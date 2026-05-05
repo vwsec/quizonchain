@@ -1,0 +1,2 @@
+"/**\n * Simple utility for sending messages via the Telegram Bot API.\n */\nexport async function sendTelegramMessage(botToken: string, chatId: string, message: string) {\n  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;\n  \n  try {\n
+<truncated 1121 bytes>

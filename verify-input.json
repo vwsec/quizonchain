@@ -1,0 +1,29 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/QuizScores.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\ncontract QuizScores {\n    struct Score {\n        uint8 score;\n        uint8 total;\n        uint256 timestamp;\n    }\n\n    mapping(address => Score) public scores;\n\n    event ScoreSubmitted(\n        address indexed player,\n        uint8 score,\n        uint8 total,\n        uint256 timestamp\n    );\n\n    function submitScore(uint8 score, uint8 total) external {\n        require(total > 0, \"Total must be greater than 0\");\n        require(score <= total, \"Score cannot exceed total\");\n\n        scores[msg.sender] = Score(score, total, block.timestamp);\n        emit ScoreSubmitted(msg.sender, score, total, block.timestamp);\n    }\n\n    function getScore(address player) external view returns (Score memory) {\n        return scores[player];\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    }
+  }
+}

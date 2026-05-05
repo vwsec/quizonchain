@@ -1,0 +1,2 @@
+"export async function POST(req: Request) {\n  try {\n    const body = await req.json();\n    console.log('Telegram API called with:', {\n      hasBotToken: !!body.botToken,\n      chatId: body.chatId,\n      messageLength: body.message?.length\n    });\n\
+<truncated 864 bytes>

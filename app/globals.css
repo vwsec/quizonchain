@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Soneium Brand Colors */
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #ffffff;
+  --popover: #0a0a0a;
+  --popover-foreground: #ffffff;
+  --primary: #0047FF;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(255, 255, 255, 0.1);
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #0047FF;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #0047FF;
+  --chart-1: #0047FF;
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.75rem;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #0047FF;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(255, 255, 255, 0.1);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #0047FF;
+}
+
+/* Dark mode not needed - Soneium theme is already dark */
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+    min-height: 100vh;
+    background: #080810;
+    position: relative;
+    overflow-x: hidden;
+  }
+}
+
+/* MegaETH Theme */
+.theme-megaeth {
+  background: #000000 !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
+.theme-megaeth * {
+  border-radius: 0 !important;
+  cursor: crosshair !important;
+}
+
+.theme-megaeth body {
+  background: #000000 !important;
+}
+
+.theme-megaeth body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+}
+
+.theme-megaeth .mega-header {
+  @apply uppercase tracking-widest text-[#00ff88] font-mono;
+}
+
+.theme-megaeth .mega-header::before {
+  content: "// ";
+}
+
+.theme-megaeth button {
+  @apply transition-all duration-200 uppercase tracking-wider;
+}
+
+.theme-megaeth .mega-btn-primary {
+  @apply bg-black border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88] hover:text-black;
+}
+
+.theme-megaeth .mega-btn-secondary {
+  @apply bg-black border border-white/20 text-white hover:border-white/40;
+}
+
+.theme-megaeth .mega-card {
+  @apply bg-black border border-white/15;
+}
+
+/* Unichain Theme */
+.theme-unichain {
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
+
+.theme-unichain body {
+  background: #080810;
+}
+
+.theme-unichain .brand-italic {
+  font-style: italic;
+}
+
+/* Ink Theme */
+.theme-ink {
+  letter-spacing: -0.02em;
+}
+
+.theme-ink body {
+  background: #050508;
+}
+
+/* Base Theme */
+.theme-base {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #0000ff;
+  --primary-foreground: #ffffff;
+  --card: #f4f5f7;
+  --card-foreground: #000000;
+  --border: #e2e8f0;
+  --radius: 0.5rem;
+  font-family: var(--font-sans) !important;
+}
+
+.theme-base body {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.theme-base .base-pill {
+  @apply rounded-full px-6 py-2 transition-all duration-200;
+}
+
+.theme-base .base-card {
+  @apply bg-[#f4f5f7] border border-[#e2e8f0] rounded-xl;
+}
+
+.theme-base .base-text-blue {
+  color: #0000ff;
+}
+
+.theme-base .base-bg-blue {
+  background-color: #0000ff;
+}

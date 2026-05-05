@@ -1,0 +1,2 @@
+"# Implementation Plan - Telegram Transaction Alerts\n\nThis plan outlines the steps to add a real-time transaction alert system to Bubble Explorer, allowing users to connect their Telegram and receive notifications for high-value transactions based on cus
+<truncated 2954 bytes>
