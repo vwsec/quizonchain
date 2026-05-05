@@ -6,17 +6,38 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { NftMintModal } from "./nft-mint"
 
-import { activeChainConfig } from "@/lib/active-chain-config"
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
   const pathname = usePathname()
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
+  const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? ''
+  
+  const CHAIN_TITLES: Record<string, string> = {
+    ink: 'Quiz On Ink',
+    soneium: 'Quiz On Soneium',
+    base: 'Quiz On Base',
+    unichain: 'Quiz On Unichain',
+    megaeth: 'Quiz On MegaETH',
+  };
+
+  const appTitle = CHAIN_TITLES[activeChain] ?? 'Quiz On Chain';
+  const titleParts = appTitle.split(' ');
+  const chainName = titleParts.slice(2).join(' ');
+
+  const isMegaEth = activeChain === 'megaeth'
+  const isInk = activeChain === 'ink'
+  const isUnichain = activeChain === 'unichain'
+  const isBase = activeChain === 'base'
+  const isSoneium = activeChain === 'soneium'
+
+  const accentColor = isMegaEth ? 'text-[#00ff88]' 
+    : isInk ? 'text-[#8b5cf6]' 
+    : isUnichain ? 'text-[#ff007a]' 
+    : isBase ? 'text-[#0052ff]' 
+    : isSoneium ? 'text-[#0047FF]' 
+    : 'text-[#0047FF]';
 
   if (!mounted) return null
 
@@ -27,7 +48,7 @@ export function Header() {
           {!isMegaEth && (
             <Image
               src="/logo.png"
-              alt="Quiz On Chain"
+              alt={appTitle}
               width={140}
               height={36}
               className="h-8 w-auto"
@@ -35,7 +56,7 @@ export function Header() {
             />
           )}
           <span className={`text-lg font-bold whitespace-nowrap ${isMegaEth ? 'text-white font-mono uppercase tracking-tight' : isInk || isUnichain ? 'text-white tracking-tighter' : isBase ? 'text-black tracking-tight' : 'text-white tracking-tight'}`}>
-            Quiz <span className={isMegaEth ? 'text-white' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-[#0047FF]'}>On Chain</span>
+            Quiz On <span className={accentColor}>{chainName}</span>
           </span>
         </Link>
         <div className="flex items-center gap-4">
@@ -44,7 +65,7 @@ export function Header() {
               { href: '/', label: 'Quiz' },
               { href: '/leaderboard', label: 'Leaderboard' },
               { href: '/docs', label: 'Docs' },
-              { href: '/explorer', label: 'Bubble Explorer', matchStart: true },
+              { href: '/explorer', label: 'Explorer', matchStart: true },
               { href: '/support', label: 'Support' }
             ].map((nav) => {
               const isActive = nav.matchStart ? pathname.startsWith(nav.href) : pathname === nav.href

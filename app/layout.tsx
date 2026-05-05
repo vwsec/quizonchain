@@ -8,30 +8,42 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-import { activeChainConfig, isMultiChain } from '@/lib/active-chain-config'
+import { activeChainConfig } from '@/lib/active-chain-config'
 import { ThemeBackground } from '@/components/theme-background'
 
-const title = isMultiChain
-  ? 'Quiz On Chain'
-  : `Quiz On Chain — ${activeChainConfig.name}`
+const CHAIN_TITLES: Record<string, string> = {
+  ink: 'Quiz On Ink',
+  soneium: 'Quiz On Soneium',
+  base: 'Quiz On Base',
+  unichain: 'Quiz On Unichain',
+  megaeth: 'Quiz On MegaETH',
+};
 
-const description = isMultiChain
-  ? 'Learn blockchain. Prove it on-chain. Questions sourced from official documentation across multiple L2 networks. Submit your score on-chain and climb the global leaderboard.'
-  : `Test your ${activeChainConfig.name} blockchain knowledge. Prove it on-chain.`
+const CHAIN_DESCRIPTIONS: Record<string, string> = {
+  ink: 'Test your Ink Onchain knowledge. Prove it on-chain.',
+  soneium: 'Test your Soneium blockchain knowledge. Prove it on-chain.',
+  base: 'Test your Base blockchain knowledge. Prove it on-chain.',
+  unichain: 'Test your Unichain knowledge. Prove it on-chain.',
+  megaeth: 'Test your MegaETH blockchain knowledge. Prove it on-chain.',
+};
+
+const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? '';
+const title = CHAIN_TITLES[activeChain] ?? 'Quiz On Chain';
+const description = CHAIN_DESCRIPTIONS[activeChain] ?? 'Learn blockchain. Prove it on-chain. Questions sourced from official documentation across multiple L2 networks.';
 
 export const metadata: Metadata = {
   title,
   description,
   openGraph: {
-    title: 'Quiz On Chain',
-    description: 'Learn blockchain. Prove it on-chain.',
-    siteName: 'Quiz On Chain',
+    title,
+    description,
+    siteName: title,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quiz On Chain',
-    description: 'Learn blockchain. Prove it on-chain.',
     site: '@quizonchain',
+    title,
+    description,
   },
   icons: {
     icon: '/logo.png',
