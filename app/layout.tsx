@@ -22,7 +22,6 @@ const description = isMultiChain
 export const metadata: Metadata = {
   title,
   description,
-  generator: 'v0.app',
   openGraph: {
     title: 'Quiz On Chain',
     description: 'Learn blockchain. Prove it on-chain.',
