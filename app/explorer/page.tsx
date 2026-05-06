@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import ExplorerContent from './ExplorerContent'
 
 export const metadata: Metadata = {
@@ -17,6 +18,11 @@ export const metadata: Metadata = {
   },
 };
 
+const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
+
 export default function ExplorerPage() {
+  if (activeChain) {
+    redirect(`/explorer/${activeChain}`);
+  }
   return <ExplorerContent />
 }

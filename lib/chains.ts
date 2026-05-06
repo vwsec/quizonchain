@@ -67,7 +67,7 @@ export const megaEth = defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: { default: { http: ['https://mainnet.megaeth.com/rpc'] } },
   blockExplorers: { default: { name: 'MegaETH Explorer', url: 'https://megaexplorer.xyz' } },
-  iconUrl: 'https://avatars.githubusercontent.com/u/148967376?s=200&v=4',
+  iconUrl: '/chains/megaeth.png',
 });
 
 export const soneiumChains = [

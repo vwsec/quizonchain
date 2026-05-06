@@ -127,6 +127,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
+  const isSoneium = activeChainConfig.name === 'Soneium'
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<GlobalPlayer[]>([])
@@ -233,7 +234,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       case "Soneium":  iconUrl = soneiumMainnet.iconUrl || '/icon.svg'; break
       case "Base":     iconUrl = 'https://github.com/base-org.png'; break
       case "Unichain": iconUrl = unichain.iconUrl || 'https://github.com/Uniswap.png'; break
-      case "MegaETH":  iconUrl = 'https://avatars.githubusercontent.com/u/148967376?s=200&v=4'; break
+      case "MegaETH":  iconUrl = '/chains/megaeth.png'; break
     }
     if (iconUrl) {
       return (
@@ -347,8 +348,8 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             }
           >
             <Star
-              fill={showMastersOnly ? (isBase ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700")}
-              color={showMastersOnly ? (isBase ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700")}
+              fill={showMastersOnly ? (isBase ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : "#FFD700")}
+              color={showMastersOnly ? (isBase ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : "#FFD700")}
               className="w-3.5 h-3.5"
             />
             {showMastersOnly ? "All Players" : "Show Masters Only"}
@@ -396,7 +397,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className={`border-b text-sm ${isMegaEth ? 'border-white/15 text-white/40 uppercase' : isBase ? 'border-black/5 text-black/40' : 'border-white/10 text-gray-400'}`}>
+            <tr className={`border-b text-sm ${isMegaEth ? 'border-white/15 text-white/40 uppercase' : isBase ? 'border-black/5 text-black/40' : isSoneium ? 'border-[#0047FF]/10 text-white/40' : 'border-white/10 text-gray-400'}`}>
               <th className="pb-3 pl-4 font-medium whitespace-nowrap">Rank</th>
               <th className="pb-3 font-medium whitespace-nowrap">Wallet</th>
               {chainFilter === 'Global' && (
@@ -437,6 +438,8 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     ? (player.rank === 1 ? 'text-[#FF007A]' : 'text-white/60')
                   : isBase
                     ? (player.rank === 1 ? 'text-[#0052FF]' : 'text-black/60')
+                  : isSoneium
+                    ? (player.rank === 1 ? 'text-[#0047FF]' : 'text-white/60')
                   : (player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-gray-300" : player.rank === 3 ? "text-amber-600" : "text-gray-500")
 
                 return (
@@ -444,7 +447,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     key={player.address}
                     className={`border-b border-white/5 transition-colors ${
                       isMe
-                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
+                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
                         : (isBase ? "hover:bg-black/5" : "hover:bg-white/5")
                     }`}
                   >

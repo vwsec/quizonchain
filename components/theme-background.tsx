@@ -11,18 +11,21 @@ export function ThemeBackground() {
   const isInk = activeChainConfig.name === 'Ink';
   const isUnichain = activeChainConfig.name === 'Unichain';
   const isBase = activeChainConfig.name === 'Base';
+  const isSoneium = activeChainConfig.name === 'Soneium';
 
   if (!mounted) return null;
 
   return (
-    <div className={`fixed inset-0 z-[-1] pointer-events-none ${isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : ''}`}>
-      {/* MegaEth / Ink / Base Noise Overlay */}
-      {(isMegaEth || isInk || isBase) && (
+    <div className={`fixed inset-0 z-[-1] pointer-events-none ${isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : isSoneium ? 'bg-[#00040F]' : ''}`}>
+      {/* MegaEth / Ink / Base / Soneium Noise Overlay */}
+      {(isMegaEth || isInk || isBase || isSoneium) && (
         <div style={{
           position: 'absolute',
           inset: 0,
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E")`,
           opacity: 0.4,
+          zIndex: 0,
+          pointerEvents: 'none',
         }} />
       )}
 
@@ -89,6 +92,20 @@ export function ThemeBackground() {
           ))}
         </>
       )}
+      
+      {/* Soneium Stars */}
+      {isSoneium && Array.from({ length: 20 }).map((_, i) => (
+        <span key={`soneium-${i}`} style={{
+          position: 'absolute',
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+          color: 'rgba(0,71,255,0.2)',
+          fontSize: 18,
+          pointerEvents: 'none',
+          userSelect: 'none',
+          zIndex: 0,
+        }}>·</span>
+      ))}
 
       {/* Default Base Blue Glow */}
       {!isMegaEth && !isInk && !isUnichain && !isBase && (

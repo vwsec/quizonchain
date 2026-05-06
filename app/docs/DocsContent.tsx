@@ -76,7 +76,7 @@ const NETWORKS = [
     name: "MegaETH",
     id: 4326,
     explorer: "megaexplorer.xyz",
-    iconUrl: megaEth.iconUrl || "https://avatars.githubusercontent.com/u/148967376?s=200&v=4",
+    iconUrl: megaEth.iconUrl || "/chains/megaeth.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH,
   },
 ]
@@ -87,6 +87,7 @@ export default function DocsContent() {
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
+  const isSoneium = activeChainConfig.name === 'Soneium'
 
   const displayNetworks = isMultiChain 
     ? NETWORKS 
@@ -168,6 +169,10 @@ export default function DocsContent() {
                           ? activeSection === section.id
                             ? "text-[#0052FF] border-[#0052FF] bg-[#0052FF]/5 rounded-r-full"
                             : "text-black/40 border-transparent hover:text-black hover:bg-black/5 rounded-r-full"
+                        : isSoneium
+                          ? activeSection === section.id
+                            ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-r-full shadow-[inset_0_0_10px_rgba(0,71,255,0.1)]"
+                            : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-r-full"
                       : activeSection === section.id
                         ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-md"
                         : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-md"
@@ -182,23 +187,26 @@ export default function DocsContent() {
           {/* Content Area */}
           <div className="flex-1 min-w-0 max-w-4xl space-y-24">
             <section id="about">
-              <h1 className={`text-4xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] tracking-tight text-white' : isUnichain ? 'border-[#FF007A] font-serif italic text-white' : isBase ? 'border-[#0052FF] tracking-tighter text-black' : 'border-[#0047FF] text-white'}`}>
+              <h1 className={`text-4xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] tracking-tight text-white' : isUnichain ? 'border-[#FF007A] font-serif italic text-white' : isBase ? 'border-[#0052FF] tracking-tighter text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// WHAT IS QUIZ ON CHAIN?' : 'What is Quiz On Chain?'}
               </h1>
-              <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5 shadow-sm' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/70 leading-relaxed text-lg font-medium' : 'text-gray-300 leading-relaxed text-lg'}`}>
+              <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5 shadow-sm' : isSoneium ? 'rounded-2xl bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl shadow-[0_0_30px_rgba(0,71,255,0.05)]' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
+                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/70 leading-relaxed text-lg font-medium' : isSoneium ? 'text-white/80 leading-relaxed text-lg font-medium' : 'text-gray-300 leading-relaxed text-lg'}`}>
                   Quiz On Chain is a Web3 quiz application that tests your knowledge of {networkText}. Answer 5 questions generated from official documentation, then submit your score on-chain to compete on the global leaderboard.
                 </p>
               </div>
             </section>
 
             <section id="how-it-works">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// HOW IT WORKS' : 'How It Works'}
               </h2>
               <div className="relative space-y-10 pl-4 md:pl-0">
-                {!isMegaEth && !isInk && !isUnichain && !isBase && (
+                {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/20 to-[#0047FF] hidden md:block" />
+                )}
+                {isSoneium && (
+                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/10 to-[#0047FF] hidden md:block shadow-[0_0_10px_rgba(0,71,255,0.2)]" />
                 )}
                 {isBase && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0052FF] via-[#0052FF]/20 to-[#0052FF] hidden md:block" />
@@ -228,6 +236,8 @@ export default function DocsContent() {
                           ? 'rounded-2xl bg-[#FF007A] text-white shadow-[0_0_20px_rgba(255,0,122,0.4)]'
                         : isBase
                           ? 'rounded-full bg-[#0052FF] text-white shadow-lg shadow-[#0052FF]/20'
+                        : isSoneium
+                          ? 'rounded-full bg-[#0047FF] text-white shadow-[0_0_25px_rgba(0,71,255,0.5)]'
                         : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
                     }`}>
                       {i + 1}
@@ -241,10 +251,12 @@ export default function DocsContent() {
                           ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#FF007A]/50 text-white'
                         : isBase
                           ? 'rounded-2xl bg-[#f4f5f7] border-black/5 hover:border-[#0052FF]/30 text-black'
+                        : isSoneium
+                          ? 'rounded-2xl bg-white/[0.02] border-[#0047FF]/10 hover:bg-white/[0.04] hover:border-[#0047FF]/40 text-white backdrop-blur-xl'
                         : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
                     }`}>
                       <h4 className={`text-xl font-bold mb-2 ${isMegaEth ? 'uppercase' : ''}`}>{item.step}: {item.title}</h4>
-                      <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : 'text-gray-400 text-base leading-relaxed'}`}>{item.desc}</p>
+                      <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isSoneium ? 'text-white/50 text-base leading-relaxed' : 'text-gray-400 text-base leading-relaxed'}`}>{item.desc}</p>
                     </div>
                   </div>
                 ))}

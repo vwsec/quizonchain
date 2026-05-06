@@ -15,6 +15,7 @@ const isMegaEth = activeChainConfig.name === 'MegaETH'
 const isInk = activeChainConfig.name === 'Ink'
 const isUnichain = activeChainConfig.name === 'Unichain'
 const isBase = activeChainConfig.name === 'Base'
+const isSoneium = activeChainConfig.name === 'Soneium'
 
 function getChainName(chainId: number): string {
   if (!isMultiChain) return activeChainConfig.name
@@ -89,6 +90,8 @@ function ConfettiCanvas() {
           ? ["#FF007A", "#FFFFFF", "#000000", "#FF007A"]
         : isBase
           ? ["#0052FF", "#FFFFFF", "#0000FF", "#3C8AFF"]
+        : isSoneium
+          ? ["#0047FF", "#FFFFFF", "#0000FF", "#0047FF"]
           : ["#FFD700", "#FFA500", "#FFFFFF", "#0047FF", "#9B59B6"]
     const particles = Array.from({ length: 120 }, () => ({
       x: Math.random() * canvas.width,
@@ -468,8 +471,8 @@ export function NftMintModal() {
                         href={getOpenSeaUrl(chainId, nftContract, mintedTokenId)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-bold transition ${isMegaEth ? 'rounded-none border border-[#00ff88]/50 hover:bg-[#00ff88]/10 text-[#00ff88]' : isInk ? 'rounded-full border border-[#7B61FF]/30 hover:bg-[#7B61FF]/10 text-[#7B61FF]' : isUnichain ? 'rounded-2xl border border-[#FF007A]/30 hover:bg-[#FF007A]/10 text-[#FF007A]' : isBase ? 'rounded-xl border border-[#0052FF]/30 hover:bg-[#0052FF]/5 text-[#0052FF]' : 'rounded-xl border border-[rgba(255,215,0,0.3)] hover:bg-[rgba(255,215,0,0.08)]'}`}
-                        style={(!isMegaEth && !isInk && !isUnichain && !isBase) ? { color: "#FFD700" } : {}}
+                        className={`flex flex-1 items-center justify-center gap-1.5 py-2.5 text-sm font-bold transition ${isMegaEth ? 'rounded-none border border-[#00ff88]/50 hover:bg-[#00ff88]/10 text-[#00ff88]' : isInk ? 'rounded-full border border-[#7B61FF]/30 hover:bg-[#7B61FF]/10 text-[#7B61FF]' : isUnichain ? 'rounded-2xl border border-[#FF007A]/30 hover:bg-[#FF007A]/10 text-[#FF007A]' : isBase ? 'rounded-xl border border-[#0052FF]/30 hover:bg-[#0052FF]/5 text-[#0052FF]' : isSoneium ? 'rounded-xl border border-[#0047FF]/30 hover:bg-[#0047FF]/5 text-[#0047FF]' : 'rounded-xl border border-[rgba(255,215,0,0.3)] hover:bg-[rgba(255,215,0,0.08)]'}`}
+                        style={(!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium) ? { color: "#FFD700" } : {}}
                       >
                         🌊 View NFT
                       </a>
@@ -499,7 +502,7 @@ export function NftMintModal() {
                     }`}>
                       <span
                         className={`text-xl font-bold ${isMegaEth ? 'font-mono' : ''}`}
-                        style={{ color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700" }}
+                        style={{ color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : "#FFD700" }}
                       >
                         {nftState.loading ? "…" : nftState.points.toString()}
                       </span>
@@ -516,7 +519,7 @@ export function NftMintModal() {
                     <div className={`flex flex-1 flex-col items-center py-3 border ${
                       isMegaEth ? 'bg-black border-white/15 rounded-none' : isBase ? 'rounded-xl border-black/5 bg-black/5' : 'rounded-xl border-white/[0.07] bg-white/[0.04]'
                     }`}>
-                      <span className={`text-xl font-bold ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-blue-400'}`}>
+                      <span className={`text-xl font-bold ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-blue-400'}`}>
                         {chainName}
                       </span>
                       <span className={`text-xs ${isMegaEth ? 'text-white/40 uppercase font-mono' : isBase ? 'text-black/40' : 'text-white/45'}`}>Network</span>
@@ -535,7 +538,7 @@ export function NftMintModal() {
                           className={`h-full transition-all duration-700 ${isMegaEth ? 'rounded-none' : 'rounded-full'}`}
                           style={{
                             width: `${progress}%`,
-                            background: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "linear-gradient(90deg, #0047FF, #FFD700)",
+                            background: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : "linear-gradient(90deg, #0047FF, #FFD700)",
                           }}
                         />
                       </div>
@@ -582,6 +585,8 @@ export function NftMintModal() {
                             ? 'rounded-2xl bg-[#FF007A] text-white hover:bg-[#d60066]'
                           : isBase
                             ? 'rounded-xl bg-[#0052FF] text-white hover:bg-[#0047FF]'
+                          : isSoneium
+                            ? 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#003bd9]'
                             : 'rounded-xl text-black'
                       }`}
                       style={(!isMegaEth && !isInk && !isUnichain && !isBase) ? {

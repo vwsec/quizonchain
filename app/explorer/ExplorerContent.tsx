@@ -43,7 +43,7 @@ const CHAINS = [
     id: 'megaeth',
     name: 'MegaETH',
     description: 'Explore MegaETH transactions visually',
-    iconUrl: 'https://avatars.githubusercontent.com/u/148967376?s=200&v=4',
+    iconUrl: '/chains/megaeth.png',
     accentColor: 'group-hover:border-[#00ff88] group-hover:shadow-[0_0_20px_rgba(0,255,136,0.2)]',
     textAccent: 'group-hover:text-[#00ff88]',
   }

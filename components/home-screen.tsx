@@ -11,6 +11,7 @@ import MegaEthLogo from "./megaeth-logo"
 import InkLogo from "./ink-logo"
 import UnichainLogo from "./unichain-logo"
 import BaseLogo from "./base-logo"
+import SoneiumLogo from "./soneium-logo"
 
 interface HomeScreenProps {
   onStartQuiz: () => void
@@ -114,6 +115,7 @@ export function HomeScreen({
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
+  const isSoneium = activeChainConfig.name === 'Soneium'
 
   if (!mounted) return null
 
@@ -125,24 +127,23 @@ export function HomeScreen({
         {isInk && <InkLogo />}
         {isUnichain && <UnichainLogo />}
         {isBase && <BaseLogo />}
+        {isSoneium && <SoneiumLogo />}
         <div className="mb-5 flex items-center gap-2">
-          {!isMegaEth && !isInk && !isUnichain && !isBase && <div className="size-2 rounded-full bg-[#0047FF]" />}
-          <span className={`text-xs uppercase tracking-[0.28em] ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#6C5CE7] font-mono' : isUnichain ? 'text-[#FF007A] font-mono' : isBase ? 'text-[#0052FF] font-semibold' : 'text-white/55'}`}>
-            {isMegaEth || isInk || isUnichain ? `// ${hero.label}` : hero.label}
+          {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && <div className="size-2 rounded-full bg-[#0047FF]" />}
+          <span className={`text-xs uppercase tracking-[0.28em] ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#6C5CE7] font-mono' : isUnichain ? 'text-[#FF007A] font-mono' : isBase ? 'text-[#0052FF] font-semibold' : isSoneium ? 'text-[#0047FF] font-semibold' : 'text-white/55'}`}>
+            {isMegaEth || isInk || isUnichain || isSoneium ? `// ${hero.label}` : hero.label}
           </span>
         </div>
 
-        <h1 className={`mb-4 font-bold ${isMegaEth ? 'text-4xl md:text-7xl uppercase font-mono tracking-tight text-white' : isInk ? 'text-4xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-4xl md:text-7xl tracking-tight font-serif text-white' : isBase ? 'text-4xl md:text-7xl tracking-tighter text-black' : 'text-4xl md:text-6xl tracking-tight text-white'}`}>
+        <h1 className={`mb-4 font-bold ${isMegaEth ? 'text-4xl md:text-7xl uppercase font-mono tracking-tight text-white' : isInk ? 'text-4xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-4xl md:text-7xl tracking-tight font-serif text-white' : isBase ? 'text-4xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-4xl md:text-7xl tracking-tight text-white' : 'text-4xl md:text-6xl tracking-tight text-white'}`}>
           {isUnichain ? (
             <>
               The <span className="italic text-[#FF007A]">Knowledge</span> of Unichain
             </>
-          ) : (
-            hero.title
-          )}
+          ) : hero.title}
         </h1>
 
-        <p className={`mb-8 ${isMegaEth ? 'text-white/40 font-mono lowercase text-sm' : isInk ? 'text-base md:text-lg text-white/70 font-medium' : isUnichain ? 'text-base text-[#FF007A]/80 font-medium' : isBase ? 'text-base text-black/60 font-medium' : 'text-sm text-white/55 md:text-base'}`}>
+        <p className={`mb-8 ${isMegaEth ? 'text-white/40 font-mono lowercase text-sm' : isInk ? 'text-base md:text-lg text-white/70 font-medium' : isUnichain ? 'text-base text-[#FF007A]/80 font-medium' : isBase ? 'text-base text-black/60 font-medium' : isSoneium ? 'text-base md:text-lg text-white/60 tracking-tight' : 'text-sm text-white/55 md:text-base'}`}>
           {hero.subtitle}
         </p>
 
@@ -169,6 +170,8 @@ export function HomeScreen({
                   ? 'rounded-2xl border border-white/10 bg-white/5 text-white hover:bg-white/10 backdrop-blur-lg shadow-none'
                 : isBase
                   ? 'rounded-full border-2 border-black/5 bg-black/5 text-black hover:bg-black/10 shadow-none'
+                : isSoneium
+                  ? 'rounded-xl border border-[#0047FF]/20 bg-[#0047FF]/5 text-white hover:bg-[#0047FF]/10 hover:border-[#0047FF]/50 backdrop-blur-xl transition-all'
                   : 'rounded-xl border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] font-medium text-white hover:bg-[rgba(255,255,255,0.08)]'
             }`}
           >
@@ -189,6 +192,8 @@ export function HomeScreen({
                   ? 'rounded-2xl bg-[#FF007A] font-bold text-white hover:bg-[#d60066] shadow-[0_0_30px_rgba(255,0,122,0.4)]'
                 : isBase
                   ? 'rounded-full bg-[#0052FF] font-bold text-white hover:bg-[#0047FF] shadow-lg hover:shadow-xl'
+                : isSoneium
+                  ? 'rounded-xl bg-[#0047FF] font-bold text-white shadow-[0_0_30px_rgba(0,71,255,0.4)] hover:bg-[#003bd9] transition-all duration-300'
                   : 'rounded-xl bg-[#0047FF] font-medium text-white shadow-[0_0_24px_rgba(0,71,255,0.35)] hover:bg-[#0047FF]/90'
             }`}
           >
@@ -236,6 +241,8 @@ export function HomeScreen({
                   ? 'rounded-2xl border border-white/5 bg-white/5 backdrop-blur-lg shadow-[0_0_30px_rgba(255,255,255,0.02)]'
                 : isBase
                   ? 'rounded-2xl border border-black/5 bg-[#f4f5f7] shadow-sm'
+                : isSoneium
+                  ? 'rounded-2xl border border-[#0047FF]/10 bg-white/[0.02] backdrop-blur-xl shadow-[0_0_30px_rgba(0,71,255,0.03)]'
                   : 'rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] backdrop-blur-md'
             }`}>
               <div className={`text-2xl font-bold ${isMegaEth ? 'text-white font-mono' : isInk || isUnichain ? 'text-white tracking-tight' : isBase ? 'text-black tracking-tight' : 'text-white'}`}>{item.value}</div>

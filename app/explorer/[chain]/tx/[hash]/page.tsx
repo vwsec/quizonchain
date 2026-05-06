@@ -4,24 +4,39 @@ import { ExplorerBackButton } from '@/components/explorer-back-button';
 import { Header } from '@/components/header';
 import { WalletProvider } from '@/components/wallet-provider';
 
+const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
+
 export default async function TxPage({ params }: { params: Promise<{ chain: string; hash: string }> }) {
   const resolvedParams = await params;
+  
+  if (activeChain && resolvedParams.chain !== activeChain) {
+    redirect('/explorer');
+  }
+
   const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth'];
   const validHash = /^0x[a-fA-F0-9]{64}$/i.test(resolvedParams.hash);
   
   if (!validChains.includes(resolvedParams.chain) || !validHash) redirect('/explorer');
   
   const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH' };
+  const isBase = resolvedParams.chain === 'base';
+  const isMegaEth = resolvedParams.chain === 'megaeth';
+  const isInk = resolvedParams.chain === 'ink';
+  const isUnichain = resolvedParams.chain === 'unichain';
+  const isSoneium = resolvedParams.chain === 'soneium';
   const chainName = names[resolvedParams.chain] || (resolvedParams.chain.charAt(0).toUpperCase() + resolvedParams.chain.slice(1));
 
   return (
     <WalletProvider>
-      <div className='min-h-screen bg-[#080810] relative pt-20'>
+      <div className={`min-h-screen relative pt-20 ${
+        isBase ? 'bg-white text-black' : 
+        isMegaEth ? 'bg-black text-white font-mono' : 
+        isInk ? 'bg-[#0a0a0f] text-white' :
+        isUnichain ? 'bg-[#0d0014] text-white' :
+        isSoneium ? 'bg-[#00040F] text-white' :
+        'bg-[#080810] text-white'
+      }`}>
         <Header />
-        <ExplorerBackButton 
-          fallbackHref={`/explorer/${resolvedParams.chain}`} 
-          label={`Back to ${chainName} Explorer`} 
-        />
         <BubbleExplorer chain={resolvedParams.chain as any} initialTxHash={resolvedParams.hash} />
       </div>
     </WalletProvider>

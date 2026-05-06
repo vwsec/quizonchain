@@ -28,10 +28,16 @@ export async function generateMetadata({ params }: ExplorerPageProps) {
   };
 }
 
+const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
+
 export default async function ExplorerPage({ params }: ExplorerPageProps) {
   const resolvedParams = await params;
   const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth'];
   
+  if (activeChain && resolvedParams.chain !== activeChain) {
+    redirect('/explorer');
+  }
+
   if (!validChains.includes(resolvedParams.chain)) {
     redirect('/explorer');
   }
@@ -40,6 +46,7 @@ export default async function ExplorerPage({ params }: ExplorerPageProps) {
   const isMegaEth = resolvedParams.chain === 'megaeth';
   const isInk = resolvedParams.chain === 'ink';
   const isUnichain = resolvedParams.chain === 'unichain';
+  const isSoneium = resolvedParams.chain === 'soneium';
 
   return (
     <WalletProvider>
@@ -48,17 +55,10 @@ export default async function ExplorerPage({ params }: ExplorerPageProps) {
         isMegaEth ? 'bg-black text-white font-mono' : 
         isInk ? 'bg-[#0a0a0f] text-white' :
         isUnichain ? 'bg-[#0d0014] text-white' :
+        isSoneium ? 'bg-[#00040F] text-white' :
         'bg-[#080810] text-white'
       }`}>
         <Header />
-        <div className="absolute top-24 left-6 z-50">
-          <Link 
-            href="/explorer" 
-            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-sm font-medium transition-all text-gray-300 hover:text-white backdrop-blur-md"
-          >
-            <span>←</span> Explorer
-          </Link>
-        </div>
         <BubbleExplorer chain={resolvedParams.chain as any} />
       </div>
     </WalletProvider>

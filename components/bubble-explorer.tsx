@@ -162,6 +162,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   const isInk = chain === 'ink'
   const isUnichain = chain === 'unichain'
   const isBase = chain === 'base'
+  const isSoneium = chain === 'soneium'
   
   const config = CHAIN_CONFIG[chain]
   const router = useRouter()
@@ -2485,7 +2486,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
          }).length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
             <div className={`p-8 rounded-3xl flex flex-col items-center gap-4 max-w-md text-center border backdrop-blur-md shadow-2xl ${
-              isBase ? 'bg-white/80 border-black/5 text-black' : 'bg-black/60 border-white/10 text-white'
+              isBase ? 'bg-white/80 border-black/5 text-black' : isSoneium ? 'bg-[#00040F]/60 border-[#0047FF]/20 text-white shadow-[0_0_50px_rgba(0,71,255,0.1)]' : 'bg-black/60 border-white/10 text-white'
             }`}>
               <Search className={`w-12 h-12 ${isBase ? 'text-black/20' : 'text-gray-500'}`} />
               <p className={`font-bold text-lg ${isBase ? 'text-black/60' : 'text-gray-300'}`}>No transactions found in current view — showing in Network View</p>
@@ -2503,7 +2504,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         {/* Loading Overlay */}
         {loading && bubblesRef.current.size === 0 && viewMode === 'bubbles' && (
           <div className={`absolute inset-0 flex items-center justify-center backdrop-blur-sm z-20 pointer-events-none ${
-            isBase ? 'bg-white/80' : 'bg-[#080810]/80'
+            isBase ? 'bg-white/80' : isSoneium ? 'bg-[#00040F]/80' : 'bg-[#080810]/80'
           }`}>
             <div className="flex flex-col items-center gap-4">
               <div className={`w-8 h-8 border-4 border-t-white rounded-full animate-spin ${
@@ -2519,7 +2520,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         {/* Error State */}
         {error && (
           <div className={`absolute inset-0 flex flex-col items-center justify-center z-30 pointer-events-auto gap-4 ${
-            isBase ? 'bg-white/95' : 'bg-[#080810]/95'
+            isBase ? 'bg-white/95' : isSoneium ? 'bg-[#00040F]/95' : 'bg-[#080810]/95'
           }`}>
             <AlertCircle className="w-12 h-12 text-red-500" />
             <p className={`${isBase ? 'text-black' : 'text-white'} text-lg`}>Failed to connect to the network.</p>
@@ -2546,6 +2547,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                   ? 'bg-black border-[#00ff88] rounded-none text-white font-mono uppercase' 
                   : isBase 
                     ? 'bg-white border-black/5 rounded-2xl text-black' 
+                  : isSoneium
+                    ? 'bg-[#00040F]/95 border-[#0047FF]/30 rounded-2xl text-white backdrop-blur-2xl shadow-[0_0_50px_rgba(0,71,255,0.2)]'
                     : 'bg-[#0a0a0f]/90 border-white/10 rounded-2xl text-white backdrop-blur-xl shadow-[0_0_40px_rgba(0,0,0,0.5)]'
               }`}>
                 <div className={`flex justify-between items-start mb-3 pb-2 border-b ${isBase ? 'border-black/5' : 'border-white/5'}`}>
@@ -2560,7 +2563,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 
                 <div className="flex justify-between items-baseline mb-1">
                   <span className={`text-[10px] font-bold uppercase tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Value</span>
-                  <span className={`text-sm font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : 'text-white'}`}>
+                  <span className={`text-sm font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isSoneium ? 'text-[#0047FF]' : 'text-white'}`}>
                     {formatEther(BigInt(hoveredTx.tx.value || '0')).slice(0, 8)} ETH
                   </span>
                 </div>
@@ -2610,6 +2613,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           ? 'bg-black border-white/10 rounded-none' 
           : isBase 
             ? 'bg-white border-black/5 rounded-full shadow-xl' 
+          : isSoneium
+            ? 'bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl rounded-full shadow-[0_0_30px_rgba(0,71,255,0.1)]'
             : 'bg-white/[0.02] border-white/[0.08] backdrop-blur-md rounded-full shadow-2xl'
       }`}>
         <LegendItem color={config.color} label="Native Transfer" isBase={isBase} />

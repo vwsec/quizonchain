@@ -14,7 +14,7 @@ const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'Soneium', label: 'Soneium', iconUrl: soneiumMainnet.iconUrl || '/icon.svg' },
   { id: 'Base', label: 'Base', iconUrl: 'https://github.com/base-org.png' },
   { id: 'Unichain', label: 'Unichain', iconUrl: unichain.iconUrl || 'https://github.com/Uniswap.png' },
-  { id: 'MegaETH', label: 'MegaETH', iconUrl: 'https://avatars.githubusercontent.com/u/148967376?s=200&v=4' },
+  { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
 ]
 
 import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"

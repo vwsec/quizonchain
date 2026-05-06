@@ -52,6 +52,7 @@ export default function SupportContent() {
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
+  const isSoneium = activeChainConfig.name === 'Soneium'
 
   return (
     <WalletProvider>
@@ -60,10 +61,10 @@ export default function SupportContent() {
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className={`font-black ${isMegaEth ? 'text-5xl md:text-7xl uppercase tracking-tight text-white' : isInk ? 'text-5xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-5xl md:text-7xl tracking-tight font-serif italic text-white' : isBase ? 'text-5xl md:text-7xl tracking-tighter text-black' : 'text-5xl tracking-tight text-white'}`}>
+            <h1 className={`font-black ${isMegaEth ? 'text-5xl md:text-7xl uppercase tracking-tight text-white' : isInk ? 'text-5xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-5xl md:text-7xl tracking-tight font-serif italic text-white' : isBase ? 'text-5xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-5xl md:text-7xl tracking-tight text-white' : 'text-5xl tracking-tight text-white'}`}>
               {isMegaEth ? '// SUPPORT' : 'Support'}
             </h1>
-            <p className={`${isMegaEth ? 'text-white/40 uppercase text-sm' : isInk || isUnichain ? 'text-white/70 text-lg' : isBase ? 'text-black/40 text-lg font-medium' : 'text-gray-400 text-lg'}`}>
+            <p className={`${isMegaEth ? 'text-white/40 uppercase text-sm' : isInk || isUnichain ? 'text-white/70 text-lg' : isBase ? 'text-black/40 text-lg font-medium' : isSoneium ? 'text-white/60 text-lg' : 'text-gray-400 text-lg'}`}>
               Need help? We are here for you.
             </p>
           </div>
@@ -78,12 +79,14 @@ export default function SupportContent() {
                   ? `bg-white/5 border border-white/10 backdrop-blur-lg hover:border-white/30 ${isInk ? 'rounded-3xl hover:shadow-[0_0_30px_rgba(123,97,255,0.1)]' : 'rounded-2xl hover:shadow-[0_0_30px_rgba(255,0,122,0.1)]'}`
                 : isBase
                   ? 'bg-[#f4f5f7] border border-black/5 rounded-3xl hover:border-[#0052FF] shadow-sm'
+                : isSoneium
+                  ? 'rounded-2xl bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl hover:border-[#0047FF]/50 shadow-[0_0_30px_rgba(0,71,255,0.05)]'
                   : 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:border-[#0047FF]'
             }`}>
                {!isMegaEth && !isInk && !isUnichain && <div className="absolute inset-0 bg-gradient-to-br from-[#0047FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                <div className="relative z-10 space-y-6">
                 <div className={`w-12 h-12 flex items-center justify-center ${
-                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
+                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isSoneium ? 'bg-[#0047FF]/10 text-[#0047FF] rounded-2xl' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
                 }`}>
                   <XIcon className="w-6 h-6" />
                 </div>
@@ -143,6 +146,8 @@ export default function SupportContent() {
                         ? 'bg-white/5 border border-white/10 text-white/40 rounded-2xl'
                       : isBase
                         ? 'bg-black/5 text-black/30 rounded-full'
+                      : isSoneium
+                        ? 'bg-[#0047FF]/5 border border-[#0047FF]/10 text-[#0047FF]/50 rounded-2xl'
                       : 'bg-white/5 text-gray-500 rounded-2xl'
                   }`}
                 >

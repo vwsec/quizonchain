@@ -208,168 +208,171 @@ export function ResultsScreen({ score, totalQuestions, onRestart, onScoreSubmitt
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
+  const isSoneium = activeChainConfig.name === 'Soneium'
+
+  const handleAction = async () => {
+    if (isWrongNetwork) {
+      try {
+        await switchChainAsync({ chainId })
+        setWrongNetwork(false)
+        setTxError(undefined)
+      } catch (err) {
+        setTxError(formatSwitchChainError(err))
+      }
+    } else {
+      openSubmitConfirmation()
+    }
+  }
 
   return (
     <div className={`flex min-h-screen flex-col items-center justify-center px-4 py-12 ${isMegaEth ? 'font-mono' : ''}`}>
       {/* Background decoration removed - handled by ThemeBackground */}
 
-      <div className="relative z-10 w-full max-w-md">
-        {/* Results card */}
-        <div className={`p-8 text-center border ${
+      <div className="flex w-full flex-col items-center text-center">
+        <div className={`mb-10 p-6 shadow-2xl relative group ${
           isMegaEth 
-            ? 'bg-black border-white/15 rounded-none' 
-            : isInk
-              ? 'rounded-3xl border-white/10 bg-white/5 backdrop-blur-lg shadow-[0_0_50px_rgba(123,97,255,0.05)]'
-            : isUnichain
-              ? 'rounded-2xl border-white/10 bg-white/5 backdrop-blur-lg shadow-[0_0_50px_rgba(255,0,122,0.05)]'
-            : isBase
-              ? 'rounded-2xl border-black/5 bg-[#f4f5f7] shadow-sm'
-              : 'rounded-2xl border border-border bg-card/50 backdrop-blur-lg'
+            ? 'bg-black border-2 border-[#00ff88] rounded-none' 
+            : isInk 
+              ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-xl' 
+            : isUnichain 
+              ? 'bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl' 
+            : isBase 
+              ? 'bg-black/5 border border-black/5 rounded-full' 
+            : isSoneium
+              ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.1)]'
+              : 'bg-white/5 border border-white/10 rounded-2xl'
         }`}>
-          {/* Icon */}
-          <div className="mb-6 flex justify-center">
-            <div className={`flex items-center justify-center size-16 border ${
+          <div className={`mb-4 flex items-center justify-center p-4 ${
+            isMegaEth ? 'bg-black border border-[#00ff88] rounded-none' : isInk ? 'bg-[#7B61FF]/20 rounded-full' : isUnichain ? 'bg-[#FF007A]/20 rounded-xl' : isBase ? 'bg-[#0052FF]/10 rounded-full' : isSoneium ? 'bg-[#0047FF]/20 rounded-xl' : 'bg-white/10 rounded-xl'
+          }`}>
+            {percentage >= 80 ? <Trophy className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : percentage >= 60 ? <Sparkles className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : <Target className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} />}
+          </div>
+          <div className={`text-5xl font-black mb-2 ${isMegaEth ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
+            {score} <span className={`text-2xl ${isMegaEth ? 'text-white/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
+          </div>
+          <div className={`text-sm font-black uppercase tracking-widest ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`}>
+            {percentage}% Correct
+          </div>
+        </div>
+
+        <h2 className={`text-3xl font-black mb-3 max-w-md ${isMegaEth ? 'font-mono uppercase text-white' : isBase ? 'text-black' : 'text-white'}`}>
+          {getMessage()}
+        </h2>
+        <p className={`mb-10 ${isMegaEth ? 'font-mono lowercase text-white/40 text-sm' : isBase ? 'text-black/40' : 'text-white/40'}`}>
+          Points will be added to the global leaderboard.
+        </p>
+
+        <div className="flex w-full max-w-[400px] flex-col gap-3">
+          <Button
+            size="lg"
+            onClick={handleAction}
+            disabled={txState === "pending" || isCooldownActive || hasSubmittedThisSession || isCheckingCooldown}
+            className={`h-14 text-lg font-black transition-all duration-300 relative overflow-hidden group ${
               isMegaEth 
-                ? 'bg-black border-[#00ff88] text-[#00ff88] rounded-none' 
+                ? 'rounded-none bg-black border-2 border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88] hover:text-black font-mono uppercase shadow-none' 
                 : isInk
-                  ? 'rounded-full bg-[#7B61FF]/10 border-[#7B61FF]/20 text-[#7B61FF]'
+                  ? 'rounded-full bg-[#7B61FF] text-white hover:bg-[#7B61FF]/90 shadow-[0_0_25px_rgba(123,97,255,0.4)] border-none'
                 : isUnichain
-                  ? 'rounded-xl bg-[#FF007A]/10 border-[#FF007A]/20 text-[#FF007A]'
+                  ? 'rounded-2xl bg-[#FF007A] text-white hover:bg-[#FF007A]/90 shadow-[0_0_25px_rgba(255,0,122,0.4)] border-none'
                 : isBase
-                  ? 'rounded-full bg-[#0052FF]/10 border-[#0052FF]/20 text-[#0052FF]'
-                : 'rounded-full bg-primary/10 border-primary/20'
-            }`}>
-              {getIcon()}
-            </div>
-          </div>
-
-          {/* Score display */}
-          <div className="mb-4">
-            <div className={`text-5xl md:text-7xl font-bold mb-2 ${isMegaEth ? 'font-mono uppercase text-white' : isUnichain ? 'font-serif italic text-white' : isInk ? 'tracking-tighter text-white' : isBase ? 'tracking-tighter text-black' : 'text-white'}`}>
-              {score} / {total}
-            </div>
-            <div className={`text-lg ${isMegaEth ? 'text-white/40 uppercase' : isInk || isUnichain ? 'text-white/60' : isBase ? 'text-black/40' : 'text-muted-foreground'}`}>
-              {percentage}% correct
-            </div>
-          </div>
-
-          {/* Message */}
-          <p className={`text-lg mb-8 text-balance ${isMegaEth ? 'text-white uppercase' : isInk || isUnichain ? 'text-white tracking-tight' : isBase ? 'text-black tracking-tight' : 'text-foreground'}`}>
-            {getMessage()}
-          </p>
-
-          {/* Submit score button */}
-          <div className="space-y-4">
-            <Button
-              size="lg"
-              onClick={openSubmitConfirmation}
-              disabled={
-                txState === "pending" ||
-                hasSubmittedThisSession ||
-                isCheckingCooldown ||
-                isCooldownActive
-              }
-              className={`w-full h-12 transition-all duration-200 ${
-                isMegaEth 
-                  ? 'rounded-none border border-[#00ff88] bg-black text-[#00ff88] hover:bg-[#00ff88] hover:text-black font-mono uppercase' 
-                : isInk
-                  ? 'rounded-full bg-[#7B61FF] hover:bg-[#6c54e6] text-white font-bold shadow-[0_0_20px_rgba(123,97,255,0.4)]'
-                : isUnichain
-                  ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold shadow-[0_0_20px_rgba(255,0,122,0.4)]'
-                : isBase
-                  ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold shadow-lg shadow-[#0052FF]/20'
-                  : 'bg-primary hover:bg-primary/90 text-primary-foreground font-medium'
-              }`}
-            >
-              {hasSubmittedThisSession
-                ? "Score already submitted"
-                : isCheckingCooldown
-                  ? "Checking cooldown..."
-                  : isCooldownActive
-                    ? `Next submission in ${formatCooldown(cooldownRemaining)}`
-                    : "Submit Score On-Chain"}
-            </Button>
-            {wrongNetwork ? (
-              <div className={`p-3 text-left ${isMegaEth ? 'border border-amber-500 bg-black' : 'rounded-lg border border-amber-500/30 bg-amber-500/10'}`}>
-                <p className={`text-sm ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className={`mt-2 ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : ''}`}
-                  onClick={async () => {
-                    try {
-                      await switchChainAsync({ chainId })
-                      setWrongNetwork(false)
-                      setTxError(undefined)
-                    } catch (err) {
-                      setTxError(formatSwitchChainError(err))
-                    }
-                  }}
-                >
-                  Switch Network
-                </Button>
+                  ? 'rounded-full bg-[#0052FF] text-white hover:bg-[#0052FF]/90 shadow-lg shadow-[#0052FF]/20 border-none'
+                : isSoneium
+                  ? 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-[0_0_30px_rgba(0,71,255,0.5)] border-none'
+                  : 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-none'
+            }`}
+          >
+            {txState === "pending" ? (
+              <div className="flex items-center gap-2">
+                <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                <span>Submitting...</span>
               </div>
-            ) : null}
+            ) : isWrongNetwork ? (
+              "Switch to " + chainName
+            ) : isCooldownActive ? (
+              `Wait ${formatCooldown(cooldownRemaining)}`
+            ) : hasSubmittedThisSession ? (
+              "Score Submitted!"
+            ) : (
+              "Submit Score On-Chain"
+            )}
+          </Button>
 
-            <p className={`text-xs ${isMegaEth ? 'text-white/30 uppercase' : isInk || isUnichain ? 'text-white/40' : isBase ? 'text-black/40' : 'text-muted-foreground'}`}>
-              Submits on the connected network ({chain.name}, id {chain.id}).
-            </p>
-
-            {/* Transaction status */}
-            <TransactionStatus
-              state={txState}
-              txHash={txHash}
-              chainId={chainId}
-              errorMessage={txError}
-            />
-            {txPendingWarning ? (
-              <p className={`text-xs ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-400'}`}>{txPendingWarning}</p>
-            ) : null}
-
-            {/* Restart button */}
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={onRestart}
-              className={`w-full mt-4 transition-all duration-200 ${
-                isMegaEth 
-                  ? 'rounded-none border border-white/20 bg-black text-white hover:border-white font-mono uppercase' 
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={onRestart}
+            className={`h-12 border-2 transition-all duration-300 ${
+              isMegaEth 
+                ? 'rounded-none border-white/20 bg-black text-white/60 hover:border-white hover:text-white font-mono uppercase' 
                 : isInk
-                  ? 'rounded-full border border-white/10 bg-white/5 text-white hover:bg-white/10'
+                  ? 'rounded-full border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white backdrop-blur-xl'
                 : isUnichain
-                  ? 'rounded-2xl border border-white/10 bg-white/5 text-white hover:bg-white/10'
+                  ? 'rounded-2xl border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white backdrop-blur-xl'
                 : isBase
-                  ? 'rounded-full border border-black/5 bg-white text-black hover:bg-black/5'
-                  : 'border-border hover:bg-card'
-              }`}
-            >
-              <RotateCcw className="mr-2 size-4" />
-              Play Again
-            </Button>
-          </div>
+                  ? 'rounded-full border-black/5 bg-black/5 text-black/40 hover:bg-black/10 hover:text-black'
+                : isSoneium
+                  ? 'rounded-2xl border-[#0047FF]/20 bg-[#0047FF]/5 text-white/60 hover:bg-[#0047FF]/10 hover:text-white backdrop-blur-xl'
+                  : 'rounded-2xl border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            <RotateCcw className="mr-2 size-5" />
+            Play Again
+          </Button>
         </div>
       </div>
 
+      {wrongNetwork ? (
+        <div className={`mt-6 p-4 rounded-xl border ${isMegaEth ? 'border-amber-500 bg-black' : 'border-amber-500/30 bg-amber-500/10'}`}>
+          <p className={`text-sm mb-2 ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
+          <Button
+            size="sm"
+            variant="outline"
+            className={`w-full ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : ''}`}
+            onClick={async () => {
+              try {
+                await switchChainAsync({ chainId })
+                setWrongNetwork(false)
+                setTxError(undefined)
+              } catch (err) {
+                setTxError(formatSwitchChainError(err))
+              }
+            }}
+          >
+            Switch Network
+          </Button>
+        </div>
+      ) : null}
+
+      <TransactionStatus
+        state={txState}
+        txHash={txHash}
+        chainId={chainId}
+        errorMessage={txError}
+      />
+      {txPendingWarning ? (
+        <p className={`text-xs mt-2 ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-400'}`}>{txPendingWarning}</p>
+      ) : null}
+
       {showConfirmModal ? (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className={`w-full max-w-md p-6 text-left shadow-2xl border ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-white/10 bg-[#0A0A0F] text-white' : isUnichain ? 'rounded-2xl border-white/10 bg-[#0A0A0F] text-white' : isBase ? 'rounded-2xl border-black/5 bg-white text-black' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
+          <div className={`w-full max-w-md p-6 text-left shadow-2xl border ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-white/10 bg-[#0A0A0F] text-white' : isUnichain ? 'rounded-2xl border-white/10 bg-[#0A0A0F] text-white' : isBase ? 'rounded-2xl border-black/5 bg-white text-black' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 bg-[#0A0A0F] text-white' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
             <h3 className={`mb-4 text-xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isUnichain ? 'font-serif italic' : isBase ? 'text-black' : ''}`}>
               {isMegaEth ? '// CONFIRM TRANSACTION' : 'Confirm Transaction'}
             </h3>
             <div className={`space-y-3 text-sm ${isMegaEth ? 'font-mono uppercase text-white/70' : isInk || isUnichain ? 'text-white/70' : isBase ? 'text-black/60' : 'text-white/85'}`}>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-white/60'}>Chain:</span> {chain.name} ({chainId})</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-white/60'}>Chain:</span> {chain.name} ({chainId})</p>
               <p>
-                <span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-white/60'}>Contract:</span>{" "}
+                <span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-white/60'}>Contract:</span>{" "}
                 {contractAddress ? `${contractAddress.slice(0, 6)}...${contractAddress.slice(-4)}` : "Not configured"}
               </p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-white/60'}>Score:</span> {score}/{total}</p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-white/60'}>Estimated gas:</span> {estimatedGas ? estimatedGas.toString() : "Estimating..."}</p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : 'text-white/60'}>From:</span> {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Not connected"}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-white/60'}>Score:</span> {score}/{total}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-white/60'}>Estimated gas:</span> {estimatedGas ? estimatedGas.toString() : "Estimating..."}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-white/60'}>From:</span> {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Not connected"}</p>
             </div>
             <div className="mt-8 flex gap-3">
               <Button
                 variant="outline"
-                className={`flex-1 ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full border-black/10 text-black hover:bg-black/5' : ''}`}
+                className={`flex-1 ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full border-black/10 text-black hover:bg-black/5' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 text-white' : ''}`}
                 onClick={() => setShowConfirmModal(false)}
               >
                 Cancel
@@ -384,6 +387,8 @@ export function ResultsScreen({ score, totalQuestions, onRestart, onScoreSubmitt
                     ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold'
                   : isBase
                     ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold shadow-lg shadow-[#0052FF]/20'
+                  : isSoneium
+                    ? 'rounded-2xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold shadow-lg shadow-[#0047FF]/20'
                     : 'bg-[#0047FF] hover:bg-[#0047FF]/90'
                 }`}
                 onClick={handleConfirmedSubmitScore}

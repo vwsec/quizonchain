@@ -42,16 +42,16 @@ export function Header() {
   if (!mounted) return null
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 ${isMegaEth ? 'bg-black border-b border-white/10' : isInk || isUnichain ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5' : isBase ? 'bg-white/90 backdrop-blur-md border-b border-black/5' : ''}`}>
+    <header className={`fixed inset-x-0 top-0 z-50 ${isMegaEth ? 'bg-black border-b border-white/10' : isInk || isUnichain ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5' : isBase ? 'bg-white/90 backdrop-blur-md border-b border-black/5' : isSoneium ? 'bg-[#00040F]/80 backdrop-blur-xl border-b border-[#0047FF]/10' : ''}`}>
       <div className="flex items-center justify-between px-4 py-4 md:px-8">
         <Link href="/" className="flex items-center gap-2">
           {!isMegaEth && (
             <Image
-              src="/logo.png"
+              src={isSoneium ? "/chains/soneium.png" : isBase ? "/chains/base.png" : isInk ? "/chains/ink-logo-purple-white-icon.png" : isUnichain ? "/chains/unichain.png" : isMegaEth ? "/chains/megaeth.png" : "/logo.png"}
               alt={appTitle}
               width={140}
               height={36}
-              className="h-8 w-auto"
+              className="h-8 w-auto object-contain"
               priority
             />
           )}
@@ -60,7 +60,7 @@ export function Header() {
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          <div className={`flex items-center p-1 ${isMegaEth ? 'bg-black border border-white/10 rounded-none' : isInk || isUnichain ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-lg' : isBase ? 'bg-black/5 border border-black/5 rounded-full' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl'}`}>
+          <div className={`flex items-center p-1 ${isMegaEth ? 'bg-black border border-white/10 rounded-none' : isInk || isUnichain ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-lg' : isBase ? 'bg-black/5 border border-black/5 rounded-full' : isSoneium ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-full backdrop-blur-xl' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl'}`}>
             {[
               { href: '/', label: 'Quiz' },
               { href: '/leaderboard', label: 'Leaderboard' },
@@ -77,8 +77,10 @@ export function Header() {
                   ? 'bg-[#FF007A] text-white rounded-xl shadow-[0_0_15px_rgba(255,0,122,0.3)]'
                 : isBase
                   ? 'bg-[#0052FF] text-white rounded-full'
+                : isSoneium
+                  ? 'bg-[#0047FF] text-white rounded-full shadow-[0_0_20px_rgba(0,71,255,0.4)]'
                   : 'bg-[#0047FF] text-white rounded-lg'
-              const inactiveClass = isMegaEth || isInk || isUnichain
+              const inactiveClass = isMegaEth || isInk || isUnichain || isSoneium
                 ? 'bg-transparent text-white/50 hover:text-white'
                 : isBase
                   ? 'bg-transparent text-black/50 hover:text-black'
