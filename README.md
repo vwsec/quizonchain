@@ -7,7 +7,7 @@
 ## Chain-Specific Deployments
 | Chain | URL | Active Chain |
 |:------|:----|:-------------|
-| Multi-chain | [quizonchain.vercel.app](https://quizonchain.vercel.app) | NEXT_PUBLIC_ACTIVE_CHAIN=ink |
+| Multi-chain | [quizonchain.vercel.app](https://quizonchain.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=ink` |
 | Ink | [quizonink.vercel.app](https://quizonink.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=ink` |
 | Soneium | [quizonsoneium.vercel.app](https://quizonsoneium.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=soneium` |
 | Base | [quizonbase.vercel.app](https://quizonbase.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=base` |
