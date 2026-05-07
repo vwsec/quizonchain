@@ -50,6 +50,9 @@ export const metadata: Metadata = {
     shortcut: '/logo.png',
     apple: '/logo.png',
   },
+  other: activeChain === 'base' ? {
+    'base:app_id': '69fcb1ba5f11a2d419d3021c',
+  } : {},
 }
 
 import { Header } from '@/components/header'
