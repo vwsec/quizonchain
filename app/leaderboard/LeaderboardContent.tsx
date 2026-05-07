@@ -10,10 +10,10 @@ import { soneiumMainnet, unichain } from "@/lib/chains"
 
 const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'Global', label: 'Global', iconUrl: null },
-  { id: 'Ink', label: 'Ink', iconUrl: 'https://github.com/inkonchain.png' },
-  { id: 'Soneium', label: 'Soneium', iconUrl: soneiumMainnet.iconUrl || '/icon.svg' },
-  { id: 'Base', label: 'Base', iconUrl: 'https://github.com/base-org.png' },
-  { id: 'Unichain', label: 'Unichain', iconUrl: unichain.iconUrl || 'https://github.com/Uniswap.png' },
+  { id: 'Ink', label: 'Ink', iconUrl: '/chains/ink-logo-purple-white-icon.png' },
+  { id: 'Soneium', label: 'Soneium', iconUrl: '/chains/soneium.png' },
+  { id: 'Base', label: 'Base', iconUrl: '/chains/base.png' },
+  { id: 'Unichain', label: 'Unichain', iconUrl: '/chains/unichain.png' },
   { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
 ]
 

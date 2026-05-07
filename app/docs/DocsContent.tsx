@@ -55,21 +55,21 @@ const NETWORKS = [
     name: "Ink",
     id: 57073,
     explorer: "explorer.inkonchain.com",
-    iconUrl: "https://github.com/inkonchain.png",
+    iconUrl: "/chains/ink-logo-purple-white-icon.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_INK_MAINNET,
   },
   {
     name: "Base",
     id: 8453,
     explorer: "basescan.org",
-    iconUrl: "https://github.com/base-org.png",
+    iconUrl: "/chains/base.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET,
   },
   {
     name: "Unichain",
     id: 130,
     explorer: "uniscan.xyz",
-    iconUrl: unichain.iconUrl || "https://github.com/Uniswap.png",
+    iconUrl: "/chains/unichain.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN_MAINNET,
   },
   {
@@ -319,7 +319,7 @@ export default function DocsContent() {
               <div className="space-y-8">
                 <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                   <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
+                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on {isMultiChain ? 'each network' : 'the network'}. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
                   </p>
                 </div>
                 
@@ -332,7 +332,7 @@ export default function DocsContent() {
                       </tr>
                     </thead>
                     <tbody className={`divide-y ${isMegaEth ? 'divide-white/10' : 'divide-white/[0.08]'}`}>
-                      {NETWORKS.map((network) => (
+                      {displayNetworks.map((network) => (
                         <tr key={network.name} className={`transition-colors group ${isBase ? 'hover:bg-black/5' : 'hover:bg-white/[0.01]'}`}>
                           <td className={`px-6 py-5 font-bold tracking-tight ${isMegaEth ? 'text-white uppercase' : isBase ? 'text-black' : 'text-white'}`}>{network.name}</td>
                           <td className="px-6 py-5">
@@ -394,7 +394,7 @@ export default function DocsContent() {
                 <ul className={`list-disc pl-6 space-y-2 ${isMegaEth ? 'text-white/50 text-sm' : isBase ? 'text-black/60 text-lg' : 'text-gray-300 text-lg'}`}>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Bubble Visualization:</span> Watch live transactions flow as floating bubbles.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Network Orbit View:</span> Click bubbles to focus on specific addresses and linked clusters.</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Multi-Chain Search:</span> Instantly search across all supported chains with live autocomplete and quick suggestions.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>{isMultiChain ? 'Multi-Chain Search' : 'Instant Search'}:</span> {isMultiChain ? 'Instantly search across all supported chains' : `Instantly search ${activeChainConfig.name}`} with live autocomplete and quick suggestions.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Smart Filters:</span> Easily filter transactions by type and status to find what you need quickly.</li>
                 </ul>
               </div>
@@ -406,7 +406,7 @@ export default function DocsContent() {
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                  The leaderboard tracks total points accumulated across all quizzes. Switch between the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Global leaderboard</span> (all chains combined) or individual chain leaderboards. Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their QuizMaster NFT. Your wallet address is displayed in truncated format for privacy.
+                  The leaderboard tracks total points accumulated across all quizzes.{isMultiChain && ' Switch between the Global leaderboard (all chains combined) or individual chain leaderboards.'} Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their QuizMaster NFT. Your wallet address is displayed in truncated format for privacy.
                 </p>
               </div>
             </section>
