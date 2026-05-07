@@ -68,18 +68,15 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
   const chainName = names[resolvedParams.chain] || (resolvedParams.chain.charAt(0).toUpperCase() + resolvedParams.chain.slice(1));
 
   return (
-    <WalletProvider>
-      <div className={`min-h-screen relative pt-20 ${
-        isBase ? 'bg-white text-black' : 
-        isMegaEth ? 'bg-black text-white font-mono' : 
-        isInk ? 'bg-[#0a0a0f] text-white' :
-        isUnichain ? 'bg-[#0d0014] text-white' :
-        isSoneium ? 'bg-[#00040F] text-white' :
-        'bg-[#080810] text-white'
-      }`}>
-        <Header />
-        <BubbleExplorer chain={resolvedParams.chain as any} initialAddress={resolvedParams.address} />
-      </div>
-    </WalletProvider>
+    <div className={`min-h-screen relative pt-20 ${
+      isBase ? 'bg-white text-black' : 
+      isMegaEth ? 'bg-black text-white font-mono' : 
+      isInk ? 'bg-[#0a0a0f] text-white' :
+      isUnichain ? 'bg-[#0d0014] text-white' :
+      isSoneium ? 'bg-[#00040F] text-white' :
+      'bg-[#080810] text-white'
+    }`}>
+      <BubbleExplorer chain={resolvedParams.chain as any} initialAddress={resolvedParams.address} />
+    </div>
   );
 }

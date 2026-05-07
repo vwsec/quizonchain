@@ -55,9 +55,7 @@ export default function SupportContent() {
   const isSoneium = activeChainConfig.name === 'Soneium'
 
   return (
-    <WalletProvider>
-      <Header />
-      <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
+    <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Header */}
           <div className="text-center space-y-4">
@@ -190,7 +188,6 @@ export default function SupportContent() {
             </Accordion>
           </div>
         </div>
-      </main>
-    </WalletProvider>
+    </main>
   )
 }

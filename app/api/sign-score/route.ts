@@ -8,6 +8,26 @@ import {
   toBytes,
 } from "viem"
 import { privateKeyToAccount } from "viem/accounts"
+import { jwtVerify } from "jose"
+
+const rateLimit = new Map<string, { count: number; resetTime: number }>()
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const limit = rateLimit.get(ip)
+  if (limit && now < limit.resetTime) {
+    if (limit.count >= 5) return false
+    limit.count++
+  } else {
+    rateLimit.set(ip, { count: 1, resetTime: now + 60_000 })
+  }
+  return true
+}
+
+const quizJwtSecret =
+  process.env.QUIZ_JWT_SECRET?.trim() ||
+  process.env.GROQ_API_KEY?.trim() ||
+  "dev-insecure-quiz-secret"
 
 const bodySchema = z.object({
   playerAddress: z.string(),
@@ -15,7 +35,9 @@ const bodySchema = z.object({
   total: z.number().int().min(1).max(20),
   nonce: z.number().int(),
   chainId: z.number().int(),
-  contractAddress: z.string()
+  contractAddress: z.string(),
+  quizToken: z.string().optional(), // Token from /api/generate-quiz
+  answers: z.array(z.number().int().min(0).max(3)).optional(), // User's answers
 })
 
 function getSignerPrivateKey(): `0x${string}` {
@@ -31,6 +53,11 @@ function getSignerPrivateKey(): `0x${string}` {
 }
 
 export async function POST(request: Request) {
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
+  if (!checkRateLimit(ip)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+  }
+
   let json: unknown
   try {
     json = await request.json()
@@ -40,19 +67,49 @@ export async function POST(request: Request) {
 
   const parsed = bodySchema.safeParse(json)
   if (!parsed.success) {
-    console.error("Invalid request body:", parsed.error.format())
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 })
   }
 
-  const { playerAddress, score, total, nonce, chainId, contractAddress } = parsed.data
+  const { playerAddress, score: clientScore, total, nonce, chainId, contractAddress, quizToken, answers } = parsed.data
   if (!isAddress(playerAddress)) {
     return NextResponse.json({ error: "Invalid player address" }, { status: 400 })
   }
   if (!isAddress(contractAddress)) {
     return NextResponse.json({ error: "Invalid contract address" }, { status: 400 })
   }
-  if (score > total) {
+  if (clientScore > total) {
     return NextResponse.json({ error: "Score cannot exceed total" }, { status: 400 })
+  }
+
+  // --- SERVER-SIDE SCORE VERIFICATION ---
+  let finalScore = clientScore
+  if (quizToken && answers) {
+    try {
+      const secret = new TextEncoder().encode(quizJwtSecret)
+      const { payload } = await jwtVerify(quizToken, secret)
+      const quizPayload = payload as { answers: number[], type: string }
+      
+      if (quizPayload.type !== "quiz-answers") {
+        return NextResponse.json({ error: "Invalid quiz token type" }, { status: 400 })
+      }
+
+      // Re-calculate score on the server
+      const serverCalculatedScore = answers.reduce((acc, ans, idx) => {
+        return acc + (ans === quizPayload.answers[idx] ? 1 : 0)
+      }, 0)
+
+      if (serverCalculatedScore !== clientScore) {
+        console.warn(`[Security] Score mismatch for ${playerAddress}: client said ${clientScore}, server calculated ${serverCalculatedScore}`)
+        return NextResponse.json({ error: "Score verification failed. Please don't tamper with the results." }, { status: 403 })
+      }
+      finalScore = serverCalculatedScore
+    } catch (err) {
+      console.error("Quiz token verification failed:", err)
+      return NextResponse.json({ error: "Invalid or expired quiz token" }, { status: 400 })
+    }
+  } else if (process.env.NODE_ENV === "production") {
+    // In production, we REQUIRE the quizToken for verification
+    return NextResponse.json({ error: "Security check failed: missing quiz token" }, { status: 403 })
   }
 
   if (process.env.NODE_ENV === "development") {
@@ -75,7 +132,7 @@ export async function POST(request: Request) {
       ],
       [
         playerAddress as `0x${string}`, 
-        score, 
+        finalScore, 
         total, 
         BigInt(nonce), 
         BigInt(chainId), 

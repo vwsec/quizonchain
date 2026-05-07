@@ -68,9 +68,7 @@ export default function ExplorerContent() {
   if (!isMultiChain) return null
 
   return (
-    <WalletProvider>
-      <Header />
-      <main className={`relative z-10 min-h-screen pt-32 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
+    <main className={`relative z-10 min-h-screen pt-32 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <h1 className={`font-extrabold tracking-tight ${isMegaEth ? 'text-4xl md:text-6xl uppercase text-white' : isInk ? 'text-4xl md:text-6xl tracking-tighter text-white' : isUnichain ? 'text-4xl md:text-6xl font-serif italic text-white' : isBase ? 'text-4xl md:text-6xl tracking-tighter text-black' : 'text-4xl md:text-5xl text-white'}`}>
@@ -126,7 +124,6 @@ export default function ExplorerContent() {
             ))}
           </div>
         </div>
-      </main>
-    </WalletProvider>
+    </main>
   )
 }

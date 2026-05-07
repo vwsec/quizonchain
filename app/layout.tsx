@@ -52,6 +52,9 @@ export const metadata: Metadata = {
   },
 }
 
+import { Header } from '@/components/header'
+import { WalletProvider } from '@/components/wallet-provider'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,8 +69,11 @@ export default function RootLayout({
     <html lang="en" className={isMegaEth ? 'theme-megaeth' : isInk ? 'theme-ink' : isUnichain ? 'theme-unichain' : isBase ? 'theme-base' : ''}>
       <body className="font-sans antialiased">
         <Providers>
-          <ThemeBackground />
-          {children}
+          <WalletProvider>
+            <ThemeBackground />
+            <Header />
+            {children}
+          </WalletProvider>
         </Providers>
         <Toaster theme="dark" position="top-center" richColors />
         {process.env.NODE_ENV === 'production' && <Analytics />}

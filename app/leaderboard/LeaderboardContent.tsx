@@ -27,9 +27,7 @@ export default function LeaderboardContent() {
   const [activeTab, setActiveTab] = useState<ChainFilterType>(initialTab)
 
   return (
-    <WalletProvider>
-      <Header />
-      <main className="relative z-10 min-h-screen pt-24 pb-12 px-4 flex flex-col items-center">
+    <main className="relative z-10 min-h-screen pt-24 pb-12 px-4 flex flex-col items-center">
         {/* Tab Switcher */}
         {isMultiChain && (
           <div className="flex flex-wrap items-center justify-center gap-2 mb-8 p-1 backdrop-blur-md bg-black/50 border border-[rgba(255,255,255,0.08)] rounded-2xl w-fit">
@@ -65,7 +63,6 @@ export default function LeaderboardContent() {
         <div className="w-full">
           <Leaderboard chainFilter={activeTab} />
         </div>
-      </main>
-    </WalletProvider>
+    </main>
   )
 }

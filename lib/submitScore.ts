@@ -257,8 +257,10 @@ async function fetchScoreSignature(
   nonce: number,
   chainId: number,
   contractAddress: Address,
+  quizToken?: string,
+  userAnswers?: number[],
 ): Promise<Hex> {
-  const payload = { playerAddress, score, total, nonce, chainId, contractAddress }
+  const payload = { playerAddress, score, total, nonce, chainId, contractAddress, quizToken, answers: userAnswers }
   
   if (process.env.NODE_ENV === 'development') {
     console.debug("Submitting API /sign-score values:")
@@ -362,7 +364,7 @@ export function useSubmitScore() {
   const { chain, address } = useAccount()
 
   return async (
-    params: { score: number; total: number },
+    params: { score: number; total: number; quizToken?: string; userAnswers?: number[] },
     options?: SubmitScoreOptions,
   ): Promise<SubmitScoreResult> => {
     const validationError = validateScoreInputs(params.score, params.total)
@@ -428,7 +430,9 @@ export function useSubmitScore() {
             params.total,
             Number(nonce),
             chainId,
-            addressOrErr
+            addressOrErr,
+            params.quizToken,
+            params.userAnswers,
           ),
         ],
         chain: viemChain,

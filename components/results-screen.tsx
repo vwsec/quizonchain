@@ -18,6 +18,8 @@ import { activeChainConfig } from "@/lib/active-chain-config"
 interface ResultsScreenProps {
   score: number
   totalQuestions: number
+  quizToken?: string
+  userAnswers?: number[]
   onRestart: () => void
   onScoreSubmitted?: () => void
 }
@@ -36,7 +38,14 @@ function formatSwitchChainError(err: unknown): string {
   return "Could not switch network."
 }
 
-export function ResultsScreen({ score, totalQuestions, onRestart, onScoreSubmitted }: ResultsScreenProps) {
+export function ResultsScreen({ 
+  score, 
+  totalQuestions, 
+  quizToken,
+  userAnswers,
+  onRestart, 
+  onScoreSubmitted 
+}: ResultsScreenProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
@@ -178,7 +187,7 @@ export function ResultsScreen({ score, totalQuestions, onRestart, onScoreSubmitt
       return
     }
 
-    const result = await submitScore({ score, total }, { chainId })
+    const result = await submitScore({ score, total, quizToken, userAnswers }, { chainId })
 
     if (result.success) {
       setTxHash(result.hash)

@@ -137,9 +137,7 @@ export default function DocsContent() {
   const step2Text = isMultiChain ? "Choose from Ink, Soneium, Base, Unichain, or MegaETH" : `Connect to ${activeChainConfig.name}`
 
   return (
-    <WalletProvider>
-      <Header />
-      <main className={`relative z-10 min-h-screen pt-24 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
+    <main className={`relative z-10 min-h-screen pt-24 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-start gap-12">
           {/* Sticky Sidebar */}
           <aside className="hidden md:block w-[260px] shrink-0 sticky top-[80px] self-start h-fit max-h-[calc(100vh-100px)] overflow-y-auto">
@@ -454,7 +452,6 @@ export default function DocsContent() {
             </section>
           </div>
         </div>
-      </main>
-    </WalletProvider>
+    </main>
   )
 }

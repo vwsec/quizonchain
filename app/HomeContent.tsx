@@ -49,6 +49,7 @@ function QuizApp() {
   const { isConnected } = useAccount()
   const [screen, setScreen] = useState<Screen>("home")
   const [finalScore, setFinalScore] = useState(0)
+  const [userAnswers, setUserAnswers] = useState<number[]>([])
   const [questions, setQuestions] = useState<Question[]>([])
   const [quizToken, setQuizToken] = useState<string | null>(null)
   const [quizLoading, setQuizLoading] = useState(false)
@@ -132,6 +133,7 @@ function QuizApp() {
     setQuizToken(null)
     setQuizError(null)
     setFinalScore(0)
+    setUserAnswers([])
     setScreen("home")
   }, [chainId])
 
@@ -211,6 +213,7 @@ function QuizApp() {
         throw new Error(data.error ?? "Failed to verify quiz answers")
       }
       setFinalScore(data.score)
+      setUserAnswers(answers)
       setScreen("results")
     } catch (e) {
       setQuizError(e instanceof Error ? e.message : "Failed to verify quiz answers")
@@ -220,6 +223,7 @@ function QuizApp() {
 
   const handleRestart = () => {
     setFinalScore(0)
+    setUserAnswers([])
     setQuestions([])
     setQuizToken(null)
     setScreen("home")
@@ -229,9 +233,7 @@ function QuizApp() {
   if (!mounted) return null
 
   return (
-    <>
-      <Header />
-      <main className="relative z-10 min-h-screen">
+    <main className="relative z-10 min-h-screen">
         {screen === "home" && (
           <HomeScreen
             onStartQuiz={handleStartQuiz}
@@ -251,39 +253,38 @@ function QuizApp() {
           <ResultsScreen
             score={finalScore}
             totalQuestions={questions.length || 5}
+            quizToken={quizToken || undefined}
+            userAnswers={userAnswers}
             onRestart={handleRestart}
             onScoreSubmitted={() => setGlobalRefreshKey(k => k + 1)}
           />
         )}
       </main>
-    </>
-  )
+    )
 }
 
 export default function HomeContent() {
   return (
-    <WalletProvider>
-      <ErrorBoundary
-        fallbackRender={({ resetErrorBoundary }) => (
-          <main className="min-h-screen flex items-center justify-center px-4">
-            <div className="w-full max-w-md rounded-2xl border border-border bg-card/50 p-6 text-center">
-              <h2 className="text-xl font-semibold text-foreground">Something went wrong</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                An unexpected error occurred while loading the quiz.
-              </p>
-              <button
-                type="button"
-                onClick={resetErrorBoundary}
-                className="mt-4 inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
-              >
-                Try again
-              </button>
-            </div>
-          </main>
-        )}
-      >
-        <QuizApp />
-      </ErrorBoundary>
-    </WalletProvider>
+    <ErrorBoundary
+      fallbackRender={({ resetErrorBoundary }) => (
+        <main className="min-h-screen flex items-center justify-center px-4">
+          <div className="w-full max-w-md rounded-2xl border border-border bg-card/50 p-6 text-center">
+            <h2 className="text-xl font-semibold text-foreground">Something went wrong</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              An unexpected error occurred while loading the quiz.
+            </p>
+            <button
+              type="button"
+              onClick={resetErrorBoundary}
+              className="mt-4 inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+            >
+              Try again
+            </button>
+          </div>
+        </main>
+      )}
+    >
+      <QuizApp />
+    </ErrorBoundary>
   )
 }
