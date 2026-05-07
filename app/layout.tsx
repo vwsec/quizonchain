@@ -52,6 +52,7 @@ export const metadata: Metadata = {
   },
   other: activeChain === 'base' ? {
     'base:app_id': '69fcb1ba5f11a2d419d3021c',
+    'base:builder_code': 'bc_2tnkhocu',
   } : {},
 }
 
