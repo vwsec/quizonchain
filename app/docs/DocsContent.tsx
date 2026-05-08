@@ -138,7 +138,7 @@ export default function DocsContent() {
 
   return (
     <main className={`relative z-10 min-h-screen pt-24 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-start gap-12">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-start gap-8 md:gap-12">
           {/* Sticky Sidebar */}
           <aside className="hidden md:block w-[260px] shrink-0 sticky top-[80px] self-start h-fit max-h-[calc(100vh-100px)] overflow-y-auto">
             <nav className="space-y-1 pr-4">
@@ -224,14 +224,14 @@ export default function DocsContent() {
                   { step: "Step 5", title: "Check the leaderboard", desc: "See how you rank against other players globally and per chain" },
                   { step: "Step 6", title: "Earn NFTs", desc: "Reach 100 points to mint an exclusive QuizMaster NFT and gain Master status" }
                 ].map((item, i) => (
-                  <div key={i} className="flex gap-8 relative items-start group">
-                    <div className={`flex-shrink-0 w-14 h-14 flex items-center justify-center font-black text-xl z-20 transition-transform group-hover:scale-110 ${
+                  <div key={i} className="flex gap-3 md:gap-8 relative items-start group">
+                    <div className={`flex-shrink-0 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center font-black text-base md:text-xl z-20 transition-transform group-hover:scale-110 ${
                       isMegaEth 
                         ? 'bg-black border border-[#00ff88] text-[#00ff88] rounded-none' 
                         : isInk
                           ? 'rounded-full bg-[#7B61FF] text-white shadow-[0_0_20px_rgba(123,97,255,0.4)]'
                         : isUnichain
-                          ? 'rounded-2xl bg-[#FF007A] text-white shadow-[0_0_20px_rgba(255,0,122,0.4)]'
+                          ? 'rounded-xl md:rounded-2xl bg-[#FF007A] text-white shadow-[0_0_20px_rgba(255,0,122,0.4)]'
                         : isBase
                           ? 'rounded-full bg-[#0052FF] text-white shadow-lg shadow-[#0052FF]/20'
                         : isSoneium
@@ -240,21 +240,21 @@ export default function DocsContent() {
                     }`}>
                       {i + 1}
                     </div>
-                    <div className={`p-6 flex-1 transition-all border ${
+                    <div className={`p-4 md:p-6 flex-1 transition-all border ${
                       isMegaEth 
                         ? 'bg-black border-white/10 rounded-none hover:border-[#00ff88]/30' 
                         : isInk
-                          ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#7B61FF]/50'
+                          ? 'rounded-2xl md:rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#7B61FF]/50'
                         : isUnichain
-                          ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#FF007A]/50 text-white'
+                          ? 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#FF007A]/50 text-white'
                         : isBase
-                          ? 'rounded-2xl bg-[#f4f5f7] border-black/5 hover:border-[#0052FF]/30 text-black'
+                          ? 'rounded-xl md:rounded-2xl bg-[#f4f5f7] border-black/5 hover:border-[#0052FF]/30 text-black'
                         : isSoneium
-                          ? 'rounded-2xl bg-white/[0.02] border-[#0047FF]/10 hover:bg-white/[0.04] hover:border-[#0047FF]/40 text-white backdrop-blur-xl'
-                        : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
+                          ? 'rounded-xl md:rounded-2xl bg-white/[0.02] border-[#0047FF]/10 hover:bg-white/[0.04] hover:border-[#0047FF]/40 text-white backdrop-blur-xl'
+                        : 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
                     }`}>
-                      <h4 className={`text-xl font-bold mb-2 ${isMegaEth ? 'uppercase' : ''}`}>{item.step}: {item.title}</h4>
-                      <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isSoneium ? 'text-white/50 text-base leading-relaxed' : 'text-gray-400 text-base leading-relaxed'}`}>{item.desc}</p>
+                      <h4 className={`text-base md:text-xl font-bold mb-1 md:mb-2 ${isMegaEth ? 'uppercase' : ''}`}>{item.step}: {item.title}</h4>
+                      <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-sm md:text-base leading-relaxed' : isSoneium ? 'text-white/50 text-sm md:text-base leading-relaxed' : 'text-gray-400 text-sm md:text-base leading-relaxed'}`}>{item.desc}</p>
                     </div>
                   </div>
                 ))}

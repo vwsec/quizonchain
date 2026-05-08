@@ -238,7 +238,7 @@ export function ResultsScreen({
       {/* Background decoration removed - handled by ThemeBackground */}
 
       <div className="flex w-full flex-col items-center text-center">
-        <div className={`mb-10 p-6 shadow-2xl relative group ${
+        <div className={`mb-8 md:mb-10 p-4 md:p-6 shadow-2xl relative group ${
           isMegaEth 
             ? 'bg-black border-2 border-[#00ff88] rounded-none' 
             : isInk 
@@ -251,15 +251,15 @@ export function ResultsScreen({
               ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.1)]'
               : 'bg-white/5 border border-white/10 rounded-2xl'
         }`}>
-          <div className={`mb-4 flex items-center justify-center p-4 ${
+          <div className={`mb-3 md:mb-4 flex items-center justify-center p-3 md:p-4 ${
             isMegaEth ? 'bg-black border border-[#00ff88] rounded-none' : isInk ? 'bg-[#7B61FF]/20 rounded-full' : isUnichain ? 'bg-[#FF007A]/20 rounded-xl' : isBase ? 'bg-[#0052FF]/10 rounded-full' : isSoneium ? 'bg-[#0047FF]/20 rounded-xl' : 'bg-white/10 rounded-xl'
           }`}>
-            {percentage >= 80 ? <Trophy className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : percentage >= 60 ? <Sparkles className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : <Target className={`size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} />}
+            {percentage >= 80 ? <Trophy className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : percentage >= 60 ? <Sparkles className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} /> : <Target className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`} />}
           </div>
-          <div className={`text-5xl font-black mb-2 ${isMegaEth ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
-            {score} <span className={`text-2xl ${isMegaEth ? 'text-white/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
+          <div className={`text-4xl md:text-5xl font-black mb-2 ${isMegaEth ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
+            {score} <span className={`text-xl md:text-2xl ${isMegaEth ? 'text-white/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
           </div>
-          <div className={`text-sm font-black uppercase tracking-widest ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`}>
+          <div className={`text-xs md:text-sm font-black uppercase tracking-widest ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : 'text-primary'}`}>
             {percentage}% Correct
           </div>
         </div>

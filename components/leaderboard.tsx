@@ -305,7 +305,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
 
       {/* ── NFT stats row ─────────────────────────────────────────────────── */}
       {hasNftContract && (
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-4 flex flex-wrap items-center gap-2 md:gap-3">
           {/* Masters count card */}
           <div
             className={`flex items-center gap-2 border px-4 py-2.5 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-3xl' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full shadow-sm' : 'rounded-xl'}`}
@@ -359,17 +359,17 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
 
       {/* ── Error/Warning banner ───────────────────────────────────────────── */}
       {failedNetworks.length > 0 && !loading && (
-        <div className={`mb-4 p-4 rounded-xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-sm transition-all animate-in fade-in slide-in-from-top-2 duration-300 ${
+        <div className={`mb-4 p-3 md:p-4 rounded-xl border flex flex-col md:flex-row items-start md:items-center justify-between gap-3 md:gap-4 text-xs md:text-sm transition-all animate-in fade-in slide-in-from-top-2 duration-300 ${
           data.length > 0 
             ? "bg-amber-500/10 border-amber-500/20 text-amber-200"
             : "bg-red-500/10 border-red-500/20 text-red-200"
         }`}>
-          <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${data.length > 0 ? "bg-amber-500/20" : "bg-red-500/20"}`}>
-              <AlertCircle className={`w-5 h-5 ${data.length > 0 ? "text-amber-400" : "text-red-400"}`} />
+          <div className="flex items-start md:items-center gap-2 md:gap-3">
+            <div className={`p-1.5 md:p-2 rounded-lg ${data.length > 0 ? "bg-amber-500/20" : "bg-red-500/20"}`}>
+              <AlertCircle className={`w-4 h-4 md:w-5 md:h-5 ${data.length > 0 ? "text-amber-400" : "text-red-400"}`} />
             </div>
             <div>
-              <p className="font-bold flex items-center gap-2">
+              <p className="font-bold flex items-center gap-2 flex-wrap">
                 {data.length > 0 ? "Partial Data Displayed" : "Connection Error"}
                 {data.length > 0 && <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-400 border border-amber-500/20 uppercase tracking-widest font-black">Limited View</span>}
               </p>
@@ -464,9 +464,9 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     </td>
 
                     {/* Wallet address + badges */}
-                    <td className={`py-4 font-mono text-sm ${isBase ? 'text-black' : 'text-white'}`}>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span>{truncateAddress(player.address)}</span>
+                    <td className={`py-4 font-mono text-xs md:text-sm ${isBase ? 'text-black' : 'text-white'}`}>
+                      <div className="flex items-center gap-2 flex-wrap min-w-0">
+                        <span className="truncate">{truncateAddress(player.address)}</span>
 
                         {/* NFT Holder star */}
                         {isHolder && hasNftContract && (

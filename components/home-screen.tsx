@@ -226,7 +226,7 @@ export function HomeScreen({
         </div>
 
         {/* Feature highlights */}
-        <div className="mt-14 grid w-full max-w-4xl grid-cols-3 gap-4">
+        <div className="mt-14 grid w-full max-w-4xl grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           {[
             { value: '5', label: 'Questions' },
             { value: 'On-Chain', label: 'Results' },

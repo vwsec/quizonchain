@@ -30,32 +30,34 @@ export default function LeaderboardContent() {
     <main className="relative z-10 min-h-screen pt-24 pb-12 px-4 flex flex-col items-center">
         {/* Tab Switcher */}
         {isMultiChain && (
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8 p-1 backdrop-blur-md bg-black/50 border border-[rgba(255,255,255,0.08)] rounded-2xl w-fit">
-            {TABS.map((tab) => {
-              const isActive = activeTab === tab.id
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                    isActive
-                      ? 'bg-[#0047FF] text-white shadow-lg shadow-[#0047FF]/20'
-                      : 'bg-transparent text-gray-400 hover:text-white border border-[rgba(255,255,255,0.08)] hover:border-white/20'
-                  }`}
-                >
-                  {tab.iconUrl && (
-                    <Image
-                      src={tab.iconUrl}
-                      alt={`${tab.label} logo`}
-                      width={16}
-                      height={16}
-                      className="w-4 h-4 rounded-full"
-                    />
-                  )}
-                  <span>{tab.label}</span>
-                </button>
-              )
-            })}
+          <div className="w-full max-w-[90vw] overflow-x-auto scrollbar-none">
+            <div className="flex items-center justify-start md:justify-center gap-2 mb-8 p-1 backdrop-blur-md bg-black/50 border border-[rgba(255,255,255,0.08)] rounded-2xl w-fit mx-auto">
+              {TABS.map((tab) => {
+                const isActive = activeTab === tab.id
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all whitespace-nowrap ${
+                      isActive
+                        ? 'bg-[#0047FF] text-white shadow-lg shadow-[#0047FF]/20'
+                        : 'bg-transparent text-gray-400 hover:text-white border border-[rgba(255,255,255,0.08)] hover:border-white/20'
+                    }`}
+                  >
+                    {tab.iconUrl && (
+                      <Image
+                        src={tab.iconUrl}
+                        alt={`${tab.label} logo`}
+                        width={16}
+                        height={16}
+                        className="w-4 h-4 rounded-full shrink-0"
+                      />
+                    )}
+                    <span>{tab.label}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
         )}
 

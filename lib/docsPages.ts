@@ -12,19 +12,19 @@ export const INK_DOCS_PAGES = [
 ]
 
 export const BASE_DOCS_PAGES = [
-  'https://docs.base.org/docs/using-base',
-  'https://docs.base.org/docs/tools/bridges',
-  'https://docs.base.org/docs/tools/block-explorers',
+  'https://docs.base.org/base-chain/quickstart/why-base',
+  'https://docs.base.org/base-account/overview/what-is-base-account',
+  'https://docs.base.org/apps/quickstart/build-app',
 ];
 
 export const UNICHAIN_DOCS_PAGES = [
-  'https://docs.unichain.org/docs/technical-information/network-information',
+  'https://developers.uniswap.org/docs/unichain',
   'https://docs.unichain.org/docs/building-on-unichain',
-  'https://docs.unichain.org/docs/technical-information/contract-addresses',
+  'https://developers.uniswap.org/whitepaper_unichain.pdf',
 ];
 
 export const MEGAETH_DOCS_PAGES = [
-  'https://docs.megaeth.com/frontier',
-  'https://docs.megaeth.com/build',
+  'https://docs.megaeth.com',
+  'https://docs.megaeth.com/spec',
   'https://docs.megaeth.com/architecture',
 ];

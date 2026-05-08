@@ -122,20 +122,20 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
         </div>
 
         {/* Question card */}
-        <div className={`p-6 md:p-8 mb-6 border ${
+        <div className={`p-4 md:p-8 mb-6 border ${
           isMegaEth 
             ? 'border-white/15 bg-black rounded-none' 
             : isInk
-              ? 'rounded-3xl border-white/10 bg-white/5 backdrop-blur-lg'
+              ? 'rounded-2xl md:rounded-3xl border-white/10 bg-white/5 backdrop-blur-lg'
             : isUnichain
-              ? 'rounded-2xl border-white/10 bg-white/5 backdrop-blur-lg'
+              ? 'rounded-xl md:rounded-2xl border-white/10 bg-white/5 backdrop-blur-lg'
             : isBase
-              ? 'rounded-2xl border-black/5 bg-[#f4f5f7] shadow-sm'
+              ? 'rounded-xl md:rounded-2xl border-black/5 bg-[#f4f5f7] shadow-sm'
             : isSoneium
-              ? 'rounded-2xl border-[#0047FF]/20 bg-white/[0.03] backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.05)]'
-              : 'rounded-2xl border-border bg-card/50 backdrop-blur-lg'
+              ? 'rounded-xl md:rounded-2xl border-[#0047FF]/20 bg-white/[0.03] backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.05)]'
+              : 'rounded-xl md:rounded-2xl border-border bg-card/50 backdrop-blur-lg'
         }`}>
-          <h2 className={`text-xl md:text-2xl font-semibold text-balance ${isMegaEth ? 'uppercase text-white' : isUnichain ? 'font-serif italic text-white' : isInk ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : isSoneium ? 'tracking-tight text-white' : 'text-white'}`}>
+          <h2 className={`text-lg md:text-2xl font-semibold text-balance ${isMegaEth ? 'uppercase text-white' : isUnichain ? 'font-serif italic text-white' : isInk ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : isSoneium ? 'tracking-tight text-white' : 'text-white'}`}>
             {question.question}
           </h2>
         </div>
@@ -153,7 +153,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
                 onClick={() => handleSelectAnswer(index)}
                 disabled={isAnswered}
                 className={cn(
-                  "w-full text-left px-5 py-4 transition-all duration-200 flex items-center justify-between gap-4",
+                  "w-full text-left px-4 md:px-5 py-3 md:py-4 transition-all duration-200 flex items-center justify-between gap-3 md:gap-4",
                   isMegaEth ? "rounded-none border border-white/15" : isInk ? "rounded-full border-2 backdrop-blur-md" : isUnichain ? "rounded-2xl border-2 backdrop-blur-md" : isSoneium ? "rounded-xl border border-[#0047FF]/20 backdrop-blur-md" : "rounded-xl border-2 backdrop-blur-md",
                   getOptionStyles(index)
                 )}

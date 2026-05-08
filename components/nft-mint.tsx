@@ -496,7 +496,7 @@ export function NftMintModal() {
                   </div>
 
                   {/* ── Stats row ─────────────────────────────────────── */}
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-4 flex gap-1.5 md:gap-2">
                     <div className={`flex flex-1 flex-col items-center py-3 border ${
                       isMegaEth ? 'bg-black border-white/15 rounded-none' : isBase ? 'rounded-xl border-black/5 bg-black/5' : 'rounded-xl border-white/[0.07] bg-white/[0.04]'
                     }`}>
@@ -718,7 +718,7 @@ export function NftBadgeTrigger() {
 
       {/* Home-screen banner */}
       <div
-        className={`mb-6 flex flex-col items-center gap-2 border px-5 py-4 text-center ${
+        className={`mb-6 flex flex-col sm:flex-row items-center gap-3 border px-4 md:px-5 py-4 text-center sm:text-left ${
           isMegaEth ? 'bg-black border-white/20 rounded-none' : 'rounded-2xl'
         }`}
         style={(!isMegaEth && !isInk && !isUnichain) ? {
@@ -916,11 +916,11 @@ export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
           {/* ── NFT Holder badge ───────────────────────────────────── */}
           {!loading && hasMinted && (
             <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <span className="text-xl">⭐</span>
-                <div>
-                  <p className="text-sm font-semibold text-white">NFT Holder</p>
-                  <p className="text-xs text-white/45">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-xl shrink-0">⭐</span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-white truncate">NFT Holder</p>
+                  <p className="text-xs text-white/45 truncate">
                     You own Quiz On Chain NFT
                   </p>
                 </div>
@@ -942,12 +942,12 @@ export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
           {/* ── Progress bar (not yet eligible) ───────────────────── */}
           {!loading && !hasMinted && !isEligible && (
             <div>
-              <div className="mb-2.5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-base leading-none">🏆</span>
-                  <span className={`text-sm font-medium ${isBase ? 'text-black' : 'text-white'}`}>Progress to NFT</span>
+              <div className="mb-2.5 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-base leading-none shrink-0">🏆</span>
+                  <span className={`text-sm font-medium truncate ${isBase ? 'text-black' : 'text-white'}`}>Progress to NFT</span>
                 </div>
-                <span className="text-xs font-semibold" style={{ color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700" }}>
+                <span className="text-xs font-semibold shrink-0" style={{ color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700" }}>
                   {progress} / 100 pts
                 </span>
               </div>
@@ -981,10 +981,10 @@ export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
 
           {/* ── Eligible: Claim NFT button ─────────────────────────── */}
           {!loading && !hasMinted && isEligible && (
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2.5">
-                <span className="text-xl">🏆</span>
-                <div>
+                <span className="text-xl shrink-0">🏆</span>
+                <div className="min-w-0">
                   <p className={`text-sm font-semibold ${isBase ? 'text-black tracking-tighter' : 'text-white'} ${isMegaEth ? 'uppercase font-mono' : ''}`}>
                     You've reached{" "}
                     <span style={{ color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : "#FFD700" }}>{points.toString()} pts</span>!
@@ -996,7 +996,7 @@ export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
               </div>
               <button
                 onClick={() => setModalOpen(true)}
-                className={`relative flex shrink-0 items-center gap-1.5 transition-all hover:scale-105 active:scale-95 ${
+                className={`relative flex shrink-0 items-center gap-1.5 transition-all hover:scale-105 active:scale-95 self-start sm:self-auto ${
                   isMegaEth 
                     ? 'rounded-none bg-[#00ff88] text-black px-4 py-2 text-sm font-mono font-bold uppercase' 
                     : 'rounded-full px-4 py-2 text-sm font-bold text-black'

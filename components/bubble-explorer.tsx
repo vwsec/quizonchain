@@ -644,7 +644,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         const dpr = window.devicePixelRatio || 1
         canvas.width = parent.clientWidth * dpr
         canvas.height = parent.clientHeight * dpr
-        ctx.scale(dpr, dpr)
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
         canvas.style.width = `${parent.clientWidth}px`
         canvas.style.height = `${parent.clientHeight}px`
       }
@@ -1421,41 +1421,41 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   // --- Render ---
   return (
     <>
-    <div className="relative w-full h-[calc(100vh-80px)] flex flex-col pt-16">
+    <div className="relative w-full h-[calc(100dvh-80px)] flex flex-col pt-16">
       
       {/* Top Header UI */}
-      <div className="absolute top-16 inset-x-0 z-20 px-8 flex justify-between items-start pointer-events-none">
+      <div className="absolute top-16 inset-x-0 z-20 px-4 md:px-8 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-3">
         
         {/* Left Side: Stats */}
-        <div className="space-y-4 pointer-events-auto">
+        <div className="space-y-1 md:space-y-4 pointer-events-auto w-full md:w-auto">
           <div className="flex items-center gap-4">
-            <h1 className={`text-4xl font-extrabold tracking-tight ${isMegaEth ? 'uppercase font-mono' : isBase ? 'tracking-tighter' : ''}`} style={{ color: config.color }}>
+            <h1 className={`text-xl md:text-4xl font-extrabold tracking-tight ${isMegaEth ? 'uppercase font-mono' : isBase ? 'tracking-tighter' : ''}`} style={{ color: config.color }}>
               {config.name}
             </h1>
-            <span className={`text-xl font-medium tracking-tight ${isBase ? 'text-black/40' : 'text-gray-400'}`}>
+            <span className={`hidden md:inline text-xl font-medium tracking-tight ${isBase ? 'text-black/40' : 'text-gray-400'}`}>
               {viewMode === 'bubbles' ? 'Activity Explorer' : 'Network Cluster'}
             </span>
           </div>
 
           {viewMode === 'bubbles' ? (
-            <div className="flex gap-3">
-              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-xl px-4 py-2 flex flex-col shadow-sm`}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className={`text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Total TXs</span>
-                  <div className="flex items-center gap-1.5 ml-auto translate-y-[-1px]">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                    <span className="text-[9px] font-black text-green-500 tracking-[0.2em] uppercase">Live</span>
+            <div className="flex flex-wrap gap-1.5 md:gap-3">
+              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+                <div className="flex items-center gap-1 md:gap-2 mb-0.5 md:mb-1">
+                  <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Total TXs</span>
+                  <div className="flex items-center gap-1 md:gap-1.5 ml-auto translate-y-[-1px]">
+                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                    <span className="text-[7px] md:text-[9px] font-black text-green-500 tracking-[0.2em] uppercase">Live</span>
                   </div>
                 </div>
-                <span className={`text-lg font-mono ${isBase ? 'text-black' : 'text-white'}`}>{stats.totalTxs}</span>
+                <span className={`text-xs md:text-lg font-mono ${isBase ? 'text-black' : 'text-white'}`}>{stats.totalTxs}</span>
               </div>
-              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-xl px-4 py-2 flex flex-col shadow-sm`}>
-                <span className={`text-xs uppercase font-bold tracking-wider mb-1 ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Latest Block</span>
-                <span className={`text-lg font-mono`} style={{ color: config.color }}>{stats.latestBlock || '-'}</span>
+              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Latest Block</span>
+                <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.latestBlock || '-'}</span>
               </div>
-              <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-xl px-4 py-2 flex-col shadow-sm`}>
-                <span className={`text-xs uppercase font-bold tracking-wider mb-1 ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Avg Gas</span>
-                <span className={`text-lg font-mono`} style={{ color: config.color }}>{stats.avgGas}</span>
+              <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex-col shadow-sm`}>
+                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Avg Gas</span>
+                <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.avgGas}</span>
               </div>
             </div>
           ) : (
@@ -1478,9 +1478,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         </div>
 
         {/* Right Side: Filters & Controls */}
-          <div className="flex flex-col items-end gap-3 pointer-events-auto">
+          <div className="flex flex-col items-start md:items-end gap-1 md:gap-3 pointer-events-auto w-full md:w-auto">
           
-          <div className={`flex p-1 border shadow-sm ${
+          <div className={`flex p-0.5 md:p-1 border shadow-sm ${
             isMegaEth 
               ? 'bg-black border-white/10 rounded-none' 
               : isBase 
@@ -1492,7 +1492,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                  setViewMode('bubbles')
                  router.push(`/explorer/${chain}`)
                }}
-               className={`px-4 py-2 text-xs font-bold transition-all duration-200 ${
+               className={`px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-xs font-bold transition-all duration-200 ${
                  isMegaEth ? 'rounded-none uppercase font-mono' : 'rounded-full'
                } ${
                  viewMode === 'bubbles' 
@@ -1504,7 +1504,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
             </button>
             <button
                onClick={() => setViewMode('network')}
-               className={`px-4 py-2 text-xs font-bold transition-all duration-200 flex items-center gap-2 ${
+               className={`px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-xs font-bold transition-all duration-200 flex items-center gap-1 md:gap-2 ${
                  isMegaEth ? 'rounded-none uppercase font-mono' : 'rounded-full'
                } ${
                  viewMode === 'network' 
@@ -1513,16 +1513,17 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                }`}
             >
               {viewMode === 'network' && (
-                <span className="relative flex h-2 w-2">
+                <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-green-500" />
                 </span>
               )}
-              Network View
+              <span className="hidden md:inline">Network View</span>
+              <span className="md:hidden">Network</span>
             </button>
           </div>
 
-          <div className={`flex flex-nowrap overflow-x-auto scrollbar-none p-1 border shadow-sm ${
+          <div className={`flex flex-nowrap overflow-x-auto scrollbar-none p-0.5 md:p-1 border shadow-sm ${
             isMegaEth 
               ? 'bg-black border-white/10 rounded-none' 
               : isBase 
@@ -1539,7 +1540,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               <button
                 key={f.key}
                 onClick={() => setFilter(f.key)}
-                className={`px-3 py-1.5 text-xs font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap shrink-0 ${
+                className={`px-1.5 md:px-3 py-0.5 md:py-1.5 text-[9px] md:text-xs font-black uppercase tracking-wider transition-all duration-200 whitespace-nowrap shrink-0 ${
                   isMegaEth ? 'rounded-none font-mono' : 'rounded-full'
                 } ${
                   filter === f.key
@@ -1548,55 +1549,67 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 }`}
                 style={filter === f.key && !isMegaEth ? { backgroundColor: config.color } : {}}
               >
-                {f.label}
+                {f.label === 'Contract Calls' ? (
+                  <>
+                    <span className="hidden md:inline">Contract Calls</span>
+                    <span className="md:hidden">Calls</span>
+                  </>
+                ) : f.label === 'Token Transfers' ? (
+                  <>
+                    <span className="hidden md:inline">Token Transfers</span>
+                    <span className="md:hidden">Tokens</span>
+                  </>
+                ) : (
+                  f.label
+                )}
               </button>
             ))}
           </div>
           
-          <div className="flex items-center gap-3">
-             <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isMegaEth ? 'text-white/30 font-mono' : isBase ? 'text-black/30' : 'text-gray-500'}`}>
-                Last updated: {lastUpdate ? lastUpdate.toLocaleTimeString() : '-'}
-             </span>
-             
-             <button
-                onClick={() => setIsAlertsModalOpen(true)}
-                className={`group flex items-center gap-2 px-4 py-2 border transition-all duration-200 shadow-sm ${
-                  isMegaEth 
-                    ? 'bg-black border-white/15 text-white rounded-none font-mono uppercase hover:border-[#00ff88]/50' 
-                    : isBase 
-                      ? 'bg-black/5 border-black/5 text-black hover:bg-black/10 rounded-full' 
-                      : 'bg-white/[0.04] border-white/[0.08] text-white hover:bg-white/[0.1] backdrop-blur-md rounded-full'
-                }`}
-             >
-                <div className="relative">
-                   <Bell className={`w-4 h-4 transition-transform group-hover:rotate-12 ${isBase ? 'text-black' : 'text-white'}`} />
-                   {settings.enabled && (
-                     <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-transparent" />
-                   )}
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wider">Alerts</span>
-             </button>
+          <div className="flex items-center gap-1 md:gap-3">
+              <span className={`hidden sm:inline text-[10px] font-bold uppercase tracking-[0.2em] ${isMegaEth ? 'text-white/30 font-mono' : isBase ? 'text-black/30' : 'text-gray-500'}`}>
+                 Last updated: {lastUpdate ? lastUpdate.toLocaleTimeString() : '-'}
+              </span>
+              
+              <button
+                 onClick={() => setIsAlertsModalOpen(true)}
+                 className={`group flex items-center gap-1 md:gap-2 px-2 md:px-4 py-1 md:py-2 border transition-all duration-200 shadow-sm ${
+                   isMegaEth 
+                     ? 'bg-black border-white/15 text-white rounded-none font-mono uppercase hover:border-[#00ff88]/50' 
+                     : isBase 
+                       ? 'bg-black/5 border-black/5 text-black hover:bg-black/10 rounded-full' 
+                       : 'bg-white/[0.04] border-white/[0.08] text-white hover:bg-white/[0.1] backdrop-blur-md rounded-full'
+                 }`}
+              >
+                 <div className="relative">
+                    <Bell className={`w-3 h-3 md:w-4 md:h-4 transition-transform group-hover:rotate-12 ${isBase ? 'text-black' : 'text-white'}`} />
+                    {settings.enabled && (
+                      <div className="absolute -top-0.5 -right-0.5 md:-top-1 md:-right-1 w-1.5 h-1.5 md:w-2 md:h-2 bg-red-500 rounded-full border border-transparent md:border-2" />
+                    )}
+                 </div>
+                 <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Alerts</span>
+              </button>
 
-             <button
-                onClick={viewMode === 'bubbles' ? fetchBubblesData : () => networkCenterRef.current.hash && fetchNetworkData(networkCenterRef.current.hash)}
-                disabled={loading}
-                className={`p-2 border transition-all duration-200 shadow-sm ${
-                  isMegaEth 
-                    ? 'bg-black border-white/15 text-white rounded-none hover:border-[#00ff88]/50' 
-                    : isBase 
-                      ? 'bg-black/5 border-black/5 text-black hover:bg-black/10 rounded-full' 
-                      : 'bg-white/[0.04] border-white/[0.08] text-white hover:bg-white/[0.1] backdrop-blur-md rounded-full'
-                } ${loading ? 'animate-spin opacity-50' : ''}`}
-                title="Refresh data"
-             >
-                <RefreshCw className="w-4 h-4" />
-             </button>
-          </div>
+              <button
+                 onClick={viewMode === 'bubbles' ? fetchBubblesData : () => networkCenterRef.current.hash && fetchNetworkData(networkCenterRef.current.hash)}
+                 disabled={loading}
+                 className={`p-1.5 md:p-2 border transition-all duration-200 shadow-sm ${
+                   isMegaEth 
+                     ? 'bg-black border-white/15 text-white rounded-none hover:border-[#00ff88]/50' 
+                     : isBase 
+                       ? 'bg-black/5 border-black/5 text-black hover:bg-black/10 rounded-full' 
+                       : 'bg-white/[0.04] border-white/[0.08] text-white hover:bg-white/[0.1] backdrop-blur-md rounded-full'
+                 } ${loading ? 'animate-spin opacity-50' : ''}`}
+                 title="Refresh data"
+              >
+                 <RefreshCw className="w-3 h-3 md:w-4 md:h-4" />
+              </button>
+           </div>
         </div>
       </div>
 
       {/* Centered Search Bar */}
-      <div className="absolute top-[180px] inset-x-0 z-30 px-4 flex flex-col items-center pointer-events-none">
+      <div className="absolute top-[160px] md:top-[180px] inset-x-0 z-30 px-4 flex flex-col items-center pointer-events-none">
         <span className={`text-[11px] font-bold uppercase tracking-widest mb-3 pointer-events-auto px-3 py-1 border backdrop-blur-md ${
           isMegaEth 
             ? 'bg-black border-[#00ff88] text-[#00ff88] rounded-none font-mono' 
@@ -1844,8 +1857,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 </div>
               ) : searchResult && searchResult.type === 'transaction' ? (
                 /* Detailed Transaction Card */
-                <div className="w-full max-w-4xl bg-[#0e0f18] border border-white/10 rounded-[40px] shadow-2xl relative min-h-[650px] flex flex-col overflow-hidden">
-                   <div className="p-8">
+                <div className="w-full max-w-4xl bg-[#0e0f18] border border-white/10 rounded-2xl md:rounded-[40px] shadow-2xl relative min-h-[650px] flex flex-col overflow-hidden">
+                   <div className="p-4 md:p-8">
                      <div className="flex justify-between items-start mb-10">
                        <div className="space-y-1.5">
                           <h2 className="text-2xl font-black text-white tracking-tighter flex items-center gap-3">
@@ -1927,7 +1940,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   
                         {/* Details Grid */}
                         <div className="bg-white/[0.02] border border-white/5 rounded-[32px] overflow-hidden divide-y divide-white/5">
-                           <div className="grid grid-cols-1 md:grid-cols-2 p-6 gap-6 md:gap-12">
+                           <div className="grid grid-cols-1 md:grid-cols-2 p-4 md:p-6 gap-4 md:gap-12">
                               <div className="space-y-1">
                                  <span className="block text-[10px] uppercase tracking-[0.2em] font-black text-gray-500 mb-1">Value</span>
                                  <div className="flex items-baseline gap-2">
@@ -2068,7 +2081,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
 
       {/* Address Details Panel (Right Side Desktop) */}
       {searchResult?.type === 'address' && (
-        <div className="absolute top-40 right-8 w-80 bg-[#0d0e15]/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl p-5 pointer-events-auto z-30">
+        <div className="absolute top-40 right-4 md:right-8 left-4 md:left-auto w-auto md:w-80 bg-[#0d0e15]/90 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl p-5 pointer-events-auto z-30">
              <div className="flex justify-between items-start mb-5">
                 <div className="flex flex-col gap-1.5">
                   <h3 className="text-base font-extrabold text-white flex items-center gap-2 tracking-tight">
@@ -2165,7 +2178,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
             <div className="max-w-[1400px] mx-auto px-6 pt-4 pb-8">
               {/* Address Info Banner (Network View) */}
               {activeSearch?.type === 'address' && activeSearch.addressData && (
-                <div className="mb-6 p-6 bg-white/[0.04] border border-white/[0.1] rounded-3xl backdrop-blur-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                <div className="mb-6 p-4 md:p-6 bg-white/[0.04] border border-white/[0.1] rounded-2xl md:rounded-3xl backdrop-blur-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
                   <div className="flex items-center gap-5">
                     <div 
                       className="p-4 rounded-2xl border"

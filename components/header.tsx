@@ -5,7 +5,21 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { NftMintModal } from "./nft-mint"
+import { Menu } from "lucide-react"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from "@/components/ui/sheet"
 
+const NAV_ITEMS = [
+  { href: '/', label: 'Quiz' },
+  { href: '/leaderboard', label: 'Leaderboard' },
+  { href: '/docs', label: 'Docs' },
+  { href: '/explorer', label: 'Explorer', matchStart: true },
+  { href: '/support', label: 'Support' }
+]
 
 export function Header() {
   const [mounted, setMounted] = useState(false)
@@ -41,10 +55,13 @@ export function Header() {
 
   if (!mounted) return null
 
+  const isActiveLink = (nav: typeof NAV_ITEMS[number]) =>
+    nav.matchStart ? pathname.startsWith(nav.href) : pathname === nav.href
+
   return (
     <header className={`fixed inset-x-0 top-0 z-50 ${isMegaEth ? 'bg-black border-b border-white/10' : isInk || isUnichain ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5' : isBase ? 'bg-white/90 backdrop-blur-md border-b border-black/5' : isSoneium ? 'bg-[#00040F]/80 backdrop-blur-xl border-b border-[#0047FF]/10' : ''}`}>
       <div className="flex items-center justify-between px-4 py-4 md:px-8">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2 shrink-0">
           {!isMegaEth && (
             <Image
               src={isSoneium ? "/chains/soneium.png" : isBase ? "/chains/base.png" : isInk ? "/chains/ink-logo-purple-white-icon.png" : isUnichain ? "/chains/unichain.png" : isMegaEth ? "/chains/megaeth.png" : "/logo.png"}
@@ -59,16 +76,12 @@ export function Header() {
             Quiz On <span className={accentColor}>{chainName}</span>
           </span>
         </Link>
-        <div className="flex items-center gap-4">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-4">
           <div className={`flex items-center p-1 ${isMegaEth ? 'bg-black border border-white/10 rounded-none' : isInk || isUnichain ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-lg' : isBase ? 'bg-black/5 border border-black/5 rounded-full' : isSoneium ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-full backdrop-blur-xl' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl'}`}>
-            {[
-              { href: '/', label: 'Quiz' },
-              { href: '/leaderboard', label: 'Leaderboard' },
-              { href: '/docs', label: 'Docs' },
-              { href: '/explorer', label: 'Explorer', matchStart: true },
-              { href: '/support', label: 'Support' }
-            ].map((nav) => {
-              const isActive = nav.matchStart ? pathname.startsWith(nav.href) : pathname === nav.href
+            {NAV_ITEMS.map((nav) => {
+              const active = isActiveLink(nav)
               const activeClass = isMegaEth 
                 ? 'bg-white text-black rounded-none' 
                 : isInk
@@ -91,7 +104,7 @@ export function Header() {
                   key={nav.href}
                   href={nav.href}
                   className={`px-3 py-1.5 text-sm transition-all duration-200 text-center min-w-[80px] ${isMegaEth ? 'font-mono uppercase font-medium' : isInk || isUnichain ? 'font-semibold tracking-tight' : 'font-medium'} ${
-                    isActive ? activeClass : inactiveClass
+                    active ? activeClass : inactiveClass
                   }`}
                 >
                   {nav.label}
@@ -101,6 +114,76 @@ export function Header() {
           </div>
           <NftMintModal />
           <ConnectButton showBalance={false} />
+        </div>
+
+        {/* Mobile Controls */}
+        <div className="flex md:hidden items-center gap-1">
+          <NftMintModal />
+          <ConnectButton showBalance={false} />
+          <Sheet>
+            <SheetTrigger asChild>
+              <button
+                className={`p-2 transition-colors ${
+                  isMegaEth ? 'text-white hover:text-[#00ff88]' : isBase ? 'text-black hover:text-black/60' : 'text-white hover:text-white/60'
+                }`}
+                aria-label="Open menu"
+              >
+                <Menu className="size-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              side="right"
+              className={`w-[280px] sm:w-[320px] border-l p-0 ${
+                isMegaEth ? 'bg-black border-white/10' : isBase ? 'bg-white border-black/5' : 'bg-[#0a0a0f] border-white/10'
+              }`}
+            >
+              <div className="flex flex-col h-full">
+                <div className={`px-6 py-6 border-b ${isMegaEth ? 'border-white/10' : isBase ? 'border-black/5' : 'border-white/10'}`}>
+                  <span className={`text-lg font-bold ${isMegaEth ? 'text-white font-mono uppercase tracking-tight' : isInk || isUnichain ? 'text-white tracking-tighter' : isBase ? 'text-black tracking-tight' : 'text-white tracking-tight'}`}>
+                    Quiz On <span className={accentColor}>{chainName}</span>
+                  </span>
+                </div>
+                <nav className="flex-1 px-3 py-4 space-y-1">
+                  {NAV_ITEMS.map((nav) => {
+                    const active = isActiveLink(nav)
+                    return (
+                      <SheetClose asChild key={nav.href}>
+                        <Link
+                          href={nav.href}
+                          className={`flex items-center px-4 py-3 text-base font-medium transition-all rounded-lg ${
+                            active
+                              ? isMegaEth
+                                ? 'bg-white/10 text-[#00ff88] font-mono uppercase'
+                                : isBase
+                                  ? 'bg-[#0052FF]/10 text-[#0052FF]'
+                                  : isInk
+                                    ? 'bg-[#7B61FF]/10 text-[#7B61FF]'
+                                  : isUnichain
+                                    ? 'bg-[#FF007A]/10 text-[#FF007A]'
+                                  : isSoneium
+                                    ? 'bg-[#0047FF]/10 text-[#0047FF]'
+                                    : 'bg-[#0047FF]/10 text-[#0047FF]'
+                              : isMegaEth
+                                ? 'text-white/50 hover:text-white hover:bg-white/5 font-mono uppercase'
+                                : isBase
+                                  ? 'text-black/50 hover:text-black hover:bg-black/5'
+                                  : 'text-white/50 hover:text-white hover:bg-white/5'
+                          }`}
+                        >
+                          {nav.label}
+                        </Link>
+                      </SheetClose>
+                    )
+                  })}
+                </nav>
+                <div className={`px-6 py-4 border-t ${isMegaEth ? 'border-white/10' : isBase ? 'border-black/5' : 'border-white/10'}`}>
+                  <p className={`text-xs ${isBase ? 'text-black/40' : 'text-white/40'}`}>
+                    Quiz On Chain
+                  </p>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
