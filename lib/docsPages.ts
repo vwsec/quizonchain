@@ -14,13 +14,16 @@ export const INK_DOCS_PAGES = [
 export const BASE_DOCS_PAGES = [
   'https://docs.base.org/base-chain/quickstart/why-base',
   'https://docs.base.org/base-account/overview/what-is-base-account',
-  'https://docs.base.org/apps/quickstart/build-app',
+  'https://docs.base.org/base-chain/network-information/bridges',
+  'https://docs.base.org/base-chain/network-information/network-faucets',
+  'https://docs.base.org/get-started/block-explorers',
 ];
 
 export const UNICHAIN_DOCS_PAGES = [
-  'https://developers.uniswap.org/docs/unichain',
+  'https://docs.unichain.org/docs/unichain',
+  'https://docs.unichain.org/docs/unichain/technical-information/network-information',
+  'https://docs.unichain.org/docs/unichain/guides/deploy-a-smart-contract',
   'https://docs.unichain.org/docs/building-on-unichain',
-  'https://developers.uniswap.org/whitepaper_unichain.pdf',
 ];
 
 export const MEGAETH_DOCS_PAGES = [
