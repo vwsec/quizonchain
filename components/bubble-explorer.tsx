@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
 import { formatEther } from 'viem'
-import { ExternalLink, RefreshCw, AlertCircle, ArrowLeft, ArrowRight, Search, X, Loader2, Clock, FileCode, Coins, Wallet, Copy, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ExternalLink, RefreshCw, AlertCircle, ArrowLeft, ArrowRight, Search, X, Loader2, Clock, FileCode, Coins, Wallet, Copy, Check } from 'lucide-react'
 import { safeStorage } from '../lib/safe-storage'
 import { useRouter, usePathname } from 'next/navigation'
 import { toast } from 'sonner'
@@ -55,7 +55,6 @@ const CHAIN_CONFIG = {
 
 
 type FilterType = 'all' | 'transfers' | 'contract_calls' | 'token_transfers' | 'nfts'
-type ViewMode = 'bubbles' | 'network'
 
 interface TxData {
   hash: string
@@ -177,8 +176,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   
   const [stats, setStats] = useState({ totalTxs: 0, latestBlock: 0, avgGas: '0' })
   const [filter, setFilter] = useState<FilterType>('all')
-  const [viewMode, setViewMode] = useState<ViewMode>(initialAddress ? 'network' : 'bubbles')
-  const [networkStats, setNetworkStats] = useState({ address: '', sent: '0', received: '0' })
+  const viewMode = 'bubbles' as const
   
   const [hoveredTx, setHoveredTx] = useState<{ tx: TxData; x: number; y: number } | null>(null)
   
@@ -200,33 +198,12 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   const activeSearchRef = useRef<ActiveSearch>(null)
   useEffect(() => { activeSearchRef.current = activeSearch }, [activeSearch])
 
-  // Network table state
-
-  // Network table state
-  const [networkTxs, setNetworkTxs] = useState<TxData[]>([])
-  const [networkTableLoading, setNetworkTableLoading] = useState(false)
-  const [networkNextParams, setNetworkNextParams] = useState<any>(null)
-  const [networkPageStack, setNetworkPageStack] = useState<any[]>([])
-  const [newTxHashes, setNewTxHashes] = useState<Set<string>>(new Set())
-  const prevNetworkHashesRef = useRef<Set<string>>(new Set())
-
   const { settings, saveSettings, monitorTransactions } = useTelegramAlerts(config.name, config.explorer)
   const [isAlertsModalOpen, setIsAlertsModalOpen] = useState(false)
 
-  // Scroll searched row into view
-  const searchedRowRef = useRef<HTMLTableRowElement>(null)
-  useEffect(() => {
-    if (activeSearch?.type === 'tx' && viewMode === 'network' && searchedRowRef.current) {
-      searchedRowRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-  }, [activeSearch, viewMode])
-
   // Refs for canvas synchronization
   const bubblesRef = useRef<Map<string, Bubble>>(new Map())
-  const networkNodesRef = useRef<Bubble[]>([])
   const filterRef = useRef<FilterType>('all')
-  const viewModeRef = useRef<ViewMode>('bubbles')
-  const networkCenterRef = useRef({ hash: '', sent: '0', received: '0' })
   const mouseRef = useRef({ x: -1000, y: -1000, isHovering: false })
   const ripplesRef = useRef<Ripple[]>([])
   const rafRef = useRef<number>(0)
@@ -271,7 +248,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
     setSearchError(null)
     setSearchResult(null)
     setFocusedTxHash(null)
-    setNetworkPageStack([])
     router.push(`/explorer/${chain}`)
   }, [chain, router])
 
@@ -316,38 +292,21 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
 
   useEffect(() => { filterRef.current = filter }, [filter])
   
-  useEffect(() => { 
-    viewModeRef.current = viewMode 
-    
-    // Initial load for address
-    if (viewMode === 'network' && networkCenterRef.current.hash === '') {
-      if (initialAddress) {
-        if (initialAddress.endsWith('.eth')) {
-          handleSearch(initialAddress)
-        } else {
-          fetchNetworkData(initialAddress)
-        }
-      } else {
-        // Default to picking an arbitrary bubble if user toggles directly to network view without selecting
-        const firstBubble = Array.from(bubblesRef.current.values())[0]
-        if (firstBubble && firstBubble.tx.from?.hash) {
-          fetchNetworkData(firstBubble.tx.from.hash)
-        }
-      }
+  // Initial load for address or transaction from URL props
+  useEffect(() => {
+    if (initialAddress && !activeSearch) {
+      handleSearch(initialAddress)
     }
-
-    // Initial load for transaction
     if (initialTxHash && !searchResult) {
       handleSearch(initialTxHash)
     }
-
     // Cleanup: If prompts vanish, clear search result
     if (!initialTxHash && !initialAddress && searchResult) {
       setSearchResult(null)
       setFocusedTxHash(null)
-      if (viewMode === 'network') setViewMode('bubbles')
     }
-  }, [viewMode, initialAddress, initialTxHash, searchResult])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialAddress, initialTxHash])
 
   const handleBack = () => {
     if (typeof window !== 'undefined' && window.history.length > 1) {
@@ -356,78 +315,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       router.push('/');
     }
   };
-
-  // --- Network Orbit Fetch Data ---
-  const fetchNetworkData = async (address: string) => {
-    setLoading(true)
-    try {
-      const [txsRes, coinsRes, countersRes] = await Promise.all([
-        fetch(`${config.apiBase}/addresses/${address}/transactions`),
-        fetch(`${config.apiBase}/addresses/${address}`),
-        fetch(`${config.apiBase}/addresses/${address}/counters`).catch(() => null)
-      ])
-      
-      if (!txsRes.ok) {
-        toast.error("Address transactions could not be loaded.")
-        setLoading(false)
-        return
-      }
-      const data = await txsRes.json()
-      const coinsData = coinsRes.ok ? await coinsRes.json() : {}
-      const countersData = countersRes?.ok ? await countersRes.json() : {}
-      const txs: TxData[] = data.items || []
-      
-      let sentWei = BigInt(0)
-      let receivedWei = BigInt(0)
-
-      txs.forEach((t) => {
-        try {
-          const val = BigInt(t.value || '0')
-          if (t.from?.hash?.toLowerCase() === address.toLowerCase()) { sentWei += val }
-          if (t.to?.hash?.toLowerCase() === address.toLowerCase()) { receivedWei += val }
-        } catch {}
-      })
-
-      const sentEth = parseFloat(formatEther(sentWei)).toFixed(4)
-      const recEth = parseFloat(formatEther(receivedWei)).toFixed(4)
-
-      setNetworkStats({ address, sent: sentEth, received: recEth })
-      networkCenterRef.current = { hash: address, sent: sentEth, received: recEth }
-      
-      setSearchResult({ 
-         type: 'address', 
-         data: { 
-            hash: address, 
-            coin_balance: coinsData.coin_balance, 
-            is_contract: coinsData.is_contract, 
-            counters: countersData 
-         } 
-      })
-
-      const nodes: Bubble[] = []
-      txs.forEach((tx) => {
-        const type = getTxPrimaryType(tx)
-        const color = getTypeColor(type, config.color)
-        const valueInWei = Number(BigInt(tx.value || '0'))
-        const radius = Math.max(30, Math.min(150, Math.log10(valueInWei + 1) * 20))
-
-        nodes.push({
-          id: tx.hash,
-          x: 0, y: 0, 
-          vx: 0, vy: 0, 
-          radius, color, tx,
-          targetOpacity: passesFilter(tx, filterRef.current) ? 1 : 0.1,
-          currentOpacity: 0
-        })
-      })
-      networkNodesRef.current = nodes
-
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const rebuildConnectionPairs = () => {
     const pairs: Array<{ aId: string; bId: string; color: string }> = []
@@ -565,72 +452,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
     }
   }, [fetchBubblesData, activeSearch])
 
-  // --- Network Table Fetch ---
-  const fetchNetworkTableData = useCallback(async (pageParams?: any, isAutoRefresh = false) => {
-    if (!isAutoRefresh) setNetworkTableLoading(true)
-    try {
-      let url = `${config.apiBase}/transactions`
-      if (pageParams) {
-        const params = new URLSearchParams()
-        Object.entries(pageParams).forEach(([k, v]) => params.set(k, String(v)))
-        url += `?${params.toString()}`
-      }
-      const res = await fetch(url)
-      if (!res.ok) throw new Error('Failed to fetch transactions')
-      const data = await res.json()
-      const txs: TxData[] = data.items || []
-
-      // Flash new rows on auto-refresh of first page only
-      if (isAutoRefresh && !pageParams && prevNetworkHashesRef.current.size > 0) {
-        const freshHashes = new Set(
-          txs.filter(t => !prevNetworkHashesRef.current.has(t.hash)).map(t => t.hash)
-        )
-        if (freshHashes.size > 0) {
-          setNewTxHashes(freshHashes)
-          setTimeout(() => setNewTxHashes(new Set()), 2000)
-        }
-      }
-
-      prevNetworkHashesRef.current = new Set(txs.map(t => t.hash))
-      setNetworkTxs(txs)
-      setNetworkNextParams(data.next_page_params || null)
-    } catch (err) {
-      console.error('Network table fetch error:', err)
-    } finally {
-      setNetworkTableLoading(false)
-    }
-  }, [config.apiBase])
-
-  // Auto-refresh network table
-  useEffect(() => {
-    if (viewMode !== 'network' || activeSearch) return
-    fetchNetworkTableData()
-    const interval = setInterval(() => {
-      if (networkPageStack.length === 0) {
-        fetchNetworkTableData(undefined, true)
-      }
-    }, 20000)
-    return () => clearInterval(interval)
-  }, [viewMode, activeSearch, fetchNetworkTableData, networkPageStack.length])
-
-  const handleNetworkNextPage = () => {
-    if (networkNextParams) {
-      setNetworkPageStack(prev => [...prev, networkNextParams])
-      fetchNetworkTableData(networkNextParams)
-    }
-  }
-
-  const handleNetworkPrevPage = () => {
-    const stack = [...networkPageStack]
-    stack.pop()
-    setNetworkPageStack(stack)
-    if (stack.length === 0) {
-      fetchNetworkTableData()
-    } else {
-      fetchNetworkTableData(stack[stack.length - 1])
-    }
-  }
-
   // --- Canvas Rendering Loop ---
   useEffect(() => {
     const canvas = canvasRef.current
@@ -668,8 +489,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       const shouldRunPhysics = frameCountRef.current % 3 === 0
 
       // Draw background grid
-      if (viewModeRef.current === 'bubbles') {
-        const gridSize = 48
+      const gridSize = 48
         ctx.save()
         ctx.lineWidth = 1
         ctx.strokeStyle = isMegaEth
@@ -702,7 +522,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           ctx.fill()
           ctx.restore()
         }
-      }
 
       // Draw Spawn Ripples
       ripplesRef.current = ripplesRef.current.filter(r => now - r.startTime < 1000)
@@ -724,8 +543,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       
       let hoverCandidate: { tx: TxData; x: number; y: number } | null = null
 
-      if (viewModeRef.current === 'bubbles') {
-        // Draw connecting lines from pre-computed pairs
+      // Draw connecting lines from pre-computed pairs
         for (const pair of connectionPairsRef.current) {
           const a = bubblesRef.current.get(pair.aId)
           const b = bubblesRef.current.get(pair.bId)
@@ -948,154 +766,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           // Reset alpha for next iteration
           ctx.globalAlpha = 1
         }
-      } else {
-         // Network Orbit View
-         const cx = cw / 2
-         const cy = ch / 2
-         const orbitR = Math.min(cw, ch) * 0.35
-
-         ctx.save()
-         ctx.beginPath()
-         ctx.arc(cx, cy, 40, 0, Math.PI * 2)
-         ctx.fillStyle = config.color
-         ctx.shadowColor = config.color
-         ctx.shadowBlur = 30
-         ctx.fill()
-         
-         ctx.fillStyle = '#fff'
-         ctx.font = 'bold 12px monospace'
-         ctx.textAlign = 'center'
-         ctx.textBaseline = 'middle'
-         ctx.shadowBlur = 0
-         ctx.fillText(truncateString(networkCenterRef.current.hash, 10), cx, cy)
-
-         ctx.font = '11px sans-serif'
-         ctx.fillStyle = '#ccc'
-         ctx.fillText(`Sent: ${networkCenterRef.current.sent} ETH`, cx, cy + 64)
-         ctx.fillText(`Received: ${networkCenterRef.current.received} ETH`, cx, cy + 80)
-         ctx.restore()
-
-         const total = networkNodesRef.current.length
-         const timeOffset = time * 0.001
-
-         for (let i = 0; i < total; i++) {
-             const b = networkNodesRef.current[i]
-             const type = getTxPrimaryType(b.tx)
-             b.targetOpacity = passesFilter(b.tx, filterRef.current) ? 1 : 0.1
-             b.currentOpacity += (b.targetOpacity - b.currentOpacity) * 0.02 * dt
-             
-             if (b.currentOpacity > 0.01) {
-                  const angle = (i / total) * Math.PI * 2 + timeOffset
-                  const bx = cx + orbitR * Math.cos(angle)
-                  const by = cy + orbitR * Math.sin(angle)
-                  b.x = bx
-                  b.y = by
-
-                   ctx.save()
-                   ctx.globalAlpha = b.currentOpacity * 0.5
-                   ctx.beginPath()
-                   ctx.moveTo(cx, cy)
-                   ctx.lineTo(bx, by)
-                   
-                   const type = getTxPrimaryType(b.tx)
-                   ctx.strokeStyle = getTypeColor(type, config.color)
-                   ctx.setLineDash(type === 'contract_call' ? [5, 5] : [])
-                   ctx.lineWidth = 1
-                   ctx.stroke()
-
-                   // Arrowhead
-                   const angleToNode = Math.atan2(by - cy, bx - cx)
-                   const arrowSize = 6
-                   ctx.beginPath()
-                   ctx.moveTo(bx - (b.radius + 2) * Math.cos(angleToNode), by - (b.radius + 2) * Math.sin(angleToNode))
-                   ctx.lineTo(
-                     bx - (b.radius + arrowSize) * Math.cos(angleToNode - 0.5), 
-                     by - (b.radius + arrowSize) * Math.sin(angleToNode - 0.5)
-                   )
-                   ctx.lineTo(
-                     bx - (b.radius + arrowSize) * Math.cos(angleToNode + 0.5), 
-                     by - (b.radius + arrowSize) * Math.sin(angleToNode + 0.5)
-                   )
-                   ctx.closePath()
-                   ctx.fillStyle = getTypeColor(type, config.color)
-                   ctx.fill()
-                   ctx.restore()
-
-                  const dx = mouseRef.current.x - bx
-                  const dy = mouseRef.current.y - by
-                  const distance = Math.sqrt(dx * dx + dy * dy)
-                  const isHovered = distance < b.radius
-
-                  if (isHovered && b.targetOpacity > 0.1) {
-                      hoverCandidate = { tx: b.tx, x: mouseRef.current.x, y: mouseRef.current.y }
-                  }
-
-                  const isFocused = b.tx.hash === focusedTxHashRef.current
-                  const drawRadius = isFocused ? b.radius * 1.5 : b.radius
-
-                  if (isFocused) {
-                    const pulse = Math.sin(time * 0.01) * 0.5 + 0.5
-                    ctx.save()
-                    ctx.globalAlpha = pulse * 0.4
-                    ctx.beginPath()
-                    ctx.arc(bx, by, drawRadius + 10 + pulse * 10, 0, Math.PI * 2)
-                    ctx.fillStyle = '#ffffff'
-                    ctx.fill()
-                    ctx.restore()
-                  }
-
-                  ctx.save()
-                  ctx.globalAlpha = b.currentOpacity
-                  
-                  ctx.beginPath()
-                  ctx.arc(bx, by, drawRadius, 0, Math.PI * 2)
-                  ctx.fillStyle = `${b.color}22`
-                  ctx.fill()
-                  
-                  ctx.lineWidth = isHovered || isFocused ? 3 : 1
-                  ctx.strokeStyle = isHovered || isFocused ? '#ffffff' : b.color
-                  ctx.stroke()
-
-                  const nodeX = bx + drawRadius * Math.cos(angle)
-                  const nodeY = by + drawRadius * Math.sin(angle)
-                  ctx.beginPath()
-                  ctx.arc(nodeX, nodeY, 3, 0, Math.PI * 2)
-                  ctx.fillStyle = isHovered || isFocused ? '#ffffff' : b.color
-                  ctx.fill()
-
-                  const ethValue = parseFloat(formatEther(BigInt(b.tx.value || '0')))
-                  const isWhale = ethValue > 1
-
-                  if (isWhale) {
-                    ctx.save()
-                    ctx.beginPath()
-                    ctx.arc(bx, by, drawRadius + 4, 0, Math.PI * 2)
-                    ctx.strokeStyle = '#ffffff'
-                    ctx.lineWidth = 2
-                    ctx.globalAlpha = 0.5 + Math.sin(time * 0.01) * 0.3
-                    ctx.stroke()
-                    
-                    ctx.fillStyle = '#ffffff'
-                    ctx.font = 'black 9px sans-serif'
-                    ctx.textAlign = 'center'
-                    ctx.fillText('WHALE', bx, by - drawRadius - 12)
-                    ctx.restore()
-                  }
-
-                  if (drawRadius > 20) {
-                    const formatted = ethValue >= 1 ? ethValue.toFixed(1) : ethValue.toFixed(2)
-                    const text = `${formatted}E`
-                    ctx.fillStyle = '#ffffff'
-                    ctx.font = `bold ${Math.floor(drawRadius * 0.4)}px monospace`
-                    ctx.textAlign = 'center'
-                    ctx.textBaseline = 'middle'
-                    ctx.fillText(text, bx, by)
-                  }
-                  
-                  ctx.restore()
-             }
-         }
-      }
 
       setHoveredTx(current => {
         if (!hoverCandidate && !current) return null
@@ -1107,7 +777,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
 
       // Update Mini-map
       const miniCanvas = miniMapCanvasRef.current
-      if (miniCanvas && viewModeRef.current === 'bubbles') {
+      if (miniCanvas) {
         const mCtx = miniCanvas.getContext('2d')
         if (mCtx) {
           mCtx.clearRect(0, 0, 140, 90)
@@ -1147,7 +817,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
     mouseDownTimeRef.current = Date.now()
     isDraggingRef.current = false
 
-    if (viewModeRef.current === 'bubbles') {
       const bubblesArray = Array.from(bubblesRef.current.values())
       for (let i = bubblesArray.length - 1; i >= 0; i--) {
         const b = bubblesArray[i]
@@ -1163,7 +832,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           break
         }
       }
-    }
   }, [])
 
   const handleGlobalMouseMove = useCallback((e: MouseEvent) => {
@@ -1199,7 +867,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       // Keep within bounds
       b.x = Math.max(b.radius, Math.min(cw - b.radius, b.x))
       b.y = Math.max(b.radius, Math.min(ch - b.radius, b.y))
-    } else if (viewModeRef.current === 'bubbles') {
+    } else {
       // Grab cursor feedback
       const bubblesArray = Array.from(bubblesRef.current.values())
       const isHoveringAny = bubblesArray.some(b => {
@@ -1421,10 +1089,10 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   // --- Render ---
   return (
     <>
-    <div className="relative w-full h-[calc(100dvh-80px)] flex flex-col pt-16">
+    <div className="relative w-full h-[calc(100dvh-80px)] flex flex-col pt-1">
       
       {/* Top Header UI */}
-      <div className="absolute top-16 inset-x-0 z-20 px-4 md:px-8 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-3">
+      <div className="absolute top-2 inset-x-0 z-20 px-4 md:px-8 flex flex-col md:flex-row justify-between items-start pointer-events-none gap-3">
         
         {/* Left Side: Stats */}
         <div className="space-y-1 md:space-y-4 pointer-events-auto w-full md:w-auto">
@@ -1433,97 +1101,38 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               {config.name}
             </h1>
             <span className={`hidden md:inline text-xl font-medium tracking-tight ${isBase ? 'text-black/40' : 'text-gray-400'}`}>
-              {viewMode === 'bubbles' ? 'Activity Explorer' : 'Network Cluster'}
+              Activity Explorer
             </span>
           </div>
 
-          {viewMode === 'bubbles' ? (
-            <div className="flex flex-wrap gap-1.5 md:gap-3">
-              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
-                <div className="flex items-center gap-1 md:gap-2 mb-0.5 md:mb-1">
-                  <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Total TXs</span>
-                  <div className="flex items-center gap-1 md:gap-1.5 ml-auto translate-y-[-1px]">
-                    <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                    <span className="text-[7px] md:text-[9px] font-black text-green-500 tracking-[0.2em] uppercase">Live</span>
-                  </div>
+          <div className="flex flex-wrap gap-1.5 md:gap-3">
+            <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+              <div className="flex items-center gap-1 md:gap-2 mb-0.5 md:mb-1">
+                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Total TXs</span>
+                <div className="flex items-center gap-1 md:gap-1.5 ml-auto translate-y-[-1px]">
+                  <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
+                  <span className="text-[7px] md:text-[9px] font-black text-green-500 tracking-[0.2em] uppercase">Live</span>
                 </div>
-                <span className={`text-xs md:text-lg font-mono ${isBase ? 'text-black' : 'text-white'}`}>{stats.totalTxs}</span>
               </div>
-              <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
-                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Latest Block</span>
-                <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.latestBlock || '-'}</span>
-              </div>
-              <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex-col shadow-sm`}>
-                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Avg Gas</span>
-                <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.avgGas}</span>
-              </div>
+              <span className={`text-xs md:text-lg font-mono ${isBase ? 'text-black' : 'text-white'}`}>{stats.totalTxs}</span>
             </div>
-          ) : (
-              <button 
-                 onClick={() => {
-                   setViewMode('bubbles')
-                   router.push(`/explorer/${chain}`)
-                 }}
-                 className={`flex items-center gap-2 px-4 py-2 border transition-all duration-200 text-sm font-bold shadow-sm ${
-                   isMegaEth 
-                     ? 'bg-black border-[#00ff88] text-[#00ff88] rounded-none uppercase font-mono hover:bg-[#00ff88] hover:text-black' 
-                     : isBase 
-                       ? 'bg-black/5 border-black/5 text-black hover:bg-black/10 rounded-full' 
-                       : 'bg-white/[0.04] border-white/[0.08] text-white hover:bg-white/[0.1] backdrop-blur-md rounded-full'
-                 }`}
-              >
-                 <ArrowLeft className="w-4 h-4" /> Back to bubbles
-              </button>
-          )}
+            <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Latest Block</span>
+              <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.latestBlock || '-'}</span>
+            </div>
+            <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Avg Gas</span>
+              <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.avgGas}</span>
+            </div>
+          </div>
         </div>
 
         {/* Right Side: Filters & Controls */}
           <div className="flex flex-col items-start md:items-end gap-1 md:gap-3 pointer-events-auto w-full md:w-auto">
           
-          <div className={`flex p-0.5 md:p-1 border shadow-sm ${
-            isMegaEth 
-              ? 'bg-black border-white/10 rounded-none' 
-              : isBase 
-                ? 'bg-black/5 border-black/5 rounded-full' 
-                : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md rounded-full'
-          }`}>
-            <button
-               onClick={() => {
-                 setViewMode('bubbles')
-                 router.push(`/explorer/${chain}`)
-               }}
-               className={`px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-xs font-bold transition-all duration-200 ${
-                 isMegaEth ? 'rounded-none uppercase font-mono' : 'rounded-full'
-               } ${
-                 viewMode === 'bubbles' 
-                 ? isMegaEth ? 'bg-[#00ff88] text-black shadow-sm' : isBase ? 'bg-white text-black shadow-sm' : 'bg-white/10 text-white shadow-sm' 
-                 : isMegaEth ? 'text-white/40 hover:text-white' : isBase ? 'text-black/40 hover:text-black' : 'text-gray-400 hover:text-white'
-               }`}
-            >
-              Bubble View
-            </button>
-            <button
-               onClick={() => setViewMode('network')}
-               className={`px-2 md:px-4 py-1 md:py-2 text-[10px] md:text-xs font-bold transition-all duration-200 flex items-center gap-1 md:gap-2 ${
-                 isMegaEth ? 'rounded-none uppercase font-mono' : 'rounded-full'
-               } ${
-                 viewMode === 'network' 
-                 ? isMegaEth ? 'bg-[#00ff88] text-black shadow-sm' : isBase ? 'bg-white text-black shadow-sm' : 'bg-white/10 text-white shadow-sm' 
-                 : isMegaEth ? 'text-white/40 hover:text-white' : isBase ? 'text-black/40 hover:text-black' : 'text-gray-400 hover:text-white'
-               }`}
-            >
-              {viewMode === 'network' && (
-                <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2 bg-green-500" />
-                </span>
-              )}
-              <span className="hidden md:inline">Network View</span>
-              <span className="md:hidden">Network</span>
-            </button>
-          </div>
-
           <div className={`flex flex-nowrap overflow-x-auto scrollbar-none p-0.5 md:p-1 border shadow-sm ${
+
+// etc.
             isMegaEth 
               ? 'bg-black border-white/10 rounded-none' 
               : isBase 
@@ -1591,7 +1200,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               </button>
 
               <button
-                 onClick={viewMode === 'bubbles' ? fetchBubblesData : () => networkCenterRef.current.hash && fetchNetworkData(networkCenterRef.current.hash)}
+                 onClick={fetchBubblesData}
                  disabled={loading}
                  className={`p-1.5 md:p-2 border transition-all duration-200 shadow-sm ${
                    isMegaEth 
@@ -1609,7 +1218,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       </div>
 
       {/* Centered Search Bar */}
-      <div className="absolute top-[160px] md:top-[180px] inset-x-0 z-30 px-4 flex flex-col items-center pointer-events-none">
+      <div className="absolute top-[100px] md:top-[125px] inset-x-0 z-30 px-4 flex flex-col items-center pointer-events-none">
         <span className={`text-[11px] font-bold uppercase tracking-widest mb-3 pointer-events-auto px-3 py-1 border backdrop-blur-md ${
           isMegaEth 
             ? 'bg-black border-[#00ff88] text-[#00ff88] rounded-none font-mono' 
@@ -2117,9 +1726,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                     >
                       <Share2 className="w-4 h-4 text-gray-400 hover:text-white" />
                     </button>
-                    <button onClick={() => {
+                     <button onClick={() => {
                       setSearchResult(null)
-                      setViewMode('bubbles')
                       router.push(`/explorer/${chain}`)
                     }} className="p-1.5 hover:bg-white/10 rounded-md transition-colors border border-transparent hover:border-white/10">
                        <X className="w-4 h-4 text-gray-400" />
@@ -2166,294 +1774,14 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       >
         <canvas
           ref={canvasRef}
-          className={cn(
-            "w-full h-full cursor-default outline-none touch-none",
-            viewMode === 'network' && "invisible absolute"
-          )}
+          className="w-full h-full cursor-default outline-none touch-none"
         />
 
-        {/* Network View — Transaction Table */}
-        {viewMode === 'network' && (
-          <div className="w-full h-full overflow-auto">
-            <div className="max-w-[1400px] mx-auto px-6 pt-4 pb-8">
-              {/* Address Info Banner (Network View) */}
-              {activeSearch?.type === 'address' && activeSearch.addressData && (
-                <div className="mb-6 p-4 md:p-6 bg-white/[0.04] border border-white/[0.1] rounded-2xl md:rounded-3xl backdrop-blur-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-6">
-                  <div className="flex items-center gap-5">
-                    <div 
-                      className="p-4 rounded-2xl border"
-                      style={{ 
-                        backgroundColor: `${config.color}11`, 
-                        borderColor: `${config.color}33` 
-                      }}
-                    >
-                      {activeSearch.addressData.is_contract ? (
-                        <FileCode className="w-8 h-8" style={{ color: config.color }} />
-                      ) : (
-                        <Wallet className="w-8 h-8" style={{ color: config.color }} />
-                      )}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-xl font-bold text-white font-mono">{truncateString(activeSearch.address || '', 12)}</h3>
-                        <CopyButton text={activeSearch.address || ''} />
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${activeSearch.addressData.is_contract ? 'bg-purple-500/20 text-purple-400' : 'bg-green-500/20 text-green-400'}`}>
-                          {activeSearch.addressData.is_contract ? 'Contract' : 'Wallet'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-4 text-sm text-gray-400 font-medium">
-                        <span className="flex items-center gap-1.5"><Coins className="w-3.5 h-3.5" /> {parseFloat(formatEther(BigInt(activeSearch.addressData.coin_balance || '0'))).toFixed(4)} ETH</span>
-                        <span>{activeSearch.addressData.counters?.transactions_count || 0} Transactions</span>
-                      </div>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={clearSearch}
-                    className="px-5 py-2.5 bg-white/5 hover:bg-white/10 text-white rounded-full text-sm font-bold border border-white/10 transition-all flex items-center gap-2"
-                  >
-                    Clear Search <X className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-
-              {/* Block Info Banner (Network View) */}
-              {activeSearch?.type === 'block' && (
-                <div className="mb-6 p-4 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex justify-between items-center">
-                   <div className="flex items-center gap-3">
-                      <div className="p-2 bg-orange-500/20 rounded-lg">
-                        <Clock className="w-5 h-5 text-orange-400" />
-                      </div>
-                      <h3 className="text-white font-bold">Showing Transactions for Block #{activeSearch.query}</h3>
-                   </div>
-                   <button onClick={clearSearch} className="p-2 hover:bg-white/10 rounded-full text-gray-400 hover:text-white transition-colors">
-                     <X className="w-5 h-5" />
-                   </button>
-                </div>
-              )}
-
-              {/* Table Header */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-lg font-bold text-white tracking-tight">
-                    {activeSearch ? 'Search Results' : 'Latest Transactions'}
-                  </h2>
-                  <span className="text-xs font-mono text-gray-500 bg-white/5 px-2 py-0.5 rounded border border-white/5">
-                    {(activeSearch?.type === 'address' ? activeSearch.addressTxs : 
-                      activeSearch?.type === 'block' ? activeSearch.blockTxs : 
-                      networkTxs)?.filter(tx => passesFilter(tx, filter)).length || 0} shown
-                  </span>
-                </div>
-                {!activeSearch && (
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-                    </span>
-                    <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest">Auto-refresh 15s</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Table */}
-              <div className="bg-white/[0.02] border border-white/[0.08] rounded-2xl overflow-hidden backdrop-blur-md">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-white/[0.08] bg-white/[0.02]">
-                        <th className="text-left px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Tx Hash</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Block</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Age</th>
-                        <th className="text-left px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">From</th>
-                        <th className="px-2 py-3"></th>
-                        <th className="text-left px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">To</th>
-                        <th className="text-right px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Value</th>
-                        <th className="text-center px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Type</th>
-                        <th className="text-right px-4 py-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Fee</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {networkTableLoading && networkTxs.length === 0 ? (
-                        // Skeleton rows
-                        Array.from({ length: 10 }).map((_, i) => (
-                          <tr key={`skel-${i}`} className="border-b border-white/[0.04] animate-pulse">
-                            {Array.from({ length: 9 }).map((_, j) => (
-                              <td key={j} className="px-4 py-3.5">
-                                <div className="h-4 bg-white/[0.04] rounded w-full" />
-                              </td>
-                            ))}
-                          </tr>
-                        ))
-                      ) : (
-                        (activeSearch?.type === 'address' ? activeSearch.addressTxs : 
-                         activeSearch?.type === 'block' ? activeSearch.blockTxs : 
-                         networkTxs)
-                          ?.filter(tx => passesFilter(tx, filter))
-                          .map((tx) => {
-                            const txType = getTxPrimaryType(tx)
-                            const typeColor = getTypeColor(txType, config.color)
-                            const ethValue = parseFloat(formatEther(BigInt(tx.value || '0')))
-                            const gasPrice = BigInt((tx as any).gas_price || '0')
-                            const gasUsed = BigInt(tx.gas_used || '0')
-                            const fee = parseFloat(formatEther(gasPrice * gasUsed))
-                            const isNew = newTxHashes.has(tx.hash)
-                            const isSearched = activeSearch?.type === 'tx' && tx.hash === activeSearch.query
-
-                            const typeLabel: Record<string, string> = {
-                              coin_transfer: 'Transfer',
-                              contract_call: 'Contract',
-                              token_transfer: 'Token',
-                              nft_transfer: 'NFT',
-                              default: 'Tx',
-                            }
-
-                            return (
-                              <tr
-                                key={tx.hash}
-                                ref={isSearched ? searchedRowRef : null}
-                                className={cn(
-                                   `border-b transition-colors duration-300 cursor-pointer ${isBase ? 'border-black/5 hover:bg-black/5' : 'border-white/[0.04] hover:bg-white/[0.03]'}`,
-                                   isNew && (isBase ? "bg-green-500/10" : "animate-pulse bg-green-500/[0.06]"),
-                                   isSearched && (isBase ? "border-l-2 shadow-inner" : "border-l-2")
-                                 )}
-                                 style={isSearched ? { 
-                                    backgroundColor: `${config.color}22`,
-                                    borderLeftColor: config.color 
-                                  } : {}}
-                              >
-                                {/* Tx Hash */}
-                                <td className="px-4 py-3">
-                                  <button
-                                    onClick={() => router.push(`/explorer/${chain}/tx/${tx.hash}`)}
-                                    className="font-mono text-[13px] hover:underline transition-colors opacity-80 hover:opacity-100"
-                                    style={{ color: config.color }}
-                                  >
-                                    {tx.hash.slice(0, 6)}...{tx.hash.slice(-4)}
-                                  </button>
-                                </td>
-
-                                {/* Block */}
-                                <td className="px-4 py-3">
-                                  <span
-                                    className="font-mono text-xs text-gray-400 hover:text-white cursor-pointer transition-colors"
-                                    onClick={() => {
-                                      const blockNum = (tx as any).block_number || (tx as any).block
-                                      if (blockNum) window.open(`${config.explorer}/block/${blockNum}`, '_blank')
-                                    }}
-                                  >
-                                    {(tx as any).block_number || (tx as any).block || '-'}
-                                  </span>
-                                </td>
-
-                                {/* Age */}
-                                <td className="px-4 py-3">
-                                  <span
-                                    className="text-xs text-gray-500"
-                                    title={new Date(tx.timestamp).toLocaleString()}
-                                  >
-                                    {timeAgo(tx.timestamp)}
-                                  </span>
-                                </td>
-
-                                {/* From */}
-                                <td className="px-4 py-3">
-                                  <button
-                                    onClick={() => router.push(`/explorer/${chain}/${tx.from?.hash}`)}
-                                    className="font-mono text-[13px] text-gray-300 hover:text-white hover:underline transition-colors"
-                                  >
-                                    {truncateString(tx.from?.hash || '', 10)}
-                                  </button>
-                                </td>
-
-                                {/* Arrow */}
-                                <td className="px-2 py-3 text-center">
-                                  <ArrowRight className="w-3.5 h-3.5 text-gray-600 inline-block" />
-                                </td>
-
-                                {/* To */}
-                                <td className="px-4 py-3">
-                                  <button
-                                    onClick={() => {
-                                      const toHash = tx.to?.hash
-                                      if (toHash) router.push(`/explorer/${chain}/${toHash}`)
-                                    }}
-                                    className="font-mono text-[13px] text-gray-300 hover:text-white hover:underline transition-colors"
-                                  >
-                                    {tx.to ? truncateString(tx.to.hash, 10) : 'Contract Creation'}
-                                  </button>
-                                </td>
-
-                                {/* Value */}
-                                <td className="px-4 py-3 text-right">
-                                  <span className="font-mono text-xs text-white font-medium">
-                                    {ethValue.toFixed(4)}
-                                    <span className="text-gray-600 ml-1">ETH</span>
-                                  </span>
-                                </td>
-
-                                {/* Type Badge */}
-                                <td className="px-4 py-3 text-center">
-                                  <span
-                                    className="inline-block px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider"
-                                    style={{
-                                      backgroundColor: `${typeColor}22`,
-                                      color: typeColor,
-                                    }}
-                                  >
-                                    {typeLabel[txType] || 'Tx'}
-                                  </span>
-                                </td>
-
-                                {/* Fee */}
-                                <td className="px-4 py-3 text-right">
-                                  <span className="font-mono text-[11px] text-gray-500">
-                                    {fee > 0 ? fee.toFixed(6) : '-'}
-                                  </span>
-                                </td>
-                              </tr>
-                            )
-                          })
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination */}
-                <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.08] bg-white/[0.01]">
-                  <button
-                    onClick={handleNetworkPrevPage}
-                    disabled={networkPageStack.length === 0}
-                    className={cn(
-                      "flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-colors",
-                      networkPageStack.length === 0
-                        ? "text-gray-600 cursor-not-allowed"
-                        : "text-gray-300 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    <ChevronLeft className="w-4 h-4" /> Previous
-                  </button>
-                  <span className="text-xs text-gray-500 font-medium">
-                    Page {networkPageStack.length + 1}
-                  </span>
-                  <button
-                    onClick={handleNetworkNextPage}
-                    disabled={!networkNextParams}
-                    className={cn(
-                      "flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-colors",
-                      !networkNextParams
-                        ? "text-gray-600 cursor-not-allowed"
-                        : "text-gray-300 hover:text-white hover:bg-white/5"
-                    )}
-                  >
-                    Next <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
         
+
         {/* Search Results Overlay / Messages */}
-        {activeSearch?.type === 'address' && viewMode === 'bubbles' && (
+        {/* Search Results Overlay / Messages */}
+        {activeSearch?.type === 'address' && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
             <div 
               className="backdrop-blur-md border px-6 py-2 rounded-full flex items-center gap-3 shadow-lg"
@@ -2478,7 +1806,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           </div>
         )}
 
-        {activeSearch?.type === 'block' && viewMode === 'bubbles' && (
+        {activeSearch?.type === 'block' && (
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
             <div className="bg-orange-600/20 backdrop-blur-md border border-orange-500/30 px-6 py-2 rounded-full flex items-center gap-3">
               <span className="text-white text-sm font-bold">Showing Block #{activeSearch.query}</span>
@@ -2492,30 +1820,10 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           </div>
         )}
 
-        {activeSearch?.type === 'address' && viewMode === 'bubbles' && 
-         Array.from(bubblesRef.current.values()).filter(b => {
-           const addr = activeSearch.address?.toLowerCase()
-           return b.tx.from?.hash?.toLowerCase() === addr || b.tx.to?.hash?.toLowerCase() === addr
-         }).length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-            <div className={`p-8 rounded-3xl flex flex-col items-center gap-4 max-w-md text-center border backdrop-blur-md shadow-2xl ${
-              isBase ? 'bg-white/80 border-black/5 text-black' : isSoneium ? 'bg-[#00040F]/60 border-[#0047FF]/20 text-white shadow-[0_0_50px_rgba(0,71,255,0.1)]' : 'bg-black/60 border-white/10 text-white'
-            }`}>
-              <Search className={`w-12 h-12 ${isBase ? 'text-black/20' : 'text-gray-500'}`} />
-              <p className={`font-bold text-lg ${isBase ? 'text-black/60' : 'text-gray-300'}`}>No transactions found in current view — showing in Network View</p>
-              <button 
-                onClick={() => setViewMode('network')}
-                className="pointer-events-auto mt-2 px-6 py-2 text-white font-bold rounded-full transition-all duration-200 hover:scale-105 active:scale-95"
-                style={{ backgroundColor: config.color }}
-              >
-                Switch to Network View
-              </button>
-            </div>
-          </div>
-        )}
+        
         
         {/* Loading Overlay */}
-        {loading && bubblesRef.current.size === 0 && viewMode === 'bubbles' && (
+        {loading && bubblesRef.current.size === 0 && (
           <div className={`absolute inset-0 flex items-center justify-center backdrop-blur-sm z-20 pointer-events-none ${
             isBase ? 'bg-white/80' : isSoneium ? 'bg-[#00040F]/80' : 'bg-[#080810]/80'
           }`}>
@@ -2566,7 +1874,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               }`}>
                 <div className={`flex justify-between items-start mb-3 pb-2 border-b ${isBase ? 'border-black/5' : 'border-white/5'}`}>
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: hoveredTx.color }} />
+                    <div className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: getTypeColor(getTxPrimaryType(hoveredTx.tx), config.color) }} />
                     <span className={`text-[10px] font-black uppercase tracking-widest ${isBase ? 'text-black/40' : 'text-gray-500'}`}>
                       {hoveredTx.tx.transaction_types?.includes('contract_call') ? 'Contract Call' : 'Native Transfer'}
                     </span>
@@ -2598,8 +1906,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       </div>
 
       {/* Mini-map Overlay */}
-      {viewMode === 'bubbles' && (
-        <div className="absolute bottom-20 left-8 z-20 pointer-events-none">
+      <div className="absolute bottom-20 left-8 z-20 pointer-events-none">
           <canvas
             ref={miniMapCanvasRef}
             width={140}
@@ -2618,7 +1925,6 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
             Overview
           </span>
         </div>
-      )}
 
       {/* Legend */}
       <div className={`absolute bottom-6 right-8 z-20 flex gap-4 p-3 border shadow-lg pointer-events-none ${

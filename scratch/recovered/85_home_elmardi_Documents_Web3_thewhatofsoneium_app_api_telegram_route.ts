@@ -1,2 +1,0 @@
-"export async function POST(req: Request) {\n  const { botToken, chatId, message } = await req.json();\n  if (!botToken || !chatId || !message) {\n    return Response.json({ error: 'Missing fields' }, { status: 400 });\n  }\n  const res = await fetch(\n   
-<truncated 408 bytes>

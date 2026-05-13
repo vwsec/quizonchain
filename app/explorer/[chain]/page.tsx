@@ -49,7 +49,7 @@ export default async function ExplorerPage({ params }: ExplorerPageProps) {
   const isSoneium = resolvedParams.chain === 'soneium';
 
   return (
-    <div className={`min-h-screen relative pt-20 ${
+    <div className={`min-h-screen relative pt-16 ${
       isBase ? 'bg-white text-black' : 
       isMegaEth ? 'bg-black text-white font-mono' : 
       isInk ? 'bg-[#0a0a0f] text-white' :

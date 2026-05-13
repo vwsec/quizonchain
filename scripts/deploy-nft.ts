@@ -1,0 +1,81 @@
+import { config as dotenvConfig } from "dotenv"
+
+dotenvConfig({ path: ".env" })
+dotenvConfig({ path: ".env.local", override: true })
+
+import hre from "hardhat"
+
+const chainScoresVar: Record<number, string> = {
+  1868: "NEXT_PUBLIC_CONTRACT_ADDRESS_SONEIUM",
+  57073: "NEXT_PUBLIC_CONTRACT_ADDRESS_INK",
+  8453: "NEXT_PUBLIC_CONTRACT_ADDRESS_BASE",
+  130: "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
+  4326: "NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH",
+}
+
+const chainNftVar: Record<number, string> = {
+  1868: "NEXT_PUBLIC_NFT_CONTRACT_SONEIUM",
+  57073: "NEXT_PUBLIC_NFT_CONTRACT_INK",
+  8453: "NEXT_PUBLIC_NFT_CONTRACT_BASE",
+  130: "NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN",
+  4326: "NEXT_PUBLIC_NFT_CONTRACT_MEGAETH",
+}
+
+const chainUriMap: Record<number, string> = {
+  1868: "https://quizonchain.com/nft/soneium",
+  57073: "https://quizonchain.com/nft/ink",
+  8453: "https://quizonchain.com/nft/base",
+  130: "https://quizonchain.com/nft/unichain",
+  4326: "https://quizonchain.com/nft/megaeth",
+}
+
+async function main() {
+  const pk = process.env.PRIVATE_KEY?.trim()
+  if (!pk) {
+    throw new Error("PRIVATE_KEY is not set.")
+  }
+
+  const net = hre.network.name
+  const chainId = hre.network.config.chainId
+  if (!chainId) {
+    throw new Error("Unknown chain ID")
+  }
+
+  const scoresVar = chainScoresVar[chainId]
+  const nftVar = chainNftVar[chainId]
+  const baseURI = chainUriMap[chainId]
+  if (!scoresVar || !nftVar || !baseURI) {
+    throw new Error(`Unsupported chain: ${net} (${chainId})`)
+  }
+
+  const quizScoresAddress = process.env[scoresVar]
+  if (!quizScoresAddress) {
+    throw new Error(`${scoresVar} is not set in .env.local`)
+  }
+
+  const [deployer] = await hre.ethers.getSigners()
+  console.debug(`Network: ${net} (chainId ${chainId})`)
+  console.debug("Deploying QuizNFT with:", deployer.address)
+  console.debug("QuizScores contract:", quizScoresAddress)
+  console.debug("Base URI:", baseURI)
+  console.debug("Points threshold: 100")
+
+  const QuizNFT = await hre.ethers.getContractFactory("QuizNFT")
+  const quizNFT = await QuizNFT.deploy(
+    quizScoresAddress,
+    baseURI,
+    100,
+  )
+  await quizNFT.waitForDeployment()
+
+  const address = await quizNFT.getAddress()
+  console.debug("QuizNFT deployed to:", address)
+
+  console.debug("\nSet in .env.local:")
+  console.debug(`${nftVar}=${address}`)
+}
+
+main().catch((error) => {
+  console.error(error)
+  process.exitCode = 1
+})

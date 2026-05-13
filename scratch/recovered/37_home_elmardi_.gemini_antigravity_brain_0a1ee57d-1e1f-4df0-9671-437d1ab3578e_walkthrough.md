@@ -1,2 +1,0 @@
-"# Walkthrough - Telegram Transaction Alerts\n\nI have successfully implemented the Telegram Alert system for Bubble Explorer. This feature allows users to receive real-time notifications on Telegram for high-value transactions.\n\n## Changes Made\n\n### 1
-<truncated 2200 bytes>

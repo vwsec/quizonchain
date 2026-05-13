@@ -32,10 +32,28 @@ const config: HardhatUserConfig = {
       chainId: 57073,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    baseMainnet: {
+      url: "https://mainnet.base.org",
+      chainId: 8453,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
+    unichainMainnet: {
+      url: "https://mainnet.unichain.org",
+      chainId: 130,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
+    megaethMainnet: {
+      url: "https://mainnet.megaeth.com/rpc",
+      chainId: 4326,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
   },
   etherscan: {
     apiKey: {
       inkonchain: "empty",
+      baseMainnet: process.env.BASESCAN_API_KEY || "",
+      unichainMainnet: "empty",
+      megaethMainnet: "empty",
     },
     customChains: [
       {
@@ -44,6 +62,30 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://explorer.inkonchain.com/api",
           browserURL: "https://explorer.inkonchain.com",
+        },
+      },
+      {
+        network: "baseMainnet",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org",
+        },
+      },
+      {
+        network: "unichainMainnet",
+        chainId: 130,
+        urls: {
+          apiURL: "https://uniscan.xyz/api",
+          browserURL: "https://uniscan.xyz",
+        },
+      },
+      {
+        network: "megaethMainnet",
+        chainId: 4326,
+        urls: {
+          apiURL: "https://megaeth.blockscout.com/api",
+          browserURL: "https://megaeth.blockscout.com",
         },
       },
     ],

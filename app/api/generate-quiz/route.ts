@@ -447,6 +447,7 @@ async function handleGenerateQuiz(
         [],
         true,
         headers,
+        ecosystemName,
       )
     }
 

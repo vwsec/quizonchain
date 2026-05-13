@@ -114,7 +114,7 @@ export async function POST(request: Request) {
 
   if (process.env.NODE_ENV === "development") {
     console.debug("--- Server /api/sign-score received: ---")
-    console.debug({ playerAddress, score, total, nonce, chainId, contractAddress })
+    console.debug({ playerAddress, score: clientScore, total, nonce, chainId, contractAddress })
   }
 
   try {

@@ -1,2 +1,0 @@
-"- [ ] Create `lib/telegram.ts` for Telegram Bot API interaction\n- [ ] Create `hooks/use-telegram-alerts.ts` for monitoring logic and persistence\n- [ ] Create `components/telegram-alerts-modal.tsx` UI\n- [ ] Integrate alerts into `components/bubble-explo
-<truncated 60 bytes>

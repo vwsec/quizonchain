@@ -11,6 +11,7 @@ const chainUriMap: Record<number, string> = {
   57073: "https://quizonchain.com/nft/ink",     // Ink
   8453: "https://quizonchain.com/nft/base",      // Base
   130: "https://quizonchain.com/nft/unichain",   // Unichain
+  4326: "https://quizonchain.com/nft/megaeth",   // MegaETH
 }
 
 async function main() {
@@ -36,6 +37,7 @@ async function main() {
     57073: process.env.NEXT_PUBLIC_NFT_CONTRACT_INK,
     8453: process.env.NEXT_PUBLIC_NFT_CONTRACT_BASE,
     130: process.env.NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN,
+    4326: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
   }
 
   const contractAddress = contractAddresses[chainId]
