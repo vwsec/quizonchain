@@ -5,7 +5,7 @@ import { Header } from '@/components/header';
 import { WalletProvider } from '@/components/wallet-provider';
 
 interface SubExplorerPageProps {
-  params: { chain: string; address: string };
+  params: Promise<{ chain: string; address: string }>;
 }
 
 export async function generateMetadata({ params }: SubExplorerPageProps) {
@@ -18,7 +18,8 @@ export async function generateMetadata({ params }: SubExplorerPageProps) {
     ink: 'Ink', 
     base: 'Base', 
     unichain: 'Unichain',
-    megaeth: 'MegaETH'
+    megaeth: 'MegaETH',
+    litvm: 'LitVM'
   };
   
   if (!names[resolvedParams.chain]) {
@@ -40,7 +41,7 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
     redirect('/explorer');
   }
 
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm'];
   
   if (!validChains.includes(resolvedParams.chain)) {
     redirect('/explorer');
@@ -58,13 +59,15 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
     ink: 'Ink', 
     base: 'Base', 
     unichain: 'Unichain',
-    megaeth: 'MegaETH'
+    megaeth: 'MegaETH',
+    litvm: 'LitVM'
   };
   const isBase = resolvedParams.chain === 'base';
   const isMegaEth = resolvedParams.chain === 'megaeth';
   const isInk = resolvedParams.chain === 'ink';
   const isUnichain = resolvedParams.chain === 'unichain';
   const isSoneium = resolvedParams.chain === 'soneium';
+  const isLitvm = resolvedParams.chain === 'litvm';
   const chainName = names[resolvedParams.chain] || (resolvedParams.chain.charAt(0).toUpperCase() + resolvedParams.chain.slice(1));
 
   return (
@@ -74,6 +77,7 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
       isInk ? 'bg-[#0a0a0f] text-white' :
       isUnichain ? 'bg-[#0d0014] text-white' :
       isSoneium ? 'bg-[#00040F] text-white' :
+      isLitvm ? 'bg-[#0B192C] text-white font-mono' :
       'bg-[#080810] text-white'
     }`}>
       <BubbleExplorer chain={resolvedParams.chain as any} initialAddress={resolvedParams.address} />

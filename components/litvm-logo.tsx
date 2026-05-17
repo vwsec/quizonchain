@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
-export default function SoneiumLogo() {
+export default function LitvmLogo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const targetX = useRef(0);
@@ -45,12 +46,22 @@ export default function SoneiumLogo() {
           willChange: 'transform',
         }}
       >
-        <div className="relative group">
-          <div className="absolute inset-0 bg-[#0047FF] rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
-          <img 
-            src="/chains/soneium.png" 
-            alt="Soneium" 
-            className="w-[340px] h-[340px] object-contain relative z-10 drop-shadow-[0_0_30px_rgba(0,71,255,0.3)]"
+        <div style={{
+          position: 'relative',
+          width: 280,
+          height: 280,
+          boxShadow: '0 0 60px rgba(0,242,254,0.2), 0 0 120px rgba(0,242,254,0.08), 0 0 200px rgba(0,242,254,0.03)',
+          borderRadius: 16,
+          overflow: 'hidden',
+          filter: 'drop-shadow(0 0 25px rgba(0,242,254,0.15))',
+          border: '1px solid rgba(0,242,254,0.12)',
+        }}>
+          <Image 
+            src="/chains/litvm.png" 
+            alt="LitVM Logo" 
+            fill
+            className="object-contain"
+            priority
           />
         </div>
       </div>

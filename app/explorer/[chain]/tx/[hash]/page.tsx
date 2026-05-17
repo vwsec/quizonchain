@@ -13,17 +13,18 @@ export default async function TxPage({ params }: { params: Promise<{ chain: stri
     redirect('/explorer');
   }
 
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm'];
   const validHash = /^0x[a-fA-F0-9]{64}$/i.test(resolvedParams.hash);
   
   if (!validChains.includes(resolvedParams.chain) || !validHash) redirect('/explorer');
   
-  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH' };
+  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM' };
   const isBase = resolvedParams.chain === 'base';
   const isMegaEth = resolvedParams.chain === 'megaeth';
   const isInk = resolvedParams.chain === 'ink';
   const isUnichain = resolvedParams.chain === 'unichain';
   const isSoneium = resolvedParams.chain === 'soneium';
+  const isLitvm = resolvedParams.chain === 'litvm';
   const chainName = names[resolvedParams.chain] || (resolvedParams.chain.charAt(0).toUpperCase() + resolvedParams.chain.slice(1));
 
   return (
@@ -33,6 +34,7 @@ export default async function TxPage({ params }: { params: Promise<{ chain: stri
       isInk ? 'bg-[#0a0a0f] text-white' :
       isUnichain ? 'bg-[#0d0014] text-white' :
       isSoneium ? 'bg-[#00040F] text-white' :
+      isLitvm ? 'bg-[#0B192C] text-white font-mono' :
       'bg-[#080810] text-white'
     }`}>
       <BubbleExplorer chain={resolvedParams.chain as any} initialTxHash={resolvedParams.hash} />
@@ -42,7 +44,7 @@ export default async function TxPage({ params }: { params: Promise<{ chain: stri
 
 export async function generateMetadata({ params }: { params: Promise<{ chain: string; hash: string }> }) {
   const resolvedParams = await params;
-  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH' };
+  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM' };
   
   if (!names[resolvedParams.chain]) return { title: 'Transaction Explorer' };
   

@@ -70,12 +70,23 @@ export const megaEth = defineChain({
   iconUrl: '/chains/megaeth.png',
 });
 
+export const litvmTestnet = defineChain({
+  id: 4441,
+  name: 'LitVM LiteForge',
+  nativeCurrency: { name: 'zkLTC', symbol: 'zkLTC', decimals: 18 },
+  rpcUrls: { default: { http: ['https://liteforge.rpc.caldera.xyz/http'] } },
+  blockExplorers: { default: { name: 'LitVM Explorer', url: 'https://liteforge.explorer.caldera.xyz' } },
+  iconUrl: '/chains/litvm.png',
+  testnet: true,
+});
+
 export const soneiumChains = [
   inkMainnet,
   soneiumMainnet,
   base,
   unichain,
   megaEth,
+  litvmTestnet,
 ] as const
 
 export function getSoneiumChainById(chainId: number) {
@@ -89,7 +100,8 @@ export function getTxInternalUrl(chainId: number, txHash: string): string {
     57073: 'ink',
     8453: 'base',
     130: 'unichain',
-    4326: 'megaeth'
+    4326: 'megaeth',
+    4441: 'litvm'
   }
   const slug = mapping[chainId] || 'soneium'
   return `/explorer/${slug}/tx/${txHash}`
@@ -111,6 +123,9 @@ export function getTxExplorerUrl(chainId: number, txHash: string): string {
   }
   if (chainId === 4326) {
     return `https://megaeth.blockscout.com/tx/${txHash}`
+  }
+  if (chainId === 4441) {
+    return `https://liteforge.explorer.caldera.xyz/tx/${txHash}`
   }
   return `https://soneium.blockscout.com/tx/${txHash}`
 }

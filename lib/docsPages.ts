@@ -31,3 +31,11 @@ export const MEGAETH_DOCS_PAGES = [
   'https://docs.megaeth.com/spec',
   'https://docs.megaeth.com/architecture',
 ];
+
+export const LITVM_DOCS_PAGES = [
+  'https://docs.litvm.com/',
+  'https://docs.litvm.com/getting-started',
+  'https://docs.litvm.com/network-information',
+  'https://docs.litvm.com/bridges',
+  'https://docs.litvm.com/faucet',
+];

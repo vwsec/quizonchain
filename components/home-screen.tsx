@@ -12,6 +12,7 @@ import InkLogo from "./ink-logo"
 import UnichainLogo from "./unichain-logo"
 import BaseLogo from "./base-logo"
 import SoneiumLogo from "./soneium-logo"
+import LitvmLogo from "./litvm-logo"
 
 interface HomeScreenProps {
   onStartQuiz: () => void
@@ -62,6 +63,13 @@ function getHeroContent(chainId?: number) {
         label: 'MEGAETH',
         title: 'The Knowledge of MegaETH',
         subtitle: 'Test your MegaETH blockchain knowledge',
+      }
+    }
+    if (chainId === 4441) {
+      return {
+        label: 'LITEFORGE',
+        title: "The Knowledge of litvm",
+        subtitle: 'Test your litvm blockchain knowledge',
       }
     }
     // Default to Web3 content for fallback
@@ -116,6 +124,7 @@ export function HomeScreen({
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
   const isSoneium = activeChainConfig.name === 'Soneium'
+  const isLitvm = activeChainConfig.name === 'LitVM'
 
   if (!mounted) return null
 
@@ -128,14 +137,15 @@ export function HomeScreen({
         {isUnichain && <UnichainLogo />}
         {isBase && <BaseLogo />}
         {isSoneium && <SoneiumLogo />}
+        {isLitvm && <LitvmLogo />}
         <div className="mb-5 flex items-center gap-2">
-          {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && <div className="size-2 rounded-full bg-[#0047FF]" />}
-          <span className={`text-xs uppercase tracking-[0.28em] ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#6C5CE7] font-mono' : isUnichain ? 'text-[#FF007A] font-mono' : isBase ? 'text-[#0052FF] font-semibold' : isSoneium ? 'text-[#0047FF] font-semibold' : 'text-white/55'}`}>
-            {isMegaEth || isInk || isUnichain || isSoneium ? `// ${hero.label}` : hero.label}
+          {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && <div className="size-2 rounded-full bg-[#0047FF]" />}
+          <span className={`text-xs ${isLitvm ? 'lowercase' : 'uppercase'} tracking-[0.28em] ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#6C5CE7] font-mono' : isUnichain ? 'text-[#FF007A] font-mono' : isBase ? 'text-[#0052FF] font-semibold' : isSoneium ? 'text-[#0047FF] font-semibold' : isLitvm ? 'text-[#00F2FE] font-mono' : 'text-white/55'}`}>
+            {isMegaEth || isInk || isUnichain || isSoneium || isLitvm ? `// ${hero.label}` : hero.label}
           </span>
         </div>
 
-        <h1 className={`mb-4 font-bold ${isMegaEth ? 'text-4xl md:text-7xl uppercase font-mono tracking-tight text-white' : isInk ? 'text-4xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-4xl md:text-7xl tracking-tight font-serif text-white' : isBase ? 'text-4xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-4xl md:text-7xl tracking-tight text-white' : 'text-4xl md:text-6xl tracking-tight text-white'}`}>
+        <h1 className={`mb-4 font-bold ${isMegaEth ? 'text-4xl md:text-7xl uppercase font-mono tracking-tight text-white' : isInk ? 'text-4xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-4xl md:text-7xl tracking-tight font-serif text-white' : isBase ? 'text-4xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-4xl md:text-7xl tracking-tight text-white' : isLitvm ? 'text-4xl md:text-7xl tracking-tight font-mono text-[#00F2FE]' : 'text-4xl md:text-6xl tracking-tight text-white'}`}>
           {isUnichain ? (
             <>
               The <span className="italic text-[#FF007A]">Knowledge</span> of Unichain
@@ -143,14 +153,14 @@ export function HomeScreen({
           ) : hero.title}
         </h1>
 
-        <p className={`mb-8 ${isMegaEth ? 'text-white/40 font-mono lowercase text-sm' : isInk ? 'text-base md:text-lg text-white/70 font-medium' : isUnichain ? 'text-base text-[#FF007A]/80 font-medium' : isBase ? 'text-base text-black/60 font-medium' : isSoneium ? 'text-base md:text-lg text-white/60 tracking-tight' : 'text-sm text-white/55 md:text-base'}`}>
+        <p className={`mb-8 ${isMegaEth ? 'text-white/40 font-mono lowercase text-sm' : isInk ? 'text-base md:text-lg text-white/70 font-medium' : isUnichain ? 'text-base text-[#FF007A]/80 font-medium' : isBase ? 'text-base text-black/60 font-medium' : isSoneium ? 'text-base md:text-lg text-white/60 tracking-tight' : isLitvm ? 'text-base md:text-lg text-[#00F2FE]/60 font-mono' : 'text-sm text-white/55 md:text-base'}`}>
           {hero.subtitle}
         </p>
 
         {quizError && safeIsConnected && (
-          <div className={`mb-4 flex max-w-md items-start gap-2 p-3 text-left text-sm ${isMegaEth ? 'border border-red-500 bg-black text-red-500' : isInk || isUnichain ? 'rounded-full border border-red-500/30 bg-red-500/10 text-red-300 backdrop-blur-md px-6 py-3' : isBase ? 'rounded-xl border border-red-200 bg-red-50 text-red-600' : 'rounded-xl border border-red-500/20 bg-red-500/10 text-red-200'}`}>
+          <div className={`mb-4 flex max-w-md items-start gap-2 p-3 text-left text-sm ${isMegaEth ? 'border border-red-500 bg-black text-red-500' : isInk || isUnichain ? 'rounded-full border border-red-500/30 bg-red-500/10 text-red-300 backdrop-blur-md px-6 py-3' : isBase ? 'rounded-xl border border-red-200 bg-red-50 text-red-600' : isLitvm ? 'border border-red-500 bg-[#0B192C] text-red-500 font-mono' : 'rounded-xl border border-red-500/20 bg-red-500/10 text-red-200'}`}>
             <span className="mt-0.5">⚠️</span>
-            <span className={`text-balance ${isMegaEth ? 'uppercase font-mono tracking-tighter' : ''}`}>{quizError}</span>
+            <span className={`text-balance ${isMegaEth ? 'uppercase font-mono tracking-tighter' : isLitvm ?'font-mono tracking-tighter' : ''}`}>{quizError}</span>
           </div>
         )}
 
@@ -172,6 +182,7 @@ export function HomeScreen({
                   ? 'rounded-full border-2 border-black/5 bg-black/5 text-black hover:bg-black/10 shadow-none'
                 : isSoneium
                   ? 'rounded-xl border border-[#0047FF]/20 bg-[#0047FF]/5 text-white hover:bg-[#0047FF]/10 hover:border-[#0047FF]/50 backdrop-blur-xl transition-all'
+                : isLitvm ?'border border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10 hover:border-[#00F2FE]/50 font-mono'
                   : 'rounded-xl border border-[rgba(255,255,255,0.1)] bg-[rgba(255,255,255,0.04)] font-medium text-white hover:bg-[rgba(255,255,255,0.08)]'
             }`}
           >
@@ -194,6 +205,7 @@ export function HomeScreen({
                   ? 'rounded-full bg-[#0052FF] font-bold text-white hover:bg-[#0047FF] shadow-lg hover:shadow-xl'
                 : isSoneium
                   ? 'rounded-xl bg-[#0047FF] font-bold text-white shadow-[0_0_30px_rgba(0,71,255,0.4)] hover:bg-[#003bd9] transition-all duration-300'
+                : isLitvm ?'bg-[#00F2FE] font-bold text-[#0B192C] hover:bg-[#00C9DB] shadow-[0_0_30px_rgba(0,242,254,0.4)] font-mono'
                   : 'rounded-xl bg-[#0047FF] font-medium text-white shadow-[0_0_24px_rgba(0,71,255,0.35)] hover:bg-[#0047FF]/90'
             }`}
           >
@@ -205,7 +217,7 @@ export function HomeScreen({
           </Button>
 
           {safeIsConnected && (
-            <div className={isMegaEth ? 'font-mono uppercase text-xs' : ''}>
+            <div className={isMegaEth ? 'font-mono uppercase text-xs' : isLitvm ?'font-mono text-xs' : ''}>
               {!hasQuiz && !quizLoading && !isCooldownActive && (
                 <p className="text-sm text-muted-foreground">
                   Load a quiz with shuffle or fix the error above, then start.
@@ -217,7 +229,7 @@ export function HomeScreen({
                 </p>
               )}
               {isCooldownActive && (
-                <p className={`text-sm ${isMegaEth ? 'text-amber-500' : 'text-amber-500/80'}`}>
+                <p className={`text-sm ${isMegaEth ? 'text-amber-500' : isLitvm ? 'text-amber-500 font-mono' : 'text-amber-500/80'}`}>
                   You've recently submitted your score. Wait for the cooldown to play again.
                 </p>
               )}
@@ -243,10 +255,12 @@ export function HomeScreen({
                   ? 'rounded-2xl border border-black/5 bg-[#f4f5f7] shadow-sm'
                 : isSoneium
                   ? 'rounded-2xl border border-[#0047FF]/10 bg-white/[0.02] backdrop-blur-xl shadow-[0_0_30px_rgba(0,71,255,0.03)]'
+                : isLitvm
+                  ? 'bg-[#0B192C] border border-[#00F2FE]/20'
                   : 'rounded-xl border border-[rgba(255,255,255,0.08)] bg-[rgba(255,255,255,0.03)] backdrop-blur-md'
             }`}>
-              <div className={`text-2xl font-bold ${isMegaEth ? 'text-white font-mono' : isInk || isUnichain ? 'text-white tracking-tight' : isBase ? 'text-black tracking-tight' : 'text-white'}`}>{item.value}</div>
-              <div className={`text-sm ${isMegaEth ? 'text-white/40 uppercase font-mono' : isInk || isUnichain ? 'text-white/60 tracking-wider uppercase text-xs font-semibold' : isBase ? 'text-black/40 font-semibold' : 'text-white/55'}`}>{item.label}</div>
+              <div className={`text-2xl font-bold ${isMegaEth ? 'text-white font-mono' : isInk || isUnichain ? 'text-white tracking-tight' : isBase ? 'text-black tracking-tight' : isLitvm ? 'text-[#00F2FE] font-mono' : 'text-white'}`}>{item.value}</div>
+              <div className={`text-sm ${isMegaEth ? 'text-white/40 uppercase font-mono' : isInk || isUnichain ? 'text-white/60 tracking-wider uppercase text-xs font-semibold' : isBase ? 'text-black/40 font-semibold' : isLitvm ?'text-[#00F2FE]/60 font-mono text-xs' : 'text-white/55'}`}>{item.label}</div>
             </div>
           ))}
         </div>

@@ -3,6 +3,7 @@ export const NFT_CONTRACTS: Record<number, string> = {
   1868: process.env.NEXT_PUBLIC_NFT_CONTRACT_SONEIUM!,
   8453: process.env.NEXT_PUBLIC_NFT_CONTRACT_BASE!,
   130: process.env.NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN!,
+  4441: process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM!,
 };
 
 export const NFT_ABI = [

@@ -37,7 +37,7 @@ const FAQS = [
   },
   { 
     q: "Can I play on multiple chains?", 
-    a: "Yes. Each chain has its own leaderboard and NFT. You can play and submit scores on all 4 chains independently." 
+    a: "Yes. Each chain has its own leaderboard and NFT. You can play and submit scores on all chains independently." 
   },
   { 
     q: "Is my score stored permanently?", 
@@ -45,24 +45,23 @@ const FAQS = [
   }
 ]
 
-
-
 export default function SupportContent() {
   const isMegaEth = activeChainConfig.name === 'MegaETH'
   const isInk = activeChainConfig.name === 'Ink'
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
   const isSoneium = activeChainConfig.name === 'Soneium'
+  const isLitvm = activeChainConfig.name === 'LitVM'
 
   return (
-    <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
+    <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0] font-mono' : 'text-white'}`}>
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className={`font-black ${isMegaEth ? 'text-5xl md:text-7xl uppercase tracking-tight text-white' : isInk ? 'text-5xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-5xl md:text-7xl tracking-tight font-serif italic text-white' : isBase ? 'text-5xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-5xl md:text-7xl tracking-tight text-white' : 'text-5xl tracking-tight text-white'}`}>
-              {isMegaEth ? '// SUPPORT' : 'Support'}
+            <h1 className={`font-black ${isMegaEth ? 'text-5xl md:text-7xl uppercase tracking-tight text-white' : isInk ? 'text-5xl md:text-7xl tracking-tighter text-white' : isUnichain ? 'text-5xl md:text-7xl tracking-tight font-serif italic text-white' : isBase ? 'text-5xl md:text-7xl tracking-tighter text-black' : isSoneium ? 'text-5xl md:text-7xl tracking-tight text-white' : isLitvm ?'text-5xl md:text-7xl tracking-tight text-[#E2E8F0]' : 'text-5xl tracking-tight text-white'}`}>
+              {isMegaEth ? '// SUPPORT' : isLitvm ? '>> support' : 'Support'}
             </h1>
-            <p className={`${isMegaEth ? 'text-white/40 uppercase text-sm' : isInk || isUnichain ? 'text-white/70 text-lg' : isBase ? 'text-black/40 text-lg font-medium' : isSoneium ? 'text-white/60 text-lg' : 'text-gray-400 text-lg'}`}>
+            <p className={`${isMegaEth ? 'text-white/40 uppercase text-sm' : isInk || isUnichain ? 'text-white/70 text-lg' : isBase ? 'text-black/40 text-lg font-medium' : isSoneium ? 'text-white/60 text-lg' : isLitvm ? 'text-[#E2E8F0]/40 text-sm' : 'text-gray-400 text-lg'}`}>
               Need help? We are here for you.
             </p>
           </div>
@@ -79,18 +78,20 @@ export default function SupportContent() {
                   ? 'bg-[#f4f5f7] border border-black/5 rounded-3xl hover:border-[#0052FF] shadow-sm'
                 : isSoneium
                   ? 'rounded-2xl bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl hover:border-[#0047FF]/50 shadow-[0_0_30px_rgba(0,71,255,0.05)]'
+                : isLitvm
+                  ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]'
                   : 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:border-[#0047FF]'
             }`}>
-               {!isMegaEth && !isInk && !isUnichain && <div className="absolute inset-0 bg-gradient-to-br from-[#0047FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
+               {!isMegaEth && !isInk && !isUnichain && !isLitvm && <div className="absolute inset-0 bg-gradient-to-br from-[#0047FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                <div className="relative z-10 space-y-6">
                 <div className={`w-12 h-12 flex items-center justify-center ${
-                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isSoneium ? 'bg-[#0047FF]/10 text-[#0047FF] rounded-2xl' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
+                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isSoneium ? 'bg-[#0047FF]/10 text-[#0047FF] rounded-2xl' : isLitvm ? 'bg-[#00F2FE]/10 text-[#00F2FE]' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
                 }`}>
                   <XIcon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isMegaEth ? 'uppercase text-white' : isInk || isUnichain ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : 'text-white'}`}>Twitter / X</h3>
-                  <p className={`${isMegaEth ? 'text-white/40 text-sm' : isInk || isUnichain ? 'text-white/60' : isBase ? 'text-black/40 font-medium' : 'text-gray-400'} leading-relaxed`}>Follow us and send a DM for quick support</p>
+                  <h3 className={`text-2xl font-bold mb-2 ${isMegaEth ? 'uppercase text-white' : isInk || isUnichain ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : isLitvm ?'text-[#E2E8F0]' : 'text-white'}`}>Twitter / X</h3>
+                  <p className={`${isMegaEth ? 'text-white/40 text-sm' : isInk || isUnichain ? 'text-white/60' : isBase ? 'text-black/40 font-medium' : isLitvm ? 'text-[#E2E8F0]/40 text-sm' : 'text-gray-400'} leading-relaxed`}>Follow us and send a DM for quick support</p>
                 </div>
                 <a
                   href="https://x.com/quizonchain"
@@ -105,6 +106,7 @@ export default function SupportContent() {
                         ? 'bg-[#FF007A] hover:bg-[#d60066] text-white rounded-2xl shadow-[0_0_20px_rgba(255,0,122,0.3)]'
                       : isBase
                         ? 'bg-[#0052FF] hover:bg-[#0047FF] text-white rounded-full shadow-lg transition-all'
+                      : isLitvm ?'bg-[#0B192C] border border-[#00F2FE] text-[#00F2FE] hover:bg-[#00F2FE] hover:text-[#0B192C] rounded-none'
                         : 'bg-[#0047FF] hover:bg-blue-600 text-white rounded-xl shadow-[0_0_20px_rgba(0,71,255,0.3)]'
                   }`}
                 >
@@ -121,17 +123,19 @@ export default function SupportContent() {
                   ? `bg-white/5 border border-white/10 backdrop-blur-lg ${isInk ? 'rounded-3xl' : 'rounded-2xl'}`
                   : isBase
                     ? 'bg-[#f4f5f7] border border-black/5 rounded-3xl'
+                  : isLitvm
+                    ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none'
                   : 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl'
             }`}>
                <div className="relative z-10 space-y-6">
                 <div className={`w-12 h-12 flex items-center justify-center ${
-                  isMegaEth ? 'bg-black border border-white/10 rounded-none text-white/20' : isInk ? 'bg-white/5 text-white/40 rounded-2xl' : isUnichain ? 'bg-white/5 text-white/40 rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : 'rounded-2xl bg-white/5 text-gray-500'
+                  isMegaEth ? 'bg-black border border-white/10 rounded-none text-white/20' : isInk ? 'bg-white/5 text-white/40 rounded-2xl' : isUnichain ? 'bg-white/5 text-white/40 rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isLitvm ? 'bg-[#00F2FE]/10 text-[#00F2FE] rounded-none' : 'rounded-2xl bg-white/5 text-gray-500'
                 }`}>
                   <MessageSquare className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className={`text-2xl font-bold mb-2 ${isMegaEth ? 'uppercase text-white' : isInk || isUnichain ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : 'text-white'}`}>Community</h3>
-                  <p className={`${isMegaEth ? 'text-white/40 text-sm' : isInk || isUnichain ? 'text-white/60' : isBase ? 'text-black/40 font-medium' : 'text-gray-400'} leading-relaxed`}>Join our Discord or Telegram for community help</p>
+                  <h3 className={`text-2xl font-bold mb-2 ${isMegaEth ? 'uppercase text-white' : isInk || isUnichain ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : isLitvm ?'text-[#E2E8F0]' : 'text-white'}`}>Community</h3>
+                  <p className={`${isMegaEth ? 'text-white/40 text-sm' : isInk || isUnichain ? 'text-white/60' : isBase ? 'text-black/40 font-medium' : isLitvm ? 'text-[#E2E8F0]/40 text-sm' : 'text-gray-400'} leading-relaxed`}>Join our Discord or Telegram for community help</p>
                 </div>
                 <button
                   disabled
@@ -146,6 +150,7 @@ export default function SupportContent() {
                         ? 'bg-black/5 text-black/30 rounded-full'
                       : isSoneium
                         ? 'bg-[#0047FF]/5 border border-[#0047FF]/10 text-[#0047FF]/50 rounded-2xl'
+                      : isLitvm ?'bg-[#0B192C] border border-[#00F2FE]/20 text-[#E2E8F0]/30 rounded-none'
                       : 'bg-white/5 text-gray-500 rounded-2xl'
                   }`}
                 >
@@ -157,7 +162,7 @@ export default function SupportContent() {
 
           {/* FAQ Section */}
           <div className="space-y-8">
-            <h2 className={`text-3xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isBase ? 'text-black tracking-tighter' : 'text-white'}`}>Frequently Asked Questions</h2>
+            <h2 className={`text-3xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isBase ? 'text-black tracking-tighter' : isLitvm ?'font-mono text-[#00F2FE]' : 'text-white'}`}>Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full space-y-4">
               {FAQS.map((faq, i) => (
                 <AccordionItem 
@@ -172,15 +177,17 @@ export default function SupportContent() {
                         ? 'border-white/10 bg-white/5 rounded-2xl data-[state=open]:border-[#FF007A]/50 data-[state=open]:bg-white/10 backdrop-blur-sm'
                       : isBase
                         ? 'bg-white border-black/5 rounded-2xl shadow-sm data-[state=open]:border-black/10'
+                      : isLitvm
+                        ? 'border-[#00F2FE]/20 bg-[#0B192C] rounded-none data-[state=open]:border-[#00F2FE]/50'
                       : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
                   }`}
                 >
-                  <AccordionTrigger className={`hover:no-underline font-bold text-left ${isMegaEth ? 'font-mono uppercase text-[#00ff88]' : isBase ? 'text-black' : 'text-white'}`}>
+                  <AccordionTrigger className={`hover:no-underline font-bold text-left ${isMegaEth ? 'font-mono uppercase text-[#00ff88]' : isBase ? 'text-black' : isLitvm ?'font-mono text-[#E2E8F0]' : 'text-white'}`}>
                     <div className="flex items-start text-left gap-4">
                       {faq.q}
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className={`text-base leading-relaxed pb-6 pl-9 ${isMegaEth ? 'text-white/50 lowercase text-sm' : 'text-gray-400'}`}>
+                  <AccordionContent className={`text-base leading-relaxed pb-6 pl-9 ${isMegaEth ? 'text-white/50 lowercase text-sm' : isLitvm ? 'text-[#E2E8F0]/50 text-sm' : 'text-gray-400'}`}>
                     {faq.a}
                   </AccordionContent>
                 </AccordionItem>

@@ -46,6 +46,14 @@ const CHAINS = [
     iconUrl: '/chains/megaeth.png',
     accentColor: 'group-hover:border-[#00ff88] group-hover:shadow-[0_0_20px_rgba(0,255,136,0.2)]',
     textAccent: 'group-hover:text-[#00ff88]',
+  },
+  {
+    id: 'litvm',
+    name: 'LitVM',
+    description: 'Explore LitVM LiteForge transactions visually',
+    iconUrl: '/chains/litvm.png',
+    accentColor: 'group-hover:border-[#00F2FE] group-hover:shadow-[0_0_20px_rgba(0,242,254,0.2)]',
+    textAccent: 'group-hover:text-[#00F2FE]',
   }
 ]
 

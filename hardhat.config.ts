@@ -47,6 +47,11 @@ const config: HardhatUserConfig = {
       chainId: 4326,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    litvmTestnet: {
+      url: "https://liteforge.rpc.caldera.xyz/http",
+      chainId: 4441,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
   },
   etherscan: {
     apiKey: {
@@ -54,6 +59,7 @@ const config: HardhatUserConfig = {
       baseMainnet: process.env.BASESCAN_API_KEY || "",
       unichainMainnet: "empty",
       megaethMainnet: "empty",
+      litvmTestnet: "empty",
     },
     customChains: [
       {
@@ -86,6 +92,14 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://megaeth.blockscout.com/api",
           browserURL: "https://megaeth.blockscout.com",
+        },
+      },
+      {
+        network: "litvmTestnet",
+        chainId: 4441,
+        urls: {
+          apiURL: "https://liteforge.explorer.caldera.xyz/api",
+          browserURL: "https://liteforge.explorer.caldera.xyz",
         },
       },
     ],

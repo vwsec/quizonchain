@@ -18,7 +18,7 @@ const SEARCH_TYPES = {
   ENS: /\.eth$/i,
   BLOCK: /^\d+$/,
 }
-export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth'
+export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth' | 'litvm'
 
 const CHAIN_CONFIG = {
   soneium: {
@@ -50,6 +50,12 @@ const CHAIN_CONFIG = {
     color: '#00ff88',
     name: 'MegaETH',
     explorer: 'https://megaeth.blockscout.com',
+  },
+  litvm: {
+    apiBase: 'https://liteforge.explorer.caldera.xyz/api/v2',
+    color: '#00F2FE',
+    name: 'LitVM',
+    explorer: 'https://liteforge.explorer.caldera.xyz',
   },
 } as const
 
@@ -162,6 +168,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   const isUnichain = chain === 'unichain'
   const isBase = chain === 'base'
   const isSoneium = chain === 'soneium'
+  const isLitvm = chain === 'litvm'
   
   const config = CHAIN_CONFIG[chain]
   const router = useRouter()
@@ -294,14 +301,11 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   
   // Initial load for address or transaction from URL props
   useEffect(() => {
-    if (initialAddress && !activeSearch) {
+    if (initialAddress) {
       handleSearch(initialAddress)
-    }
-    if (initialTxHash && !searchResult) {
+    } else if (initialTxHash) {
       handleSearch(initialTxHash)
-    }
-    // Cleanup: If prompts vanish, clear search result
-    if (!initialTxHash && !initialAddress && searchResult) {
+    } else {
       setSearchResult(null)
       setFocusedTxHash(null)
     }
@@ -500,6 +504,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               ? 'rgba(255, 0, 122, 0.03)'
               : isBase
                 ? 'rgba(0, 82, 255, 0.03)'
+              : isLitvm
+                ? 'rgba(0, 242, 254, 0.025)'
                 : 'rgba(0, 71, 255, 0.025)'
 
         for (let x = 0; x < cw; x += gridSize) {
@@ -1080,6 +1086,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         }
       }
     } catch (err: any) {
+      console.error(`Search error for ${q}:`, err?.message || err)
       setSearchError(`Not found on ${config.name}`)
     } finally {
       setSearchLoading(false)

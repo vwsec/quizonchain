@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Outfit:wght@100..900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -149,7 +150,7 @@
 }
 
 .theme-megaeth button {
-  @apply transition-all duration-200 uppercase tracking-wider;
+  @apply transition-all duration-200 tracking-wider;
 }
 
 .theme-megaeth .mega-btn-primary {
@@ -218,4 +219,146 @@
 
 .theme-base .base-bg-blue {
   background-color: #0000ff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LitVM Theme — Matching official litvm.com design
+   Deep navy backgrounds, vibrant cyan accent (#00F2FE),
+   Rajdhani headings, Outfit body, glassmorphic cards
+   ═══════════════════════════════════════════════════════════ */
+.theme-litvm {
+  --background: #0B192C;
+  --foreground: #E2E8F0;
+  --card: rgba(11, 25, 44, 0.85);
+  --card-foreground: #E2E8F0;
+  --popover: #0B192C;
+  --popover-foreground: #E2E8F0;
+  --primary: #00F2FE;
+  --primary-foreground: #0B192C;
+  --secondary: rgba(0, 242, 254, 0.1);
+  --secondary-foreground: #E2E8F0;
+  --muted: rgba(226, 232, 240, 0.1);
+  --muted-foreground: rgba(226, 232, 240, 0.5);
+  --accent: #00F2FE;
+  --accent-foreground: #0B192C;
+  --destructive: #ef4444;
+  --destructive-foreground: #E2E8F0;
+  --success: #00FF87;
+  --success-foreground: #0B192C;
+  --border: rgba(0, 242, 254, 0.15);
+  --input: rgba(0, 242, 254, 0.15);
+  --ring: #00F2FE;
+  --chart-1: #00F2FE;
+  --chart-2: #00C9DB;
+  --chart-3: #0097A7;
+  --chart-4: #00FF87;
+  --chart-5: #A18CD1;
+  --radius: 0.75rem;
+  --sidebar: #0B192C;
+  --sidebar-foreground: #E2E8F0;
+  --sidebar-primary: #00F2FE;
+  --sidebar-primary-foreground: #0B192C;
+  --sidebar-accent: rgba(0, 242, 254, 0.1);
+  --sidebar-accent-foreground: #E2E8F0;
+  --sidebar-border: rgba(0, 242, 254, 0.15);
+  --sidebar-ring: #00F2FE;
+
+  font-family: 'Outfit', 'Outfit Variablefont Wght', Arial, sans-serif !important;
+}
+
+.theme-litvm body {
+  background: #080F1A !important;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(0, 242, 254, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(161, 140, 209, 0.04) 0%, transparent 50%),
+    linear-gradient(160deg, #0B192C 0%, #080F1A 40%, #0F1923 70%, #0B192C 100%) !important;
+}
+
+.theme-litvm body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 242, 254, 0.04) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 80px,
+      rgba(0, 242, 254, 0.015) 80px,
+      rgba(0, 242, 254, 0.015) 81px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(0, 242, 254, 0.015) 80px,
+      rgba(0, 242, 254, 0.015) 81px
+    );
+}
+
+/* Headings use Rajdhani (futuristic, geometric) */
+.theme-litvm h1, .theme-litvm h2, .theme-litvm h3, .theme-litvm h4 {
+  font-family: 'Rajdhani', Arial, sans-serif !important;
+  font-weight: 700;
+}
+
+.theme-litvm .litvm-header {
+  @apply tracking-widest text-[#00F2FE];
+  font-family: 'Rajdhani', Arial, sans-serif !important;
+}
+
+.theme-litvm .litvm-header::before {
+  content: ">> ";
+}
+
+.theme-litvm button {
+  @apply transition-all duration-300;
+  font-family: 'Rajdhani', Arial, sans-serif !important;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.theme-litvm .litvm-btn-primary {
+  @apply bg-transparent border text-[#00F2FE] hover:text-[#0B192C];
+  border-color: #00F2FE;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.05), rgba(0, 242, 254, 0.02));
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.1), inset 0 1px 0 rgba(0, 242, 254, 0.1);
+}
+
+.theme-litvm .litvm-btn-primary:hover {
+  background: linear-gradient(135deg, #00F2FE, #00C9DB);
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.4);
+}
+
+.theme-litvm .litvm-btn-secondary {
+  @apply bg-transparent border border-white/15 text-white/70 hover:border-[#00F2FE]/40 hover:text-white;
+}
+
+.theme-litvm .litvm-card {
+  background: linear-gradient(135deg, rgba(11, 25, 44, 0.9), rgba(15, 25, 35, 0.85));
+  border: 1px solid rgba(0, 242, 254, 0.12);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(0, 242, 254, 0.05);
+}
+
+/* Animated glow pulse for LitVM accent elements */
+@keyframes litvm-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(0, 242, 254, 0.3); }
+}
+
+@keyframes litvm-border-shimmer {
+  0% { border-color: rgba(0, 242, 254, 0.15); }
+  50% { border-color: rgba(0, 242, 254, 0.35); }
+  100% { border-color: rgba(0, 242, 254, 0.15); }
+}
+
+.theme-litvm .litvm-glow {
+  animation: litvm-glow-pulse 4s ease-in-out infinite;
+}
+
+.theme-litvm .litvm-shimmer {
+  animation: litvm-border-shimmer 3s ease-in-out infinite;
 }

@@ -40,6 +40,7 @@ async function main() {
     8453: "NEXT_PUBLIC_CONTRACT_ADDRESS_BASE",
     130: "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
     4326: "NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH",
+    4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
   }
 
   const chainId = hre.network.config.chainId

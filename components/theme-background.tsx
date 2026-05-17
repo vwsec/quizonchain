@@ -12,11 +12,12 @@ export function ThemeBackground() {
   const isUnichain = activeChainConfig.name === 'Unichain';
   const isBase = activeChainConfig.name === 'Base';
   const isSoneium = activeChainConfig.name === 'Soneium';
+  const isLitvm = activeChainConfig.name === 'LitVM';
 
   if (!mounted) return null;
 
   return (
-    <div className={`fixed inset-0 z-[-1] pointer-events-none ${isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : isSoneium ? 'bg-[#00040F]' : ''}`}>
+    <div className={`fixed inset-0 z-[-1] pointer-events-none ${isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : isSoneium ? 'bg-[#00040F]' : isLitvm ? 'bg-[#080F1A]' : ''}`}>
       {/* MegaEth / Ink / Base / Soneium Noise Overlay */}
       {(isMegaEth || isInk || isBase || isSoneium) && (
         <div style={{
@@ -93,6 +94,56 @@ export function ThemeBackground() {
         </>
       )}
       
+      {/* LitVM Deep Navy Background + Animated Glow Orbs */}
+      {isLitvm && (
+        <>
+          {/* Base gradient matching litvm.com */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(160deg, #0B192C 0%, #080F1A 40%, #0F1923 70%, #0B192C 100%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }} />
+          {/* Top-left cyan glow orb */}
+          <div style={{
+            position: 'absolute',
+            left: '-5%',
+            top: '-10%',
+            width: '50vw',
+            height: '50vh',
+            background: 'radial-gradient(circle, rgba(0,242,254,0.06) 0%, transparent 70%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+            filter: 'blur(60px)',
+          }} />
+          {/* Bottom-right warm glow orb */}
+          <div style={{
+            position: 'absolute',
+            right: '-10%',
+            bottom: '-5%',
+            width: '40vw',
+            height: '40vh',
+            background: 'radial-gradient(circle, rgba(161,140,209,0.04) 0%, transparent 70%)',
+            pointerEvents: 'none',
+            zIndex: 0,
+            filter: 'blur(80px)',
+          }} />
+          {/* Subtle grid lines */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `
+              linear-gradient(rgba(0,242,254,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,242,254,0.02) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px',
+            pointerEvents: 'none',
+            zIndex: 0,
+          }} />
+        </>
+      )}
+
       {/* Soneium Stars */}
       {isSoneium && Array.from({ length: 20 }).map((_, i) => (
         <span key={`soneium-${i}`} style={{
@@ -108,7 +159,7 @@ export function ThemeBackground() {
       ))}
 
       {/* Default Base Blue Glow */}
-      {!isMegaEth && !isInk && !isUnichain && !isBase && (
+      {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && (
         <div className="absolute inset-0">
           <div className="absolute left-1/2 top-1/2 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(0,71,255,0.08)] blur-3xl animate-pulse" />
         </div>

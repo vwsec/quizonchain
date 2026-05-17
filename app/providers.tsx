@@ -11,7 +11,7 @@ import {
   darkTheme,
 } from '@rainbow-me/rainbowkit'
 import { activeChainConfig, isMultiChain } from '@/lib/active-chain-config'
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth } from '@/lib/chains'
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet } from '@/lib/chains'
 import { validateContractAddressEnv } from '@/lib/env-validation'
 
 // Some runtimes expose a `localStorage` global that is not a real `Storage`
@@ -60,7 +60,7 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set.')
 }
 
-const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth]
+const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet]
 const singleChain = allChains.find(c => c.id === activeChainConfig.chainId)
 const chains = isMultiChain ? allChains : [singleChain!]
 
@@ -81,8 +81,8 @@ export function Providers({ children }: { children: ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
           theme={darkTheme({
-            accentColor: activeChainConfig.name === 'MegaETH' ? '#00ff88' : activeChainConfig.color,
-            accentColorForeground: activeChainConfig.name === 'MegaETH' ? '#000000' : 'white',
+            accentColor: activeChainConfig.name === 'MegaETH' ? '#00ff88' : activeChainConfig.name === 'LitVM' ? '#00F2FE' : activeChainConfig.color,
+            accentColorForeground: activeChainConfig.name === 'MegaETH' ? '#000000' : activeChainConfig.name === 'LitVM' ? '#000000' : 'white',
           })}
         >
           {children}

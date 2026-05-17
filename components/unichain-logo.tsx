@@ -7,7 +7,7 @@ export default function UnichainLogo() {
   const logoRef = useRef<HTMLDivElement>(null);
   const targetX = useRef(0);
   const currentX = useRef(0);
-  const rafRef = useRef<number>();
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

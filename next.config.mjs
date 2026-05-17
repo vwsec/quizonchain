@@ -24,7 +24,10 @@ const cspHeader = `
       https://explorer.inkonchain.com
       https://base.blockscout.com
       https://unichain.blockscout.com
-      https://megaeth.blockscout.com;
+      https://megaeth.blockscout.com
+      https://liteforge.explorer.caldera.xyz
+      https://liteforge.rpc.caldera.xyz
+      wss://liteforge.rpc.caldera.xyz;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim()

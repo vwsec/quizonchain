@@ -13,6 +13,7 @@ import {
   base,
   unichain,
   megaEth,
+  litvmTestnet,
 } from '@/lib/chains'
 
 const CHAIN_MAINNET = 1868
@@ -20,6 +21,7 @@ const CHAIN_INK_MAINNET = 57073
 const CHAIN_BASE_MAINNET = 8453
 const CHAIN_UNICHAIN_MAINNET = 130
 const CHAIN_MEGAETH_MAINNET = 4326
+const CHAIN_LITVM_TESTNET = 4441
 
 export const quizScoresAbi = [
   {
@@ -213,9 +215,27 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
     }
     return addr
   }
+  if (chainId === CHAIN_LITVM_TESTNET) {
+    const raw = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM
+    if (!raw?.trim()) {
+      return {
+        success: false,
+        error:
+          'NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM is not configured for this build.',
+      }
+    }
+    const addr = raw.trim() as Address
+    if (!isAddress(addr)) {
+      return {
+        success: false,
+        error: 'Invalid LitVM contract address in env.',
+      }
+    }
+    return addr
+  }
   return {
     success: false,
-    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}).`,
+    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}).`,
   }
 }
 
@@ -231,6 +251,7 @@ function getViemChain(chainId: number) {
   if (chainId === CHAIN_BASE_MAINNET) return base
   if (chainId === CHAIN_UNICHAIN_MAINNET) return unichain
   if (chainId === CHAIN_MEGAETH_MAINNET) return megaEth
+  if (chainId === CHAIN_LITVM_TESTNET) return litvmTestnet
   return null
 }
 

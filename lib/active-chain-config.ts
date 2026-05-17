@@ -111,6 +111,29 @@ const CHAIN_CONFIGS = {
     nftMetadataPath: '/nft/megaeth/1.json',
     nftImage: '/nft/megaeth.png',
   },
+  litvm: {
+    name: 'LitVM',
+    chainId: 4441,
+    color: '#00F2FE',
+    rpc: 'https://liteforge.rpc.caldera.xyz/http',
+    explorer: 'https://liteforge.explorer.caldera.xyz',
+    blockscoutApi: 'https://liteforge.explorer.caldera.xyz/api/v2',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!,
+    nftContract: process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM!,
+    docsPages: [
+      'https://docs.litvm.com/',
+      'https://docs.litvm.com/getting-started',
+      'https://docs.litvm.com/network-information',
+      'https://docs.litvm.com/bridges',
+      'https://docs.litvm.com/faucet',
+      'https://docs.litvm.com/ecosystem',
+    ],
+    heroTitle: "The Knowledge of litvm",
+    heroSubtitle: "Test your litvm blockchain knowledge",
+    heroLabel: 'LITEFORGE',
+    nftMetadataPath: '/nft/litvm/1.json',
+    nftImage: '/nft/litvm.png',
+  },
 } as const;
 
 type ChainKey = keyof typeof CHAIN_CONFIGS;
