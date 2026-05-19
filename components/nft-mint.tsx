@@ -24,6 +24,7 @@ function getChainName(chainId: number): string {
   if (chainId === 8453) return "Base"
   if (chainId === 130) return "Unichain"
   if (chainId === 4326) return "MegaETH"
+  if (chainId === 4441) return "LitVM LiteForge"
   return "Unknown Chain"
 }
 
@@ -32,10 +33,11 @@ function getQuizContractAddress(chainId: number): Address | null {
   const map: Record<number, string | undefined> = {
     1868: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MAINNET,
     57073: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_INK_MAINNET,
-    8453: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET,
-    130: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN,
-    4326: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH,
-  }
+     8453: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET,
+     130: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN,
+     4326: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH,
+     4441: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM,
+   }
   const raw = map[chainId]
   if (!raw || !isAddress(raw)) return null
   return raw as Address
@@ -54,6 +56,7 @@ function getExplorerTxUrl(chainId: number, txHash: string): string {
   if (chainId === 8453) return `https://basescan.org/tx/${txHash}`
   if (chainId === 130) return `https://uniscan.xyz/tx/${txHash}`
   if (chainId === 4326) return `https://megaexplorer.xyz/tx/${txHash}`
+  if (chainId === 4441) return `https://liteforge.explorer.caldera.xyz/tx/${txHash}`
   return `#`
 }
 
@@ -65,6 +68,7 @@ function getOpenSeaUrl(chainId: number, contractAddress: string, tokenId: string
   if (chainId === 57073) return `https://explorer.inkonchain.com/token/${contractAddress}/instance/${tokenId}`
   if (chainId === 130) return `https://uniscan.xyz/token/${contractAddress}/instance/${tokenId}`
   if (chainId === 4326) return `https://megaexplorer.xyz/token/${contractAddress}/instance/${tokenId}`
+  if (chainId === 4441) return `https://liteforge.explorer.caldera.xyz/token/${process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM}/instance/${tokenId}`
   return `https://opensea.io/assets/${contractAddress}/${tokenId}`
 }
 

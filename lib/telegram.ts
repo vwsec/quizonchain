@@ -16,10 +16,11 @@ export async function sendTelegramMessage(botToken: string, chatId: string, mess
       }),
     });
 
-    const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || 'Failed to send Telegram message');
+      const text = await response.text()
+      throw new Error(text.slice(0, 200))
     }
+    const data = await response.json();
     return data;
   } catch (error: any) {
     console.error('Error sending Telegram message:', error);

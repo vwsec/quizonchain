@@ -70,13 +70,14 @@ function QuizApp() {
       const res = await fetch(`/api/generate-quiz?chainId=${chainId}`, {
         signal: controller.signal,
       })
-      const data = (await res.json()) as GenerateQuizApiResponse
       if (!res.ok) {
+        const text = await res.text()
         if (res.status === 429) {
           throw new Error("You're a bit too fast! ⏳ Please wait a few seconds before requesting a new quiz.")
         }
-        throw new Error(data.error ?? "Failed to load quiz")
+        throw new Error(`Quiz API error ${res.status}: ${text.slice(0, 200)}`)
       }
+      const data = (await res.json()) as GenerateQuizApiResponse
       if (!data.questions?.length) {
         throw new Error("No questions returned")
       }
@@ -208,8 +209,12 @@ function QuizApp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quizToken, answers }),
       })
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Quiz API error ${res.status}: ${text.slice(0, 200)}`)
+      }
       const data = (await res.json()) as { score?: number; error?: string }
-      if (!res.ok || typeof data.score !== "number") {
+      if (typeof data.score !== "number") {
         throw new Error(data.error ?? "Failed to verify quiz answers")
       }
       setFinalScore(data.score)

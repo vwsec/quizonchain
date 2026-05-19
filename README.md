@@ -13,6 +13,7 @@
 | Base | [quizonbase.vercel.app](https://quizonbase.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=base` |
 | Unichain | [quizonunichain.vercel.app](https://quizonunichain.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=unichain` |
 | MegaETH | [quizonmegaeth.vercel.app](https://quizonmegaeth.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=megaeth` |
+| LitVM | [quizonlitvm.vercel.app](https://quizonlitvm.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=litvm` |
 
 ## Description
 Quiz On Chain is a Web3 quiz app about blockchain ecosystems.
@@ -27,7 +28,7 @@ an exclusive NFT.
 - Answer feedback shown after each question
 - 1 hour cooldown between on-chain submissions
 - Global leaderboard tracking total points across all players
-- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH
+- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM
 - NFT mint unlocked at 100 total points per chain
 - Visual bubble explorer — live transactions shown as floating bubbles
 - Network view — standard transaction table explorer
@@ -44,6 +45,7 @@ an exclusive NFT.
 | Base     | 8453     | [base.blockscout.com](https://base.blockscout.com) |
 | Unichain | 130      | [unichain.blockscout.com](https://unichain.blockscout.com) |
 | MegaETH  | 4326     | [megaeth.blockscout.com](https://megaeth.blockscout.com) |
+| LitVM    | 4441     | [liteforge.explorer.caldera.xyz](https://liteforge.explorer.caldera.xyz) |
 
 ## Smart Contract Addresses
 
@@ -55,6 +57,7 @@ an exclusive NFT.
 | Base     | `0xCc8Fc975715388171eCAa93A27313379Bd25D881` |
 | Unichain | `0x1f42B65a9C1f873D26881217E86E09e1470A3c6C` |
 | MegaETH  | `0xd493bb9fadd6226ba1c7ff1b524527855782163e` |
+| LitVM    | `0xBEd500d8d59547269085BBB4fa32Fab4394a4802` |
 
 ### QuizNFT Contracts
 | Network  | Address |
@@ -63,9 +66,11 @@ an exclusive NFT.
 | Soneium  | `0x606a662Aa2Cd6d928A939768a2DB73E09B25eF48` |
 | Base     | `0xBD99520780Dce2BfC79d29C044ADf88f449Ecf55` |
 | Unichain | `0x88baBdA85F78eE6dcF63e0bBc78618008F1Fc9E8` |
+| MegaETH  | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` |
+| LitVM    | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` |
 
 ## Tech Stack
-- **Framework**: Next.js 14 (App Router), React 19
+- **Framework**: Next.js 15 (App Router), React 19
 - **Wallet**: RainbowKit, wagmi v2, viem
 - **Smart Contracts**: Solidity ^0.8.20, OpenZeppelin, Hardhat
 - **Quiz Generation**: Groq SDK (llama-3.3-70b-versatile), Jina Reader
@@ -101,7 +106,7 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 PRIVATE_KEY=
 
 # Single-chain deployment (optional)
-# Values: ink | soneium | base | unichain | megaeth
+# Values: ink | soneium | base | unichain | megaeth | litvm
 NEXT_PUBLIC_ACTIVE_CHAIN=
 
 # App URL
@@ -113,12 +118,14 @@ NEXT_PUBLIC_CONTRACT_ADDRESS_SONEIUM=0xFcd6909EFAC729DC901775895f3322f8050c7c73
 NEXT_PUBLIC_CONTRACT_ADDRESS_BASE=0xCc8Fc975715388171eCAa93A27313379Bd25D881
 NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN=0x1f42B65a9C1f873D26881217E86E09e1470A3c6C
 NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH=0xd493bb9fadd6226ba1c7ff1b524527855782163e
+NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM=0xBEd500d8d59547269085BBB4fa32Fab4394a4802
 
 # QuizNFT Contract Addresses
 NEXT_PUBLIC_NFT_CONTRACT_INK=0x1328C30B73B90DcD59B26D513275644c8B34Ad6d
 NEXT_PUBLIC_NFT_CONTRACT_SONEIUM=0x606a662Aa2Cd6d928A939768a2DB73E09B25eF48
 NEXT_PUBLIC_NFT_CONTRACT_BASE=0xBD99520780Dce2BfC79d29C044ADf88f449Ecf55
 NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN=0x88baBdA85F78eE6dcF63e0bBc78618008F1Fc9E8
+NEXT_PUBLIC_NFT_CONTRACT_LITVM=0x800a3843eE97e5e19468e3d62c19f9E93524A510
 
 # NFT Settings
 NEXT_PUBLIC_NFT_POINTS_THRESHOLD=100
@@ -138,7 +145,7 @@ This changes:
 - Only Ink contract used for score submission
 - Only Ink leaderboard shown
 - Explorer goes directly to Ink explorer
-- Chain-specific theme applied (Ink=purple, Soneium=blue, Base=blue, Unichain=pink, MegaETH=green)
+- Chain-specific theme applied (Ink=purple, Soneium=blue, Base=blue, Unichain=pink, MegaETH=green, LitVM=teal)
 
 ## How It Works
 

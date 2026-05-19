@@ -8,10 +8,7 @@ const verifySchema = z.object({
   answers: z.array(z.number().int().min(0).max(3)).length(5),
 })
 
-const verifySecret =
-  process.env.QUIZ_JWT_SECRET?.trim() ||
-  process.env.GROQ_API_KEY?.trim() ||
-  "dev-insecure-quiz-secret"
+const verifySecret = process.env.QUIZ_JWT_SECRET
 
 type QuizTokenPayload = {
   answers: number[]
@@ -20,6 +17,13 @@ type QuizTokenPayload = {
 }
 
 export async function POST(request: Request) {
+  if (!verifySecret) {
+    return NextResponse.json(
+      { error: "Server configuration error: QUIZ_JWT_SECRET is not set" },
+      { status: 500 },
+    )
+  }
+
   let body: unknown
   try {
     body = await request.json()

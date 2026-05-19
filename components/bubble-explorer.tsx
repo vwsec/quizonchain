@@ -1281,6 +1281,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 searchInputRef.current?.focus()
               }}
               disabled={searchLoading}
+              aria-label="Clear search"
               className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors disabled:opacity-50 ${
                 isBase ? 'text-black/40 hover:text-black' : 'text-gray-500 hover:text-white'
               }`}
@@ -1407,9 +1408,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
              <div className="absolute top-[60px] left-0 right-0 bg-[#0d0e15]/95 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden pointer-events-auto z-50">
                <div className="flex justify-between items-center px-4 py-2 border-b border-white/10 bg-white/5">
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Search Results</span>
-                  <button onClick={() => setSearchResult(null)} className="p-1 hover:bg-white/10 rounded-md transition-colors">
-                     <X className="w-3 h-3 text-gray-400" />
-                  </button>
+                   <button onClick={() => setSearchResult(null)} className="p-1 hover:bg-white/10 rounded-md transition-colors" aria-label="Close search results">
+                      <X className="w-3 h-3 text-gray-400" />
+                   </button>
                </div>
                <div className="max-h-[300px] overflow-y-auto">
                   {(searchResult.data as any[]).slice(0, 5).map((item, i) => (
@@ -1493,13 +1494,14 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                              <span className="text-green-400 font-mono">#{searchResult.data.block_number || searchResult.data.block}</span>
                           </div>
                        </div>
-                       <button 
-                          onClick={() => {
-                            setSearchResult(null)
-                            handleBack()
-                          }}
-                          className="p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all border border-white/5 group"
-                       >
+                        <button 
+                           onClick={() => {
+                             setSearchResult(null)
+                             handleBack()
+                           }}
+                           aria-label="Close"
+                           className="p-2.5 bg-white/5 hover:bg-white/10 rounded-full transition-all border border-white/5 group"
+                        >
                           <X className="w-6 h-6 text-gray-400 group-hover:text-white" />
                        </button>
                      </div>
@@ -1646,7 +1648,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                   <button onClick={() => {
                     setSearchResult(null)
                     router.push(`/explorer/${chain}`)
-                  }} className="p-1.5 hover:bg-white/10 rounded-md transition-colors border border-transparent hover:border-white/10">
+                  }} className="p-1.5 hover:bg-white/10 rounded-md transition-colors border border-transparent hover:border-white/10" aria-label="Close">
                      <X className="w-4 h-4 text-gray-400" />
                   </button>
                </div>
@@ -1736,7 +1738,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                      <button onClick={() => {
                       setSearchResult(null)
                       router.push(`/explorer/${chain}`)
-                    }} className="p-1.5 hover:bg-white/10 rounded-md transition-colors border border-transparent hover:border-white/10">
+                    }} className="p-1.5 hover:bg-white/10 rounded-md transition-colors border border-transparent hover:border-white/10" aria-label="Close">
                        <X className="w-4 h-4 text-gray-400" />
                     </button>
                  </div>
@@ -1805,6 +1807,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               </span>
               <button 
                 onClick={clearSearch}
+                aria-label="Clear search"
                 className="pointer-events-auto bg-white/10 hover:bg-white/20 p-1 rounded-full transition-colors"
               >
                 <X className="w-4 h-4 text-white" />
@@ -1819,6 +1822,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               <span className="text-white text-sm font-bold">Showing Block #{activeSearch.query}</span>
               <button 
                 onClick={clearSearch}
+                aria-label="Clear search"
                 className="pointer-events-auto bg-white/10 hover:bg-white/20 p-1 rounded-full transition-colors"
               >
                 <X className="w-4 h-4 text-white" />

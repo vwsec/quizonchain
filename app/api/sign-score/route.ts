@@ -24,10 +24,7 @@ function checkRateLimit(ip: string): boolean {
   return true
 }
 
-const quizJwtSecret =
-  process.env.QUIZ_JWT_SECRET?.trim() ||
-  process.env.GROQ_API_KEY?.trim() ||
-  "dev-insecure-quiz-secret"
+const quizJwtSecret = process.env.QUIZ_JWT_SECRET
 
 const bodySchema = z.object({
   playerAddress: z.string(),
@@ -56,6 +53,13 @@ export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
   if (!checkRateLimit(ip)) {
     return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+  }
+
+  if (!quizJwtSecret) {
+    return NextResponse.json(
+      { error: "Server configuration error: QUIZ_JWT_SECRET is not set" },
+      { status: 500 },
+    )
   }
 
   let json: unknown

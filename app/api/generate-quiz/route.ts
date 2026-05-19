@@ -47,10 +47,7 @@ const quizArraySchema = z.array(quizItemSchema).length(5)
 type ServerQuestion = z.infer<typeof quizItemSchema>
 type PublicQuestion = { id: number; question: string; options: string[]; correctIndex: number }
 const QUIZ_TOKEN_TTL_SECONDS = 15 * 60
-const quizJwtSecret =
-  process.env.QUIZ_JWT_SECRET?.trim() ||
-  process.env.GROQ_API_KEY?.trim() ||
-  "dev-insecure-quiz-secret"
+const quizJwtSecret = process.env.QUIZ_JWT_SECRET
 
 function buildCorsHeaders(origin?: string) {
   const allowOrigin = origin && origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN
@@ -559,6 +556,12 @@ export async function GET(request: Request) {
   }
 
   try {
+    if (!quizJwtSecret) {
+      return NextResponse.json(
+        { error: "Server configuration error: QUIZ_JWT_SECRET is not set" },
+        { status: 500, headers },
+      )
+    }
     const selectedChainId = readSelectedChainId(request, "GET")
     return await handleGenerateQuiz(request, selectedChainId, headers)
   } catch (err) {
@@ -593,6 +596,12 @@ export async function POST(request: Request) {
   }
 
   try {
+    if (!quizJwtSecret) {
+      return NextResponse.json(
+        { error: "Server configuration error: QUIZ_JWT_SECRET is not set" },
+        { status: 500, headers },
+      )
+    }
     const selectedChainId = await readSelectedChainIdFromBody(request)
     return await handleGenerateQuiz(request, selectedChainId, headers)
   } catch (err) {

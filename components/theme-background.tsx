@@ -44,8 +44,8 @@ export function ThemeBackground() {
       {isMegaEth && Array.from({ length: 20 }).map((_, i) => (
         <span key={`mega-${i}`} style={{
           position: 'absolute',
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
+          left: `${(i * 17 + 7) % 100}%`,
+          top: `${(i * 13 + 11) % 100}%`,
           color: 'rgba(255,255,255,0.15)',
           fontSize: 12,
         }}>×</span>
@@ -55,8 +55,8 @@ export function ThemeBackground() {
       {isInk && Array.from({ length: 20 }).map((_, i) => (
         <span key={`ink-${i}`} style={{
           position: 'absolute',
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
+          left: `${(i * 17 + 7) % 100}%`,
+          top: `${(i * 13 + 11) % 100}%`,
           color: 'rgba(108,92,231,0.2)',
           fontSize: 16,
         }}>•</span>
@@ -66,8 +66,8 @@ export function ThemeBackground() {
       {isUnichain && Array.from({ length: 20 }).map((_, i) => (
         <span key={`uni-${i}`} style={{
           position: 'absolute',
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
+          left: `${(i * 17 + 7) % 100}%`,
+          top: `${(i * 13 + 11) % 100}%`,
           color: 'rgba(255,0,122,0.2)',
           fontSize: 14,
         }}>✦</span>
@@ -85,8 +85,8 @@ export function ThemeBackground() {
           {Array.from({ length: 20 }).map((_, i) => (
             <span key={`base-${i}`} style={{
               position: 'absolute',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${(i * 17 + 7) % 100}%`,
+              top: `${(i * 13 + 11) % 100}%`,
               color: 'rgba(0,82,255,0.15)',
               fontSize: 14,
             }}>○</span>
@@ -148,8 +148,8 @@ export function ThemeBackground() {
       {isSoneium && Array.from({ length: 20 }).map((_, i) => (
         <span key={`soneium-${i}`} style={{
           position: 'absolute',
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
+          left: `${(i * 17 + 7) % 100}%`,
+          top: `${(i * 13 + 11) % 100}%`,
           color: 'rgba(0,71,255,0.2)',
           fontSize: 18,
           pointerEvents: 'none',

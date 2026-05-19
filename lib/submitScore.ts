@@ -298,8 +298,12 @@ async function fetchScoreSignature(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Sign API error ${res.status}: ${text.slice(0, 200)}`)
+  }
   const data = (await res.json()) as { signature?: string; error?: string }
-  if (!res.ok || !data.signature) {
+  if (!data.signature) {
     throw new Error(data.error ?? 'Failed to fetch score signature')
   }
   return data.signature as Hex

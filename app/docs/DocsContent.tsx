@@ -13,6 +13,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
+import { NFT_CONTRACTS } from "@/lib/nft-contracts"
 import { megaEth, soneiumMainnet, unichain } from "@/lib/chains"
 
 const SECTIONS = [
@@ -23,6 +24,7 @@ const SECTIONS = [
   { id: "scoring", title: "Scoring & Cooldown" },
   { id: "achievements", title: "NFT Achievements" },
   { id: "explorer", title: "Blockchain Explorer" },
+  { id: "telegram-alerts", title: "Telegram Alerts" },
   { id: "leaderboard", title: "Leaderboard" },
   { id: "faq", title: "FAQ" },
 ]
@@ -36,6 +38,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
       }}
+      aria-label="Copy to clipboard"
       className="shrink-0 p-1.5 rounded text-gray-500 hover:text-white transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -47,6 +50,7 @@ const NETWORKS = [
   {
     name: "Soneium",
     id: 1868,
+    gasToken: "ETH",
     explorer: "soneium.blockscout.com",
     iconUrl: soneiumMainnet.iconUrl || "/chains/soneium.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MAINNET,
@@ -54,6 +58,7 @@ const NETWORKS = [
   {
     name: "Ink",
     id: 57073,
+    gasToken: "ETH",
     explorer: "explorer.inkonchain.com",
     iconUrl: "/chains/ink-logo-purple-white-icon.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_INK_MAINNET,
@@ -61,27 +66,31 @@ const NETWORKS = [
   {
     name: "Base",
     id: 8453,
-    explorer: "basescan.org",
+    gasToken: "ETH",
+    explorer: "base.blockscout.com",
     iconUrl: "/chains/base.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET,
   },
   {
     name: "Unichain",
     id: 130,
-    explorer: "uniscan.xyz",
+    gasToken: "ETH",
+    explorer: "unichain.blockscout.com",
     iconUrl: "/chains/unichain.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN_MAINNET,
   },
   {
     name: "MegaETH",
     id: 4326,
-    explorer: "megaexplorer.xyz",
+    gasToken: "ETH",
+    explorer: "megaeth.blockscout.com",
     iconUrl: megaEth.iconUrl || "/chains/megaeth.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH,
   },
   {
     name: "LitVM LiteForge",
     id: 4441,
+    gasToken: "zkLTC",
     explorer: "liteforge.explorer.caldera.xyz",
     iconUrl: "/chains/litvm.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM,
@@ -315,6 +324,10 @@ export default function DocsContent() {
                           <span className={`font-mono px-2 py-0.5 ${isMegaEth ? 'text-[#00ff88] bg-white/5 rounded-none' : isBase ? 'text-black/60 bg-black/5 rounded' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'text-gray-300 bg-white/5 rounded'}`}>{network.id}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
+                          <span className={`${isMegaEth ? 'text-white/20 uppercase tracking-widest text-[10px]' : isBase ? 'text-black/40 font-medium tracking-tight uppercase' : isLitvm ?'text-[#E2E8F0]/30 tracking-widest text-[10px]' : 'text-gray-500 font-medium tracking-tight uppercase'}`}>Gas Token</span>
+                          <span className={`font-mono px-2 py-0.5 ${isMegaEth ? 'text-[#00ff88] bg-white/5 rounded-none' : isBase ? 'text-black/60 bg-black/5 rounded' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'text-gray-300 bg-white/5 rounded'}`}>{network.gasToken}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
                           <span className={`${isMegaEth ? 'text-white/20 uppercase tracking-widest text-[10px]' : isBase ? 'text-black/40 font-medium tracking-tight uppercase' : isLitvm ?'text-[#E2E8F0]/30 tracking-widest text-[10px]' : 'text-gray-500 font-medium tracking-tight uppercase'}`}>Explorer</span>
                           <a
                             href={`https://${network.explorer}`}
@@ -369,6 +382,39 @@ export default function DocsContent() {
                     </tbody>
                   </table>
                 </div>
+
+                <h3 className={`text-lg font-bold mb-4 ${isMegaEth ? 'text-[#00ff88] uppercase' : isLitvm ? 'text-[#00F2FE] lowercase' : 'text-white'}`}>
+                  QuizNFT
+                </h3>
+                <div className={`overflow-hidden border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isUnichain ? 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isBase ? 'rounded-2xl border-black/5 bg-white shadow-sm' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm'}`}>
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className={`${isMegaEth ? 'bg-white/5' : isBase ? 'bg-black/5' : isLitvm ? 'bg-white/5' : 'bg-white/[0.04]'}`}>
+                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>Network</th>
+                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>NFT Contract Address</th>
+                      </tr>
+                    </thead>
+                    <tbody className={`divide-y ${isMegaEth ? 'divide-white/10' : isLitvm ? 'divide-[#00F2FE]/15' : 'divide-white/[0.08]'}`}>
+                      {displayNetworks.map((network) => {
+                        const nftAddr = NFT_CONTRACTS[network.id]
+                        const displayAddr = nftAddr || "—"
+                        return (
+                          <tr key={network.name} className={`transition-colors group ${isBase ? 'hover:bg-black/5' : isLitvm ? 'hover:bg-white/[0.01]' : 'hover:bg-white/[0.01]'}`}>
+                            <td className={`px-6 py-5 font-bold tracking-tight ${isMegaEth ? 'text-white uppercase' : isBase ? 'text-black' : isLitvm ?'text-[#E2E8F0]' : 'text-white'}`}>{network.name}</td>
+                            <td className="px-6 py-5">
+                              <div className="flex items-center justify-between gap-4">
+                                <span className={`font-mono text-xs break-all leading-relaxed transition-colors ${isMegaEth ? 'text-white/40 group-hover:text-[#00ff88]' : isBase ? 'text-black/40 group-hover:text-black/80' : isLitvm ? 'text-[#E2E8F0]/40 group-hover:text-[#00F2FE]' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                  {displayAddr}
+                                </span>
+                                {nftAddr && <CopyButton text={nftAddr} />}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
 
@@ -389,9 +435,9 @@ export default function DocsContent() {
                     ? 'bg-[#0B192C] border-[#00F2FE]/30 rounded-none'
                     : 'rounded-2xl bg-gradient-to-br from-[#0047FF]/10 to-transparent border-white/[0.08] backdrop-blur-md'
               }`}>
-                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                  Each correct answer awards 1 point. The maximum score per quiz is 5 points. After submitting a score on-chain, you must wait <span className={`font-bold underline underline-offset-4 ${isMegaEth ? 'text-[#00ff88] decoration-[#00ff88]/50' : isInk ? 'text-white decoration-[#7B61FF]' : isUnichain ? 'text-white decoration-[#FF007A]' : isBase ? 'text-black decoration-[#0052FF]' : isLitvm ? 'text-[#E2E8F0] decoration-[#00F2FE]' : 'text-white decoration-[#0047FF]'}`}>1 hour</span> before you can play again. During this cooldown period, you cannot generate or take any new quizzes.
-                </p>
+                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
+                   Each quiz round consists of 5 questions. Each correct answer awards 1 point for a maximum score of 5 per round. Your score is verified server-side against a signed JWT that was created when the quiz was generated — the server will only sign a valid score, preventing client-side manipulation. The server signs the approved score using ECDSA, and the smart contract verifies this signature before accepting the submission. After submitting a score on-chain, you must wait <span className={`font-bold underline underline-offset-4 ${isMegaEth ? 'text-[#00ff88] decoration-[#00ff88]/50' : isInk ? 'text-white decoration-[#7B61FF]' : isUnichain ? 'text-white decoration-[#FF007A]' : isBase ? 'text-black decoration-[#0052FF]' : isLitvm ? 'text-[#E2E8F0] decoration-[#00F2FE]' : 'text-white decoration-[#0047FF]'}`}>1 hour</span> (contract-enforced) before you can play again. Players pay their own gas for score submission.
+                 </p>
               </div>
             </section>
 
@@ -400,9 +446,9 @@ export default function DocsContent() {
                 {isMegaEth ? '// NFT ACHIEVEMENTS' : isLitvm ? '>> nft achievements' : 'NFT Achievements'}
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                  Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points</span> across all networks, you unlock the ability to mint an exclusive QuizMaster NFT directly in the app. Holding this NFT grants you the prestigious "Master" status on the leaderboard.
-                </p>
+                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
+                    Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, {isMultiChain ? "across all 6 supported networks: Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge" : `on the ${activeChainConfig.name} network`}. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
+                 </p>
               </div>
             </section>
 
@@ -415,11 +461,50 @@ export default function DocsContent() {
                   Dive into on-chain data with our interactive Blockchain Explorer. It features:
                 </p>
                 <ul className={`list-disc pl-6 space-y-2 ${isMegaEth ? 'text-white/50 text-sm' : isBase ? 'text-black/60 text-lg' : isLitvm ? 'text-[#E2E8F0]/50 text-sm' : 'text-gray-300 text-lg'}`}>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Bubble Visualization:</span> Watch live transactions flow as floating bubbles.</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Network Orbit View:</span> Click bubbles to focus on specific addresses and linked clusters.</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>{isMultiChain ? 'Multi-Chain Search' : 'Instant Search'}:</span> {isMultiChain ? 'Instantly search across all supported chains' : `Instantly search ${activeChainConfig.name}`} with live autocomplete and quick suggestions.</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Smart Filters:</span> Easily filter transactions by type and status to find what you need quickly.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Live Transaction Bubbles:</span> Transactions appear as animated floating bubbles on an interactive canvas.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Bubble Size:</span> Represents transaction value — larger bubbles mean higher-value transfers.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Bubble Color:</span> Color-coded by transaction type — native transfers, contract calls, token transfers, and NFT transfers.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Click to Inspect:</span> Click any bubble to open a detail panel showing value, from/to addresses, type, status, and timestamp.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Search Bar:</span> Search by address, transaction hash, or ENS name with live autocomplete and suggestions.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Address Orbit View:</span> Click an address to see all its transactions clustered in a focused orbit view.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Transaction Focus View:</span> Highlights connected addresses for a given transaction with visual links.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Filter Tabs:</span> Quickly switch between ALL, TRANSFERS, CONTRACT CALLS, TOKEN TRANSFERS, and NFTS views.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Real-Time Stats:</span> Live counters for Total TXs, Latest Block, and Average Gas displayed in the header.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Telegram Alerts:</span> Receive real-time notifications for matching transactions (see Telegram Alerts section).</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Multi-Chain:</span> {isMultiChain ? "Supports all 6 chains — Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge" : `Supports ${activeChainConfig.name}`}.</li>
                 </ul>
+              </div>
+            </section>
+
+            <section id="telegram-alerts">
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+                {isMegaEth ? '// TELEGRAM ALERTS' : isLitvm ? '>> telegram alerts' : 'Telegram Alerts'}
+              </h2>
+              <div className={`p-8 border space-y-4 ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
+                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
+                  The Bubble Explorer includes a real-time Telegram alert system. You can monitor live transactions on any supported chain and receive instant notifications in your Telegram account when high-value or specific transaction types occur.
+                </p>
+                <h4 className={`font-bold text-base ${isMegaEth ? 'text-[#00ff88] uppercase' : isLitvm ? 'text-[#00F2FE] lowercase' : 'text-white'}`}>How to set up:</h4>
+                <ol className={`list-decimal pl-6 space-y-1.5 ${isMegaEth ? 'text-white/50 text-sm' : isBase ? 'text-black/60 text-base' : isLitvm ? 'text-[#E2E8F0]/50 text-sm' : 'text-gray-300 text-base'}`}>
+                  <li>Create a Telegram bot via <code className={`px-1 py-0.5 rounded text-xs ${isMegaEth ? 'text-[#00ff88] bg-white/5' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'bg-white/10'}`}>@BotFather</code> and copy your bot token</li>
+                  <li>Get your chat ID by messaging <code className={`px-1 py-0.5 rounded text-xs ${isMegaEth ? 'text-[#00ff88] bg-white/5' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'bg-white/10'}`}>@userinfobot</code> on Telegram</li>
+                  <li>Open the Explorer on any chain</li>
+                  <li>Click the <span className={`font-semibold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"Alerts"</span> button in the top-right corner of the explorer</li>
+                  <li>Enter your bot token and chat ID</li>
+                  <li>Set your minimum ETH value threshold</li>
+                  <li>Select which transaction types to monitor: Native transfers (coin sends), Contract calls, Token transfers, NFT transfers</li>
+                  <li>Set cooldown minutes between alerts to avoid spam</li>
+                  <li>Click <span className={`font-semibold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"Test Connection"</span> to verify your setup</li>
+                  <li>Toggle alerts ON — you will now receive real-time Telegram messages</li>
+                </ol>
+                <div className={`p-4 border ${isMegaEth ? 'bg-black border-[#00ff88]/20 rounded-none' : isInk ? 'rounded-2xl bg-[#7B61FF]/5 border-[#7B61FF]/15' : isUnichain ? 'rounded-xl bg-[#FF007A]/5 border-[#FF007A]/15' : isBase ? 'rounded-xl bg-[#0052FF]/5 border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-xl bg-white/[0.03] border-white/[0.08]'}`}>
+                  <p className={`text-xs ${isMegaEth ? 'text-white/40' : isBase ? 'text-black/40' : isLitvm ? 'text-[#E2E8F0]/40' : 'text-gray-400'}`}>
+                    <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isLitvm ? 'text-[#00F2FE]' : 'text-white'}`}>Note:</span> Your bot token and chat ID are stored locally in your browser (localStorage) and never sent to any server except the Telegram API proxy.
+                  </p>
+                </div>
+                <p className={`text-sm ${isMegaEth ? 'text-white/50' : isBase ? 'text-black/60' : isLitvm ? 'text-[#E2E8F0]/50' : 'text-gray-300'}`}>
+                  Each alert includes the transaction type, value in the chain's native token, from/to addresses (truncated), and a direct link to the transaction in the chain's block explorer.
+                </p>
               </div>
             </section>
 
@@ -429,7 +514,10 @@ export default function DocsContent() {
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                  The leaderboard tracks total points accumulated across all quizzes.{isMultiChain && ' Switch between the Global leaderboard (all chains combined) or individual chain leaderboards.'} Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their QuizMaster NFT. Your wallet address is displayed in truncated format for privacy.
+                  {isMultiChain
+                    ? "The leaderboard tracks total points accumulated across all quizzes. Switch between 7 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, and LitVM. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH and LitVM have their own per-chain tabs but are not included in the global aggregation."
+                    : `The leaderboard shows rankings for ${activeChainConfig.name}. Points are tracked on-chain and update after each score submission.`
+                  } Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
                 </p>
               </div>
             </section>
@@ -441,9 +529,20 @@ export default function DocsContent() {
               <Accordion type="single" collapsible className="w-full space-y-4">
                 {[
                   { q: "Is the quiz free to play?", a: "Yes, playing the quiz is completely free. Submitting your score on-chain requires a small gas fee." },
-                  { q: "How do I get a QuizMaster NFT?", a: "Keep playing and submitting scores! Once your combined total reaches 100 points, a mint button will appear allowing you to claim your NFT." },
+                  { q: "How do I get a QuizMaster NFT?", a: "Keep playing and submitting scores! Once your total reaches 100 points on any single chain, a mint button will appear allowing you to claim your exclusive 'The What of Blockchain' (TWOB) NFT." },
                   { q: "What does the Blockchain Explorer do?", a: "It lets you visualize real-time transactions on supported networks. You can easily search for addresses and watch network activity dynamically." },
-                  { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." }
+                  { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
+                  ...(isMultiChain
+                    ? [
+                        { q: "Which chains support NFT minting?", a: "All 6 chains — Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
+                        { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
+                      ]
+                    : [
+                        { q: `Does ${activeChainConfig.name} support NFT minting?`, a: `Yes. Reach 100 total points on ${activeChainConfig.name} to unlock your NFT mint. One NFT is mintable per address on this chain.` },
+                        ...(activeChainConfig.name === 'LitVM' ? [{ q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." }] : []),
+                      ]),
+                  { q: "How do Telegram alerts work?", a: "From the Explorer page, click the Alerts button and configure your Telegram bot token and chat ID. You will receive real-time messages whenever transactions matching your filters occur on-chain. Your credentials are stored only in your browser's localStorage." },
+                  { q: "Is my quiz score verified before going on-chain?", a: "Yes. When you finish a quiz, your answers are verified server-side against a signed JWT that was created when the quiz was generated. The server will only sign a valid score — preventing any client-side manipulation before the transaction is submitted." }
                 ].map((faq, i) => (
                   <AccordionItem 
                     key={i} 
