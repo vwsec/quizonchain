@@ -16,6 +16,7 @@ const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'Unichain', label: 'Unichain', iconUrl: '/chains/unichain.png' },
   { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
   { id: 'LitVM', label: 'LitVM', iconUrl: '/chains/litvm.png' },
+  { id: 'Arc Testnet', label: 'Arc', iconUrl: '/chains/arc.png' },
 ]
 
 import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"

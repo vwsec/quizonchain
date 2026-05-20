@@ -14,6 +14,7 @@ import {
   unichain,
   megaEth,
   litvmTestnet,
+  arcTestnet,
 } from '@/lib/chains'
 
 const CHAIN_MAINNET = 1868
@@ -22,6 +23,7 @@ const CHAIN_BASE_MAINNET = 8453
 const CHAIN_UNICHAIN_MAINNET = 130
 const CHAIN_MEGAETH_MAINNET = 4326
 const CHAIN_LITVM_TESTNET = 4441
+const CHAIN_ARC_TESTNET = 5042002
 
 export const quizScoresAbi = [
   {
@@ -98,7 +100,7 @@ export const quizScoresAbi = [
 ] as const
 
 export type SubmitScoreSuccess = { success: true; hash: Hex }
-export type SubmitScoreFailure = { success: false; error: string }
+export type SubmitScoreFailure = { success: false; error: string; hash?: `0x${string}` }
 export type SubmitScoreResult = SubmitScoreSuccess | SubmitScoreFailure
 
 function formatError(err: unknown): string {
@@ -221,7 +223,7 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
       return {
         success: false,
         error:
-          'NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM is not configured for this build.',
+          'Invalid LitVM contract address in env.',
       }
     }
     const addr = raw.trim() as Address
@@ -233,9 +235,26 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
     }
     return addr
   }
+  if (chainId === CHAIN_ARC_TESTNET) {
+    const raw = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC
+    if (!raw?.trim()) {
+      return {
+        success: false,
+        error: 'NEXT_PUBLIC_CONTRACT_ADDRESS_ARC is not configured for this build.',
+      }
+    }
+    const addr = raw.trim() as Address
+    if (!isAddress(addr)) {
+      return {
+        success: false,
+        error: 'Invalid Arc Testnet contract address in env.',
+      }
+    }
+    return addr
+  }
   return {
     success: false,
-    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}).`,
+    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}), Arc (${CHAIN_ARC_TESTNET}).`,
   }
 }
 
@@ -252,6 +271,7 @@ function getViemChain(chainId: number) {
   if (chainId === CHAIN_UNICHAIN_MAINNET) return unichain
   if (chainId === CHAIN_MEGAETH_MAINNET) return megaEth
   if (chainId === CHAIN_LITVM_TESTNET) return litvmTestnet
+  if (chainId === CHAIN_ARC_TESTNET) return arcTestnet
   return null
 }
 
@@ -464,7 +484,15 @@ export function useSubmitScore() {
         account: walletClient.account,
       })
 
-      await publicClient.waitForTransactionReceipt({ hash })
+      const receipt = await publicClient.waitForTransactionReceipt({ hash })
+
+      if (receipt.status !== 'success') {
+        return {
+          success: false,
+          error: `Transaction reverted on-chain. Hash: ${hash}`,
+          hash,
+        }
+      }
 
       return { success: true, hash }
     } catch (err) {

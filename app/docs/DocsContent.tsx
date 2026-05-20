@@ -77,7 +77,7 @@ const NETWORKS = [
     gasToken: "ETH",
     explorer: "unichain.blockscout.com",
     iconUrl: "/chains/unichain.png",
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN_MAINNET,
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN,
   },
   {
     name: "MegaETH",
@@ -95,6 +95,14 @@ const NETWORKS = [
     iconUrl: "/chains/litvm.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM,
   },
+  {
+    name: "Arc Testnet",
+    id: 5042002,
+    gasToken: "USDC",
+    explorer: "testnet.arcscan.app",
+    iconUrl: "/chains/arc.png",
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC,
+  },
 ]
 
 export default function DocsContent() {
@@ -105,6 +113,7 @@ export default function DocsContent() {
   const isBase = activeChainConfig.name === 'Base'
   const isSoneium = activeChainConfig.name === 'Soneium'
   const isLitvm = activeChainConfig.name === 'LitVM'
+  const isArc = activeChainConfig.name === 'Arc Testnet'
 
   const displayNetworks = isMultiChain 
     ? NETWORKS 
@@ -151,7 +160,7 @@ export default function DocsContent() {
   }
 
   const networkText = isMultiChain ? "multiple blockchain ecosystems" : `${activeChainConfig.name} blockchain`
-  const step2Text = isMultiChain ? "Choose from Ink, Soneium, Base, Unichain, MegaETH, or LitVM" : `Connect to ${activeChainConfig.name}`
+  const step2Text = isMultiChain ? "Choose from Ink, Soneium, Base, Unichain, MegaETH, LitVM, or Arc" : `Connect to ${activeChainConfig.name}`
 
   return (
     <main className={`relative z-10 min-h-screen pt-24 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0] font-mono' : 'text-white'}`}>
@@ -159,7 +168,7 @@ export default function DocsContent() {
           {/* Sticky Sidebar */}
           <aside className="hidden md:block w-[260px] shrink-0 sticky top-[80px] self-start h-fit max-h-[calc(100vh-100px)] overflow-y-auto">
             <nav className="space-y-1 pr-4">
-              <h3 className={`text-xs font-semibold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-wider mb-4 px-3 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : 'text-[#0047FF]'}`}>
+              <h3 className={`text-xs font-semibold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-wider mb-4 px-3 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : isArc ? 'text-[#4D8EE9]' : 'text-[#0047FF]'}`}>
                 {isMegaEth ? '// DOCUMENTATION' : isLitvm ? '>> documentation' : 'Documentation'}
               </h3>
               {SECTIONS.map((section) => (
@@ -188,6 +197,10 @@ export default function DocsContent() {
                         ? activeSection === section.id
                           ? "text-[#00F2FE] border-[#00F2FE] bg-[#00F2FE]/10 rounded-none lowercase font-mono"
                           : "text-[#E2E8F0]/40 border-transparent hover:text-[#E2E8F0] hover:bg-white/5 rounded-none lowercase font-mono"
+                      : isArc
+                        ? activeSection === section.id
+                          ? "text-[#4D8EE9] border-[#4D8EE9] bg-[#4D8EE9]/10 rounded-r-full"
+                          : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-r-full"
                       : isSoneium
                           ? activeSection === section.id
                             ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-r-full shadow-[inset_0_0_10px_rgba(0,71,255,0.1)]"
@@ -217,15 +230,18 @@ export default function DocsContent() {
             </section>
 
             <section id="how-it-works">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// HOW IT WORKS' : isLitvm ? '>> how it works' : 'How It Works'}
               </h2>
               <div className="relative space-y-10 pl-4 md:pl-0">
-                {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && (
+                {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && !isArc && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/20 to-[#0047FF] hidden md:block" />
                 )}
                 {isLitvm && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#00F2FE] via-[#00F2FE]/20 to-[#00F2FE] hidden md:block" />
+                )}
+                {isArc && (
+                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#4D8EE9] via-[#4D8EE9]/20 to-[#4D8EE9] hidden md:block" />
                 )}
                 {isSoneium && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/10 to-[#0047FF] hidden md:block shadow-[0_0_10px_rgba(0,71,255,0.2)]" />
@@ -262,7 +278,9 @@ export default function DocsContent() {
                           ? 'rounded-full bg-[#0047FF] text-white shadow-[0_0_25px_rgba(0,71,255,0.5)]'
                         : isLitvm
                           ? 'bg-[#00F2FE] text-[#0B192C] rounded-none shadow-[0_0_20px_rgba(0,242,254,0.4)]'
-                        : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
+                        : isArc
+                          ? 'rounded-full bg-[#4D8EE9] text-white shadow-[0_0_20px_rgba(77,142,233,0.4)]'
+                          : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
                     }`}>
                       {i + 1}
                     </div>
@@ -279,7 +297,9 @@ export default function DocsContent() {
                           ? 'rounded-xl md:rounded-2xl bg-white/[0.02] border-[#0047FF]/10 hover:bg-white/[0.04] hover:border-[#0047FF]/40 text-white backdrop-blur-xl'
                         : isLitvm
                           ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]/50'
-                        : 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
+                        : isArc
+                          ? 'rounded-xl md:rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:bg-white/[0.04] hover:border-[#4D8EE9]/40 text-white backdrop-blur-xl'
+                          : 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
                     }`}>
                       <h4 className={`text-base md:text-xl font-bold mb-1 md:mb-2 ${isMegaEth || isLitvm ?'' : ''}`}>{item.step}: {item.title}</h4>
                       <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-sm md:text-base leading-relaxed' : isSoneium ? 'text-white/50 text-sm md:text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/50 text-sm leading-relaxed' : 'text-gray-400 text-sm md:text-base leading-relaxed'}`}>{item.desc}</p>
@@ -288,9 +308,9 @@ export default function DocsContent() {
                 ))}
               </div>
             </section>
-
+ 
             <section id="supported-networks">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// SUPPORTED NETWORKS' : isLitvm ? '>> supported networks' : (isMultiChain ? "Supported Networks" : `${activeChainConfig.name} Network`)}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -304,7 +324,9 @@ export default function DocsContent() {
                         ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#FF007A]/50'
                       : isLitvm
                         ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]/50'
-                      : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
+                      : isArc
+                        ? 'rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:border-[#4D8EE9]/50 backdrop-blur-xl text-white'
+                        : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
                   }`}>
                     <div>
                       <div className="flex items-center gap-4 mb-5">
@@ -447,7 +469,7 @@ export default function DocsContent() {
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                  <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, {isMultiChain ? "across all 6 supported networks: Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge" : `on the ${activeChainConfig.name} network`}. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
+                     Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, {isMultiChain ? "across all 7 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet" : `on the ${activeChainConfig.name} network`}. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
                  </p>
               </div>
             </section>
@@ -471,7 +493,7 @@ export default function DocsContent() {
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Filter Tabs:</span> Quickly switch between ALL, TRANSFERS, CONTRACT CALLS, TOKEN TRANSFERS, and NFTS views.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Real-Time Stats:</span> Live counters for Total TXs, Latest Block, and Average Gas displayed in the header.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Telegram Alerts:</span> Receive real-time notifications for matching transactions (see Telegram Alerts section).</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Multi-Chain:</span> {isMultiChain ? "Supports all 6 chains — Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge" : `Supports ${activeChainConfig.name}`}.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Multi-Chain:</span> {isMultiChain ? "Supports all 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet" : `Supports ${activeChainConfig.name}`}.</li>
                 </ul>
               </div>
             </section>
@@ -515,7 +537,7 @@ export default function DocsContent() {
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
                   {isMultiChain
-                    ? "The leaderboard tracks total points accumulated across all quizzes. Switch between 7 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, and LitVM. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH and LitVM have their own per-chain tabs but are not included in the global aggregation."
+                    ?                     "The leaderboard tracks total points accumulated across all quizzes. Switch between 8 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, LitVM, and Arc. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH, LitVM, and Arc have their own per-chain tabs but are not included in the global aggregation."
                     : `The leaderboard shows rankings for ${activeChainConfig.name}. Points are tracked on-chain and update after each score submission.`
                   } Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
                 </p>
@@ -534,12 +556,14 @@ export default function DocsContent() {
                   { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
                   ...(isMultiChain
                     ? [
-                        { q: "Which chains support NFT minting?", a: "All 6 chains — Ink, Soneium, Base, Unichain, MegaETH, and LitVM LiteForge. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
+                        { q: "Which chains support NFT minting?", a: "All 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
                         { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
+                        { q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." },
                       ]
                     : [
                         { q: `Does ${activeChainConfig.name} support NFT minting?`, a: `Yes. Reach 100 total points on ${activeChainConfig.name} to unlock your NFT mint. One NFT is mintable per address on this chain.` },
                         ...(activeChainConfig.name === 'LitVM' ? [{ q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." }] : []),
+                        ...(activeChainConfig.name === 'Arc Testnet' ? [{ q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." }] : []),
                       ]),
                   { q: "How do Telegram alerts work?", a: "From the Explorer page, click the Alerts button and configure your Telegram bot token and chat ID. You will receive real-time messages whenever transactions matching your filters occur on-chain. Your credentials are stored only in your browser's localStorage." },
                   { q: "Is my quiz score verified before going on-chain?", a: "Yes. When you finish a quiz, your answers are verified server-side against a signed JWT that was created when the quiz was generated. The server will only sign a valid score — preventing any client-side manipulation before the transaction is submitted." }

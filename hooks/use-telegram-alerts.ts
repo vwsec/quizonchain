@@ -3,13 +3,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { sendTelegramMessage, formatTxAlertMessage } from '@/lib/telegram'
 import { getTxPrimaryType } from '@/components/bubble-explorer'
+import { activeChainConfig } from '@/lib/active-chain-config'
 import { toast } from 'sonner'
 
 export interface TelegramSettings {
   enabled: boolean
   botToken: string
   chatId: string
-  minEthThreshold: number
+  minValueThreshold: number
   selectedTypes: string[]
   cooldownMinutes: number
 }
@@ -21,7 +22,7 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
     enabled: false,
     botToken: '',
     chatId: '',
-    minEthThreshold: 0.1,
+    minValueThreshold: 0.1,
     selectedTypes: ['coin_transfer', 'contract_call', 'token_transfer', 'nft_transfer'],
     cooldownMinutes: 0,
   })
@@ -30,12 +31,17 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
   const processedTxsRef = useRef<Set<string>>(new Set())
   const lastAlertTimeRef = useRef<number>(0)
 
-  // Load settings
+  // Load settings (with migration for old minEthThreshold field)
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
     if (saved) {
       try {
-        setSettings(prev => ({ ...prev, ...jsonParse(saved) }))
+        const stored = JSON.parse(saved)
+        setSettings(prev => ({
+          ...prev,
+          ...stored,
+          minValueThreshold: stored.minValueThreshold ?? stored.minEthThreshold ?? 0.1,
+        }))
       } catch (e) {
         console.error('Failed to parse telegram settings', e)
       }
@@ -49,6 +55,8 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
     toast.success('Alert settings saved')
   }
 
+  const nativeCurrency = activeChainConfig.nativeCurrency
+
   const monitorTransactions = useCallback(async (txs: any[]) => {
     if (!settings.enabled || !settings.botToken || !settings.chatId || !isLoaded) return
 
@@ -57,10 +65,10 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
     for (const tx of newTxs) {
       processedTxsRef.current.add(tx.hash)
       
-      const ethValue = tx.value ? Number(BigInt(tx.value)) / 1e18 : 0
+      const formattedValue = tx.value ? Number(BigInt(tx.value)) / 1e18 : 0
       const txType = getTxPrimaryType(tx)
       
-      const matchesValue = ethValue >= settings.minEthThreshold
+      const matchesValue = formattedValue >= settings.minValueThreshold
       const matchesType = settings.selectedTypes.includes(txType)
       
       if (matchesValue && matchesType) {
@@ -74,7 +82,7 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
         }
 
         try {
-          const message = formatTxAlertMessage(tx, networkName, explorerBase)
+          const message = formatTxAlertMessage(tx, networkName, explorerBase, nativeCurrency)
           await sendTelegramMessage(settings.botToken, settings.chatId, message)
           console.log(`[Alert Sent] ${tx.hash}`)
         } catch (error: any) {
@@ -83,7 +91,7 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
         }
       }
     }
-  }, [settings, isLoaded, networkName, explorerBase])
+  }, [settings, isLoaded, networkName, explorerBase, nativeCurrency])
 
   return {
     settings,
@@ -92,10 +100,4 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
   }
 }
 
-function jsonParse(str: string) {
-  try {
-    return JSON.parse(str)
-  } catch {
-    return {}
-  }
-}
+

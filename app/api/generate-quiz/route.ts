@@ -9,6 +9,9 @@ import {
   INK_DOCS_PAGES,
   SONEIUM_DOCS_PAGES,
   UNICHAIN_DOCS_PAGES,
+  MEGAETH_DOCS_PAGES,
+  LITVM_DOCS_PAGES,
+  ARC_DOCS_PAGES,
 } from "@/lib/docsPages"
 import { z } from "zod"
 
@@ -24,8 +27,14 @@ const JINA_PREFIX = "https://r.jina.ai/"
 const FETCH_TIMEOUT_MS = 35_000
 const FETCH_DELAY_MS = 1000
 const GROQ_MODEL = "llama-3.3-70b-versatile"
-const GROQ_RETRY_COUNT = 3
+const GROQ_RETRY_COUNT = 2
 const GROQ_INITIAL_BACKOFF_MS = 1000
+
+const FORBIDDEN_IN_OPTIONS = [
+  'soneium', 'ink', 'base', 'unichain', 'megaeth', 'megath',
+  'arbitrum', 'optimism', 'polygon', 'solana', 'avalanche',
+  'litvm', 'liteforge', 'arc',
+]
 
 const ALLOWED_ORIGIN =
   process.env.NEXT_PUBLIC_APP_URL?.trim() || "http://localhost:3000"
@@ -168,6 +177,18 @@ function isValidQuestion(q: ServerQuestion): boolean {
   return !badPhrases.some(p => questionLower.includes(p));
 }
 
+function hasContaminatedOptions(question: ServerQuestion, currentEcosystem: string): boolean {
+  const ecosystemLower = currentEcosystem.toLowerCase()
+  return question.options.some(option => {
+    const optionLower = option.toLowerCase()
+    return FORBIDDEN_IN_OPTIONS.some(forbidden =>
+      forbidden !== ecosystemLower &&
+      !ecosystemLower.includes(forbidden) &&
+      optionLower.includes(forbidden)
+    )
+  })
+}
+
 function trimCorpus(text: string, maxChars: number): string {
   const collapsed = text.replace(/\s+/g, " ").trim()
   return collapsed.length <= maxChars
@@ -278,7 +299,152 @@ async function buildQuizResponse(
   )
 }
 
-function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain") {
+function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet") {
+  if (ecosystemName === "Arc Testnet") {
+    return [
+      {
+        id: 1,
+        question: "What is the native gas token used on Arc Testnet?",
+        options: ["ETH", "USDC", "MATIC", "BNB"],
+        correctIndex: 1,
+      },
+      {
+        id: 2,
+        question: "What is the Chain ID of Arc Testnet?",
+        options: ["1", "137", "5042002", "8453"],
+        correctIndex: 2,
+      },
+      {
+        id: 3,
+        question: "Which company built the Arc blockchain?",
+        options: ["Coinbase", "Circle", "Consensys", "Kraken"],
+        correctIndex: 1,
+      },
+      {
+        id: 4,
+        question: "What is the RPC endpoint for Arc Testnet?",
+        options: [
+          "https://rpc.testnet.arc.network",
+          "https://mainnet.arc.network",
+          "https://rpc.arc.io",
+          "https://testnet.arc.io/rpc",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 5,
+        question: "What advantage does Arc's stablecoin gas model provide?",
+        options: [
+          "Eliminates gas price volatility",
+          "Increases block size",
+          "Reduces transaction finality time",
+          "Enables cross-chain messaging",
+        ],
+        correctIndex: 0,
+      },
+    ]
+  }
+
+  if (ecosystemName === "MegaETH") {
+    return [
+      {
+        id: 1,
+        question: "What is MegaETH?",
+        options: [
+          "A high-performance EVM-compatible blockchain",
+          "A Layer-1 for Bitcoin",
+          "A decentralized storage network",
+          "A cross-chain bridge protocol",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 2,
+        question: "What is the Chain ID of MegaETH?",
+        options: ["1", "4326", "8453", "137"],
+        correctIndex: 1,
+      },
+      {
+        id: 3,
+        question: "What native token is used for gas on MegaETH?",
+        options: ["ETH", "MEGA", "MATIC", "SOL"],
+        correctIndex: 0,
+      },
+      {
+        id: 4,
+        question: "What is the RPC endpoint for MegaETH?",
+        options: [
+          "https://carrot.megaeth.com",
+          "https://rpc.megaeth.com",
+          "https://mainnet.megaeth.io",
+          "https://megaeth.rpc.com",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 5,
+        question: "Which block explorer is used for MegaETH?",
+        options: [
+          "https://www.megaexplorer.xyz",
+          "https://etherscan.io",
+          "https://basescan.org",
+          "https://explorer.megaeth.com",
+        ],
+        correctIndex: 0,
+      },
+    ]
+  }
+
+  if (ecosystemName === "LitVM") {
+    return [
+      {
+        id: 1,
+        question: "What is LitVM LiteForge?",
+        options: [
+          "An EVM rollup testnet for Lit Protocol",
+          "A Bitcoin Layer-2",
+          "A decentralized exchange",
+          "An Ethereum staking pool",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 2,
+        question: "What is the native gas token on LitVM LiteForge?",
+        options: ["zkLTC", "ETH", "LIT", "BTC"],
+        correctIndex: 0,
+      },
+      {
+        id: 3,
+        question: "What is the Chain ID of LitVM LiteForge?",
+        options: ["1", "4441", "57073", "8453"],
+        correctIndex: 1,
+      },
+      {
+        id: 4,
+        question: "What is the RPC endpoint for LitVM LiteForge?",
+        options: [
+          "https://liteforge.rpc.caldera.xyz/http",
+          "https://rpc.litvm.com",
+          "https://liteforge.rpc.io",
+          "https://litvm.caldera.rpc.com",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 5,
+        question: "Which asset backs zkLTC on LitVM LiteForge?",
+        options: [
+          "Litecoin (LTC)",
+          "Bitcoin (BTC)",
+          "Ethereum (ETH)",
+          "Solana (SOL)",
+        ],
+        correctIndex: 0,
+      },
+    ]
+  }
+
   const networkLabel = ecosystemName
   const mainnetLabel =
     ecosystemName === "Ink"
@@ -351,7 +517,7 @@ async function generateWithGroq(prompt: string): Promise<string> {
         messages: [{ role: "user", content: prompt }],
         temperature: 0.7,
       }, {
-        timeout: 30_000, // 30s per attempt
+        timeout: 25_000, // 25s per attempt
       })
 
       const text = completion.choices[0]?.message?.content ?? ""
@@ -380,16 +546,19 @@ async function handleGenerateQuiz(
   const requestChainId = selectedChainId ?? NaN
 
   // --- Strict Ecosystem Mapping ---
-  const ecosystemConfigs: Record<number, { name: "Ink" | "Soneium" | "Base" | "Unichain"; docs: string[] | readonly string[] }> = {
+  const ecosystemConfigs: Record<number, { name: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet"; docs: string[] | readonly string[] }> = {
     [BASE_CHAIN_ID]: { name: "Base", docs: BASE_DOCS_PAGES },
     [UNICHAIN_CHAIN_ID]: { name: "Unichain", docs: UNICHAIN_DOCS_PAGES },
     [1868]: { name: "Soneium", docs: SONEIUM_DOCS_PAGES },
+    [4326]: { name: "MegaETH", docs: MEGAETH_DOCS_PAGES },
+    [4441]: { name: "LitVM", docs: LITVM_DOCS_PAGES },
+    [5042002]: { name: "Arc Testnet", docs: ARC_DOCS_PAGES },
   }
 
   // Handle Ink IDs specifically since it's a Set
   const isInk = INK_CHAIN_IDS.has(requestChainId)
   
-  let config: { name: "Ink" | "Soneium" | "Base" | "Unichain"; docs: string[] | readonly string[] } | undefined
+  let config: { name: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet"; docs: string[] | readonly string[] } | undefined
 
   if (isMultiChain) {
     config = isInk 
@@ -401,7 +570,7 @@ async function handleGenerateQuiz(
 
   if (!config) {
     return NextResponse.json(
-      { error: `Invalid or unsupported chainId (${requestChainId}). Please connect to Soneium, Ink, Base, or Unichain.` },
+      { error: `Invalid or unsupported chainId (${requestChainId}).` },
       { status: 400, headers }
     )
   }
@@ -460,6 +629,12 @@ STRICT RULES:
 - Each wrong answer must be plausible — not obviously wrong
 - Return ONLY valid JSON array, no markdown, no backticks
 
+CRITICAL RULES FOR ANSWER OPTIONS:
+- Every answer option (correct AND incorrect) must relate ONLY to the ${ecosystemName} ecosystem
+- Do NOT mention, reference, or allude to any other blockchain, chain, or network in any answer option. This includes but is not limited to: Soneium, Ink, Base, Unichain, MegaETH, LitVM, Ethereum mainnet, Polygon, Arbitrum, Optimism, Solana
+- Incorrect answer options must be plausible wrong answers about ${ecosystemName} specifically (e.g. wrong numbers, wrong names within the same ecosystem, wrong technical details) NOT answers about a completely different blockchain
+- If you cannot generate 3 plausible wrong answers using only ${ecosystemName} knowledge, use variations of the correct answer (e.g. wrong values, inverted facts, close-but-wrong technical details) rather than importing facts from other chains
+
 Good examples:
 - 'What consensus mechanism does Soneium use?'
 - 'What is the Chain ID of Ink mainnet?'
@@ -484,7 +659,7 @@ ${scrapedText}
         let parsed = parseModelJson(raw)
         let candidateItems = validateQuestions(toValidatedQuizArray(parsed))
         
-        let validQuestions = candidateItems.filter(isValidQuestion);
+        let validQuestions = candidateItems.filter(q => isValidQuestion(q) && !hasContaminatedOptions(q, ecosystemName));
         if (validQuestions.length < 5) {
           throw new Error('Generated questions failed quality check, retrying');
         }

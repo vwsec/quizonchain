@@ -11,16 +11,18 @@ const chainScoresVar: Record<number, string> = {
   8453: "NEXT_PUBLIC_CONTRACT_ADDRESS_BASE",
   130: "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
   4326: "NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH",
-  4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
+   4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
+   5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
 }
 
 const chainNftVar: Record<number, string> = {
-  1868: "NEXT_PUBLIC_NFT_CONTRACT_SONEIUM",
-  57073: "NEXT_PUBLIC_NFT_CONTRACT_INK",
-  8453: "NEXT_PUBLIC_NFT_CONTRACT_BASE",
-  130: "NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN",
-  4326: "NEXT_PUBLIC_NFT_CONTRACT_MEGAETH",
-  4441: "NEXT_PUBLIC_NFT_CONTRACT_LITVM",
+   1868: "NEXT_PUBLIC_NFT_CONTRACT_SONEIUM",
+   57073: "NEXT_PUBLIC_NFT_CONTRACT_INK",
+   8453: "NEXT_PUBLIC_NFT_CONTRACT_BASE",
+   130: "NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN",
+   4326: "NEXT_PUBLIC_NFT_CONTRACT_MEGAETH",
+   4441: "NEXT_PUBLIC_NFT_CONTRACT_LITVM",
+   5042002: "NEXT_PUBLIC_NFT_CONTRACT_ARC",
 }
 
 const chainUriMap: Record<number, string> = {
@@ -29,7 +31,8 @@ const chainUriMap: Record<number, string> = {
   8453: "https://quizonchain.com/nft/base",
   130: "https://quizonchain.com/nft/unichain",
   4326: "https://quizonchain.com/nft/megaeth",
-  4441: "https://quizonchain.com/nft/litvm",
+   4441: "https://quizonchain.com/nft/litvm",
+   5042002: "https://quizonchain.com/nft/arc",
 }
 
 async function main() {

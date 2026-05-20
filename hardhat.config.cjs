@@ -1,19 +1,20 @@
-import { config as dotenvConfig } from "dotenv"
-import { HardhatUserConfig } from "hardhat/config"
-import "@nomicfoundation/hardhat-toolbox"
-dotenvConfig({ path: ".env" })
-dotenvConfig({ path: ".env.local", override: true })
-function normalizePrivateKey(key: string | undefined): string[] {
-  if (!key?.trim()) return []
-  const trimmed = key.trim()
-  const withPrefix = trimmed.startsWith("0x") ? trimmed : `0x${trimmed}`
-  return [withPrefix]
+require("dotenv").config({ path: ".env" });
+require("dotenv").config({ path: ".env.local", override: true });
+require("@nomicfoundation/hardhat-toolbox");
+
+function normalizePrivateKey(key) {
+  if (!key?.trim()) return [];
+  const trimmed = key.trim();
+  const withPrefix = trimmed.startsWith("0x") ? trimmed : `0x${trimmed}`;
+  return [withPrefix];
 }
-const config: HardhatUserConfig = {
+
+const config = {
   solidity: {
-    version: "0.8.24",
+    version: "0.8.27",
     settings: {
       optimizer: { enabled: true, runs: 200 },
+      evmVersion: "cancun",
     },
   },
   networks: {
@@ -52,6 +53,11 @@ const config: HardhatUserConfig = {
       chainId: 4441,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    arcTestnet: {
+      url: "https://rpc.testnet.arc.network",
+      chainId: 5042002,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
   },
   etherscan: {
     apiKey: {
@@ -60,6 +66,7 @@ const config: HardhatUserConfig = {
       unichainMainnet: "empty",
       megaethMainnet: "empty",
       litvmTestnet: "empty",
+      arcTestnet: "empty",
     },
     customChains: [
       {
@@ -102,7 +109,16 @@ const config: HardhatUserConfig = {
           browserURL: "https://liteforge.explorer.caldera.xyz",
         },
       },
+      {
+        network: "arcTestnet",
+        chainId: 5042002,
+        urls: {
+          apiURL: "https://testnet.arcscan.app/api",
+          browserURL: "https://testnet.arcscan.app",
+        },
+      },
     ],
   },
-}
-export default config
+};
+
+module.exports = config;

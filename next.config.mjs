@@ -25,9 +25,17 @@ const cspHeader = `
       https://base.blockscout.com
       https://unichain.blockscout.com
       https://megaeth.blockscout.com
+      https://carrot.megaeth.com
+      https://www.megaexplorer.xyz
       https://liteforge.explorer.caldera.xyz
       https://liteforge.rpc.caldera.xyz
-      wss://liteforge.rpc.caldera.xyz;
+      wss://liteforge.rpc.caldera.xyz
+      https://testnet.arcscan.app
+      https://rpc.testnet.arc.network
+      wss://rpc.testnet.arc.network
+      https://rpc.blockdaemon.testnet.arc.network
+      https://rpc.drpc.testnet.arc.network
+      https://rpc.quicknode.testnet.arc.network;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim()

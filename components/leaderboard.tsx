@@ -6,11 +6,11 @@ import { useAccount } from "wagmi"
 import { createPublicClient, http, isAddress, type Chain } from "viem"
 import { fetchGlobalLeaderboard, type GlobalPlayer } from "@/lib/leaderboard"
 import { getChainLeaderboard } from "@/lib/chain-leaderboard"
-import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet } from "@/lib/chains"
+import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet } from "@/lib/chains"
 import { NFT_ABI } from "@/lib/nft-contracts"
 import { AlertCircle, Star } from "lucide-react"
 
-export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM'
+export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet'
 
 import { activeChainConfig } from "@/lib/active-chain-config"
 
@@ -22,6 +22,7 @@ const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
   Unichain: process.env.NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN,
   MegaETH: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
   LitVM:   process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
+  'Arc Testnet': process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
 }
 
 const CHAIN_FOR_NAME: Record<string, Chain> = {
@@ -31,6 +32,7 @@ const CHAIN_FOR_NAME: Record<string, Chain> = {
   Unichain: unichain,
   MegaETH: megaEth,
   LitVM:   litvmTestnet,
+  'Arc Testnet': arcTestnet,
 }
 
 // ─── 5-minute in-memory cache ─────────────────────────────────────────────────
@@ -131,6 +133,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   const isBase = activeChainConfig.name === 'Base'
   const isSoneium = activeChainConfig.name === 'Soneium'
   const isLitvm = activeChainConfig.name === 'LitVM'
+  const isArc = activeChainConfig.name === 'Arc Testnet'
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<GlobalPlayer[]>([])
@@ -189,6 +192,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         else if (chainFilter === 'Unichain') chainConfig = { chain: unichain,   contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN!,      chainName: "Unichain" }
         else if (chainFilter === 'MegaETH') chainConfig = { chain: megaEth,   contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH!,      chainName: "MegaETH" }
         else if (chainFilter === 'LitVM') chainConfig = { chain: litvmTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!, chainName: "LitVM" }
+        else if (chainFilter === 'Arc Testnet') chainConfig = { chain: arcTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC!, chainName: "Arc Testnet" }
 
         if (chainConfig?.contractAddress) {
           try {
@@ -240,6 +244,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       case "Unichain": iconUrl = unichain.iconUrl || 'https://github.com/Uniswap.png'; break
       case "MegaETH":  iconUrl = '/chains/megaeth.png'; break
       case "LitVM":    iconUrl = '/chains/litvm.png'; break
+      case "Arc Testnet": iconUrl = '/chains/arc.png'; break
     }
     if (iconUrl) {
       return (
@@ -277,7 +282,9 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           ? 'bg-[#f4f5f7] border border-black/5 rounded-2xl shadow-sm'
         : isLitvm
           ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none font-mono shadow-none'
-        : 'backdrop-blur-xl bg-black/40 border border-white/10 rounded-2xl shadow-2xl'
+        : isArc
+          ? 'backdrop-blur-xl bg-[#000B24]/60 border border-[#4D8EE9]/15 rounded-2xl shadow-2xl'
+          : 'backdrop-blur-xl bg-black/40 border border-white/10 rounded-2xl shadow-2xl'
     }`}>
 
       {/* Header row */}
@@ -285,6 +292,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         <div>
           {isMegaEth && <div className="text-[10px] text-[#00ff88] uppercase mb-1 tracking-widest font-mono">// LEADERBOARD</div>}
           {isLitvm && <div className="text-[10px] text-[#00F2FE] lowercase mb-1 tracking-widest font-mono">{'>>'} leaderboard</div>}
+          {isArc && <div className="text-[10px] text-[#4D8EE9] uppercase mb-1 tracking-widest">Leaderboard</div>}
           <h2 className={`font-bold ${isMegaEth ? 'text-3xl uppercase font-mono text-white' : isInk ? 'text-2xl tracking-tighter text-white' : isUnichain ? 'text-2xl font-serif italic text-white' : isBase ? 'text-2xl tracking-tighter text-black' : isLitvm ?'text-3xl font-mono text-[#E2E8F0]' : 'text-2xl text-white'}`}>
             {titlePrefix} Leaderboard
           </h2>
@@ -320,17 +328,17 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           <div
             className={`flex items-center gap-2 border px-4 py-2.5 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-3xl' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full shadow-sm' : isLitvm ? 'rounded-none' : 'rounded-xl'}`}
             style={{
-              borderColor: isMegaEth ? "rgba(0,255,136,0.25)" : isInk ? "rgba(123,97,255,0.25)" : isUnichain ? "rgba(255,0,122,0.25)" : isBase ? "rgba(0,82,255,0.2)" : isLitvm ? "rgba(0,242,254,0.25)" : "rgba(255,215,0,0.25)",
-              background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : "rgba(255,215,0,0.05)",
+              borderColor: isMegaEth ? "rgba(0,255,136,0.25)" : isInk ? "rgba(123,97,255,0.25)" : isUnichain ? "rgba(255,0,122,0.25)" : isBase ? "rgba(0,82,255,0.2)" : isLitvm ? "rgba(0,242,254,0.25)" : isArc ? "rgba(77,142,233,0.25)" : "rgba(255,215,0,0.25)",
+              background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : isArc ? "rgba(77,142,233,0.05)" : "rgba(255,215,0,0.05)",
             }}
           >
             {nftLoading ? (
               <div
                 className="h-3.5 w-3.5 animate-spin rounded-full border-2"
-                style={{ borderColor: "rgba(255,255,255,0.1)", borderTopColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isLitvm ? "#00F2FE" : "#FFD700" }}
+                style={{ borderColor: "rgba(255,255,255,0.1)", borderTopColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700" }}
               />
             ) : (
-              <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} className="w-4 h-4 shrink-0" />
+              <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-4 h-4 shrink-0" />
             )}
             <span className={`text-sm font-semibold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>
               {nftLoading ? "…" : totalMinted}
@@ -346,20 +354,20 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             style={
               showMastersOnly
                 ? {
-                    background: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
-                    borderColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700",
-                    color: isBase ? "#ffffff" : isLitvm ? "#0B192C" : "#000",
+                    background: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
+                    borderColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700",
+                    color: isBase ? "#ffffff" : isLitvm ? "#0B192C" : isArc ? "#ffffff" : "#000",
                   }
                 : {
-                    borderColor: isMegaEth ? "rgba(0,255,136,0.3)" : isInk ? "rgba(123,97,255,0.3)" : isUnichain ? "rgba(255,0,122,0.3)" : isBase ? "rgba(0,82,255,0.3)" : isLitvm ? "rgba(0,242,254,0.3)" : "rgba(255,215,0,0.3)",
-                    background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : "rgba(255,215,0,0.05)",
-                    color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700",
+                    borderColor: isMegaEth ? "rgba(0,255,136,0.3)" : isInk ? "rgba(123,97,255,0.3)" : isUnichain ? "rgba(255,0,122,0.3)" : isBase ? "rgba(0,82,255,0.3)" : isLitvm ? "rgba(0,242,254,0.3)" : isArc ? "rgba(77,142,233,0.3)" : "rgba(255,215,0,0.3)",
+                    background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : isArc ? "rgba(77,142,233,0.05)" : "rgba(255,215,0,0.05)",
+                    color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700",
                   }
             }
           >
             <Star
-              fill={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isSoneium ? "#0047FF" : "#FFD700")}
-              color={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isSoneium ? "#0047FF" : "#FFD700")}
+              fill={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : isArc ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : isSoneium ? "#0047FF" : "#FFD700")}
+              color={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : isArc ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : isSoneium ? "#0047FF" : "#FFD700")}
               className="w-3.5 h-3.5"
             />
             {showMastersOnly ? "All Players" : "Show Masters Only"}
@@ -452,14 +460,16 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     ? (player.rank === 1 ? 'text-[#0047FF]' : 'text-white/60')
                   : isLitvm
                     ? (player.rank === 1 ? 'text-[#00F2FE]' : 'text-[#E2E8F0]/60')
-                  : (player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-gray-300" : player.rank === 3 ? "text-amber-600" : "text-gray-500")
+                  : isArc
+                    ? (player.rank === 1 ? 'text-[#4D8EE9]' : 'text-white/60')
+                    : (player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-gray-300" : player.rank === 3 ? "text-amber-600" : "text-gray-500")
 
                 return (
                   <tr
                     key={player.address}
                     className={`border-b border-white/5 transition-colors ${
                       isMe
-                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/20" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
+                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/20" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/20" : isArc ? "bg-[#4D8EE9]/10 hover:bg-[#4D8EE9]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
                         : (isBase ? "hover:bg-black/5" : isLitvm ? "hover:bg-white/[0.02]" : "hover:bg-white/5")
                     }`}
                   >
@@ -467,7 +477,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     <td className="py-4 pl-4 font-medium">
                       <div className="flex items-center gap-2">
                         {player.rank === 1 && (
-                          <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} className="w-4 h-4" />
+                          <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-4 h-4" />
                         )}
                         <span className={rankColor}>
                           #{player.rank}
@@ -494,10 +504,11 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                                 : isBase
                                   ? 'bg-[rgba(0,82,255,0.1)] border-[rgba(0,82,255,0.4)] text-[#0052FF] rounded-full'
                                 : isLitvm ?'bg-[rgba(0,242,254,0.1)] border-[rgba(0,242,254,0.4)] text-[#00F2FE] rounded-none'
-                                  : 'bg-[rgba(255,215,0,0.1)] border-[rgba(255,215,0,0.4)] text-[#FFD700] rounded-full'
+                                  : isArc ? 'bg-[rgba(77,142,233,0.1)] border-[rgba(77,142,233,0.4)] text-[#4D8EE9] rounded-full'
+                                    : 'bg-[rgba(255,215,0,0.1)] border-[rgba(255,215,0,0.4)] text-[#FFD700] rounded-full'
                             }`}
                           >
-                            <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : "#FFD700"} className="w-2.5 h-2.5" />
+                            <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-2.5 h-2.5" />
                             Master
                           </span>
                         )}
@@ -516,7 +527,9 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                                 ? 'bg-[#0052FF] text-white rounded-full'
                               : isLitvm
                                 ? 'bg-[#00F2FE] text-[#0B192C] rounded-none'
-                              : 'bg-[#0047FF] text-white rounded-full'
+                              : isArc
+                                ? 'bg-[#4D8EE9] text-white rounded-full'
+                                : 'bg-[#0047FF] text-white rounded-full'
                           }`}>
                             You
                           </span>
@@ -535,7 +548,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
 
                     <td className={`py-4 text-right font-bold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth || isLitvm ? 'font-mono' : ''}`}>{player.points}</td>
                     <td className={`py-4 text-right ${isBase ? 'text-black/40' : isLitvm ? 'text-[#E2E8F0]/40' : 'text-white/40'}`}>{player.games}</td>
-                    <td className={`py-4 pr-4 text-right font-medium ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : 'text-[#0047FF]'}`}>
+                    <td className={`py-4 pr-4 text-right font-medium ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : isArc ? 'text-[#4D8EE9]' : 'text-[#0047FF]'}`}>
                       {Math.round(player.avg)}%
                     </td>
                   </tr>

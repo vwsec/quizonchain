@@ -11,7 +11,7 @@ import {
   darkTheme,
 } from '@rainbow-me/rainbowkit'
 import { activeChainConfig, isMultiChain } from '@/lib/active-chain-config'
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet } from '@/lib/chains'
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet } from '@/lib/chains'
 import { validateContractAddressEnv } from '@/lib/env-validation'
 
 // Some runtimes expose a `localStorage` global that is not a real `Storage`
@@ -60,9 +60,9 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set.')
 }
 
-const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet]
-const singleChain = allChains.find(c => c.id === activeChainConfig.chainId)
-const chains = isMultiChain ? allChains : [singleChain!]
+const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet]
+const singleChain = allChains.find(c => c.id === activeChainConfig.chainId) ?? allChains[0]
+const chains = isMultiChain ? allChains : [singleChain]
 
 const config = getDefaultConfig({
   appName: 'Quiz On Chain',

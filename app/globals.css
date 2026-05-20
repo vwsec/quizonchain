@@ -111,6 +111,21 @@
   }
 }
 
+/* Soneium Theme */
+.theme-soneium {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --primary: #0047FF;
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  letter-spacing: -0.01em;
+}
+
+.theme-soneium body {
+  background: #00040F !important;
+}
+
 /* MegaETH Theme */
 .theme-megaeth {
   background: #000000 !important;
@@ -361,4 +376,144 @@
 
 .theme-litvm .litvm-shimmer {
   animation: litvm-border-shimmer 3s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Arc Theme — Matching official docs.arc.io design
+   Dark navy backgrounds, vibrant blue accent (#4D8EE9),
+   Space Grotesk / DM Sans typography, professional financial feel
+   ═══════════════════════════════════════════════════════════ */
+.theme-arc {
+  --background: #000B24;
+  --foreground: #FFFFFF;
+  --card: rgba(255, 255, 255, 0.03);
+  --card-foreground: #FFFFFF;
+  --popover: #000B24;
+  --popover-foreground: #FFFFFF;
+  --primary: #4D8EE9;
+  --primary-foreground: #FFFFFF;
+  --secondary: rgba(77, 142, 233, 0.1);
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(255, 255, 255, 0.08);
+  --muted-foreground: #C7C5D1;
+  --accent: #4D8EE9;
+  --accent-foreground: #FFFFFF;
+  --destructive: #ef4444;
+  --destructive-foreground: #FFFFFF;
+  --success: #22c55e;
+  --success-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: #4D8EE9;
+  --chart-1: #4D8EE9;
+  --chart-2: #ACC6E9;
+  --chart-3: #2F578C;
+  --chart-4: #1B3158;
+  --chart-5: #664C88;
+  --radius: 0.875rem;
+  --sidebar: #000B24;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #4D8EE9;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(77, 142, 233, 0.1);
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #4D8EE9;
+
+  font-family: 'DM Sans', 'Space Grotesk', Arial, sans-serif !important;
+}
+
+.theme-arc body {
+  background: #000B24 !important;
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(77, 142, 233, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(172, 198, 233, 0.04) 0%, transparent 50%),
+    linear-gradient(160deg, #000B24 0%, #010D28 40%, #000920 70%, #000B24 100%) !important;
+}
+
+.theme-arc body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(77, 142, 233, 0.03) 0%, transparent 60%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 80px,
+      rgba(77, 142, 233, 0.015) 80px,
+      rgba(77, 142, 233, 0.015) 81px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 80px,
+      rgba(77, 142, 233, 0.015) 80px,
+      rgba(77, 142, 233, 0.015) 81px
+    );
+}
+
+.theme-arc h1, .theme-arc h2, .theme-arc h3, .theme-arc h4 {
+  font-family: 'Space Grotesk', Arial, sans-serif !important;
+  font-weight: 600;
+}
+
+.theme-arc .arc-header {
+  @apply tracking-widest text-[#4D8EE9];
+  font-family: 'Space Grotesk', Arial, sans-serif !important;
+}
+
+.theme-arc .arc-header::before {
+  content: ">> ";
+}
+
+.theme-arc button {
+  @apply transition-all duration-300;
+  font-family: 'DM Sans', Arial, sans-serif !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.theme-arc .arc-btn-primary {
+  @apply bg-transparent border text-[#4D8EE9] hover:text-white;
+  border-color: #4D8EE9;
+  background: linear-gradient(135deg, rgba(77, 142, 233, 0.05), rgba(77, 142, 233, 0.02));
+  box-shadow: 0 0 20px rgba(77, 142, 233, 0.1), inset 0 1px 0 rgba(77, 142, 233, 0.1);
+}
+
+.theme-arc .arc-btn-primary:hover {
+  background: linear-gradient(135deg, #4D8EE9, #2F578C);
+  box-shadow: 0 0 30px rgba(77, 142, 233, 0.4);
+}
+
+.theme-arc .arc-btn-secondary {
+  @apply bg-transparent border border-white/15 text-white/70 hover:border-[#4D8EE9]/40 hover:text-white;
+}
+
+.theme-arc .arc-card {
+  background: linear-gradient(135deg, rgba(0, 11, 36, 0.9), rgba(1, 13, 40, 0.85));
+  border: 1px solid rgba(77, 142, 233, 0.12);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(77, 142, 233, 0.05);
+}
+
+@keyframes arc-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(77, 142, 233, 0.15); }
+  50% { box-shadow: 0 0 40px rgba(77, 142, 233, 0.3); }
+}
+
+@keyframes arc-border-shimmer {
+  0% { border-color: rgba(77, 142, 233, 0.15); }
+  50% { border-color: rgba(77, 142, 233, 0.35); }
+  100% { border-color: rgba(77, 142, 233, 0.15); }
+}
+
+.theme-arc .arc-glow {
+  animation: arc-glow-pulse 4s ease-in-out infinite;
+}
+
+.theme-arc .arc-shimmer {
+  animation: arc-border-shimmer 3s ease-in-out infinite;
 }

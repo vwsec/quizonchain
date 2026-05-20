@@ -19,7 +19,8 @@ export async function generateMetadata({ params }: SubExplorerPageProps) {
     base: 'Base', 
     unichain: 'Unichain',
     megaeth: 'MegaETH',
-    litvm: 'LitVM'
+    litvm: 'LitVM',
+    arc: 'Arc Testnet'
   };
   
   if (!names[resolvedParams.chain]) {
@@ -41,7 +42,7 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
     redirect('/explorer');
   }
 
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc'];
   
   if (!validChains.includes(resolvedParams.chain)) {
     redirect('/explorer');
@@ -60,7 +61,8 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
     base: 'Base', 
     unichain: 'Unichain',
     megaeth: 'MegaETH',
-    litvm: 'LitVM'
+    litvm: 'LitVM',
+    arc: 'Arc Testnet'
   };
   const isBase = resolvedParams.chain === 'base';
   const isMegaEth = resolvedParams.chain === 'megaeth';
@@ -68,6 +70,7 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
   const isUnichain = resolvedParams.chain === 'unichain';
   const isSoneium = resolvedParams.chain === 'soneium';
   const isLitvm = resolvedParams.chain === 'litvm';
+  const isArc = resolvedParams.chain === 'arc';
   const chainName = names[resolvedParams.chain] || (resolvedParams.chain.charAt(0).toUpperCase() + resolvedParams.chain.slice(1));
 
   return (
@@ -78,6 +81,7 @@ export default async function SubExplorerPage({ params }: SubExplorerPageProps) 
       isUnichain ? 'bg-[#0d0014] text-white' :
       isSoneium ? 'bg-[#00040F] text-white' :
       isLitvm ? 'bg-[#0B192C] text-white font-mono' :
+      isArc ? 'bg-[#000B24] text-white' :
       'bg-[#080810] text-white'
     }`}>
       <BubbleExplorer chain={resolvedParams.chain as any} initialAddress={resolvedParams.address} />

@@ -54,6 +54,14 @@ const CHAINS = [
     iconUrl: '/chains/litvm.png',
     accentColor: 'group-hover:border-[#00F2FE] group-hover:shadow-[0_0_20px_rgba(0,242,254,0.2)]',
     textAccent: 'group-hover:text-[#00F2FE]',
+  },
+  {
+    id: 'arc',
+    name: 'Arc Testnet',
+    description: 'Explore Arc Testnet transactions visually',
+    iconUrl: '/chains/arc.png',
+    accentColor: 'group-hover:border-[#4D8EE9] group-hover:shadow-[0_0_20px_rgba(77,142,233,0.2)]',
+    textAccent: 'group-hover:text-[#4D8EE9]',
   }
 ]
 

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/lib/utils'
-import { formatEther } from 'viem'
+import { formatUnits } from 'viem'
 import { ExternalLink, RefreshCw, AlertCircle, ArrowLeft, ArrowRight, Search, X, Loader2, Clock, FileCode, Coins, Wallet, Copy, Check } from 'lucide-react'
 import { safeStorage } from '../lib/safe-storage'
 import { useRouter, usePathname } from 'next/navigation'
@@ -18,7 +18,7 @@ const SEARCH_TYPES = {
   ENS: /\.eth$/i,
   BLOCK: /^\d+$/,
 }
-export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth' | 'litvm'
+export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth' | 'litvm' | 'arc'
 
 const CHAIN_CONFIG = {
   soneium: {
@@ -26,36 +26,63 @@ const CHAIN_CONFIG = {
     color: '#0047FF',
     name: 'Soneium',
     explorer: 'https://soneium.blockscout.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
   ink: {
     apiBase: 'https://explorer.inkonchain.com/api/v2',
     color: '#8b5cf6',
     name: 'Ink',
     explorer: 'https://explorer.inkonchain.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
   base: {
     apiBase: 'https://base.blockscout.com/api/v2',
     color: '#0052ff',
     name: 'Base',
     explorer: 'https://base.blockscout.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
   unichain: {
     apiBase: 'https://unichain.blockscout.com/api/v2',
     color: '#ff007a',
     name: 'Unichain',
     explorer: 'https://unichain.blockscout.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
   megaeth: {
     apiBase: 'https://megaeth.blockscout.com/api/v2',
     color: '#00ff88',
     name: 'MegaETH',
     explorer: 'https://megaeth.blockscout.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
   litvm: {
     apiBase: 'https://liteforge.explorer.caldera.xyz/api/v2',
     color: '#00F2FE',
     name: 'LitVM',
     explorer: 'https://liteforge.explorer.caldera.xyz',
+    currency: 'zkLTC',
+    decimals: 18,
+    whaleThreshold: 10,
+  },
+  arc: {
+    apiBase: 'https://testnet.arcscan.app/api/v2',
+    color: '#4D8EE9',
+    name: 'Arc Testnet',
+    explorer: 'https://testnet.arcscan.app',
+    currency: 'USDC',
+    decimals: 18,
+    whaleThreshold: 10000,
   },
 } as const
 
@@ -151,6 +178,17 @@ function truncateString(str: string, max = 8) {
   return `${str.slice(0, 4)}...${str.slice(-4)}`
 }
 
+function getAddr(txField: any): string | null {
+  if (!txField) return null
+  if (typeof txField === 'string') return txField.toLowerCase()
+  return txField.hash?.toLowerCase() || null
+}
+
+function formatNativeValue(value: string | bigint, decimals: number): string {
+  const val = typeof value === 'bigint' ? value : BigInt(value || '0')
+  return formatUnits(val, decimals)
+}
+
 function timeAgo(timestamp: string) {
   const diff = Date.now() - new Date(timestamp).getTime()
   const seconds = Math.floor(diff / 1000)
@@ -169,6 +207,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   const isBase = chain === 'base'
   const isSoneium = chain === 'soneium'
   const isLitvm = chain === 'litvm'
+  const isArc = chain === 'arc'
   
   const config = CHAIN_CONFIG[chain]
   const router = useRouter()
@@ -326,10 +365,10 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
     for (let i = 0; i < arr.length; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         const a = arr[i], b = arr[j]
-        const aFrom = a.tx.from?.hash?.toLowerCase()
-        const aTo = a.tx.to?.hash?.toLowerCase()
-        const bFrom = b.tx.from?.hash?.toLowerCase()
-        const bTo = b.tx.to?.hash?.toLowerCase()
+        const aFrom = getAddr(a.tx.from)
+        const aTo = getAddr(a.tx.to)
+        const bFrom = getAddr(b.tx.from)
+        const bTo = getAddr(b.tx.to)
         const connected =
           (aFrom && bFrom && aFrom === bFrom) ||
           (aFrom && bTo && aFrom === bTo) ||
@@ -506,7 +545,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 ? 'rgba(0, 82, 255, 0.03)'
               : isLitvm
                 ? 'rgba(0, 242, 254, 0.025)'
-                : 'rgba(0, 71, 255, 0.025)'
+                : isArc
+                  ? 'rgba(77, 142, 233, 0.025)'
+                  : 'rgba(0, 71, 255, 0.025)'
 
         for (let x = 0; x < cw; x += gridSize) {
           ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ch); ctx.stroke()
@@ -596,12 +637,11 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           const id = b.id
           let targetOpacity = passesFilter(b.tx, filterRef.current) ? 1 : 0
           
-          // Address search highlighting
+          // Address search highlighting (combines with filter)
           if (activeSearchRef.current?.type === 'address') {
             const addr = activeSearchRef.current.address?.toLowerCase()
-            const matches = b.tx.from?.hash?.toLowerCase() === addr || b.tx.to?.hash?.toLowerCase() === addr
-            if (!matches) targetOpacity = 0.15
-            else targetOpacity = 1
+            const matches = getAddr(b.tx.from) === addr || getAddr(b.tx.to) === addr
+            if (targetOpacity > 0 && !matches) targetOpacity = 0.15
           }
 
           b.targetOpacity = targetOpacity
@@ -635,7 +675,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
             // 3. Address cluster attraction
             if (activeSearchRef.current?.type === 'address') {
               const addr = activeSearchRef.current.address?.toLowerCase()
-              const matches = b.tx.from?.hash?.toLowerCase() === addr || b.tx.to?.hash?.toLowerCase() === addr
+              const matches = getAddr(b.tx.from) === addr || getAddr(b.tx.to) === addr
               if (matches) {
                 b.vx += (cw / 2 - b.x) * 0.008
                 b.vy += (ch / 2 - b.y) * 0.008
@@ -692,7 +732,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           // Address match glow
           if (activeSearchRef.current?.type === 'address') {
             const addr = activeSearchRef.current.address?.toLowerCase()
-            const matches = b.tx.from?.hash?.toLowerCase() === addr || b.tx.to?.hash?.toLowerCase() === addr
+            const matches = getAddr(b.tx.from) === addr || getAddr(b.tx.to) === addr
             if (matches) {
               ctx.save()
               ctx.beginPath()
@@ -741,8 +781,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           ctx.fillStyle = isHovered || isFocused ? '#ffffff' : b.color
           ctx.fill()
 
-          const ethValue = parseFloat(formatEther(BigInt(b.tx.value || '0')))
-          const isWhale = ethValue > 1
+          const ethValue = parseFloat(formatNativeValue(b.tx.value || '0', config.decimals))
+          const whaleThreshold = (config as any).whaleThreshold ?? 10
+          const isWhale = ethValue >= whaleThreshold
 
           if (isWhale) {
             ctx.save()
@@ -754,7 +795,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
             ctx.stroke()
             
             ctx.fillStyle = '#ffffff'
-            ctx.font = 'black 9px sans-serif'
+            ctx.font = `bold ${Math.min(Math.floor(drawRadius * 0.25), 16)}px sans-serif`
             ctx.textAlign = 'center'
             ctx.fillText('WHALE', b.x, b.y - drawRadius - 12)
             ctx.restore()
@@ -762,9 +803,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
 
           if (drawRadius > 20) {
             const formatted = ethValue >= 1 ? ethValue.toFixed(1) : ethValue.toFixed(2)
-            const text = `${formatted}E`
+            const text = `${formatted}${config.currency}`
             ctx.fillStyle = '#ffffff'
-            ctx.font = `bold ${Math.floor(drawRadius * 0.4)}px monospace`
+            ctx.font = `bold ${Math.min(Math.floor(drawRadius * 0.4), 14)}px monospace`
             ctx.textAlign = 'center'
             ctx.textBaseline = 'middle'
             ctx.fillText(text, b.x, b.y)
@@ -969,6 +1010,46 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
 
   // Click navigation is now handled in handleMouseUp with drag detection
 
+  const addSearchTxsToBubbles = (txs: TxData[], clearExisting = false) => {
+    if (clearExisting) {
+      bubblesRef.current.clear()
+      ripplesRef.current = []
+    }
+
+    const canvas = canvasRef.current
+    const dpr = window.devicePixelRatio || 1
+    const width = canvas ? canvas.width / dpr : window.innerWidth
+    const height = canvas ? canvas.height / dpr : window.innerHeight
+
+    txs.forEach((tx) => {
+      if (bubblesRef.current.has(tx.hash)) return
+      const type = getTxPrimaryType(tx)
+      const color = getTypeColor(type, config.color)
+      const valueInWei = Number(BigInt(tx.value || '0'))
+      const radius = Math.max(30, Math.min(150, Math.log10(valueInWei + 1) * 20))
+      const margin = radius + 20
+      const sx = margin + Math.random() * Math.max(1, width - margin * 2)
+      const sy = margin + Math.random() * Math.max(1, height - margin * 2)
+
+      bubblesRef.current.set(tx.hash, {
+        id: tx.hash, x: sx, y: sy,
+        vx: (Math.random() * 2 - 1), vy: (Math.random() * 2 - 1),
+        radius, color, tx,
+        targetOpacity: passesFilter(tx, filterRef.current) ? 1 : 0.1,
+        currentOpacity: 0
+      })
+
+      ripplesRef.current.push({
+        bubbleId: tx.hash,
+        startTime: performance.now(),
+        color
+      })
+    })
+
+    rebuildConnectionPairs()
+    setStats(prev => ({ ...prev, totalTxs: bubblesRef.current.size }))
+  }
+
   const handleSearch = async (overrideQuery?: string) => {
     const q = (typeof overrideQuery === 'string' ? overrideQuery : searchQuery).trim()
     if (!q) return
@@ -1003,6 +1084,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         }
         const data = await res.json()
         
+        addSearchTxsToBubbles([data])
+
         setActiveSearch({
           type: 'tx',
           query: q,
@@ -1025,15 +1108,19 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         if (!addrRes.ok) throw new Error('404')
         
         const addrData = await addrRes.json()
-        const txsData = await txsRes.json()
+        const txsData = txsRes.ok ? await txsRes.json() : {}
         const countersData = countersRes?.ok ? await countersRes.json() : {}
+
+        const txsList = txsData.items || txsData.result || txsData.transactions || []
+
+        addSearchTxsToBubbles(txsList, true)
 
         setActiveSearch({
           type: 'address',
           query: q,
           address: q,
           addressData: { ...addrData, counters: countersData },
-          addressTxs: txsData.items || []
+          addressTxs: txsList
         })
       }
       else if (SEARCH_TYPES.BLOCK.test(q)) {
@@ -1046,6 +1133,8 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         
         const blockData = await blockRes.json()
         const txsData = await txsRes.json()
+
+        addSearchTxsToBubbles(txsData.items || [], true)
 
         setActiveSearch({
           type: 'block',
@@ -1562,19 +1651,19 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                               <div className="space-y-1">
                                  <span className="block text-[10px] uppercase tracking-[0.2em] font-black text-gray-500 mb-1">Value</span>
                                  <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-black text-white tracking-tighter">
-                                       {parseFloat(formatEther(BigInt(searchResult.data.value || '0'))).toFixed(4)}
-                                    </span>
-                                    <span className="text-sm text-gray-600 font-bold uppercase tracking-widest">ETH</span>
+                                     <span className="text-3xl font-black text-white tracking-tighter">
+                                        {parseFloat(formatNativeValue(searchResult.data.value || '0', config.decimals)).toFixed(4)}
+                                     </span>
+                                     <span className="text-sm text-gray-600 font-bold uppercase tracking-widest">{config.currency}</span>
                                  </div>
                               </div>
                               <div className="space-y-1">
                                  <span className="block text-[10px] uppercase tracking-[0.2em] font-black text-gray-500 mb-1">Fee paid</span>
                                  <div className="flex items-baseline gap-2">
                                     <span className="text-xl font-bold text-gray-400 tracking-tight">
-                                       {formatEther(BigInt(searchResult.data.fee?.value || BigInt(searchResult.data.gas_used || 0) * BigInt(searchResult.data.gas_price || 0)))}
-                                    </span>
-                                    <span className="text-xs text-gray-600 font-bold uppercase tracking-widest">ETH</span>
+                                       {formatNativeValue(searchResult.data.fee?.value || BigInt(searchResult.data.gas_used || 0) * BigInt(searchResult.data.gas_price || 0), config.decimals)}
+                                     </span>
+                                     <span className="text-xs text-gray-600 font-bold uppercase tracking-widest">{config.currency}</span>
                                  </div>
                               </div>
                            </div>
@@ -1746,12 +1835,12 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
              
              <div className="space-y-4">
                <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl">
-                 <span className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">ETH Balance</span>
-                 <div className="flex items-end gap-2">
-                   <span className="text-3xl font-mono text-white font-extrabold tracking-tighter">
-                     {parseFloat(formatEther(BigInt(searchResult.data.coin_balance || '0'))).toFixed(4)}
-                   </span>
-                   <span className="text-sm font-bold text-gray-500 mb-1">ETH</span>
+                  <span className="block text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">{config.currency} Balance</span>
+                  <div className="flex items-end gap-2">
+                    <span className="text-3xl font-mono text-white font-extrabold tracking-tighter">
+                      {parseFloat(formatNativeValue(searchResult.data.coin_balance || '0', config.decimals)).toFixed(4)}
+                    </span>
+                    <span className="text-sm font-bold text-gray-500 mb-1">{config.currency}</span>
                  </div>
                </div>
                
@@ -1802,7 +1891,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
               <span className="text-white text-sm font-bold">
                 {Array.from(bubblesRef.current.values()).filter(b => {
                   const addr = activeSearch.address?.toLowerCase()
-                  return b.tx.from?.hash?.toLowerCase() === addr || b.tx.to?.hash?.toLowerCase() === addr
+                  return getAddr(b.tx.from) === addr || getAddr(b.tx.to) === addr
                 }).length} transactions found for {truncateString(activeSearch.address || '', 8)}
               </span>
               <button 
@@ -1896,7 +1985,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 <div className="flex justify-between items-baseline mb-1">
                   <span className={`text-[10px] font-bold uppercase tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Value</span>
                   <span className={`text-sm font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isSoneium ? 'text-[#0047FF]' : 'text-white'}`}>
-                    {formatEther(BigInt(hoveredTx.tx.value || '0')).slice(0, 8)} ETH
+                    {formatNativeValue(hoveredTx.tx.value || '0', config.decimals).slice(0, 8)} {config.currency}
                   </span>
                 </div>
 

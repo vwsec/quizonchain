@@ -66,7 +66,7 @@ export const megaEth = defineChain({
   name: 'MegaETH',
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: { default: { http: ['https://mainnet.megaeth.com/rpc'] } },
-  blockExplorers: { default: { name: 'MegaETH Explorer', url: 'https://megaexplorer.xyz' } },
+  blockExplorers: { default: { name: 'MegaETH Explorer', url: 'https://www.megaexplorer.xyz' } },
   iconUrl: '/chains/megaeth.png',
 });
 
@@ -80,6 +80,16 @@ export const litvmTestnet = defineChain({
   testnet: true,
 });
 
+export const arcTestnet = defineChain({
+  id: 5042002,
+  name: 'Arc Testnet',
+  nativeCurrency: { name: 'USD Coin', symbol: 'USDC', decimals: 6 },
+  rpcUrls: { default: { http: ['https://rpc.testnet.arc.network'], webSocket: ['wss://rpc.testnet.arc.network'] } },
+  blockExplorers: { default: { name: 'ArcScan', url: 'https://testnet.arcscan.app' } },
+  iconUrl: '/chains/arc.png',
+  testnet: true,
+});
+
 export const soneiumChains = [
   inkMainnet,
   soneiumMainnet,
@@ -87,6 +97,7 @@ export const soneiumChains = [
   unichain,
   megaEth,
   litvmTestnet,
+  arcTestnet,
 ] as const
 
 export function getSoneiumChainById(chainId: number) {
@@ -100,8 +111,9 @@ export function getTxInternalUrl(chainId: number, txHash: string): string {
     57073: 'ink',
     8453: 'base',
     130: 'unichain',
-    4326: 'megaeth',
-    4441: 'litvm'
+     4326: 'megaeth',
+     4441: 'litvm',
+     5042002: 'arc'
   }
   const slug = mapping[chainId] || 'soneium'
   return `/explorer/${slug}/tx/${txHash}`
@@ -126,6 +138,9 @@ export function getTxExplorerUrl(chainId: number, txHash: string): string {
   }
   if (chainId === 4441) {
     return `https://liteforge.explorer.caldera.xyz/tx/${txHash}`
+  }
+  if (chainId === 5042002) {
+    return `https://testnet.arcscan.app/tx/${txHash}`
   }
   return `https://soneium.blockscout.com/tx/${txHash}`
 }

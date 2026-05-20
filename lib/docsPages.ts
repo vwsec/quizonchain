@@ -39,3 +39,11 @@ export const LITVM_DOCS_PAGES = [
   'https://docs.litvm.com/bridges',
   'https://docs.litvm.com/faucet',
 ];
+
+export const ARC_DOCS_PAGES = [
+  'https://docs.arc.io/arc-chain',
+  'https://docs.arc.io/arc/concepts/system-overview',
+  'https://docs.arc.io/arc/references/gas-and-fees',
+  'https://docs.arc.io/arc/references/connect-to-arc',
+  'https://docs.arc.io/arc/tutorials/deploy-contracts',
+];

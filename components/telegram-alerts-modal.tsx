@@ -153,15 +153,15 @@ export function TelegramAlertsModal({
             
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label className="text-xs text-gray-400">Min. Value (ETH)</Label>
-                <span className={`text-xs font-mono ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : 'text-blue-400'}`}>{localSettings.minEthThreshold} ETH</span>
+                <Label className="text-xs text-gray-400">Min. Value ({activeChainConfig.nativeCurrency.symbol})</Label>
+                <span className={`text-xs font-mono ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : 'text-blue-400'}`}>{localSettings.minValueThreshold} {activeChainConfig.nativeCurrency.symbol}</span>
               </div>
               <Input 
                 type="number"
                 step="0.01"
                 min="0"
-                value={localSettings.minEthThreshold}
-                onChange={(e) => setLocalSettings(prev => ({ ...prev, minEthThreshold: parseFloat(e.target.value) || 0 }))}
+                value={localSettings.minValueThreshold}
+                onChange={(e) => setLocalSettings(prev => ({ ...prev, minValueThreshold: parseFloat(e.target.value) || 0 }))}
                 className={`bg-white/5 border-white/10 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full px-4' : isUnichain ? 'rounded-xl' : ''}`}
               />
             </div>
@@ -170,7 +170,7 @@ export function TelegramAlertsModal({
               <Label className="text-xs text-gray-400">Transaction Types</Label>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { id: 'coin_transfer', label: 'Native ETH' },
+                  { id: 'coin_transfer', label: `Native ${activeChainConfig.nativeCurrency.symbol}` },
                   { id: 'token_transfer', label: 'ERC-20' },
                   { id: 'contract_call', label: 'Smart Contract' },
                   { id: 'nft_transfer', label: 'NFTs' },

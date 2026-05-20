@@ -2,6 +2,7 @@ const CHAIN_CONFIGS = {
   ink: {
     name: 'Ink',
     chainId: 57073,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#8b5cf6',
     rpc: 'https://rpc-gel.inkonchain.com',
     explorer: 'https://explorer.inkonchain.com',
@@ -26,6 +27,7 @@ const CHAIN_CONFIGS = {
   soneium: {
     name: 'Soneium',
     chainId: 1868,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#0047FF',
     rpc: 'https://rpc.soneium.org',
     explorer: 'https://soneium.blockscout.com',
@@ -50,6 +52,7 @@ const CHAIN_CONFIGS = {
   base: {
     name: 'Base',
     chainId: 8453,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#0052ff',
     rpc: 'https://mainnet.base.org',
     explorer: 'https://basescan.org',
@@ -72,6 +75,7 @@ const CHAIN_CONFIGS = {
   unichain: {
     name: 'Unichain',
     chainId: 130,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#ff007a',
     rpc: 'https://mainnet.unichain.org',
     explorer: 'https://uniscan.xyz',
@@ -94,6 +98,7 @@ const CHAIN_CONFIGS = {
   megaeth: {
     name: 'MegaETH',
     chainId: 4326,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
     color: '#00ff88',
     rpc: 'https://mainnet.megaeth.com/rpc',
     explorer: 'https://megaeth.blockscout.com',
@@ -114,6 +119,7 @@ const CHAIN_CONFIGS = {
   litvm: {
     name: 'LitVM',
     chainId: 4441,
+    nativeCurrency: { name: 'zkLTC', symbol: 'zkLTC', decimals: 18 },
     color: '#00F2FE',
     rpc: 'https://liteforge.rpc.caldera.xyz/http',
     explorer: 'https://liteforge.explorer.caldera.xyz',
@@ -133,6 +139,30 @@ const CHAIN_CONFIGS = {
     heroLabel: 'LITEFORGE',
     nftMetadataPath: '/nft/litvm/1.json',
     nftImage: '/nft/litvm.png',
+  },
+  arc: {
+    name: 'Arc Testnet',
+    chainId: 5042002,
+    nativeCurrency: { name: 'USD Coin', symbol: 'USDC', decimals: 6 },
+    whaleThreshold: 10000,
+    color: '#4D8EE9',
+    rpc: 'https://rpc.testnet.arc.network',
+    explorer: 'https://testnet.arcscan.app',
+    blockscoutApi: 'https://testnet.arcscan.app/api/v2',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC ?? undefined,
+    nftContract: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC ?? "",
+    docsPages: [
+      'https://docs.arc.io/arc-chain',
+      'https://docs.arc.io/arc/concepts/system-overview',
+      'https://docs.arc.io/arc/references/gas-and-fees',
+      'https://docs.arc.io/arc/references/connect-to-arc',
+      'https://docs.arc.io/arc/tutorials/deploy-contracts',
+    ],
+    heroTitle: "The Knowledge of Arc",
+    heroSubtitle: "Test your Arc blockchain knowledge",
+    heroLabel: 'ARC',
+    nftMetadataPath: '/nft/arc/1.json',
+    nftImage: '/nft/arc.png',
   },
 } as const;
 

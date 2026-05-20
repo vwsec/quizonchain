@@ -18,6 +18,7 @@ const CHAIN_TITLES: Record<string, string> = {
   unichain: 'Quiz On Unichain',
   megaeth: 'Quiz On MegaETH',
   litvm: 'Quiz On LitVM',
+  arc: 'Quiz On Arc',
 };
 
 const CHAIN_DESCRIPTIONS: Record<string, string> = {
@@ -27,6 +28,7 @@ const CHAIN_DESCRIPTIONS: Record<string, string> = {
   unichain: 'Test your Unichain knowledge. Prove it on-chain.',
   megaeth: 'Test your MegaETH blockchain knowledge. Prove it on-chain.',
   litvm: 'Test your LitVM LiteForge knowledge. Prove it on-chain.',
+  arc: 'Test your Arc blockchain knowledge. Prove it on-chain.',
 };
 
 const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? '';
@@ -71,9 +73,10 @@ export default function RootLayout({
   const isUnichain = activeChainConfig.name === 'Unichain'
   const isBase = activeChainConfig.name === 'Base'
   const isLitvm = activeChainConfig.name === 'LitVM'
+  const isArc = activeChainConfig.name === 'Arc Testnet'
 
   return (
-    <html lang="en" className={isMegaEth ? 'theme-megaeth' : isInk ? 'theme-ink' : isUnichain ? 'theme-unichain' : isBase ? 'theme-base' : isLitvm ? 'theme-litvm' : ''}>
+    <html lang="en" className={isMegaEth ? 'theme-megaeth' : isInk ? 'theme-ink' : isUnichain ? 'theme-unichain' : isBase ? 'theme-base' : isLitvm ? 'theme-litvm' : isArc ? 'theme-arc' : ''}>
       <body className="font-sans antialiased">
         <Providers>
           <WalletProvider>

@@ -6,6 +6,7 @@ const contractEnvKeys = [
   "NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET",
   "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
   "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
+  "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
 ] as const
 
 export function validateContractAddressEnv() {
