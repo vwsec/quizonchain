@@ -12,8 +12,7 @@ import { AlertCircle, Star } from "lucide-react"
 
 export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Sepolia'
 
-import { useChainId } from 'wagmi'
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 // ─── NFT contract addresses per chain ────────────────────────────────────────
 const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
@@ -129,17 +128,16 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  const { address, isConnected } = useAccount()
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium' || cfg?.name === 'Sepolia'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
-  const isSepolia = cfg?.name === 'Sepolia'
+  const { address } = useAccount()
+  const { chainConfig: cfg, isConnected } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && (cfg?.name === 'Soneium' || cfg?.name === 'Sepolia')
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
+  const isSepolia = isConnected && cfg?.name === 'Sepolia'
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<GlobalPlayer[]>([])

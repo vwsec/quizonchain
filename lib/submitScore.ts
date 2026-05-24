@@ -314,16 +314,6 @@ async function fetchScoreSignature(
 ): Promise<Hex> {
   const payload = { playerAddress, score, total, nonce, chainId, contractAddress, quizToken, answers: userAnswers }
   
-  if (process.env.NODE_ENV === 'development') {
-    console.debug("Submitting API /sign-score values:")
-    console.debug("playerAddress", playerAddress)
-    console.debug("score", score)
-    console.debug("total", total)
-    console.debug("nonce", nonce)
-    console.debug("chainId", chainId)
-    console.debug("contractAddress", contractAddress)
-  }
-
   const res = await fetch('/api/sign-score', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

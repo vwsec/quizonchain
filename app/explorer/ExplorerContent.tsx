@@ -4,8 +4,7 @@ import { Header } from "@/components/header"
 import { WalletProvider } from "@/components/wallet-provider"
 import Link from "next/link"
 import Image from "next/image"
-import { useChainId } from 'wagmi'
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 const CHAINS = [
   {
@@ -79,12 +78,11 @@ import { useRouter } from "next/navigation"
 
 export default function ExplorerContent() {
   const router = useRouter()
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
+  const { chainConfig: cfg, isConnected } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
 
   return (
     <main className={`relative z-10 min-h-screen pt-32 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>

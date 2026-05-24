@@ -9,8 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { useChainId } from 'wagmi'
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useWallet } from "@/components/wallet-provider"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -47,15 +47,15 @@ const FAQS = [
 ]
 
 export default function SupportContent() {
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const { isConnected } = useWallet()
+  const { chainConfig: cfg } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
   return (
     <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0] font-mono' : 'text-white'}`}>
@@ -86,13 +86,15 @@ export default function SupportContent() {
                   ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]'
                 : isArc
                   ? 'rounded-3xl bg-white/[0.02] border border-[#4D8EE9]/20 backdrop-blur-xl hover:border-[#4D8EE9]/50 shadow-[0_0_30px_rgba(77,142,233,0.05)]'
-                  : 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:border-[#0047FF]'
+                  : !isConnected
+                    ? 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:border-white'
+                    : 'rounded-3xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl hover:border-[#0047FF]'
             }`}>
                {!isMegaEth && !isInk && !isUnichain && !isLitvm && !isArc && <div className="absolute inset-0 bg-gradient-to-br from-[#0047FF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                {isArc && <div className="absolute inset-0 bg-gradient-to-br from-[#4D8EE9]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />}
                <div className="relative z-10 space-y-6">
                 <div className={`w-12 h-12 flex items-center justify-center ${
-                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isSoneium ? 'bg-[#0047FF]/10 text-[#0047FF] rounded-2xl' : isLitvm ? 'bg-[#00F2FE]/10 text-[#00F2FE]' : isArc ? 'bg-[#4D8EE9]/10 text-[#4D8EE9] rounded-2xl' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
+                  isMegaEth ? 'bg-black border border-white/15 rounded-none text-[#00ff88]' : isInk ? 'bg-[#7B61FF]/10 text-[#7B61FF] rounded-2xl' : isUnichain ? 'bg-[#FF007A]/10 text-[#FF007A] rounded-xl' : isBase ? 'bg-[#0052FF]/10 text-[#0052FF] rounded-full' : isSoneium ? 'bg-[#0047FF]/10 text-[#0047FF] rounded-2xl' : isLitvm ? 'bg-[#00F2FE]/10 text-[#00F2FE]'                   : isArc ? 'bg-[#4D8EE9]/10 text-[#4D8EE9] rounded-2xl' : !isConnected ? 'rounded-2xl bg-white/10 text-white' : 'rounded-2xl bg-[#0047FF]/10 text-[#0047FF]'
                 }`}>
                   <XIcon className="w-6 h-6" />
                 </div>
@@ -114,9 +116,11 @@ export default function SupportContent() {
                       : isBase
                         ? 'bg-[#0052FF] hover:bg-[#0047FF] text-white rounded-full shadow-lg transition-all'
                       : isLitvm ?'bg-[#0B192C] border border-[#00F2FE] text-[#00F2FE] hover:bg-[#00F2FE] hover:text-[#0B192C] rounded-none'
-                      : isArc
-                        ? 'bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white rounded-xl shadow-[0_0_20px_rgba(77,142,233,0.3)]'
-                        : 'bg-[#0047FF] hover:bg-blue-600 text-white rounded-xl shadow-[0_0_20px_rgba(0,71,255,0.3)]'
+                  : isArc
+                    ? 'bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white rounded-xl shadow-[0_0_20px_rgba(77,142,233,0.3)]'
+                    : !isConnected
+                      ? 'bg-white hover:bg-white/80 text-black rounded-xl'
+                      : 'bg-[#0047FF] hover:bg-blue-600 text-white rounded-xl shadow-[0_0_20px_rgba(0,71,255,0.3)]'
                   }`}
                 >
                   Open X
@@ -192,9 +196,11 @@ export default function SupportContent() {
                         ? 'bg-white border-black/5 rounded-2xl shadow-sm data-[state=open]:border-black/10'
                       : isLitvm
                         ? 'border-[#00F2FE]/20 bg-[#0B192C] rounded-none data-[state=open]:border-[#00F2FE]/50'
-                      : isArc
-                        ? 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#4D8EE9]/40'
-                        : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
+                  : isArc
+                    ? 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#4D8EE9]/40'
+                    : !isConnected
+                      ? 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-white/30'
+                      : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
                   }`}
                 >
                   <AccordionTrigger className={`hover:no-underline font-bold text-left ${isMegaEth ? 'font-mono uppercase text-[#00ff88]' : isBase ? 'text-black' : isLitvm ?'font-mono text-[#E2E8F0]' : isArc ? 'text-white data-[state=open]:text-[#4D8EE9]' : 'text-white'}`}>

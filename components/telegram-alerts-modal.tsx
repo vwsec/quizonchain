@@ -25,8 +25,7 @@ import { TelegramSettings } from "@/hooks/use-telegram-alerts"
 import { sendTelegramMessage } from "@/lib/telegram"
 import { toast } from "sonner"
 import { Bell, Info, Send, ShieldCheck, Loader2 } from "lucide-react"
-import { useChainId } from 'wagmi'
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 interface TelegramAlertsModalProps {
   isOpen: boolean
@@ -44,11 +43,10 @@ export function TelegramAlertsModal({
   const [localSettings, setLocalSettings] = useState<TelegramSettings>(settings)
   const [isTesting, setIsTesting] = useState(false)
   
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
+  const { chainConfig: cfg, isConnected } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
 
   const handleTestConnection = async () => {
     if (!localSettings.botToken || !localSettings.chatId) {

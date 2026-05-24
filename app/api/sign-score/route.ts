@@ -116,11 +116,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Security check failed: missing quiz token" }, { status: 403 })
   }
 
-  if (process.env.NODE_ENV === "development") {
-    console.debug("--- Server /api/sign-score received: ---")
-    console.debug({ playerAddress, score: clientScore, total, nonce, chainId, contractAddress })
-  }
-
   try {
     const account = privateKeyToAccount(getSignerPrivateKey())
 
@@ -145,10 +140,6 @@ export async function POST(request: Request) {
     )
 
     const digest = keccak256(encoded)
-
-    if (process.env.NODE_ENV === "development") {
-      console.log("Encoded digest:", digest)
-    }
 
     // toEthSignedMessageHash adds the Ethereum prefix '\x19Ethereum Signed Message:\n32'
     const signature = await account.signMessage({

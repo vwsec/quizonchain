@@ -12,8 +12,7 @@ interface QuizScreenProps {
   onComplete: (answers: number[]) => void
 }
 
-import { useChainId } from 'wagmi'
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -21,18 +20,17 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
   const [isAnswered, setIsAnswered] = useState(false)
   const answersRef = useRef<number[]>(Array(questions.length).fill(-1))
 
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
+  const { chainConfig: cfg, isConnected } = useActiveChain()
 
   const question = questions[currentQuestion]
   const progress = ((currentQuestion + 1) / questions.length) * 100
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
   const handleSelectAnswer = (index: number) => {
     if (isAnswered) return

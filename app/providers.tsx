@@ -10,7 +10,7 @@ import {
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
-import { getChainConfig, activeChainConfig } from '@/lib/active-chain-config'
+import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
 import { validateContractAddressEnv } from '@/lib/env-validation'
 
@@ -69,15 +69,14 @@ function RainbowKitThemeWrapper({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false)
   useEffect(() => { setReady(true) }, [])
 
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId) ?? activeChainConfig
+  const { color, isConnected } = useActiveChain()
 
-  const accentColor = cfg.name === 'MegaETH' ? '#00ff88' : cfg.name === 'LitVM' ? '#00F2FE' : cfg.color
-  const accentColorForeground = cfg.name === 'MegaETH' ? '#000000' : cfg.name === 'LitVM' ? '#000000' : 'white'
+  const accentColor = ready ? color : '#ffffff'
+  const accentColorForeground = ready ? (isConnected ? 'white' : '#111111') : 'white'
 
   return (
     <RainbowKitProvider
-      theme={darkTheme({ accentColor: ready ? accentColor : '#0047FF', accentColorForeground: ready ? accentColorForeground : 'white' })}
+      theme={darkTheme({ accentColor, accentColorForeground })}
     >
       {children}
     </RainbowKitProvider>

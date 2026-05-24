@@ -12,8 +12,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { useChainId } from "wagmi"
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useWallet } from "@/components/wallet-provider"
+import { useActiveChain } from "@/hooks/use-active-chain"
 import { NFT_CONTRACTS } from "@/lib/nft-contracts"
 import { megaEth, soneiumMainnet, unichain } from "@/lib/chains"
 
@@ -108,15 +108,15 @@ const NETWORKS = [
 
 export default function DocsContent() {
   const [activeSection, setActiveSection] = useState("about")
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const { isConnected } = useWallet()
+  const { chainConfig: cfg } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
   const displayNetworks = NETWORKS
 
@@ -169,7 +169,7 @@ export default function DocsContent() {
           {/* Sticky Sidebar */}
           <aside className="hidden md:block w-[260px] shrink-0 sticky top-[80px] self-start h-fit max-h-[calc(100vh-100px)] overflow-y-auto">
             <nav className="space-y-1 pr-4">
-              <h3 className={`text-xs font-semibold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-wider mb-4 px-3 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : isArc ? 'text-[#4D8EE9]' : 'text-[#0047FF]'}`}>
+              <h3 className={`text-xs font-semibold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-wider mb-4 px-3 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : isArc ? 'text-[#4D8EE9]' : !isConnected ? 'text-white' : 'text-[#0047FF]'}`}>
                 {isMegaEth ? '// DOCUMENTATION' : isLitvm ? '>> documentation' : 'Documentation'}
               </h3>
               {SECTIONS.map((section) => (
@@ -206,9 +206,11 @@ export default function DocsContent() {
                           ? activeSection === section.id
                             ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-r-full shadow-[inset_0_0_10px_rgba(0,71,255,0.1)]"
                             : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-r-full"
-                      : activeSection === section.id
-                        ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-md"
-                        : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-md"
+: activeSection === section.id
+  ? !isConnected
+    ? "text-white border-white/20 bg-white/[0.08] rounded-md"
+    : "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-md"
+  : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-md"
                   )}
                 >
                   {section.title}
@@ -220,7 +222,7 @@ export default function DocsContent() {
           {/* Content Area */}
           <div className="flex-1 min-w-0 max-w-4xl space-y-24">
             <section id="about">
-              <h1 className={`text-4xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] tracking-tight text-white' : isUnichain ? 'border-[#FF007A] font-serif italic text-white' : isBase ? 'border-[#0052FF] tracking-tighter text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h1 className={`text-4xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] tracking-tight text-white' : isUnichain ? 'border-[#FF007A] font-serif italic text-white' : isBase ? 'border-[#0052FF] tracking-tighter text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// WHAT IS QUIZ ON CHAIN?' : 'What is Quiz On Chain?'}
               </h1>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5 shadow-sm' : isSoneium ? 'rounded-2xl bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl shadow-[0_0_30px_rgba(0,71,255,0.05)]' : isLitvm ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
@@ -231,12 +233,12 @@ export default function DocsContent() {
             </section>
 
             <section id="how-it-works">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// HOW IT WORKS' : isLitvm ? '>> how it works' : 'How It Works'}
               </h2>
               <div className="relative space-y-10 pl-4 md:pl-0">
                 {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && !isArc && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/20 to-[#0047FF] hidden md:block" />
+                  <div className={`absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b hidden md:block ${isConnected ? 'from-[#0047FF] via-[#0047FF]/20 to-[#0047FF]' : 'from-white/20 via-white/10 to-white/20'}`} />
                 )}
                 {isLitvm && (
                   <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#00F2FE] via-[#00F2FE]/20 to-[#00F2FE] hidden md:block" />
@@ -281,7 +283,9 @@ export default function DocsContent() {
                           ? 'bg-[#00F2FE] text-[#0B192C] rounded-none shadow-[0_0_20px_rgba(0,242,254,0.4)]'
                         : isArc
                           ? 'rounded-full bg-[#4D8EE9] text-white shadow-[0_0_20px_rgba(77,142,233,0.4)]'
-                          : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
+                          : !isConnected
+  ? 'rounded-full bg-white/10 text-white'
+  : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
                     }`}>
                       {i + 1}
                     </div>
@@ -311,7 +315,7 @@ export default function DocsContent() {
             </section>
  
             <section id="supported-networks">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// SUPPORTED NETWORKS' : isLitvm ? '>> supported networks' : "Supported Networks"}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -327,7 +331,7 @@ export default function DocsContent() {
                         ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]/50'
                       : isArc
                         ? 'rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:border-[#4D8EE9]/50 backdrop-blur-xl text-white'
-                        : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
+                        : !isConnected ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-white/30' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
                   }`}>
                     <div>
                       <div className="flex items-center gap-4 mb-5">
@@ -356,7 +360,7 @@ export default function DocsContent() {
                             href={`https://${network.explorer}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`flex items-center gap-1 transition-colors ${isMegaEth ? 'text-[#00ff88] hover:text-[#00ff88]/70' : isInk ? 'text-[#7B61FF] hover:text-[#7B61FF]/80' : isUnichain ? 'text-[#FF007A] hover:text-[#FF007A]/80' : isLitvm ? 'text-[#00F2FE] hover:text-[#00F2FE]/80' : 'text-[#0047FF] hover:text-[#0047FF]/80'}`}
+                            className={`flex items-center gap-1 transition-colors ${isMegaEth ? 'text-[#00ff88] hover:text-[#00ff88]/70' : isInk ? 'text-[#7B61FF] hover:text-[#7B61FF]/80' : isUnichain ? 'text-[#FF007A] hover:text-[#FF007A]/80' : isLitvm ? 'text-[#00F2FE] hover:text-[#00F2FE]/80' : !isConnected ? 'text-white/60 hover:text-white' : 'text-[#0047FF] hover:text-[#0047FF]/80'}`}
                           >
                             {network.explorer}
                             <ExternalLink className="w-3 h-3" />
@@ -370,13 +374,13 @@ export default function DocsContent() {
             </section>
 
             <section id="smart-contract">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// SMART CONTRACT' : isLitvm ? '>> smart contract' : 'Smart Contract'}
               </h2>
               <div className="space-y-8">
                 <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                   <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : isLitvm ? 'text-[#00F2FE] bg-white/5 font-mono' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
+                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : isLitvm ? 'text-[#00F2FE] bg-white/5 font-mono' : !isConnected ? 'text-white bg-white/10' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
                   </p>
                 </div>
                 
@@ -442,7 +446,7 @@ export default function DocsContent() {
             </section>
 
             <section id="scoring">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// SCORING & COOLDOWN' : isLitvm ? '>> scoring & cooldown' : 'Scoring & Cooldown'}
               </h2>
               <div className={`p-8 border ${
@@ -456,16 +460,18 @@ export default function DocsContent() {
                     ? 'rounded-2xl bg-gradient-to-br from-[#0052FF]/5 to-transparent border-black/5 shadow-sm'
                   : isLitvm
                     ? 'bg-[#0B192C] border-[#00F2FE]/30 rounded-none'
-                    : 'rounded-2xl bg-gradient-to-br from-[#0047FF]/10 to-transparent border-white/[0.08] backdrop-blur-md'
+                    : !isConnected
+  ? 'rounded-2xl bg-white/[0.02] border-white/[0.08] backdrop-blur-md'
+  : 'rounded-2xl bg-gradient-to-br from-[#0047FF]/10 to-transparent border-white/[0.08] backdrop-blur-md'
               }`}>
                  <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                   Each quiz round consists of 5 questions. Each correct answer awards 1 point for a maximum score of 5 per round. Your score is verified server-side against a signed JWT that was created when the quiz was generated — the server will only sign a valid score, preventing client-side manipulation. The server signs the approved score using ECDSA, and the smart contract verifies this signature before accepting the submission. After submitting a score on-chain, you must wait <span className={`font-bold underline underline-offset-4 ${isMegaEth ? 'text-[#00ff88] decoration-[#00ff88]/50' : isInk ? 'text-white decoration-[#7B61FF]' : isUnichain ? 'text-white decoration-[#FF007A]' : isBase ? 'text-black decoration-[#0052FF]' : isLitvm ? 'text-[#E2E8F0] decoration-[#00F2FE]' : 'text-white decoration-[#0047FF]'}`}>1 hour</span> (contract-enforced) before you can play again. Players pay their own gas for score submission.
+                   Each quiz round consists of 5 questions. Each correct answer awards 1 point for a maximum score of 5 per round. Your score is verified server-side against a signed JWT that was created when the quiz was generated — the server will only sign a valid score, preventing client-side manipulation. The server signs the approved score using ECDSA, and the smart contract verifies this signature before accepting the submission. After submitting a score on-chain, you must wait <span className={`font-bold underline underline-offset-4 ${isMegaEth ? 'text-[#00ff88] decoration-[#00ff88]/50' : isInk ? 'text-white decoration-[#7B61FF]' : isUnichain ? 'text-white decoration-[#FF007A]' : isBase ? 'text-black decoration-[#0052FF]' : isLitvm ? 'text-[#E2E8F0] decoration-[#00F2FE]' : !isConnected ? 'text-white decoration-white/50' : 'text-white decoration-[#0047FF]'}`}>1 hour</span> (contract-enforced) before you can play again. Players pay their own gas for score submission.
                  </p>
               </div>
             </section>
 
             <section id="achievements">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// NFT ACHIEVEMENTS' : isLitvm ? '>> nft achievements' : 'NFT Achievements'}
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
@@ -476,7 +482,7 @@ export default function DocsContent() {
             </section>
 
             <section id="explorer">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// BLOCKCHAIN EXPLORER' : isLitvm ? '>> blockchain explorer' : 'Blockchain Explorer'}
               </h2>
               <div className={`p-8 border space-y-4 ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
@@ -500,7 +506,7 @@ export default function DocsContent() {
             </section>
 
             <section id="telegram-alerts">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// TELEGRAM ALERTS' : isLitvm ? '>> telegram alerts' : 'Telegram Alerts'}
               </h2>
               <div className={`p-8 border space-y-4 ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
@@ -532,7 +538,7 @@ export default function DocsContent() {
             </section>
 
             <section id="leaderboard">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : 'border-[#0047FF] text-white'}`}>
+              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
                 {isMegaEth ? '// LEADERBOARD' : isLitvm ? '>> leaderboard' : 'Leaderboard'}
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
@@ -543,7 +549,7 @@ export default function DocsContent() {
             </section>
 
             <section id="faq" className="pb-40">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase' : isInk ? 'border-[#7B61FF]' : isUnichain ? 'border-[#FF007A]' : isBase ? 'border-[#0052FF]' : isLitvm ? 'border-[#00F2FE]' : 'border-[#0047FF]'}`}>
+              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase' : isInk ? 'border-[#7B61FF]' : isUnichain ? 'border-[#FF007A]' : isBase ? 'border-[#0052FF]' : isLitvm ? 'border-[#00F2FE]' : !isConnected ? 'border-white/20' : 'border-[#0047FF]'}`}>
                 {isMegaEth ? '// FAQ' : isLitvm ? '>> faq' : 'FAQ'}
               </h2>
               <Accordion type="single" collapsible className="w-full space-y-4">
@@ -573,12 +579,14 @@ export default function DocsContent() {
                           ? 'border-black/5 bg-[#f4f5f7] rounded-2xl data-[state=open]:bg-white shadow-sm transition-all'
                         : isLitvm
                           ? 'border-[#00F2FE]/20 bg-[#0B192C] rounded-none data-[state=open]:border-[#00F2FE]/50'
-                          : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
+                          : !isConnected
+  ? 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-white/30'
+  : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
                     }`}
                   >
                     <AccordionTrigger className={`text-lg font-bold hover:no-underline py-6 ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth ? 'uppercase text-sm tracking-tight' : isInk || isUnichain ? 'tracking-tight' : isLitvm ?'text-sm tracking-tight' : ''}`}>
                       <div className="flex items-start text-left gap-4">
-                        <span className={`${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : 'text-[#0047FF]'} shrink-0 font-black`}>Q:</span>
+                        <span className={`${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : !isConnected ? 'text-white' : 'text-[#0047FF]'} shrink-0 font-black`}>Q:</span>
                         {faq.q}
                       </div>
                     </AccordionTrigger>

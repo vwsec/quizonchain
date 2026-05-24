@@ -13,7 +13,7 @@ import {
 } from "@/lib/submitScore"
 import { getSoneiumChainById, soneiumMainnet, getTxExplorerUrl } from "@/lib/chains"
 import { Trophy, Sparkles, Target, RotateCcw, XCircle, ExternalLink, CheckCircle } from "lucide-react"
-import { getChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 interface ResultsScreenProps {
   score: number
@@ -50,7 +50,7 @@ export function ResultsScreen({
   useEffect(() => setMounted(true), [])
 
   const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
+  const { chainConfig: cfg } = useActiveChain()
   const chain = getSoneiumChainById(chainId) ?? soneiumMainnet
   const { switchChainAsync } = useSwitchChain()
   const { chainId: walletChainId, isConnected, chain: walletChain, address } = useAccount()
@@ -227,13 +227,13 @@ export function ResultsScreen({
     setShowConfirmModal(true)
   }
 
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
   const handleAction = async () => {
     if (isWrongNetwork) {

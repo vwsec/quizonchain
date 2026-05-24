@@ -4,7 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { useChainId } from "wagmi"
+import { useAccount } from "wagmi"
 import { NftMintModal } from "./nft-mint"
 import { Menu } from "lucide-react"
 import {
@@ -13,7 +13,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet"
-import { getChainConfig, activeChainConfig } from "@/lib/active-chain-config"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Quiz' },
@@ -28,26 +28,29 @@ export function Header() {
   useEffect(() => setMounted(true), [])
 
   const pathname = usePathname()
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId) ?? activeChainConfig
+  const { isConnected } = useAccount()
+  const { chainConfig: cfg } = useActiveChain()
 
-  const appTitle = `Quiz On ${cfg.name === 'Arc Testnet' ? 'Arc' : cfg.name === 'LitVM' ? 'LitVM' : cfg.name === 'MegaETH' ? 'MegaETH' : cfg.name === 'Unichain' ? 'Unichain' : cfg.name === 'Base' ? 'Base' : cfg.name === 'Soneium' ? 'Soneium' : cfg.name === 'Sepolia' ? 'Sepolia' : cfg.name === 'Ink' ? 'Ink' : 'Chain'}`;
+  const appTitle = isConnected && cfg
+    ? `Quiz On ${cfg.name === 'Arc Testnet' ? 'Arc' : cfg.name === 'LitVM' ? 'LitVM' : cfg.name === 'MegaETH' ? 'MegaETH' : cfg.name === 'Unichain' ? 'Unichain' : cfg.name === 'Base' ? 'Base' : cfg.name === 'Soneium' ? 'Soneium' : cfg.name === 'Sepolia' ? 'Sepolia' : cfg.name === 'Ink' ? 'Ink' : 'Chain'}`
+    : 'Quiz On Chain';
   const titleParts = appTitle.split(' ');
-  const chainName = titleParts.slice(2).join(' ');
+  const chainName = isConnected ? titleParts.slice(2).join(' ') : 'Chain';
 
-  const isMegaEth = cfg.name === 'MegaETH'
-  const isInk = cfg.name === 'Ink'
-  const isUnichain = cfg.name === 'Unichain'
-  const isBase = cfg.name === 'Base'
-  const isSoneium = cfg.name === 'Soneium'
-  const isLitvm = cfg.name === 'LitVM'
-  const isArc = cfg.name === 'Arc Testnet'
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
-  const accentColor = isMegaEth ? 'text-[#00ff88]' 
-    : isInk ? 'text-[#8b5cf6]' 
-    : isUnichain ? 'text-[#ff007a]' 
-    : isBase ? 'text-[#0052ff]' 
-    : isSoneium ? 'text-[#0047FF]' 
+  const accentColor = !isConnected ? 'text-white'
+    : isMegaEth ? 'text-[#00ff88]'
+    : isInk ? 'text-[#8b5cf6]'
+    : isUnichain ? 'text-[#ff007a]'
+    : isBase ? 'text-[#0052ff]'
+    : isSoneium ? 'text-[#0047FF]'
     : isLitvm ? 'text-[#00F2FE]'
     : isArc ? 'text-[#4D8EE9]'
     : 'text-[#0047FF]';
@@ -81,21 +84,23 @@ export function Header() {
           <div className={`flex items-center p-1 ${isMegaEth ? 'bg-black border border-white/10 rounded-none' : isInk || isUnichain ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-lg' : isBase ? 'bg-black/5 border border-black/5 rounded-full' : isSoneium ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-full backdrop-blur-xl' : isLitvm ? 'bg-[#0B192C]/80 border border-[#00F2FE]/15 rounded-xl backdrop-blur-xl' : isArc ? 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl' : 'bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.08)] rounded-xl'}`}>
             {NAV_ITEMS.map((nav) => {
               const active = isActiveLink(nav)
-              const activeClass = isMegaEth 
-                ? 'bg-white text-black rounded-none' 
-                : isInk
-                  ? 'bg-[#7B61FF] text-white rounded-full shadow-[0_0_15px_rgba(123,97,255,0.3)]'
-                : isUnichain
-                  ? 'bg-[#FF007A] text-white rounded-xl shadow-[0_0_15px_rgba(255,0,122,0.3)]'
-                : isBase
-                  ? 'bg-[#0052FF] text-white rounded-full'
-                : isSoneium
-                  ? 'bg-[#0047FF] text-white rounded-full shadow-[0_0_20px_rgba(0,71,255,0.4)]'
-                : isLitvm
-                  ? 'bg-[#00F2FE] text-[#0B192C] rounded-lg shadow-[0_0_20px_rgba(0,242,254,0.3)] font-bold'
-                  : isArc
-                    ? 'bg-[#4D8EE9] text-white rounded-lg'
-                    : 'bg-[#0047FF] text-white rounded-lg'
+              const activeClass = !isConnected
+                ? 'bg-white text-black rounded-lg'
+                : isMegaEth 
+                  ? 'bg-white text-black rounded-none' 
+                  : isInk
+                    ? 'bg-[#7B61FF] text-white rounded-full shadow-[0_0_15px_rgba(123,97,255,0.3)]'
+                  : isUnichain
+                    ? 'bg-[#FF007A] text-white rounded-xl shadow-[0_0_15px_rgba(255,0,122,0.3)]'
+                  : isBase
+                    ? 'bg-[#0052FF] text-white rounded-full'
+                  : isSoneium
+                    ? 'bg-[#0047FF] text-white rounded-full shadow-[0_0_20px_rgba(0,71,255,0.4)]'
+                  : isLitvm
+                    ? 'bg-[#00F2FE] text-[#0B192C] rounded-lg shadow-[0_0_20px_rgba(0,242,254,0.3)] font-bold'
+                    : isArc
+                      ? 'bg-[#4D8EE9] text-white rounded-lg'
+                      : 'bg-[#0047FF] text-white rounded-lg'
               const inactiveClass = isMegaEth || isInk || isUnichain || isSoneium || isArc
                 ? 'bg-transparent text-white/50 hover:text-white'
                 : isLitvm
@@ -158,21 +163,23 @@ export function Header() {
                           href={nav.href}
                           className={`flex items-center px-4 py-3 text-base font-medium transition-all rounded-lg ${
                             active
-                              ? isMegaEth
-                                ? 'bg-white/10 text-[#00ff88] font-mono uppercase'
-                                : isBase
-                                  ? 'bg-[#0052FF]/10 text-[#0052FF]'
-                                  : isInk
-                                    ? 'bg-[#7B61FF]/10 text-[#7B61FF]'
-                                  : isUnichain
-                                    ? 'bg-[#FF007A]/10 text-[#FF007A]'
-                              : isSoneium
-                                ? 'bg-[#0047FF]/10 text-[#0047FF]'
-                              : isLitvm
-                                ? 'bg-[#00F2FE]/10 text-[#00F2FE]'
-                              : isArc
-                                ? 'bg-[#4D8EE9]/10 text-[#4D8EE9]'
-                                : 'bg-[#0047FF]/10 text-[#0047FF]'
+                              ? !isConnected
+                                ? 'bg-white/10 text-white'
+                                : isMegaEth
+                                  ? 'bg-white/10 text-[#00ff88] font-mono uppercase'
+                                  : isBase
+                                    ? 'bg-[#0052FF]/10 text-[#0052FF]'
+                                    : isInk
+                                      ? 'bg-[#7B61FF]/10 text-[#7B61FF]'
+                                    : isUnichain
+                                      ? 'bg-[#FF007A]/10 text-[#FF007A]'
+                                : isSoneium
+                                  ? 'bg-[#0047FF]/10 text-[#0047FF]'
+                                : isLitvm
+                                  ? 'bg-[#00F2FE]/10 text-[#00F2FE]'
+                                : isArc
+                                  ? 'bg-[#4D8EE9]/10 text-[#4D8EE9]'
+                                  : 'bg-[#0047FF]/10 text-[#0047FF]'
                           : isMegaEth
                             ? 'text-white/50 hover:text-white hover:bg-white/5 font-mono uppercase'
                             : isBase

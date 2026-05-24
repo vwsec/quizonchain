@@ -1,30 +1,28 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useChainId } from 'wagmi';
-import { getChainConfig } from '@/lib/active-chain-config';
+import { useActiveChain } from '@/hooks/use-active-chain';
 
 export function ThemeBackground() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const chainId = useChainId();
-  const cfg = getChainConfig(chainId);
+  const { chainConfig: cfg, isConnected } = useActiveChain();
 
-  const isMegaEth = cfg?.name === 'MegaETH';
-  const isInk = cfg?.name === 'Ink';
-  const isUnichain = cfg?.name === 'Unichain';
-  const isBase = cfg?.name === 'Base';
-  const isSoneium = cfg?.name === 'Soneium';
-  const isLitvm = cfg?.name === 'LitVM';
-  const isArc = cfg?.name === 'Arc Testnet';
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH';
+  const isInk = isConnected && cfg?.name === 'Ink';
+  const isUnichain = isConnected && cfg?.name === 'Unichain';
+  const isBase = isConnected && cfg?.name === 'Base';
+  const isSoneium = isConnected && cfg?.name === 'Soneium';
+  const isLitvm = isConnected && cfg?.name === 'LitVM';
+  const isArc = isConnected && cfg?.name === 'Arc Testnet';
 
   if (!mounted) return null;
 
   return (
-    <div className={`fixed inset-0 z-[-1] pointer-events-none ${isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : isSoneium ? 'bg-[#00040F]' : isLitvm ? 'bg-[#080F1A]' : isArc ? 'bg-[#000B24]' : ''}`}>
+    <div className={`fixed inset-0 z-[-1] pointer-events-none ${!isConnected ? 'bg-[#0a0a0f]' : isMegaEth ? 'bg-black' : isInk ? 'bg-[#0a0a0f]' : isUnichain ? 'bg-[#0d0014]' : isBase ? 'bg-white' : isSoneium ? 'bg-[#00040F]' : isLitvm ? 'bg-[#080F1A]' : isArc ? 'bg-[#000B24]' : 'bg-[#0a0a0f]'}`}>
       {/* MegaEth / Ink / Base / Soneium Noise Overlay */}
-      {(isMegaEth || isInk || isBase || isSoneium) && (
+      {isConnected && (isMegaEth || isInk || isBase || isSoneium) && (
         <div style={{
           position: 'absolute',
           inset: 0,
@@ -209,8 +207,8 @@ export function ThemeBackground() {
         }}>·</span>
       ))}
 
-      {/* Default Base Blue Glow */}
-      {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && !isArc && (
+      {/* Default neutral glow — only when connected to an unrecognized chain */}
+      {isConnected && !isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && !isArc && (
         <div className="absolute inset-0">
           <div className="absolute left-1/2 top-1/2 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(0,71,255,0.08)] blur-3xl animate-pulse" />
         </div>

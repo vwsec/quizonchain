@@ -9,6 +9,7 @@ import { quizScoresAbi } from "@/lib/submitScore"
 
 // ─── Chain helpers ────────────────────────────────────────────────────────────
 
+import { useActiveChain } from "@/hooks/use-active-chain"
 import { getChainConfig } from "@/lib/active-chain-config"
 
 function getChainName(chainId: number): string {
@@ -63,8 +64,7 @@ function getOpenSeaUrl(chainId: number, contractAddress: string, tokenId: string
 
 function ConfettiCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const chainId = useChainId()
-  const cfg = getChainConfig(chainId)
+  const { chainConfig: cfg } = useActiveChain()
 
   const cfIsMegaEth = cfg?.name === 'MegaETH'
   const cfIsInk = cfg?.name === 'Ink'
@@ -162,18 +162,18 @@ export function NftMintModal() {
   const [txError, setTxError] = useState<string>()
   const [mintedTokenId, setMintedTokenId] = useState<string>()
 
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const { data: walletClient } = useWalletClient()
-  const cfg = getChainConfig(chainId)
+  const { chainConfig: cfg, isConnected } = useActiveChain()
 
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
 
   const [nftState, setNftState] = useState<NftMintState>({
     points: BigInt(0),
@@ -672,17 +672,17 @@ export function NftMintModal() {
 export function NftBadgeTrigger() {
 
   const [open, setOpen] = useState(false)
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const chainId = useChainId()
   const publicClient = usePublicClient()
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const { chainConfig: cfg, isConnected } = useActiveChain()
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
+  const isArc = isConnected && cfg?.name === 'Arc Testnet'
 
   const [eligible, setEligible] = useState(false)
   const [hasMinted, setHasMinted] = useState(false)
@@ -818,17 +818,17 @@ interface NftProgressCardProps {
 export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
   const [modalOpen, setModalOpen] = useState(false)
 
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const chainId = useChainId()
   const publicClient = usePublicClient()
-  const cfg = getChainConfig(chainId)
+  const { chainConfig: cfg, isConnected } = useActiveChain()
 
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
+  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
+  const isInk = isConnected && cfg?.name === 'Ink'
+  const isUnichain = isConnected && cfg?.name === 'Unichain'
+  const isBase = isConnected && cfg?.name === 'Base'
+  const isSoneium = isConnected && cfg?.name === 'Soneium'
+  const isLitvm = isConnected && cfg?.name === 'LitVM'
 
   const nftContract = getNFTContractAddress(chainId)
   const quizContract = getQuizContractAddress(chainId)

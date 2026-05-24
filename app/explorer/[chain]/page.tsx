@@ -1,8 +1,5 @@
 import BubbleExplorer from '@/components/bubble-explorer';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { Header } from '@/components/header';
-import { WalletProvider } from '@/components/wallet-provider';
 
 interface ExplorerPageProps {
   params: Promise<{ chain: string }>;

@@ -2,8 +2,6 @@
 
 import { useCallback, useEffect, useState, useRef } from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import { WalletProvider } from "@/components/wallet-provider"
-import { Header } from "@/components/header"
 import { HomeScreen } from "@/components/home-screen"
 import { QuizScreen } from "@/components/quiz-screen"
 import { ResultsScreen } from "@/components/results-screen"

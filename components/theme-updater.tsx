@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useChainId } from 'wagmi'
-import { getChainConfig, getThemeClass } from '@/lib/active-chain-config'
+import { useActiveChain } from '@/hooks/use-active-chain'
+import { getThemeClass } from '@/lib/active-chain-config'
 
 export function ThemeUpdater() {
-  const chainId = useChainId()
-  const config = getChainConfig(chainId)
-  const themeClass = getThemeClass(config)
+  const { chainConfig, isConnected } = useActiveChain()
+  const themeClass = isConnected ? getThemeClass(chainConfig ?? undefined) : ''
 
   useEffect(() => {
     document.documentElement.className = themeClass

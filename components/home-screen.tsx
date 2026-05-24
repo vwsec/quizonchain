@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
-import { useAccount, useChainId, usePublicClient } from "wagmi"
+import { useAccount, usePublicClient } from "wagmi"
 import { getTimeUntilNextSubmissionSeconds } from "@/lib/submitScore"
 import { NftProgressCard } from "./nft-mint"
 import MegaEthLogo from "./megaeth-logo"
@@ -14,6 +14,7 @@ import BaseLogo from "./base-logo"
 import SoneiumLogo from "./soneium-logo"
 import LitvmLogo from "./litvm-logo"
 import ArcLogo from "./arc-logo"
+import QuizOnChainLogo from "@/components/quiz-on-chain-logo"
 
 interface HomeScreenProps {
   onStartQuiz: () => void
@@ -27,23 +28,7 @@ interface HomeScreenProps {
   isCheckingCooldown: boolean
 }
 
-import { getChainConfig } from "@/lib/active-chain-config"
-
-function getHeroContent(chainId?: number) {
-  const cfg = chainId ? getChainConfig(chainId) : undefined
-  if (cfg) {
-    return {
-      label: cfg.heroLabel,
-      title: cfg.heroTitle,
-      subtitle: cfg.heroSubtitle,
-    }
-  }
-  return {
-    label: "WEB3",
-    title: "The Knowledge of Web3",
-    subtitle: "Test your blockchain knowledge across the ecosystem",
-  }
-}
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 export function HomeScreen({
   onStartQuiz,
@@ -58,12 +43,12 @@ export function HomeScreen({
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
-  const { isConnected: isWalletConnected } = useWallet()
+  const { isConnected: isWalletConnected, connect } = useWallet()
   const { chain, address, isConnected: isAccountConnected } = useAccount()
-  const chainId = useChainId()
   const publicClient = usePublicClient()
+  const { chainConfig: cfg, heroTitle, heroSubtitle, heroLabel, isConnected: hookIsConnected } = useActiveChain()
 
-  const hero = mounted ? getHeroContent(chain?.id) : getHeroContent(undefined)
+  const hero = { label: heroLabel, title: heroTitle, subtitle: heroSubtitle }
   const safeIsConnected = mounted ? (isWalletConnected || isAccountConnected) : false
 
   const formatCooldown = (seconds: number) => {
@@ -77,14 +62,13 @@ export function HomeScreen({
   const canStart =
     safeIsConnected && hasQuiz && !quizLoading && quizError === null && !isCooldownActive && !isCheckingCooldown
 
-  const cfg = getChainConfig(chainId)
-  const isMegaEth = cfg?.name === 'MegaETH'
-  const isInk = cfg?.name === 'Ink'
-  const isUnichain = cfg?.name === 'Unichain'
-  const isBase = cfg?.name === 'Base'
-  const isSoneium = cfg?.name === 'Soneium'
-  const isLitvm = cfg?.name === 'LitVM'
-  const isArc = cfg?.name === 'Arc Testnet'
+  const isMegaEth = hookIsConnected && cfg?.name === 'MegaETH'
+  const isInk = hookIsConnected && cfg?.name === 'Ink'
+  const isUnichain = hookIsConnected && cfg?.name === 'Unichain'
+  const isBase = hookIsConnected && cfg?.name === 'Base'
+  const isSoneium = hookIsConnected && cfg?.name === 'Soneium'
+  const isLitvm = hookIsConnected && cfg?.name === 'LitVM'
+  const isArc = hookIsConnected && cfg?.name === 'Arc Testnet'
 
   if (!mounted) return null
 
@@ -92,6 +76,33 @@ export function HomeScreen({
     <div className="relative z-10 flex min-h-screen items-center justify-center px-4 pt-24 pb-10">
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center text-center">
+        {!safeIsConnected && (
+          <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 relative z-10">
+            <QuizOnChainLogo />
+            <h1 style={{ color: 'white', fontSize: 36, fontWeight: 800, letterSpacing: -1 }}>
+              Quiz On Chain
+            </h1>
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 16 }}>
+              Test your blockchain knowledge on-chain
+            </p>
+            <button
+              onClick={connect}
+              style={{
+                background: 'white',
+                color: '#111',
+                border: 'none',
+                borderRadius: 999,
+                padding: '14px 36px',
+                fontSize: 16,
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              Connect Wallet
+            </button>
+          </div>
+        )}
+        {safeIsConnected && (<>
         {isMegaEth && <MegaEthLogo />}
         {isInk && <InkLogo />}
         {isUnichain && <UnichainLogo />}
@@ -234,6 +245,7 @@ export function HomeScreen({
         {safeIsConnected && (
           <NftProgressCard refreshKey={nftRefreshKey} />
         )}
+        </>)}
       </div>
     </div>
   )
