@@ -12,7 +12,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
+import { useChainId } from "wagmi"
+import { getChainConfig } from "@/lib/active-chain-config"
 import { NFT_CONTRACTS } from "@/lib/nft-contracts"
 import { megaEth, soneiumMainnet, unichain } from "@/lib/chains"
 
@@ -107,17 +108,17 @@ const NETWORKS = [
 
 export default function DocsContent() {
   const [activeSection, setActiveSection] = useState("about")
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isSoneium = activeChainConfig.name === 'Soneium'
-  const isLitvm = activeChainConfig.name === 'LitVM'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
+  const isSoneium = cfg?.name === 'Soneium'
+  const isLitvm = cfg?.name === 'LitVM'
+  const isArc = cfg?.name === 'Arc Testnet'
 
-  const displayNetworks = isMultiChain 
-    ? NETWORKS 
-    : NETWORKS.filter(n => n.id === activeChainConfig.chainId)
+  const displayNetworks = NETWORKS
 
   useEffect(() => {
     const headings = document.querySelectorAll('section[id]')
@@ -159,8 +160,8 @@ export default function DocsContent() {
     }
   }
 
-  const networkText = isMultiChain ? "multiple blockchain ecosystems" : `${activeChainConfig.name} blockchain`
-  const step2Text = isMultiChain ? "Choose from Ink, Soneium, Base, Unichain, MegaETH, LitVM, or Arc" : `Connect to ${activeChainConfig.name}`
+  const networkText = "multiple blockchain ecosystems"
+  const step2Text = "Choose from Ink, Soneium, Base, Unichain, MegaETH, LitVM, or Arc"
 
   return (
     <main className={`relative z-10 min-h-screen pt-24 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0] font-mono' : 'text-white'}`}>
@@ -311,7 +312,7 @@ export default function DocsContent() {
  
             <section id="supported-networks">
               <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// SUPPORTED NETWORKS' : isLitvm ? '>> supported networks' : (isMultiChain ? "Supported Networks" : `${activeChainConfig.name} Network`)}
+                {isMegaEth ? '// SUPPORTED NETWORKS' : isLitvm ? '>> supported networks' : "Supported Networks"}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {displayNetworks.map((network) => (
@@ -375,7 +376,7 @@ export default function DocsContent() {
               <div className="space-y-8">
                 <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                   <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : isLitvm ? 'text-[#00F2FE] bg-white/5 font-mono' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on {isMultiChain ? 'each network' : 'the network'}. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
+                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : isLitvm ? 'text-[#00F2FE] bg-white/5 font-mono' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
                   </p>
                 </div>
                 
@@ -469,7 +470,7 @@ export default function DocsContent() {
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                  <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                     Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, {isMultiChain ? "across all 7 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet" : `on the ${activeChainConfig.name} network`}. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
+                     Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, across all 7 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
                  </p>
               </div>
             </section>
@@ -493,7 +494,7 @@ export default function DocsContent() {
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Filter Tabs:</span> Quickly switch between ALL, TRANSFERS, CONTRACT CALLS, TOKEN TRANSFERS, and NFTS views.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Real-Time Stats:</span> Live counters for Total TXs, Latest Block, and Average Gas displayed in the header.</li>
                   <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Telegram Alerts:</span> Receive real-time notifications for matching transactions (see Telegram Alerts section).</li>
-                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Multi-Chain:</span> {isMultiChain ? "Supports all 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet" : `Supports ${activeChainConfig.name}`}.</li>
+                  <li><span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Multi-Chain:</span> Supports all 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet.</li>
                 </ul>
               </div>
             </section>
@@ -536,10 +537,7 @@ export default function DocsContent() {
               </h2>
               <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                  {isMultiChain
-                    ?                     "The leaderboard tracks total points accumulated across all quizzes. Switch between 8 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, LitVM, and Arc. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH, LitVM, and Arc have their own per-chain tabs but are not included in the global aggregation."
-                    : `The leaderboard shows rankings for ${activeChainConfig.name}. Points are tracked on-chain and update after each score submission.`
-                  } Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
+                    The leaderboard tracks total points accumulated across all quizzes. Switch between 8 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, LitVM, and Arc. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH, LitVM, and Arc have their own per-chain tabs but are not included in the global aggregation. Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
                 </p>
               </div>
             </section>
@@ -554,17 +552,10 @@ export default function DocsContent() {
                   { q: "How do I get a QuizMaster NFT?", a: "Keep playing and submitting scores! Once your total reaches 100 points on any single chain, a mint button will appear allowing you to claim your exclusive 'The What of Blockchain' (TWOB) NFT." },
                   { q: "What does the Blockchain Explorer do?", a: "It lets you visualize real-time transactions on supported networks. You can easily search for addresses and watch network activity dynamically." },
                   { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
-                  ...(isMultiChain
-                    ? [
-                        { q: "Which chains support NFT minting?", a: "All 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
-                        { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
-                        { q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." },
-                      ]
-                    : [
-                        { q: `Does ${activeChainConfig.name} support NFT minting?`, a: `Yes. Reach 100 total points on ${activeChainConfig.name} to unlock your NFT mint. One NFT is mintable per address on this chain.` },
-                        ...(activeChainConfig.name === 'LitVM' ? [{ q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." }] : []),
-                        ...(activeChainConfig.name === 'Arc Testnet' ? [{ q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." }] : []),
-                      ]),
+                  { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
+                  { q: "Which chains support NFT minting?", a: "All 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
+                  { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
+                  { q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." },
                   { q: "How do Telegram alerts work?", a: "From the Explorer page, click the Alerts button and configure your Telegram bot token and chat ID. You will receive real-time messages whenever transactions matching your filters occur on-chain. Your credentials are stored only in your browser's localStorage." },
                   { q: "Is my quiz score verified before going on-chain?", a: "Yes. When you finish a quiz, your answers are verified server-side against a signed JWT that was created when the quiz was generated. The server will only sign a valid score — preventing any client-side manipulation before the transaction is submitted." }
                 ].map((faq, i) => (

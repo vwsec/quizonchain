@@ -27,71 +27,21 @@ interface HomeScreenProps {
   isCheckingCooldown: boolean
 }
 
-import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
+import { getChainConfig } from "@/lib/active-chain-config"
 
 function getHeroContent(chainId?: number) {
-  if (isMultiChain) {
-    if (chainId === 57073) {
-      return {
-        label: "INK",
-        title: "The Knowledge of Ink",
-        subtitle: "Test your Ink Onchain knowledge",
-      }
-    }
-    if (chainId === 1868) {
-      return {
-        label: "SONEIUM",
-        title: "The Knowledge of Soneium",
-        subtitle: "Test your Soneium blockchain knowledge",
-      }
-    }
-    if (chainId === 8453) {
-      return {
-        label: "BASE",
-        title: "The Knowledge of Base",
-        subtitle: "Test your Base blockchain knowledge",
-      }
-    }
-    if (chainId === 130) {
-      return {
-        label: "UNICHAIN",
-        title: "The Knowledge of Unichain",
-        subtitle: "Test your Unichain knowledge",
-      }
-    }
-    if (chainId === 4326) {
-      return {
-        label: 'MEGAETH',
-        title: 'The Knowledge of MegaETH',
-        subtitle: 'Test your MegaETH blockchain knowledge',
-      }
-    }
-    if (chainId === 4441) {
-      return {
-        label: 'LITEFORGE',
-        title: "The Knowledge of litvm",
-        subtitle: 'Test your litvm blockchain knowledge',
-      }
-    }
-    if (chainId === 5042002) {
-      return {
-        label: 'ARC',
-        title: 'The Knowledge of Arc',
-        subtitle: 'Test your Arc blockchain knowledge',
-      }
-    }
-    // Default to Web3 content for fallback
+  const cfg = chainId ? getChainConfig(chainId) : undefined
+  if (cfg) {
     return {
-      label: "WEB3",
-      title: "The Knowledge of Web3",
-      subtitle: "Test your blockchain knowledge across the ecosystem",
+      label: cfg.heroLabel,
+      title: cfg.heroTitle,
+      subtitle: cfg.heroSubtitle,
     }
   }
-
   return {
-    label: activeChainConfig.heroLabel,
-    title: activeChainConfig.heroTitle,
-    subtitle: activeChainConfig.heroSubtitle,
+    label: "WEB3",
+    title: "The Knowledge of Web3",
+    subtitle: "Test your blockchain knowledge across the ecosystem",
   }
 }
 
@@ -127,13 +77,14 @@ export function HomeScreen({
   const canStart =
     safeIsConnected && hasQuiz && !quizLoading && quizError === null && !isCooldownActive && !isCheckingCooldown
 
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isSoneium = activeChainConfig.name === 'Soneium'
-  const isLitvm = activeChainConfig.name === 'LitVM'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
+  const isSoneium = cfg?.name === 'Soneium'
+  const isLitvm = cfg?.name === 'LitVM'
+  const isArc = cfg?.name === 'Arc Testnet'
 
   if (!mounted) return null
 

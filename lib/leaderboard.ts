@@ -1,5 +1,5 @@
 import { createPublicClient, http } from 'viem';
-import { soneiumMainnet, inkMainnet, base, unichain } from './chains';
+import { soneiumMainnet, inkMainnet, base, unichain, sepoliaTestnet } from './chains';
 import { quizScoresAbi } from './submitScore';
 
 export type GlobalPlayer = {
@@ -27,6 +27,7 @@ export async function fetchGlobalLeaderboard() {
     { chain: soneiumMainnet, address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MAINNET },
     { chain: base, address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_BASE_MAINNET },
     { chain: unichain, address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN },
+    { chain: sepoliaTestnet, address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA },
   ].filter(c => c.address);
 
   // Fetch all chains in parallel using Promise.allSettled to gracefully handle errors

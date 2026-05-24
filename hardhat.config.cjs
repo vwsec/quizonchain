@@ -58,6 +58,11 @@ const config = {
       chainId: 5042002,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    sepoliaTestnet: {
+      url: "https://rpc.sepolia.org",
+      chainId: 11155111,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
   },
   etherscan: {
     apiKey: {

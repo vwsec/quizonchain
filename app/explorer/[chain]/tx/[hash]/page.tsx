@@ -4,21 +4,15 @@ import { ExplorerBackButton } from '@/components/explorer-back-button';
 import { Header } from '@/components/header';
 import { WalletProvider } from '@/components/wallet-provider';
 
-const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
-
 export default async function TxPage({ params }: { params: Promise<{ chain: string; hash: string }> }) {
   const resolvedParams = await params;
   
-  if (activeChain && resolvedParams.chain !== activeChain) {
-    redirect('/explorer');
-  }
-
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc', 'sepolia'];
   const validHash = /^0x[a-fA-F0-9]{64}$/i.test(resolvedParams.hash);
   
   if (!validChains.includes(resolvedParams.chain) || !validHash) redirect('/explorer');
   
-  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM', arc: 'Arc Testnet' };
+  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM', arc: 'Arc Testnet', sepolia: 'Sepolia' };
   const isBase = resolvedParams.chain === 'base';
   const isMegaEth = resolvedParams.chain === 'megaeth';
   const isInk = resolvedParams.chain === 'ink';
@@ -46,7 +40,7 @@ export default async function TxPage({ params }: { params: Promise<{ chain: stri
 
 export async function generateMetadata({ params }: { params: Promise<{ chain: string; hash: string }> }) {
   const resolvedParams = await params;
-  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM', arc: 'Arc Testnet' };
+  const names: Record<string, string> = { soneium: 'Soneium', ink: 'Ink', base: 'Base', unichain: 'Unichain', megaeth: 'MegaETH', litvm: 'LitVM', arc: 'Arc Testnet', sepolia: 'Sepolia' };
   
   if (!names[resolvedParams.chain]) return { title: 'Transaction Explorer' };
   

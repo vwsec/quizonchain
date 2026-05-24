@@ -4,19 +4,16 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
+import { WagmiProvider, useChainId } from 'wagmi'
 import {
   getDefaultConfig,
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
-import { activeChainConfig, isMultiChain } from '@/lib/active-chain-config'
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet } from '@/lib/chains'
+import { getChainConfig, activeChainConfig } from '@/lib/active-chain-config'
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
 import { validateContractAddressEnv } from '@/lib/env-validation'
 
-// Some runtimes expose a `localStorage` global that is not a real `Storage`
-// instance (e.g. missing `getItem`). WalletConnect/RainbowKit may call
-// `localStorage.getItem` during SSR too; this guard prevents hard crashes.
 {
   const maybeLocalStorage = (globalThis as unknown as { localStorage?: unknown })
     .localStorage as
@@ -60,15 +57,32 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set.')
 }
 
-const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet]
-const singleChain = allChains.find(c => c.id === activeChainConfig.chainId) ?? allChains[0]
-const chains = isMultiChain ? allChains : [singleChain]
+const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
 
 const config = getDefaultConfig({
   appName: 'Quiz On Chain',
   projectId,
-  chains: chains as any,
+  chains: allChains as any,
 })
+
+function RainbowKitThemeWrapper({ children }: { children: ReactNode }) {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { setReady(true) }, [])
+
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId) ?? activeChainConfig
+
+  const accentColor = cfg.name === 'MegaETH' ? '#00ff88' : cfg.name === 'LitVM' ? '#00F2FE' : cfg.color
+  const accentColorForeground = cfg.name === 'MegaETH' ? '#000000' : cfg.name === 'LitVM' ? '#000000' : 'white'
+
+  return (
+    <RainbowKitProvider
+      theme={darkTheme({ accentColor: ready ? accentColor : '#0047FF', accentColorForeground: ready ? accentColorForeground : 'white' })}
+    >
+      {children}
+    </RainbowKitProvider>
+  )
+}
 
 export function Providers({ children }: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -88,14 +102,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={darkTheme({
-            accentColor: activeChainConfig.name === 'MegaETH' ? '#00ff88' : activeChainConfig.name === 'LitVM' ? '#00F2FE' : activeChainConfig.color,
-            accentColorForeground: activeChainConfig.name === 'MegaETH' ? '#000000' : activeChainConfig.name === 'LitVM' ? '#000000' : 'white',
-          })}
-        >
+        <RainbowKitThemeWrapper>
           {children}
-        </RainbowKitProvider>
+        </RainbowKitThemeWrapper>
       </QueryClientProvider>
     </WagmiProvider>
   )

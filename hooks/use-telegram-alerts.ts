@@ -3,8 +3,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { sendTelegramMessage, formatTxAlertMessage } from '@/lib/telegram'
 import { getTxPrimaryType } from '@/components/bubble-explorer'
-import { activeChainConfig } from '@/lib/active-chain-config'
 import { toast } from 'sonner'
+
+interface NativeCurrencyInfo {
+  symbol: string
+  decimals: number
+}
 
 export interface TelegramSettings {
   enabled: boolean
@@ -17,7 +21,7 @@ export interface TelegramSettings {
 
 const STORAGE_KEY = 'telegram_alert_settings'
 
-export function useTelegramAlerts(networkName: string, explorerBase: string) {
+export function useTelegramAlerts(networkName: string, explorerBase: string, nativeCurrency: NativeCurrencyInfo) {
   const [settings, setSettings] = useState<TelegramSettings>({
     enabled: false,
     botToken: '',
@@ -54,8 +58,6 @@ export function useTelegramAlerts(networkName: string, explorerBase: string) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings))
     toast.success('Alert settings saved')
   }
-
-  const nativeCurrency = activeChainConfig.nativeCurrency
 
   const monitorTransactions = useCallback(async (txs: any[]) => {
     if (!settings.enabled || !settings.botToken || !settings.chatId || !isLoaded) return

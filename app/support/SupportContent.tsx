@@ -9,7 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { activeChainConfig } from "@/lib/active-chain-config"
+import { useChainId } from 'wagmi'
+import { getChainConfig } from "@/lib/active-chain-config"
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg 
@@ -46,13 +47,15 @@ const FAQS = [
 ]
 
 export default function SupportContent() {
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isSoneium = activeChainConfig.name === 'Soneium'
-  const isLitvm = activeChainConfig.name === 'LitVM'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
+  const isSoneium = cfg?.name === 'Soneium'
+  const isLitvm = cfg?.name === 'LitVM'
+  const isArc = cfg?.name === 'Arc Testnet'
 
   return (
     <main className={`relative z-10 min-h-screen pt-32 pb-20 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0] font-mono' : 'text-white'}`}>

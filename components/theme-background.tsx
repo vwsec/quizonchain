@@ -1,19 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { activeChainConfig } from '@/lib/active-chain-config';
+import { useChainId } from 'wagmi';
+import { getChainConfig } from '@/lib/active-chain-config';
 
 export function ThemeBackground() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const isMegaEth = activeChainConfig.name === 'MegaETH';
-  const isInk = activeChainConfig.name === 'Ink';
-  const isUnichain = activeChainConfig.name === 'Unichain';
-  const isBase = activeChainConfig.name === 'Base';
-  const isSoneium = activeChainConfig.name === 'Soneium';
-  const isLitvm = activeChainConfig.name === 'LitVM';
-  const isArc = activeChainConfig.name === 'Arc Testnet';
+  const chainId = useChainId();
+  const cfg = getChainConfig(chainId);
+
+  const isMegaEth = cfg?.name === 'MegaETH';
+  const isInk = cfg?.name === 'Ink';
+  const isUnichain = cfg?.name === 'Unichain';
+  const isBase = cfg?.name === 'Base';
+  const isSoneium = cfg?.name === 'Soneium';
+  const isLitvm = cfg?.name === 'LitVM';
+  const isArc = cfg?.name === 'Arc Testnet';
 
   if (!mounted) return null;
 

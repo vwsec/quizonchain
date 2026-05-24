@@ -20,15 +20,39 @@ const BASE_CHAIN_ID = 8453
 const UNICHAIN_CHAIN_ID = 130
 
 const TARGET_CHARS = 3000
-const MIN_COMBINED_CHARS = 1500
-const MIN_URL_TEXT_CHARS = 200
+const MIN_COMBINED_CHARS = 500
+const MIN_URL_TEXT_CHARS = 100
 const MAX_URLS_TO_TRY = 6
 const JINA_PREFIX = "https://r.jina.ai/"
-const FETCH_TIMEOUT_MS = 35_000
-const FETCH_DELAY_MS = 1000
+const FETCH_TIMEOUT_MS = 8_000
+const FETCH_DELAY_MS = 300
 const GROQ_MODEL = "llama-3.3-70b-versatile"
 const GROQ_RETRY_COUNT = 2
 const GROQ_INITIAL_BACKOFF_MS = 1000
+
+const TOPIC_ANGLES = [
+  "consensus mechanisms",
+  "tokenomics",
+  "developer tooling",
+  "bridge architecture",
+  "account abstraction",
+  "gas model",
+  "governance",
+  "block explorer features",
+] as const
+
+const questionHistoryCache = new Map<string, string[]>()
+const MAX_CACHE_PER_ECOSYSTEM = 50
+
+const ECOSYSTEM_ALIASES: Record<string, string[]> = {
+  "litvm": ["litvm", "liteforge", "arbitrum"],
+  "megaeth": ["megaeth", "megath"],
+  "arc testnet": ["arc"],
+  "ink": ["ink"],
+  "soneium": ["soneium"],
+  "base": ["base"],
+  "unichain": ["unichain"],
+}
 
 const FORBIDDEN_IN_OPTIONS = [
   'soneium', 'ink', 'base', 'unichain', 'megaeth', 'megath',
@@ -36,8 +60,6 @@ const FORBIDDEN_IN_OPTIONS = [
   'litvm', 'liteforge', 'arc',
 ]
 
-const ALLOWED_ORIGIN =
-  process.env.NEXT_PUBLIC_APP_URL?.trim() || "http://localhost:3000"
 const MAX_BODY_BYTES = 10 * 1024
 
 const bodySchema = z.object({
@@ -59,9 +81,8 @@ const QUIZ_TOKEN_TTL_SECONDS = 15 * 60
 const quizJwtSecret = process.env.QUIZ_JWT_SECRET
 
 function buildCorsHeaders(origin?: string) {
-  const allowOrigin = origin && origin === ALLOWED_ORIGIN ? origin : ALLOWED_ORIGIN
   return {
-    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Origin": origin || '*',
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "X-Content-Type-Options": "nosniff",
@@ -179,21 +200,26 @@ function isValidQuestion(q: ServerQuestion): boolean {
 
 function hasContaminatedOptions(question: ServerQuestion, currentEcosystem: string): boolean {
   const ecosystemLower = currentEcosystem.toLowerCase()
+  const aliases = ECOSYSTEM_ALIASES[ecosystemLower] ?? [ecosystemLower]
   return question.options.some(option => {
     const optionLower = option.toLowerCase()
-    return FORBIDDEN_IN_OPTIONS.some(forbidden =>
-      forbidden !== ecosystemLower &&
-      !ecosystemLower.includes(forbidden) &&
-      optionLower.includes(forbidden)
-    )
+    return FORBIDDEN_IN_OPTIONS.some(forbidden => {
+      const isSelfReference = aliases.some(alias => forbidden === alias || forbidden.includes(alias) || alias.includes(forbidden))
+      if (isSelfReference) return false
+      return optionLower.includes(forbidden)
+    })
   })
 }
 
 function trimCorpus(text: string, maxChars: number): string {
   const collapsed = text.replace(/\s+/g, " ").trim()
-  return collapsed.length <= maxChars
-    ? collapsed
-    : collapsed.slice(0, maxChars)
+  if (collapsed.length <= maxChars) return collapsed
+  const start = Math.floor(Math.random() * Math.max(1, collapsed.length - maxChars))
+  return collapsed.slice(start, start + maxChars)
+}
+
+function normalizeQuestion(q: string): string {
+  return q.toLowerCase().replace(/[^\w\s]/g, "").trim()
 }
 
 function parseModelJson(raw: string): unknown {
@@ -504,7 +530,7 @@ function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unich
   ]
 }
 
-async function generateWithGroq(prompt: string): Promise<string> {
+async function generateWithGroq(prompt: string, topicAngle: string): Promise<string> {
   const apiKey = ensureGroqApiKey()
   const groq = new Groq({ apiKey })
 
@@ -514,10 +540,18 @@ async function generateWithGroq(prompt: string): Promise<string> {
     try {
       const completion = await groq.chat.completions.create({
         model: GROQ_MODEL,
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.7,
+        messages: [
+          {
+            role: "system",
+            content: `You are a blockchain quiz generator v2. Focus this quiz on: ${topicAngle}. Each time you must produce a completely different set of questions — vary the topics, difficulty angles, and technical depth. Never repeat the same question format or subject across generations.`,
+          },
+          { role: "user", content: prompt },
+        ],
+        temperature: 1.0,
+        max_tokens: 2048,
+        seed: Date.now() + Math.floor(Math.random() * 100000) + attempt,
       }, {
-        timeout: 25_000, // 25s per attempt
+        timeout: 25_000,
       })
 
       const text = completion.choices[0]?.message?.content ?? ""
@@ -535,8 +569,6 @@ async function generateWithGroq(prompt: string): Promise<string> {
 
   throw lastError || new Error("Failed to generate quiz with Groq after retries")
 }
-
-import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
 
 async function handleGenerateQuiz(
   request: Request,
@@ -560,13 +592,9 @@ async function handleGenerateQuiz(
   
   let config: { name: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet"; docs: string[] | readonly string[] } | undefined
 
-  if (isMultiChain) {
-    config = isInk 
-      ? { name: "Ink" as const, docs: INK_DOCS_PAGES } 
-      : ecosystemConfigs[requestChainId]
-  } else {
-    config = { name: activeChainConfig.name as any, docs: activeChainConfig.docsPages }
-  }
+  config = isInk 
+    ? { name: "Ink" as const, docs: INK_DOCS_PAGES } 
+    : ecosystemConfigs[requestChainId]
 
   if (!config) {
     return NextResponse.json(
@@ -588,7 +616,7 @@ async function handleGenerateQuiz(
 
     const picked = fisherYatesPick(docsPages, MAX_URLS_TO_TRY)
 
-    const scrapeResults = await Promise.all(
+    let scrapeResults = await Promise.all(
       picked.map(async (sourceUrl) => {
         try {
           const text = await fetchViaJinaReader(sourceUrl)
@@ -602,11 +630,37 @@ async function handleGenerateQuiz(
       })
     )
 
-    const chunks = scrapeResults.filter((c): c is string => c !== null)
-    const concatenated = chunks.join("\n\n")
-    const scrapedText = trimCorpus(concatenated, TARGET_CHARS)
+    let chunks = scrapeResults.filter((c): c is string => c !== null)
+    let concatenated = chunks.join("\n\n")
+    let scrapedText = trimCorpus(concatenated, TARGET_CHARS)
+
+    if (scrapedText.length < MIN_COMBINED_CHARS) {
+      console.warn(`[generate-quiz] Low scrape yield (${scrapedText.length} chars), retrying remaining URLs for ${ecosystemName}`)
+      const pickedSet = new Set(picked)
+      const remaining = docsPages.filter(u => !pickedSet.has(u))
+      if (remaining.length > 0) {
+        const retryResults = await Promise.all(
+          remaining.map(async (sourceUrl) => {
+            try {
+              const text = await fetchViaJinaReader(sourceUrl)
+              if (text.length >= MIN_URL_TEXT_CHARS && isValidContent(text)) {
+                return `--- Source: ${sourceUrl} ---\n${text}`
+              }
+            } catch {
+              /* skip failed url */
+            }
+            return null
+          })
+        )
+        const retryChunks = retryResults.filter((c): c is string => c !== null)
+        chunks = [...chunks, ...retryChunks]
+        concatenated = chunks.join("\n\n")
+        scrapedText = trimCorpus(concatenated, TARGET_CHARS)
+      }
+    }
 
     if (scrapedText.length < MIN_URL_TEXT_CHARS) {
+      console.error(`[generate-quiz] FALLBACK TRIGGERED reason=scrape_insufficient chain=${ecosystemName} chars=${scrapedText.length}`)
       return await buildQuizResponse(
         selectedChainId,
         getFallbackQuestions(ecosystemName),
@@ -617,10 +671,13 @@ async function handleGenerateQuiz(
       )
     }
 
+    const [topicAngle] = fisherYatesPick([...TOPIC_ANGLES], 1)
+
     const prompt = `
 Generate exactly 5 high-quality multiple choice questions based ONLY on the documentation below for ${ecosystemName}.
 
 STRICT RULES:
+- Focus on this topic area: ${topicAngle}
 - Test real blockchain concepts, technical knowledge, or ecosystem understanding
 - NEVER ask about URLs, page accessibility, 404 errors, or whether a webpage exists
 - NEVER ask about documentation structure or navigation
@@ -652,17 +709,30 @@ ${scrapedText}
 `.trim()
 
     let items: z.infer<typeof quizItemSchema>[] | null = null;
+    let lastValid: z.infer<typeof quizItemSchema>[] | null = null;
     
     for (let attempt = 1; attempt <= 2; attempt++) {
       try {
-        let raw = await generateWithGroq(prompt)
+        let raw = await generateWithGroq(prompt, topicAngle)
         let parsed = parseModelJson(raw)
         let candidateItems = validateQuestions(toValidatedQuizArray(parsed))
         
         let validQuestions = candidateItems.filter(q => isValidQuestion(q) && !hasContaminatedOptions(q, ecosystemName));
-        if (validQuestions.length < 5) {
-          throw new Error('Generated questions failed quality check, retrying');
+        if (validQuestions.length >= 3) {
+          lastValid = validQuestions;
         }
+        if (validQuestions.length < 5) {
+          throw new Error(`Generated questions failed quality check, retrying`);
+        }
+
+        const history = questionHistoryCache.get(ecosystemName) || []
+        const newNormalized = validQuestions.map(q => normalizeQuestion(q.question))
+        const overlap = newNormalized.filter(nq => history.includes(nq)).length
+        if (overlap >= 4) {
+          console.warn(`[generate-quiz] High overlap (${overlap}) for ${ecosystemName}, accepting anyway`)
+          // Accept the set despite overlap rather than serving hardcoded fallback
+        }
+
         items = validQuestions;
         break; // Success
       } catch (err) {
@@ -670,7 +740,13 @@ ${scrapedText}
       }
     }
 
+    if (!items && lastValid) {
+      console.warn(`[generate-quiz] Using partial set of ${lastValid.length} valid questions for ${ecosystemName} after failed attempts`)
+      items = lastValid;
+    }
+
     if (!items) {
+      console.error(`[generate-quiz] FALLBACK TRIGGERED reason=groq_quality_fail chain=${ecosystemName}`)
       return await buildQuizResponse(
         selectedChainId,
         getFallbackQuestions(ecosystemName),
@@ -680,6 +756,10 @@ ${scrapedText}
         ecosystemName,
       )
     }
+
+    const cached = questionHistoryCache.get(ecosystemName) || []
+    const newQuestions = items.map(q => normalizeQuestion(q.question))
+    questionHistoryCache.set(ecosystemName, [...cached, ...newQuestions].slice(-MAX_CACHE_PER_ECOSYSTEM))
 
     const shuffled = fisherYatesShuffle(items)
     return await buildQuizResponse(
@@ -726,10 +806,6 @@ export async function GET(request: Request) {
     )
   }
 
-  if (origin && origin !== ALLOWED_ORIGIN) {
-    return NextResponse.json({ error: "Origin not allowed." }, { status: 403, headers })
-  }
-
   try {
     if (!quizJwtSecret) {
       return NextResponse.json(
@@ -756,10 +832,6 @@ export async function POST(request: Request) {
       { error: "You reached the request limit for this minute. Please try again soon." },
       { status: 429, headers },
     )
-  }
-
-  if (origin && origin !== ALLOWED_ORIGIN) {
-    return NextResponse.json({ error: "Origin not allowed." }, { status: 403, headers })
   }
 
   const contentLength = Number(request.headers.get("content-length") ?? "0")

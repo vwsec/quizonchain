@@ -13,7 +13,7 @@ import {
 } from "@/lib/submitScore"
 import { getSoneiumChainById, soneiumMainnet, getTxExplorerUrl } from "@/lib/chains"
 import { Trophy, Sparkles, Target, RotateCcw, XCircle, ExternalLink, CheckCircle } from "lucide-react"
-import { activeChainConfig } from "@/lib/active-chain-config"
+import { getChainConfig } from "@/lib/active-chain-config"
 
 interface ResultsScreenProps {
   score: number
@@ -50,6 +50,7 @@ export function ResultsScreen({
   useEffect(() => setMounted(true), [])
 
   const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
   const chain = getSoneiumChainById(chainId) ?? soneiumMainnet
   const { switchChainAsync } = useSwitchChain()
   const { chainId: walletChainId, isConnected, chain: walletChain, address } = useAccount()
@@ -77,6 +78,7 @@ export function ResultsScreen({
     if (id === 4326) return "MegaETH"
     if (id === 4441) return "LitVM"
     if (id === 5042002) return "Arc Testnet"
+    if (id === 11155111) return "Sepolia"
     return mounted ? (walletChain?.name ?? "Web3") : "Web3"
   })()
 
@@ -225,12 +227,13 @@ export function ResultsScreen({
     setShowConfirmModal(true)
   }
 
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isSoneium = activeChainConfig.name === 'Soneium'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
+  const isSoneium = cfg?.name === 'Soneium'
+  const isLitvm = cfg?.name === 'LitVM'
+  const isArc = cfg?.name === 'Arc Testnet'
 
   const handleAction = async () => {
     if (isWrongNetwork) {
@@ -246,8 +249,18 @@ export function ResultsScreen({
     }
   }
 
+  const accentTextColor = 
+    isMegaEth ? 'text-[#00ff88]' 
+    : isInk ? 'text-[#7B61FF]' 
+    : isUnichain ? 'text-[#FF007A]' 
+    : isBase ? 'text-[#0052FF]' 
+    : isSoneium ? 'text-[#0047FF]' 
+    : isArc ? 'text-[#4D8EE9]' 
+    : isLitvm ? 'text-[#00F2FE]' 
+    : 'text-primary'
+
   return (
-    <div className={`flex min-h-screen flex-col items-center justify-center px-4 py-12 ${isMegaEth ? 'font-mono' : ''}`}>
+    <div className={`flex min-h-screen flex-col items-center justify-center px-4 py-12 ${isMegaEth || isLitvm ? 'font-mono' : ''}`}>
       {/* Background decoration removed - handled by ThemeBackground */}
 
       <div className="flex w-full flex-col items-center text-center">
@@ -264,25 +277,43 @@ export function ResultsScreen({
               ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.1)]'
             : isArc
               ? 'bg-white/[0.02] border border-[#4D8EE9]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(77,142,233,0.1)]'
+            : isLitvm
+              ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,242,254,0.15)]'
               : 'bg-white/5 border border-white/10 rounded-2xl'
         }`}>
           <div className={`mb-3 md:mb-4 flex items-center justify-center p-3 md:p-4 ${
-            isMegaEth ? 'bg-black border border-[#00ff88] rounded-none' : isInk ? 'bg-[#7B61FF]/20 rounded-full' : isUnichain ? 'bg-[#FF007A]/20 rounded-xl' : isBase ? 'bg-[#0052FF]/10 rounded-full' : isSoneium ? 'bg-[#0047FF]/20 rounded-xl' : isArc ? 'bg-[#4D8EE9]/20 rounded-xl' : 'bg-white/10 rounded-xl'
+            isMegaEth ? 'bg-black border border-[#00ff88] rounded-none' : isInk ? 'bg-[#7B61FF]/20 rounded-full' : isUnichain ? 'bg-[#FF007A]/20 rounded-xl' : isBase ? 'bg-[#0052FF]/10 rounded-full' : isSoneium ? 'bg-[#0047FF]/20 rounded-xl' : isArc ? 'bg-[#4D8EE9]/20 rounded-xl' : isLitvm ? 'bg-[#00F2FE]/20 rounded-xl' : 'bg-white/10 rounded-xl'
           }`}>
-            {percentage >= 80 ? <Trophy className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-primary'}`} /> : percentage >= 60 ? <Sparkles className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-primary'}`} /> : <Target className={`size-6 md:size-8 ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-primary'}`} />}
+            {percentage >= 80 ? <Trophy className={`size-6 md:size-8 ${accentTextColor}`} /> : percentage >= 60 ? <Sparkles className={`size-6 md:size-8 ${accentTextColor}`} /> : <Target className={`size-6 md:size-8 ${accentTextColor}`} />}
           </div>
-          <div className={`text-4xl md:text-5xl font-black mb-2 ${isMegaEth ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
-            {score} <span className={`text-xl md:text-2xl ${isMegaEth ? 'text-white/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
+          <div className={`text-4xl md:text-5xl font-black mb-2 ${isMegaEth || isLitvm ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
+            {score} <span className={`text-xl md:text-2xl ${isMegaEth ? 'text-white/40' : isLitvm ? 'text-[#00F2FE]/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
           </div>
-          <div className={`text-xs md:text-sm font-black uppercase tracking-widest ${isMegaEth ? 'text-[#00ff88] font-mono' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-primary'}`}>
+          <div className={`text-xs md:text-sm font-black tracking-widest ${
+            isMegaEth 
+              ? 'text-[#00ff88] font-mono uppercase' 
+              : isInk 
+                ? 'text-[#7B61FF] uppercase' 
+              : isUnichain 
+                ? 'text-[#FF007A] uppercase' 
+              : isBase 
+                ? 'text-[#0052FF] uppercase' 
+              : isSoneium 
+                ? 'text-[#0047FF] uppercase' 
+              : isArc 
+                ? 'text-[#4D8EE9] uppercase' 
+              : isLitvm
+                ? 'text-[#00F2FE] font-mono lowercase'
+                : 'text-primary uppercase'
+          }`}>
             {percentage}% Correct
           </div>
         </div>
 
-        <h2 className={`text-3xl font-black mb-3 max-w-md ${isMegaEth ? 'font-mono uppercase text-white' : isBase ? 'text-black' : 'text-white'}`}>
+        <h2 className={`text-3xl font-black mb-3 max-w-md ${isMegaEth ? 'font-mono uppercase text-white' : isLitvm ? 'font-mono text-[#00F2FE]' : isBase ? 'text-black' : 'text-white'}`}>
           {getMessage()}
         </h2>
-        <p className={`mb-10 ${isMegaEth ? 'font-mono lowercase text-white/40 text-sm' : isBase ? 'text-black/40' : 'text-white/40'}`}>
+        <p className={`mb-10 ${isMegaEth ? 'font-mono lowercase text-white/40 text-sm' : isLitvm ? 'font-mono lowercase text-[#00F2FE]/60 text-sm' : isBase ? 'text-black/40' : 'text-white/40'}`}>
           Points will be added to the global leaderboard.
         </p>
 
@@ -304,6 +335,8 @@ export function ResultsScreen({
                   ? 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-[0_0_30px_rgba(0,71,255,0.5)] border-none'
                 : isArc
                   ? 'rounded-2xl bg-[#4D8EE9] text-white hover:bg-[#3A7BD6] shadow-[0_0_30px_rgba(77,142,233,0.5)] border-none'
+                : isLitvm
+                  ? 'rounded-2xl bg-[#00F2FE] text-[#0B192C] hover:bg-[#00C9DB] shadow-[0_0_30px_rgba(0,242,254,0.4)] border-none font-mono font-bold'
                   : 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-none'
             }`}
           >
@@ -343,6 +376,8 @@ export function ResultsScreen({
                   ? 'rounded-2xl border-[#0047FF]/20 bg-[#0047FF]/5 text-white/60 hover:bg-[#0047FF]/10 hover:text-white backdrop-blur-xl'
                 : isArc
                   ? 'rounded-2xl border-[#4D8EE9]/20 bg-[#4D8EE9]/5 text-white/60 hover:bg-[#4D8EE9]/10 hover:text-white backdrop-blur-xl'
+                : isLitvm
+                  ? 'rounded-2xl border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10 hover:border-[#00F2FE]/50 backdrop-blur-xl font-mono'
                   : 'rounded-2xl border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
             }`}
           >
@@ -353,12 +388,12 @@ export function ResultsScreen({
       </div>
 
       {wrongNetwork ? (
-        <div className={`mt-6 p-4 rounded-xl border ${isMegaEth ? 'border-amber-500 bg-black' : 'border-amber-500/30 bg-amber-500/10'}`}>
-          <p className={`text-sm mb-2 ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
+        <div className={`mt-6 p-4 rounded-xl border ${isMegaEth ? 'border-amber-500 bg-black' : isLitvm ? 'border-amber-500 bg-[#0B192C] text-amber-500 font-mono text-xs' : 'border-amber-500/30 bg-amber-500/10'}`}>
+          <p className={`text-sm mb-2 ${isMegaEth ? 'text-amber-500 uppercase' : isLitvm ? 'text-amber-500 font-mono' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
           <Button
             size="sm"
             variant="outline"
-            className={`w-full ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : ''}`}
+            className={`w-full ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isLitvm ? 'border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10 font-mono' : ''}`}
             onClick={async () => {
               try {
                 await switchChainAsync({ chainId })
@@ -407,29 +442,29 @@ export function ResultsScreen({
       ) : null}
 
       {txPendingWarning ? (
-        <p className={`text-xs mt-2 ${isMegaEth ? 'text-amber-500 uppercase' : 'text-amber-400'}`}>{txPendingWarning}</p>
+        <p className={`text-xs mt-2 ${isMegaEth ? 'text-amber-500 uppercase' : isLitvm ? 'text-[#00F2FE] font-mono' : 'text-amber-400'}`}>{txPendingWarning}</p>
       ) : null}
 
       {showConfirmModal ? (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className={`w-full max-w-md p-6 text-left shadow-2xl border ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-white/10 bg-[#0A0A0F] text-white' : isUnichain ? 'rounded-2xl border-white/10 bg-[#0A0A0F] text-white' : isBase ? 'rounded-2xl border-black/5 bg-white text-black' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 bg-[#0A0A0F] text-white' : isArc ? 'rounded-2xl border-[#4D8EE9]/25 bg-[#0A0A0F] text-white' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
-            <h3 className={`mb-4 text-xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isUnichain ? 'font-serif italic' : isBase ? 'text-black' : ''}`}>
-              {isMegaEth ? '// CONFIRM TRANSACTION' : 'Confirm Transaction'}
+          <div className={`w-full max-w-md p-6 text-left shadow-2xl border ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-white/10 bg-[#0A0A0F] text-white' : isUnichain ? 'rounded-2xl border-white/10 bg-[#0A0A0F] text-white' : isBase ? 'rounded-2xl border-black/5 bg-white text-black' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 bg-[#0A0A0F] text-white' : isArc ? 'rounded-2xl border-[#4D8EE9]/25 bg-[#0A0A0F] text-white' : isLitvm ? 'rounded-2xl border-[#00F2FE]/25 bg-[#0B192C] text-white font-mono' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
+            <h3 className={`mb-4 text-xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isUnichain ? 'font-serif italic' : isBase ? 'text-black' : isLitvm ? 'text-[#00F2FE]' : ''}`}>
+              {isMegaEth ? '// CONFIRM TRANSACTION' : isLitvm ? 'Confirm Transaction' : 'Confirm Transaction'}
             </h3>
-            <div className={`space-y-3 text-sm ${isMegaEth ? 'font-mono uppercase text-white/70' : isInk || isUnichain ? 'text-white/70' : isBase ? 'text-black/60' : 'text-white/85'}`}>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-white/60'}>Chain:</span> {chain.name} ({chainId})</p>
+            <div className={`space-y-3 text-sm ${isMegaEth ? 'font-mono uppercase text-white/70' : isInk || isUnichain ? 'text-white/70' : isBase ? 'text-black/60' : isLitvm ? 'text-white/70' : 'text-white/85'}`}>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : isLitvm ? 'text-[#00F2FE]' : 'text-white/60'}>Chain:</span> {chain.name} ({chainId})</p>
               <p>
-                <span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-white/60'}>Contract:</span>{" "}
+                <span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : isLitvm ? 'text-[#00F2FE]' : 'text-white/60'}>Contract:</span>{" "}
                 {contractAddress ? `${contractAddress.slice(0, 6)}...${contractAddress.slice(-4)}` : "Not configured"}
               </p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-white/60'}>Score:</span> {score}/{total}</p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-white/60'}>Estimated gas:</span> {estimatedGas ? estimatedGas.toString() : "Estimating..."}</p>
-              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : 'text-white/60'}>From:</span> {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Not connected"}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : isLitvm ? 'text-[#00F2FE]' : 'text-white/60'}>Score:</span> {score}/{total}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : isLitvm ? 'text-[#00F2FE]' : 'text-white/60'}>Estimated gas:</span> {estimatedGas ? estimatedGas.toString() : "Estimating..."}</p>
+              <p><span className={isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isSoneium ? 'text-[#0047FF]' : isArc ? 'text-[#4D8EE9]' : isLitvm ? 'text-[#00F2FE]' : 'text-white/60'}>From:</span> {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Not connected"}</p>
             </div>
             <div className="mt-8 flex gap-3">
               <Button
                 variant="outline"
-                className={`flex-1 ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full border-black/10 text-black hover:bg-black/5' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 text-white' : isArc ? 'rounded-2xl border-[#4D8EE9]/20 text-white' : ''}`}
+                className={`flex-1 ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full border-black/10 text-black hover:bg-black/5' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 text-white' : isArc ? 'rounded-2xl border-[#4D8EE9]/20 text-white' : isLitvm ? 'rounded-2xl border-[#00F2FE]/20 text-[#00F2FE] hover:bg-[#00F2FE]/10' : ''}`}
                 onClick={() => setShowConfirmModal(false)}
               >
                 Cancel
@@ -448,6 +483,8 @@ export function ResultsScreen({
                     ? 'rounded-2xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold shadow-lg shadow-[#0047FF]/20'
                   : isArc
                     ? 'rounded-2xl bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white font-bold shadow-lg shadow-[#4D8EE9]/20'
+                  : isLitvm
+                    ? 'rounded-2xl bg-[#00F2FE] hover:bg-[#00C9DB] text-[#0B192C] font-bold shadow-lg shadow-[#00F2FE]/20'
                     : 'bg-[#0047FF] hover:bg-[#0047FF]/90'
                 }`}
                 onClick={handleConfirmedSubmitScore}

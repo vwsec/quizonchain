@@ -20,7 +20,8 @@ export async function generateMetadata({ params }: SubExplorerPageProps) {
     unichain: 'Unichain',
     megaeth: 'MegaETH',
     litvm: 'LitVM',
-    arc: 'Arc Testnet'
+    arc: 'Arc Testnet',
+    sepolia: 'Sepolia'
   };
   
   if (!names[resolvedParams.chain]) {
@@ -33,16 +34,10 @@ export async function generateMetadata({ params }: SubExplorerPageProps) {
   };
 }
 
-const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
-
 export default async function SubExplorerPage({ params }: SubExplorerPageProps) {
   const resolvedParams = await params;
   
-  if (activeChain && resolvedParams.chain !== activeChain) {
-    redirect('/explorer');
-  }
-
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc', 'sepolia'];
   
   if (!validChains.includes(resolvedParams.chain)) {
     redirect('/explorer');

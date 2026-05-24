@@ -41,8 +41,9 @@ async function main() {
     130: "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
      4326: "NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH",
      4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
-     5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
-   }
+      5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
+      11155111: "NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA",
+    }
 
   const chainId = hre.network.config.chainId
   const varName = chainId ? chainVarMap[chainId] : undefined

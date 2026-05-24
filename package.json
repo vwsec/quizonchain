@@ -10,7 +10,8 @@
     "test:docs-jina": "npx tsx scripts/fetch-docs-pages-jina.ts",
     "compile": "TS_NODE_PROJECT=tsconfig.hardhat.json hardhat compile",
     "deploy:minato": "TS_NODE_PROJECT=tsconfig.hardhat.json hardhat run scripts/deploy.ts --network soneiumMinato",
-    "deploy:mainnet": "TS_NODE_PROJECT=tsconfig.hardhat.json hardhat run scripts/deploy.ts --network soneiumMainnet"
+    "deploy:mainnet": "TS_NODE_PROJECT=tsconfig.hardhat.json hardhat run scripts/deploy.ts --network soneiumMainnet",
+    "deploy:sepolia": "TS_NODE_PROJECT=tsconfig.hardhat.json hardhat run scripts/deploy.ts --network sepoliaTestnet"
   },
   "dependencies": {
     "@coinbase/wallet-sdk": "^4.3.7",

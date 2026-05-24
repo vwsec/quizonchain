@@ -6,8 +6,6 @@ import { WalletProvider } from "@/components/wallet-provider"
 import { Header } from "@/components/header"
 import { Leaderboard, type ChainFilterType } from "@/components/leaderboard"
 
-import { soneiumMainnet, unichain } from "@/lib/chains"
-
 const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'Global', label: 'Global', iconUrl: null },
   { id: 'Ink', label: 'Ink', iconUrl: '/chains/ink-logo-purple-white-icon.png' },
@@ -17,21 +15,15 @@ const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
   { id: 'LitVM', label: 'LitVM', iconUrl: '/chains/litvm.png' },
   { id: 'Arc Testnet', label: 'Arc', iconUrl: '/chains/arc.png' },
+  { id: 'Sepolia', label: 'Sepolia', iconUrl: null },
 ]
 
-import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
-
 export default function LeaderboardContent() {
-  const initialTab: ChainFilterType = isMultiChain 
-    ? 'Global' 
-    : (activeChainConfig.name as ChainFilterType)
-    
-  const [activeTab, setActiveTab] = useState<ChainFilterType>(initialTab)
+  const [activeTab, setActiveTab] = useState<ChainFilterType>('Global')
 
   return (
     <main className="relative z-10 min-h-screen pt-24 pb-12 px-4 flex flex-col items-center">
         {/* Tab Switcher */}
-        {isMultiChain && (
           <div className="w-full max-w-[90vw] overflow-x-auto scrollbar-none">
             <div className="flex items-center justify-start md:justify-center gap-2 mb-8 p-1 backdrop-blur-md bg-black/50 border border-[rgba(255,255,255,0.08)] rounded-2xl w-fit mx-auto">
               {TABS.map((tab) => {
@@ -61,7 +53,6 @@ export default function LeaderboardContent() {
               })}
             </div>
           </div>
-        )}
 
         {/* Dynamic Leaderboard */}
         <div className="w-full">

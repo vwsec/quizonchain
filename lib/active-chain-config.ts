@@ -140,6 +140,30 @@ const CHAIN_CONFIGS = {
     nftMetadataPath: '/nft/litvm/1.json',
     nftImage: '/nft/litvm.png',
   },
+  sepolia: {
+    name: 'Sepolia',
+    chainId: 11155111,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    color: '#0047FF',
+    rpc: 'https://ethereum-sepolia-rpc.publicnode.com',
+    explorer: 'https://eth-sepolia.blockscout.com',
+    blockscoutApi: 'https://eth-sepolia.blockscout.com/api/v2',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA ?? '',
+    nftContract: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA ?? '',
+    docsPages: [
+      'https://ethereum.org/developers/docs/networks/',
+      'https://ethereum.org/developers/docs/smart-contracts/',
+      'https://ethereum.org/developers/docs/transactions/',
+      'https://ethereum.org/developers/docs/gas/',
+      'https://ethereum.org/developers/docs/accounts/',
+      'https://ethereum.org/developers/docs/dapps/',
+    ],
+    heroTitle: 'Quiz on Sepolia',
+    heroSubtitle: 'Test your Ethereum knowledge on the Sepolia testnet',
+    heroLabel: 'Sepolia Testnet',
+    nftMetadataPath: '/nft/sepolia/1.json',
+    nftImage: '/nft/sepolia.png',
+  },
   arc: {
     name: 'Arc Testnet',
     chainId: 5042002,
@@ -168,7 +192,48 @@ const CHAIN_CONFIGS = {
 
 type ChainKey = keyof typeof CHAIN_CONFIGS;
 
-const activeChainKey = (process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? 'ink') as ChainKey;
+const CHAIN_ID_TO_KEY: Record<number, ChainKey> = {
+  57073: 'ink',
+  1868: 'soneium',
+  8453: 'base',
+  130: 'unichain',
+  4326: 'megaeth',
+  4441: 'litvm',
+  5042002: 'arc',
+  11155111: 'sepolia',
+};
 
-export const activeChainConfig = CHAIN_CONFIGS[activeChainKey] ?? CHAIN_CONFIGS.ink;
+export function getChainConfig(chainId: number) {
+  const key = CHAIN_ID_TO_KEY[chainId];
+  return key ? CHAIN_CONFIGS[key] : undefined;
+}
+
+export function getThemeName(config: { name: string } | undefined): string {
+  if (!config) return '';
+  const name = config.name;
+  if (name === 'MegaETH') return 'megaeth';
+  if (name === 'Ink') return 'ink';
+  if (name === 'Unichain') return 'unichain';
+  if (name === 'Base') return 'base';
+  if (name === 'Soneium' || name === 'Sepolia') return 'soneium';
+  if (name === 'LitVM') return 'litvm';
+  if (name === 'Arc Testnet') return 'arc';
+  return '';
+}
+
+export function getThemeClass(config: { name: string } | undefined): string {
+  const theme = getThemeName(config);
+  return theme ? `theme-${theme}` : '';
+}
+
+const activeChainKey = (process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? '') as string;
+
+function getEnvChainConfig() {
+  if (activeChainKey && activeChainKey in CHAIN_CONFIGS) {
+    return CHAIN_CONFIGS[activeChainKey as ChainKey];
+  }
+  return undefined;
+}
+
+export const activeChainConfig = getEnvChainConfig() ?? CHAIN_CONFIGS.ink;
 export const isMultiChain = !process.env.NEXT_PUBLIC_ACTIVE_CHAIN;

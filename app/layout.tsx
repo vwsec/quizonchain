@@ -8,7 +8,6 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
-import { activeChainConfig } from '@/lib/active-chain-config'
 import { ThemeBackground } from '@/components/theme-background'
 
 const CHAIN_TITLES: Record<string, string> = {
@@ -62,23 +61,18 @@ export const metadata: Metadata = {
 
 import { Header } from '@/components/header'
 import { WalletProvider } from '@/components/wallet-provider'
+import { ThemeUpdater } from '@/components/theme-updater'
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isLitvm = activeChainConfig.name === 'LitVM'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
-
   return (
-    <html lang="en" className={isMegaEth ? 'theme-megaeth' : isInk ? 'theme-ink' : isUnichain ? 'theme-unichain' : isBase ? 'theme-base' : isLitvm ? 'theme-litvm' : isArc ? 'theme-arc' : ''}>
+    <html lang="en">
       <body className="font-sans antialiased">
         <Providers>
+          <ThemeUpdater />
           <WalletProvider>
             <ThemeBackground />
             <Header />

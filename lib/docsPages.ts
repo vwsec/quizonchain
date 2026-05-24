@@ -33,11 +33,21 @@ export const MEGAETH_DOCS_PAGES = [
 ];
 
 export const LITVM_DOCS_PAGES = [
-  'https://docs.litvm.com/',
-  'https://docs.litvm.com/getting-started',
-  'https://docs.litvm.com/network-information',
-  'https://docs.litvm.com/bridges',
-  'https://docs.litvm.com/faucet',
+  'https://docs.litvm.com/overview/about',
+  'https://docs.litvm.com/overview/architecture',
+  'https://docs.litvm.com/get-started-on-testnet/add-to-wallet',
+  'https://docs.litvm.com/get-started-on-testnet/faucet',
+  'https://docs.litvm.com/deploy-on-testnet/foundry',
+  'https://docs.litvm.com/other-resources/faq',
+];
+
+export const SEPOLIA_DOCS_PAGES = [
+  'https://ethereum.org/developers/docs/networks/',
+  'https://ethereum.org/developers/docs/smart-contracts/',
+  'https://ethereum.org/developers/docs/transactions/',
+  'https://ethereum.org/developers/docs/gas/',
+  'https://ethereum.org/developers/docs/accounts/',
+  'https://ethereum.org/developers/docs/dapps/',
 ];
 
 export const ARC_DOCS_PAGES = [

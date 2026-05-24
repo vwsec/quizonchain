@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
+import { useChainId } from "wagmi"
 import { NftMintModal } from "./nft-mint"
 import { Menu } from "lucide-react"
 import {
@@ -12,6 +13,7 @@ import {
   SheetTrigger,
   SheetClose,
 } from "@/components/ui/sheet"
+import { getChainConfig, activeChainConfig } from "@/lib/active-chain-config"
 
 const NAV_ITEMS = [
   { href: '/', label: 'Quiz' },
@@ -26,29 +28,20 @@ export function Header() {
   useEffect(() => setMounted(true), [])
 
   const pathname = usePathname()
-  const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN ?? ''
-  
-  const CHAIN_TITLES: Record<string, string> = {
-    ink: 'Quiz On Ink',
-    soneium: 'Quiz On Soneium',
-    base: 'Quiz On Base',
-    unichain: 'Quiz On Unichain',
-    megaeth: 'Quiz On MegaETH',
-    litvm: 'Quiz On LitVM',
-    arc: 'Quiz On Arc',
-  };
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId) ?? activeChainConfig
 
-  const appTitle = CHAIN_TITLES[activeChain] ?? 'Quiz On Chain';
+  const appTitle = `Quiz On ${cfg.name === 'Arc Testnet' ? 'Arc' : cfg.name === 'LitVM' ? 'LitVM' : cfg.name === 'MegaETH' ? 'MegaETH' : cfg.name === 'Unichain' ? 'Unichain' : cfg.name === 'Base' ? 'Base' : cfg.name === 'Soneium' ? 'Soneium' : cfg.name === 'Sepolia' ? 'Sepolia' : cfg.name === 'Ink' ? 'Ink' : 'Chain'}`;
   const titleParts = appTitle.split(' ');
   const chainName = titleParts.slice(2).join(' ');
 
-  const isMegaEth = activeChain === 'megaeth'
-  const isInk = activeChain === 'ink'
-  const isUnichain = activeChain === 'unichain'
-  const isBase = activeChain === 'base'
-  const isSoneium = activeChain === 'soneium'
-  const isLitvm = activeChain === 'litvm'
-  const isArc = activeChain === 'arc'
+  const isMegaEth = cfg.name === 'MegaETH'
+  const isInk = cfg.name === 'Ink'
+  const isUnichain = cfg.name === 'Unichain'
+  const isBase = cfg.name === 'Base'
+  const isSoneium = cfg.name === 'Soneium'
+  const isLitvm = cfg.name === 'LitVM'
+  const isArc = cfg.name === 'Arc Testnet'
 
   const accentColor = isMegaEth ? 'text-[#00ff88]' 
     : isInk ? 'text-[#8b5cf6]' 

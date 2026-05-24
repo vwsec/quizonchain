@@ -18,11 +18,6 @@ export const metadata: Metadata = {
   },
 };
 
-const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
-
 export default function ExplorerPage() {
-  if (activeChain) {
-    redirect(`/explorer/${activeChain}`);
-  }
   return <ExplorerContent />
 }

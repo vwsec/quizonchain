@@ -6,13 +6,14 @@ import { useAccount } from "wagmi"
 import { createPublicClient, http, isAddress, type Chain } from "viem"
 import { fetchGlobalLeaderboard, type GlobalPlayer } from "@/lib/leaderboard"
 import { getChainLeaderboard } from "@/lib/chain-leaderboard"
-import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet } from "@/lib/chains"
+import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from "@/lib/chains"
 import { NFT_ABI } from "@/lib/nft-contracts"
 import { AlertCircle, Star } from "lucide-react"
 
-export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet'
+export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Sepolia'
 
-import { activeChainConfig } from "@/lib/active-chain-config"
+import { useChainId } from 'wagmi'
+import { getChainConfig } from "@/lib/active-chain-config"
 
 // ─── NFT contract addresses per chain ────────────────────────────────────────
 const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
@@ -23,6 +24,7 @@ const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
   MegaETH: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
   LitVM:   process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
   'Arc Testnet': process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
+  Sepolia: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA,
 }
 
 const CHAIN_FOR_NAME: Record<string, Chain> = {
@@ -33,6 +35,7 @@ const CHAIN_FOR_NAME: Record<string, Chain> = {
   MegaETH: megaEth,
   LitVM:   litvmTestnet,
   'Arc Testnet': arcTestnet,
+  Sepolia: sepoliaTestnet,
 }
 
 // ─── 5-minute in-memory cache ─────────────────────────────────────────────────
@@ -127,13 +130,16 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   useEffect(() => setMounted(true), [])
 
   const { address, isConnected } = useAccount()
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-  const isSoneium = activeChainConfig.name === 'Soneium'
-  const isLitvm = activeChainConfig.name === 'LitVM'
-  const isArc = activeChainConfig.name === 'Arc Testnet'
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
+  const isSoneium = cfg?.name === 'Soneium' || cfg?.name === 'Sepolia'
+  const isLitvm = cfg?.name === 'LitVM'
+  const isArc = cfg?.name === 'Arc Testnet'
+  const isSepolia = cfg?.name === 'Sepolia'
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<GlobalPlayer[]>([])
@@ -193,6 +199,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         else if (chainFilter === 'MegaETH') chainConfig = { chain: megaEth,   contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH!,      chainName: "MegaETH" }
         else if (chainFilter === 'LitVM') chainConfig = { chain: litvmTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!, chainName: "LitVM" }
         else if (chainFilter === 'Arc Testnet') chainConfig = { chain: arcTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC!, chainName: "Arc Testnet" }
+        else if (chainFilter === 'Sepolia') chainConfig = { chain: sepoliaTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA!, chainName: "Sepolia" }
 
         if (chainConfig?.contractAddress) {
           try {
@@ -238,13 +245,15 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   const renderChainBadge = (chainName: string) => {
     let iconUrl = ''
     switch (chainName) {
-      case "Ink":      iconUrl = 'https://github.com/inkonchain.png'; break
+      case "Ink":      iconUrl = '/chains/ink-logo-purple-icon.png'; break
       case "Soneium":  iconUrl = soneiumMainnet.iconUrl || '/icon.svg'; break
-      case "Base":     iconUrl = 'https://github.com/base-org.png'; break
+      case "Base":     iconUrl = '/chains/base.png'; break
       case "Unichain": iconUrl = unichain.iconUrl || 'https://github.com/Uniswap.png'; break
       case "MegaETH":  iconUrl = '/chains/megaeth.png'; break
-      case "LitVM":    iconUrl = '/chains/litvm.png'; break
+      case "LitVM":
+      case "LitVM LiteForge": iconUrl = '/chains/litvm.png'; break
       case "Arc Testnet": iconUrl = '/chains/arc.png'; break
+      case "Sepolia": iconUrl = ''; break
     }
     if (iconUrl) {
       return (
@@ -255,7 +264,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           title={chainName}
           width={20}
           height={20}
-          className="w-5 h-5 rounded-full shrink-0 object-cover border border-white/10 bg-black/20"
+          className={`w-5 h-5 rounded-full shrink-0 object-cover border ${isBase ? 'border-black/10 bg-black/5' : 'border-white/10 bg-black/20'}`}
         />
       )
     }
@@ -343,7 +352,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             <span className={`text-sm font-semibold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>
               {nftLoading ? "…" : totalMinted}
             </span>
-            <span className="text-xs text-white/50">Masters</span>
+            <span className={`text-xs ${isBase ? 'text-black/50' : 'text-white/50'}`}>Masters</span>
           </div>
 
           {/* Show Masters Only toggle */}
@@ -429,18 +438,18 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           <tbody>
             {loading && data.length === 0 ? (
               Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="border-b border-white/5 animate-pulse">
-                  <td className="py-4 pl-4"><div className="w-8 h-6 bg-white/10 rounded" /></td>
-                  <td><div className="w-32 h-6 bg-white/10 rounded" /></td>
-                  {chainFilter === 'Global' && (<td><div className="w-16 h-6 bg-white/10 rounded" /></td>)}
-                  <td><div className="w-12 h-6 bg-white/10 rounded ml-auto" /></td>
-                  <td><div className="w-12 h-6 bg-white/10 rounded ml-auto" /></td>
-                  <td className="pr-4"><div className="w-12 h-6 bg-white/10 rounded ml-auto" /></td>
+                <tr key={i} className={`border-b animate-pulse ${isBase ? 'border-black/5' : 'border-white/5'}`}>
+                  <td className="py-4 pl-4"><div className={`w-8 h-6 rounded ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>
+                  <td><div className={`w-32 h-6 rounded ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>
+                  {chainFilter === 'Global' && (<td><div className={`w-16 h-6 rounded ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>)}
+                  <td><div className={`w-12 h-6 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>
+                  <td><div className={`w-12 h-6 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>
+                  <td className="pr-4"><div className={`w-12 h-6 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} /></td>
                 </tr>
               ))
             ) : displayData.length === 0 ? (
               <tr>
-                <td colSpan={chainFilter === 'Global' ? 6 : 5} className="py-8 text-center text-gray-400">
+                <td colSpan={chainFilter === 'Global' ? 6 : 5} className={`py-8 text-center ${isBase ? 'text-black/40' : 'text-gray-400'}`}>
                   {showMastersOnly ? "No NFT Masters found on this leaderboard" : "No players yet"}
                 </td>
               </tr>
@@ -467,7 +476,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                 return (
                   <tr
                     key={player.address}
-                    className={`border-b border-white/5 transition-colors ${
+                    className={`border-b transition-colors ${isBase ? 'border-black/5' : 'border-white/5'} ${
                       isMe
                         ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/20" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/20" : isArc ? "bg-[#4D8EE9]/10 hover:bg-[#4D8EE9]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
                         : (isBase ? "hover:bg-black/5" : isLitvm ? "hover:bg-white/[0.02]" : "hover:bg-white/5")

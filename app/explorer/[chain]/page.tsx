@@ -17,7 +17,8 @@ export async function generateMetadata({ params }: ExplorerPageProps) {
     unichain: 'Unichain',
     megaeth: 'MegaETH',
     litvm: 'LitVM',
-    arc: 'Arc Testnet'
+    arc: 'Arc Testnet',
+    sepolia: 'Sepolia'
   };
   
   if (!names[resolvedParams.chain]) {
@@ -30,16 +31,10 @@ export async function generateMetadata({ params }: ExplorerPageProps) {
   };
 }
 
-const activeChain = process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
-
 export default async function ExplorerPage({ params }: ExplorerPageProps) {
   const resolvedParams = await params;
-  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc'];
+  const validChains = ['soneium', 'ink', 'base', 'unichain', 'megaeth', 'litvm', 'arc', 'sepolia'];
   
-  if (activeChain && resolvedParams.chain !== activeChain) {
-    redirect('/explorer');
-  }
-
   if (!validChains.includes(resolvedParams.chain)) {
     redirect('/explorer');
   }
@@ -51,6 +46,7 @@ export default async function ExplorerPage({ params }: ExplorerPageProps) {
   const isSoneium = resolvedParams.chain === 'soneium';
   const isLitvm = resolvedParams.chain === 'litvm';
   const isArc = resolvedParams.chain === 'arc';
+  const isSepolia = resolvedParams.chain === 'sepolia';
 
   return (
     <div className={`min-h-screen relative pt-16 ${
@@ -61,6 +57,7 @@ export default async function ExplorerPage({ params }: ExplorerPageProps) {
       isSoneium ? 'bg-[#00040F] text-white' :
       isLitvm ? 'bg-[#0B192C] text-white font-mono' :
       isArc ? 'bg-[#000B24] text-white' :
+      isSepolia ? 'bg-[#00040F] text-white' :
       'bg-[#080810] text-white'
     }`}>
       <BubbleExplorer chain={resolvedParams.chain as any} />

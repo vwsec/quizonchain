@@ -4,7 +4,8 @@ import { Header } from "@/components/header"
 import { WalletProvider } from "@/components/wallet-provider"
 import Link from "next/link"
 import Image from "next/image"
-import { activeChainConfig, isMultiChain } from "@/lib/active-chain-config"
+import { useChainId } from 'wagmi'
+import { getChainConfig } from "@/lib/active-chain-config"
 
 const CHAINS = [
   {
@@ -62,6 +63,14 @@ const CHAINS = [
     iconUrl: '/chains/arc.png',
     accentColor: 'group-hover:border-[#4D8EE9] group-hover:shadow-[0_0_20px_rgba(77,142,233,0.2)]',
     textAccent: 'group-hover:text-[#4D8EE9]',
+  },
+  {
+    id: 'sepolia',
+    name: 'Sepolia',
+    description: 'Explore Sepolia testnet transactions visually',
+    iconUrl: '',
+    accentColor: 'group-hover:border-[#0047FF] group-hover:shadow-[0_0_20px_rgba(0,71,255,0.2)]',
+    textAccent: 'group-hover:text-[#0047FF]',
   }
 ]
 
@@ -70,18 +79,12 @@ import { useRouter } from "next/navigation"
 
 export default function ExplorerContent() {
   const router = useRouter()
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
-  const isBase = activeChainConfig.name === 'Base'
-
-  useEffect(() => {
-    if (!isMultiChain) {
-      router.push(`/explorer/${activeChainConfig.name.toLowerCase()}`)
-    }
-  }, [router])
-
-  if (!isMultiChain) return null
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
+  const isBase = cfg?.name === 'Base'
 
   return (
     <main className={`relative z-10 min-h-screen pt-32 pb-12 px-4 md:px-8 ${isMegaEth ? 'text-white font-mono' : isBase ? 'text-black' : 'text-white'}`}>
@@ -112,15 +115,21 @@ export default function ExplorerContent() {
                       : `rounded-3xl bg-white/[0.02] border-white/[0.08] backdrop-blur-md ${chain.accentColor}`
                 }`}
               >
-                <div className={`relative w-16 h-16 overflow-hidden transition-transform duration-300 border border-white/10 group-hover:scale-105 ${
+                <div className={`relative w-16 h-16 overflow-hidden transition-transform duration-300 border border-white/10 group-hover:scale-105 flex items-center justify-center ${
                   isMegaEth ? 'bg-black rounded-none' : 'rounded-2xl bg-white/5 p-2 flex-shrink-0'
                 }`}>
-                  <Image
-                    src={chain.iconUrl}
-                    alt={`${chain.name} logo`}
-                    fill
-                    className={`object-contain ${isMegaEth ? 'p-2' : 'p-1'}`}
-                  />
+                  {chain.iconUrl ? (
+                    <Image
+                      src={chain.iconUrl}
+                      alt={`${chain.name} logo`}
+                      fill
+                      className={`object-contain ${isMegaEth ? 'p-2' : 'p-1'}`}
+                    />
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-[#0047FF]" fill="currentColor">
+                      <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z"/>
+                    </svg>
+                  )}
                 </div>
                 <div className="flex-1 pt-1">
                   <h2 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${

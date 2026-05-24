@@ -90,6 +90,23 @@ export const arcTestnet = defineChain({
   testnet: true,
 });
 
+export const sepoliaTestnet = defineChain({
+  id: 11155111,
+  name: 'Sepolia',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: [
+        'https://ethereum-sepolia-rpc.publicnode.com',
+        'https://rpc2.sepolia.org',
+        'https://rpc.sepolia.org',
+      ],
+    },
+  },
+  blockExplorers: { default: { name: 'Blockscout', url: 'https://eth-sepolia.blockscout.com' } },
+  testnet: true,
+});
+
 export const soneiumChains = [
   inkMainnet,
   soneiumMainnet,
@@ -98,6 +115,7 @@ export const soneiumChains = [
   megaEth,
   litvmTestnet,
   arcTestnet,
+  sepoliaTestnet,
 ] as const
 
 export function getSoneiumChainById(chainId: number) {
@@ -113,7 +131,8 @@ export function getTxInternalUrl(chainId: number, txHash: string): string {
     130: 'unichain',
      4326: 'megaeth',
      4441: 'litvm',
-     5042002: 'arc'
+     5042002: 'arc',
+     11155111: 'sepolia',
   }
   const slug = mapping[chainId] || 'soneium'
   return `/explorer/${slug}/tx/${txHash}`
@@ -141,6 +160,9 @@ export function getTxExplorerUrl(chainId: number, txHash: string): string {
   }
   if (chainId === 5042002) {
     return `https://testnet.arcscan.app/tx/${txHash}`
+  }
+  if (chainId === 11155111) {
+    return `https://eth-sepolia.blockscout.com/tx/${txHash}`
   }
   return `https://soneium.blockscout.com/tx/${txHash}`
 }

@@ -18,7 +18,7 @@ const SEARCH_TYPES = {
   ENS: /\.eth$/i,
   BLOCK: /^\d+$/,
 }
-export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth' | 'litvm' | 'arc'
+export type ChainType = 'soneium' | 'ink' | 'base' | 'unichain' | 'megaeth' | 'litvm' | 'arc' | 'sepolia'
 
 const CHAIN_CONFIG = {
   soneium: {
@@ -83,6 +83,15 @@ const CHAIN_CONFIG = {
     currency: 'USDC',
     decimals: 18,
     whaleThreshold: 10000,
+  },
+  sepolia: {
+    apiBase: 'https://eth-sepolia.blockscout.com/api/v2',
+    color: '#0047FF',
+    name: 'Sepolia',
+    explorer: 'https://eth-sepolia.blockscout.com',
+    currency: 'ETH',
+    decimals: 18,
+    whaleThreshold: 10,
   },
 } as const
 
@@ -244,7 +253,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
   const activeSearchRef = useRef<ActiveSearch>(null)
   useEffect(() => { activeSearchRef.current = activeSearch }, [activeSearch])
 
-  const { settings, saveSettings, monitorTransactions } = useTelegramAlerts(config.name, config.explorer)
+  const { settings, saveSettings, monitorTransactions } = useTelegramAlerts(config.name, config.explorer, { symbol: config.currency, decimals: config.decimals })
   const [isAlertsModalOpen, setIsAlertsModalOpen] = useState(false)
 
   // Refs for canvas synchronization
@@ -1101,7 +1110,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
         
         const [addrRes, txsRes, countersRes] = await Promise.all([
           fetch(`${config.apiBase}/addresses/${q}`),
-          fetch(`${config.apiBase}/addresses/${q}/transactions?limit=25`),
+          fetch(`${config.apiBase}/addresses/${q}/transactions`),
           fetch(`${config.apiBase}/addresses/${q}/counters`).catch(() => null)
         ])
         
@@ -1126,7 +1135,7 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
       else if (SEARCH_TYPES.BLOCK.test(q)) {
         const [blockRes, txsRes] = await Promise.all([
           fetch(`${config.apiBase}/blocks/${q}`),
-          fetch(`${config.apiBase}/blocks/${q}/transactions?limit=25`)
+          fetch(`${config.apiBase}/blocks/${q}/transactions`)
         ])
         
         if (!blockRes.ok) throw new Error('404')

@@ -35,7 +35,12 @@ const cspHeader = `
       wss://rpc.testnet.arc.network
       https://rpc.blockdaemon.testnet.arc.network
       https://rpc.drpc.testnet.arc.network
-      https://rpc.quicknode.testnet.arc.network;
+      https://rpc.quicknode.testnet.arc.network
+      https://eth-sepolia.blockscout.com
+      wss://eth-sepolia.blockscout.com
+      https://ethereum-sepolia-rpc.publicnode.com
+      https://rpc2.sepolia.org
+      https://rpc.sepolia.org;
     block-all-mixed-content;
     upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim()
@@ -54,9 +59,6 @@ const securityHeaders = [
 
 const nextConfig = {
   poweredByHeader: false,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     unoptimized: true,
   },

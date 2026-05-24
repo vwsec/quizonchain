@@ -25,7 +25,8 @@ import { TelegramSettings } from "@/hooks/use-telegram-alerts"
 import { sendTelegramMessage } from "@/lib/telegram"
 import { toast } from "sonner"
 import { Bell, Info, Send, ShieldCheck, Loader2 } from "lucide-react"
-import { activeChainConfig } from "@/lib/active-chain-config"
+import { useChainId } from 'wagmi'
+import { getChainConfig } from "@/lib/active-chain-config"
 
 interface TelegramAlertsModalProps {
   isOpen: boolean
@@ -43,9 +44,11 @@ export function TelegramAlertsModal({
   const [localSettings, setLocalSettings] = useState<TelegramSettings>(settings)
   const [isTesting, setIsTesting] = useState(false)
   
-  const isMegaEth = activeChainConfig.name === 'MegaETH'
-  const isInk = activeChainConfig.name === 'Ink'
-  const isUnichain = activeChainConfig.name === 'Unichain'
+  const chainId = useChainId()
+  const cfg = getChainConfig(chainId)
+  const isMegaEth = cfg?.name === 'MegaETH'
+  const isInk = cfg?.name === 'Ink'
+  const isUnichain = cfg?.name === 'Unichain'
 
   const handleTestConnection = async () => {
     if (!localSettings.botToken || !localSettings.chatId) {
@@ -153,8 +156,8 @@ export function TelegramAlertsModal({
             
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label className="text-xs text-gray-400">Min. Value ({activeChainConfig.nativeCurrency.symbol})</Label>
-                <span className={`text-xs font-mono ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : 'text-blue-400'}`}>{localSettings.minValueThreshold} {activeChainConfig.nativeCurrency.symbol}</span>
+                <Label className="text-xs text-gray-400">Min. Value ({cfg?.nativeCurrency?.symbol ?? 'ETH'})</Label>
+                <span className={`text-xs font-mono ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : 'text-blue-400'}`}>{localSettings.minValueThreshold} {cfg?.nativeCurrency?.symbol ?? 'ETH'}</span>
               </div>
               <Input 
                 type="number"
@@ -170,7 +173,7 @@ export function TelegramAlertsModal({
               <Label className="text-xs text-gray-400">Transaction Types</Label>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { id: 'coin_transfer', label: `Native ${activeChainConfig.nativeCurrency.symbol}` },
+                  { id: 'coin_transfer', label: `Native ${cfg?.nativeCurrency?.symbol ?? 'ETH'}` },
                   { id: 'token_transfer', label: 'ERC-20' },
                   { id: 'contract_call', label: 'Smart Contract' },
                   { id: 'nft_transfer', label: 'NFTs' },
