@@ -1,8 +1,6 @@
 import { redirect } from 'next/navigation';
 import BubbleExplorer from '@/components/bubble-explorer';
 import { ExplorerBackButton } from '@/components/explorer-back-button';
-import { Header } from '@/components/header';
-import { WalletProvider } from '@/components/wallet-provider';
 
 export default async function TxPage({ params }: { params: Promise<{ chain: string; hash: string }> }) {
   const resolvedParams = await params;

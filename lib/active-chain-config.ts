@@ -236,4 +236,4 @@ function getEnvChainConfig() {
 }
 
 export const activeChainConfig = getEnvChainConfig() ?? CHAIN_CONFIGS.ink;
-export const isMultiChain = !process.env.NEXT_PUBLIC_ACTIVE_CHAIN;
+

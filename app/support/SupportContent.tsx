@@ -1,7 +1,5 @@
 "use client"
 
-import { Header } from "@/components/header"
-import { WalletProvider } from "@/components/wallet-provider"
 import { MessageSquare } from "lucide-react"
 import {
   Accordion,

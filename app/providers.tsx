@@ -4,7 +4,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider, useChainId } from 'wagmi'
+import { WagmiProvider } from 'wagmi'
 import {
   getDefaultConfig,
   RainbowKitProvider,
@@ -12,8 +12,6 @@ import {
 } from '@rainbow-me/rainbowkit'
 import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
-import { validateContractAddressEnv } from '@/lib/env-validation'
-
 {
   const maybeLocalStorage = (globalThis as unknown as { localStorage?: unknown })
     .localStorage as
@@ -94,10 +92,6 @@ export function Providers({ children }: { children: ReactNode }) {
       },
     },
   }))
-  useEffect(() => {
-    validateContractAddressEnv()
-  }, [])
-
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>

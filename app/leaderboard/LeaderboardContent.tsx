@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { WalletProvider } from "@/components/wallet-provider"
-import { Header } from "@/components/header"
 import { Leaderboard, type ChainFilterType } from "@/components/leaderboard"
 
 const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [

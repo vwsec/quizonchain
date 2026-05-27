@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
-import { useAccount, usePublicClient } from "wagmi"
+import { useAccount } from "wagmi"
 import { getTimeUntilNextSubmissionSeconds } from "@/lib/submitScore"
 import { NftProgressCard } from "./nft-mint"
 import MegaEthLogo from "./megaeth-logo"
@@ -46,8 +46,7 @@ export function HomeScreen({
   useEffect(() => setMounted(true), [])
 
   const { isConnected: isWalletConnected, connect } = useWallet()
-  const { chain, address, isConnected: isAccountConnected } = useAccount()
-  const publicClient = usePublicClient()
+  const { isConnected: isAccountConnected } = useAccount()
   const { chainConfig: cfg, heroTitle, heroSubtitle, heroLabel, isConnected: hookIsConnected } = useActiveChain()
 
   const hero = { label: heroLabel, title: heroTitle, subtitle: heroSubtitle }

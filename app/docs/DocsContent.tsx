@@ -4,8 +4,6 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ExternalLink, Copy, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Header } from "@/components/header"
-import { WalletProvider } from "@/components/wallet-provider"
 import {
   Accordion,
   AccordionContent,

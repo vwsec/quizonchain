@@ -1,7 +1,5 @@
 "use client"
 
-import { Header } from "@/components/header"
-import { WalletProvider } from "@/components/wallet-provider"
 import Link from "next/link"
 import Image from "next/image"
 import { useActiveChain } from "@/hooks/use-active-chain"
@@ -73,11 +71,7 @@ const CHAINS = [
   }
 ]
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-
 export default function ExplorerContent() {
-  const router = useRouter()
   const { chainConfig: cfg, isConnected } = useActiveChain()
   const isMegaEth = isConnected && cfg?.name === 'MegaETH'
   const isInk = isConnected && cfg?.name === 'Ink'
