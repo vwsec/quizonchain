@@ -11,8 +11,8 @@ import {
   getTimeUntilNextSubmissionSeconds,
   useSubmitScore,
 } from "@/lib/submitScore"
-import { getSoneiumChainById, soneiumMainnet, getTxExplorerUrl } from "@/lib/chains"
-import { Trophy, Sparkles, Target, RotateCcw, XCircle, ExternalLink, CheckCircle } from "lucide-react"
+import { getSoneiumChainById, soneiumMainnet } from "@/lib/chains"
+import { XCircle, ExternalLink, CheckCircle } from "lucide-react"
 import { useActiveChain } from "@/hooks/use-active-chain"
 
 interface ResultsScreenProps {
@@ -87,12 +87,6 @@ export function ResultsScreen({
     if (score === 4) return `Great ${chainName} expertise!`
     if (score === 3) return `Good knowledge of ${chainName}!`
     return `Keep exploring ${chainName} to improve your score!`
-  }
-
-  const getIcon = () => {
-    if (percentage >= 80) return <Trophy className="size-8 text-primary" />
-    if (percentage >= 60) return <Sparkles className="size-8 text-primary" />
-    return <Target className="size-8 text-primary" />
   }
 
   const contractAddress = getContractAddressPreview(chainId)
@@ -234,6 +228,7 @@ export function ResultsScreen({
   const isSoneium = isConnected && cfg?.name === 'Soneium'
   const isLitvm = isConnected && cfg?.name === 'LitVM'
   const isArc = isConnected && cfg?.name === 'Arc Testnet'
+  const isSepolia = isConnected && cfg?.name === 'Sepolia'
 
   const handleAction = async () => {
     if (isWrongNetwork) {
@@ -260,85 +255,170 @@ export function ResultsScreen({
     : 'text-primary'
 
   return (
-    <div className={`flex min-h-screen flex-col items-center justify-center px-4 py-12 ${isMegaEth || isLitvm ? 'font-mono' : ''}`}>
-      {/* Background decoration removed - handled by ThemeBackground */}
-
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
       <div className="flex w-full flex-col items-center text-center">
-        <div className={`mb-8 md:mb-10 p-4 md:p-6 shadow-2xl relative group ${
-          isMegaEth 
-            ? 'bg-black border-2 border-[#00ff88] rounded-none' 
-            : isInk 
-              ? 'bg-white/5 border border-white/10 rounded-full backdrop-blur-xl' 
-            : isUnichain 
-              ? 'bg-white/5 border border-white/10 rounded-2xl backdrop-blur-xl' 
-            : isBase 
-              ? 'bg-black/5 border border-black/5 rounded-full' 
-            : isSoneium
-              ? 'bg-white/[0.03] border border-[#0047FF]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.1)]'
-            : isArc
-              ? 'bg-white/[0.02] border border-[#4D8EE9]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(77,142,233,0.1)]'
-            : isLitvm
-              ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-2xl backdrop-blur-xl shadow-[0_0_50px_rgba(0,242,254,0.15)]'
-              : 'bg-white/5 border border-white/10 rounded-2xl'
-        }`}>
-          <div className={`mb-3 md:mb-4 flex items-center justify-center p-3 md:p-4 ${
-            isMegaEth ? 'bg-black border border-[#00ff88] rounded-none' : isInk ? 'bg-[#7B61FF]/20 rounded-full' : isUnichain ? 'bg-[#FF007A]/20 rounded-xl' : isBase ? 'bg-[#0052FF]/10 rounded-full' : isSoneium ? 'bg-[#0047FF]/20 rounded-xl' : isArc ? 'bg-[#4D8EE9]/20 rounded-xl' : isLitvm ? 'bg-[#00F2FE]/20 rounded-xl' : 'bg-white/10 rounded-xl'
-          }`}>
-            {percentage >= 80 ? <Trophy className={`size-6 md:size-8 ${accentTextColor}`} /> : percentage >= 60 ? <Sparkles className={`size-6 md:size-8 ${accentTextColor}`} /> : <Target className={`size-6 md:size-8 ${accentTextColor}`} />}
-          </div>
-          <div className={`text-4xl md:text-5xl font-black mb-2 ${isMegaEth || isLitvm ? 'font-mono text-white' : isBase ? 'text-black' : 'text-white'}`}>
-            {score} <span className={`text-xl md:text-2xl ${isMegaEth ? 'text-white/40' : isLitvm ? 'text-[#00F2FE]/40' : isBase ? 'text-black/40' : 'text-white/40'}`}>/ {total}</span>
-          </div>
-          <div className={`text-xs md:text-sm font-black tracking-widest ${
-            isMegaEth 
-              ? 'text-[#00ff88] font-mono uppercase' 
-              : isInk 
-                ? 'text-[#7B61FF] uppercase' 
-              : isUnichain 
-                ? 'text-[#FF007A] uppercase' 
-              : isBase 
-                ? 'text-[#0052FF] uppercase' 
-              : isSoneium 
-                ? 'text-[#0047FF] uppercase' 
-              : isArc 
-                ? 'text-[#4D8EE9] uppercase' 
-              : isLitvm
-                ? 'text-[#00F2FE] font-mono lowercase'
-                : 'text-primary uppercase'
-          }`}>
-            {percentage}% Correct
-          </div>
-        </div>
 
-        <h2 className={`text-3xl font-black mb-3 max-w-md ${isMegaEth ? 'font-mono uppercase text-white' : isLitvm ? 'font-mono text-[#00F2FE]' : isBase ? 'text-black' : 'text-white'}`}>
-          {getMessage()}
-        </h2>
-        <p className={`mb-10 ${isMegaEth ? 'font-mono lowercase text-white/40 text-sm' : isLitvm ? 'font-mono lowercase text-[#00F2FE]/60 text-sm' : isBase ? 'text-black/40' : 'text-white/40'}`}>
-          Points will be added to the global leaderboard.
-        </p>
+        {/* CARD WRAPPER */}
+        <div
+          className={`max-w-sm mx-auto w-full flex flex-col items-center px-8 py-9 ${
+            isMegaEth ? 'bg-[#0a0a0a] rounded-none' :
+            isInk ? 'bg-[#0a0a0a] rounded-2xl' :
+            isSoneium ? 'bg-[#0a0a0a] rounded-2xl' :
+            isBase ? 'bg-[#0d0d1a] rounded-2xl' :
+            isUnichain ? 'bg-[#0a0a0a] rounded-3xl' :
+            isLitvm ? 'bg-[#0a0a0a] rounded-xl' :
+            isArc ? 'bg-[#0a0a0a] rounded-2xl' :
+            isSepolia ? 'bg-[#0e0e0e] rounded-xl' :
+            'bg-[#0a0a0a] rounded-2xl'
+          }`}
+          style={{
+            border: isMegaEth ? `1px solid ${cfg?.color ?? '#00ff88'}`
+                  : isInk ? `1px solid ${cfg?.color ?? '#8b5cf6'}66`
+                  : isSoneium ? '1px solid rgba(255,255,255,0.08)'
+                  : isBase ? `1px solid ${cfg?.color ?? '#0052ff'}33`
+                  : isUnichain ? `1px solid ${cfg?.color ?? '#ff007a'}40`
+                  : isLitvm ? '1px solid rgba(255,255,255,0.1)'
+                  : isArc ? '1px solid rgba(255,255,255,0.12)'
+                  : isSepolia ? '1px solid rgba(255,255,255,0.08)'
+                  : '1px solid rgba(255,255,255,0.08)',
+          }}
+        >
+          {/* [A] SECTION LABEL */}
+          <div
+            className={
+              isMegaEth ? 'font-mono text-[10px] tracking-[0.18em] uppercase mb-7' :
+              isInk ? 'font-sans text-[10px] tracking-[0.14em] uppercase mb-6' :
+              isSoneium ? 'font-sans text-[10px] tracking-[0.12em] uppercase mb-6' :
+              isBase ? 'font-sans text-[10px] tracking-[0.1em] uppercase mb-6' :
+              isUnichain ? 'font-sans text-[10px] tracking-[0.12em] uppercase mb-6' :
+              isLitvm ? 'font-sans text-[10px] tracking-[0.12em] uppercase mb-6' :
+              isArc ? 'font-sans text-[10px] tracking-[0.12em] uppercase mb-6' :
+              isSepolia ? 'font-sans text-[10px] tracking-[0.1em] uppercase mb-6' :
+              'font-sans text-[10px] tracking-[0.12em] uppercase mb-6'
+            }
+            style={{ color: isMegaEth ? '#00ff88' : cfg?.color ?? '#8b5cf6' }}
+          >
+            SCORE RESULT
+          </div>
 
-        <div className="flex w-full max-w-[400px] flex-col gap-3">
+          {/* [B] SCORE NUMBER */}
+          <div className={
+            isMegaEth ? 'font-mono text-[80px] font-bold leading-none tracking-[-2px] text-white' :
+            isInk ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+            isSoneium ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+            isBase ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+            isUnichain ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+            isLitvm ? 'font-sans text-[84px] font-bold leading-none tracking-[-3px] text-white' :
+            isArc ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+            isSepolia ? 'font-sans text-[84px] font-bold leading-none tracking-[-3px] text-white' :
+            'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white'
+          }>
+            {score}
+            <span className={
+              isMegaEth ? 'font-mono text-[26px] opacity-35' :
+              isInk ? 'text-[28px] font-light opacity-30' :
+              isSoneium ? 'text-[28px] font-light opacity-30' :
+              isBase ? 'text-[28px] font-light opacity-30' :
+              isUnichain ? 'text-[28px] font-light opacity-30' :
+              isLitvm ? 'text-[26px] font-light opacity-30' :
+              isArc ? 'text-[28px] font-light opacity-30' :
+              isSepolia ? 'text-[26px] font-light opacity-30' :
+              'text-[28px] font-light opacity-30'
+            }>
+              {' '}/ {total}
+            </span>
+          </div>
+
+          {/* [C] PROGRESS BAR */}
+          <div className="w-full bg-white/10 h-[3px] rounded-full my-5">
+            <div className="h-full rounded-full" style={{ width: `${percentage}%`, backgroundColor: cfg?.color ?? '#00ff88' }} />
+          </div>
+
+          {/* [D] STAT CHIPS */}
+          <div className="flex items-center gap-3 mb-7">
+            <div
+              className={`px-3 py-1.5 text-xs font-medium ${
+                isMegaEth ? 'rounded-none' :
+                isInk ? 'rounded-lg' :
+                isSoneium ? 'rounded-full' :
+                isBase ? 'rounded-lg' :
+                isUnichain ? 'rounded-full' :
+                isLitvm ? 'rounded-lg' :
+                isArc ? 'rounded-full' :
+                isSepolia ? 'rounded-md' :
+                'rounded-lg'
+              }`}
+              style={{
+                backgroundColor: `${cfg?.color ?? '#00ff88'}1a`,
+                border: `1px solid ${cfg?.color ?? '#00ff88'}40`,
+                color: cfg?.color ?? '#00ff88',
+              }}
+            >
+              {percentage}% correct
+            </div>
+            <div className={`px-3 py-1.5 text-xs font-medium bg-white/6 border border-white/10 text-white/45 ${
+              isMegaEth ? 'rounded-none' :
+              isInk ? 'rounded-lg' :
+              isSoneium ? 'rounded-full' :
+              isBase ? 'rounded-lg' :
+              isUnichain ? 'rounded-full' :
+              isLitvm ? 'rounded-lg' :
+              isArc ? 'rounded-full' :
+              isSepolia ? 'rounded-md' :
+              'rounded-lg'
+            }`}>
+              {score} pts earned
+            </div>
+          </div>
+
+          {/* [E] HEADLINE */}
+          <h2 className={`text-center text-white mb-1.5 ${
+            isMegaEth ? 'font-mono font-bold text-[14px] uppercase tracking-wide' :
+            isInk ? 'font-sans font-semibold text-[15px]' :
+            isSoneium ? 'font-sans font-semibold text-[15px]' :
+            isBase ? 'font-sans font-bold text-[15px]' :
+            isUnichain ? 'font-sans font-bold text-[15px]' :
+            isLitvm ? 'font-sans font-semibold text-[14px]' :
+            isArc ? 'font-sans font-semibold text-[15px]' :
+            isSepolia ? 'font-sans font-medium text-[14px]' :
+            'font-sans font-semibold text-[15px]'
+          }`}>
+            {getMessage()}
+          </h2>
+
+          {/* [F] SUBLINE */}
+          <p className={`text-center mb-7 ${
+            isMegaEth ? 'font-mono text-[11px] tracking-widest lowercase text-white/38' :
+            isInk ? 'font-sans text-[12px] text-white/38' :
+            isSoneium ? 'font-sans text-[12px] text-white/38' :
+            isBase ? 'font-sans text-[12px] text-white/38' :
+            isUnichain ? 'font-sans text-[12px] text-white/38' :
+            isLitvm ? 'font-sans text-[12px] text-white/38' :
+            isArc ? 'font-sans text-[12px] text-white/38' :
+            isSepolia ? 'font-sans text-[11px] text-white/35' :
+            'font-sans text-[12px] text-white/38'
+          }`}>
+            Points are added to the global leaderboard.
+          </p>
+
+          <div className="flex flex-col gap-3">
+          {/* [G] PRIMARY BUTTON */}
           <Button
             size="lg"
             onClick={handleAction}
             disabled={txState === "pending" || isCooldownActive || hasSubmittedThisSession || isCheckingCooldown}
-            className={`h-14 text-lg font-black transition-all duration-300 relative overflow-hidden group ${
-              isMegaEth 
-                ? 'rounded-none bg-black border-2 border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88] hover:text-black font-mono uppercase shadow-none' 
-                : isInk
-                  ? 'rounded-full bg-[#7B61FF] text-white hover:bg-[#7B61FF]/90 shadow-[0_0_25px_rgba(123,97,255,0.4)] border-none'
-                : isUnichain
-                  ? 'rounded-2xl bg-[#FF007A] text-white hover:bg-[#FF007A]/90 shadow-[0_0_25px_rgba(255,0,122,0.4)] border-none'
-                : isBase
-                  ? 'rounded-full bg-[#0052FF] text-white hover:bg-[#0052FF]/90 shadow-lg shadow-[#0052FF]/20 border-none'
-                : isSoneium
-                  ? 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-[0_0_30px_rgba(0,71,255,0.5)] border-none'
-                : isArc
-                  ? 'rounded-2xl bg-[#4D8EE9] text-white hover:bg-[#3A7BD6] shadow-[0_0_30px_rgba(77,142,233,0.5)] border-none'
-                : isLitvm
-                  ? 'rounded-2xl bg-[#00F2FE] text-[#0B192C] hover:bg-[#00C9DB] shadow-[0_0_30px_rgba(0,242,254,0.4)] border-none font-mono font-bold'
-                  : 'rounded-2xl bg-[#0047FF] text-white hover:bg-[#0047FF]/90 shadow-none'
+            className={`w-full transition-all duration-300 relative overflow-hidden group ${
+              isMegaEth ? 'font-mono font-bold text-[12px] tracking-[0.1em] uppercase rounded-none py-[14px] text-black' :
+              isInk ? 'font-sans font-semibold text-[13px] rounded-xl py-[14px] text-white' :
+              isSoneium ? 'font-sans font-medium text-[13px] rounded-full py-[14px] text-white' :
+              isBase ? 'font-sans font-bold text-[13px] rounded-xl py-[14px] text-white' :
+              isUnichain ? 'font-sans font-bold text-[13px] rounded-full py-[14px] text-white' :
+              isLitvm ? 'font-sans font-semibold text-[13px] rounded-xl py-[14px] text-black' :
+              isArc ? 'font-sans font-semibold text-[13px] rounded-2xl py-[14px] text-black' :
+              isSepolia ? 'font-sans font-medium text-[13px] rounded-xl py-[14px] text-white' :
+              'font-sans font-semibold text-[13px] rounded-xl py-[14px] text-white'
             }`}
+            style={{ backgroundColor: cfg?.color ?? '#0047FF' }}
           >
             {txState === "pending" ? (
               <div className="flex items-center gap-2">
@@ -359,31 +439,27 @@ export function ResultsScreen({
             )}
           </Button>
 
+          {/* [H] SECONDARY BUTTON */}
           <Button
             variant="outline"
             size="lg"
             onClick={onRestart}
-            className={`h-12 border-2 transition-all duration-300 ${
-              isMegaEth 
-                ? 'rounded-none border-white/20 bg-black text-white/60 hover:border-white hover:text-white font-mono uppercase' 
-                : isInk
-                  ? 'rounded-full border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white backdrop-blur-xl'
-                : isUnichain
-                  ? 'rounded-2xl border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white backdrop-blur-xl'
-                : isBase
-                  ? 'rounded-full border-black/5 bg-black/5 text-black/40 hover:bg-black/10 hover:text-black'
-                : isSoneium
-                  ? 'rounded-2xl border-[#0047FF]/20 bg-[#0047FF]/5 text-white/60 hover:bg-[#0047FF]/10 hover:text-white backdrop-blur-xl'
-                : isArc
-                  ? 'rounded-2xl border-[#4D8EE9]/20 bg-[#4D8EE9]/5 text-white/60 hover:bg-[#4D8EE9]/10 hover:text-white backdrop-blur-xl'
-                : isLitvm
-                  ? 'rounded-2xl border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10 hover:border-[#00F2FE]/50 backdrop-blur-xl font-mono'
-                  : 'rounded-2xl border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+            className={`w-full bg-transparent text-white/50 transition-all duration-300 ${
+              isMegaEth ? 'font-mono text-[11px] uppercase rounded-none py-[13px]' :
+              isInk ? 'font-sans text-[12px] rounded-xl py-[13px]' :
+              isSoneium ? 'font-sans text-[12px] rounded-full py-[13px]' :
+              isBase ? 'font-sans text-[12px] rounded-xl py-[13px]' :
+              isUnichain ? 'font-sans text-[12px] rounded-full py-[13px]' :
+              isLitvm ? 'font-sans text-[12px] rounded-xl py-[13px]' :
+              isArc ? 'font-sans text-[12px] rounded-2xl py-[13px]' :
+              isSepolia ? 'font-sans text-[12px] rounded-xl py-[13px]' :
+              'font-sans text-[12px] rounded-xl py-[13px]'
             }`}
+            style={{ border: '1px solid rgba(255,255,255,0.12)' }}
           >
-            <RotateCcw className="mr-2 size-5" />
             Play Again
           </Button>
+          </div>
         </div>
       </div>
 
@@ -409,7 +485,7 @@ export function ResultsScreen({
         </div>
       ) : null}
 
-      {txState === "pending" || txState === "confirmed" ? (
+      {txState === "pending" || txState === "confirmed" || txState === "failed" ? (
         <TransactionStatus
           state={txState}
           txHash={txHash}
@@ -425,16 +501,6 @@ export function ResultsScreen({
             <h3 className="text-sm font-medium text-foreground">Transaction Failed</h3>
           </div>
           <p className="text-xs text-muted-foreground mb-2">{txError}</p>
-          {txHash ? (
-            <a
-              href={getTxExplorerUrl(chainId, txHash)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-xs text-primary hover:underline mb-3"
-            >
-              View Transaction <ExternalLink className="size-3" />
-            </a>
-          ) : null}
           <Button size="sm" variant="outline" onClick={handleRetry} className="w-full">
             Try Again
           </Button>
