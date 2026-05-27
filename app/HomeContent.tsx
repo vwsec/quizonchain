@@ -71,16 +71,16 @@ function QuizApp() {
       if (!res.ok) {
         const text = await res.text()
         if (res.status === 429) {
-          throw new Error("You're a bit too fast! ⏳ Please wait a few seconds before requesting a new quiz.")
+          throw new Error("Too many quizzes generated recently. Please wait a moment and try again.")
         }
-        throw new Error(`Quiz API error ${res.status}: ${text.slice(0, 200)}`)
+        throw new Error("Couldn't load the quiz right now. Please try again.")
       }
       const data = (await res.json()) as GenerateQuizApiResponse
       if (!data.questions?.length) {
-        throw new Error("No questions returned")
+        throw new Error("Something went wrong loading the quiz. Please try again.")
       }
       if (!data.quizToken) {
-        throw new Error("Missing quiz token")
+        throw new Error("Something went wrong loading the quiz. Please try again.")
       }
       
       // Safety: Only update state if we are still on the same chain as when the request started
@@ -107,7 +107,7 @@ function QuizApp() {
       if (e instanceof Error && e.name === "AbortError") {
         setQuizError("Request timed out. Please try again.")
       } else {
-        setQuizError(e instanceof Error ? e.message : "Failed to load quiz")
+        setQuizError(e instanceof Error ? e.message : "Something went wrong loading the quiz. Please try again.")
       }
       setQuestions([])
       setQuizToken(null)
@@ -119,7 +119,7 @@ function QuizApp() {
 
   // Automatically clear rate limit error after 60 seconds
   useEffect(() => {
-    if (quizError?.includes("bit too fast")) {
+    if (quizError?.includes("Too many quizzes")) {
       const timer = setTimeout(() => {
         setQuizError(null)
       }, 60000)
@@ -241,6 +241,7 @@ function QuizApp() {
           <HomeScreen
             onStartQuiz={handleStartQuiz}
             onShuffleQuiz={() => void fetchQuiz()}
+            onRetryQuiz={() => void fetchQuiz()}
             quizLoading={quizLoading}
             quizError={quizError}
             hasQuiz={questions.length >= 5}

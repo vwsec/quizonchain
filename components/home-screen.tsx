@@ -19,6 +19,7 @@ import QuizOnChainLogo from "@/components/quiz-on-chain-logo"
 interface HomeScreenProps {
   onStartQuiz: () => void
   onShuffleQuiz: () => void
+  onRetryQuiz: () => void
   quizLoading: boolean
   quizError: string | null
   hasQuiz: boolean
@@ -33,6 +34,7 @@ import { useActiveChain } from "@/hooks/use-active-chain"
 export function HomeScreen({
   onStartQuiz,
   onShuffleQuiz,
+  onRetryQuiz,
   quizLoading,
   quizError,
   hasQuiz,
@@ -192,15 +194,15 @@ export function HomeScreen({
 
           {safeIsConnected && (
             <div className={isMegaEth ? 'font-mono uppercase text-xs' : isLitvm ?'font-mono text-xs' : isArc ? 'font-mono text-xs' : ''}>
-              {!hasQuiz && !quizLoading && !isCooldownActive && (
-                <p className="text-sm text-muted-foreground">
-                  Load a quiz with shuffle or fix the error above, then start.
-                </p>
-              )}
-              {quizError && !quizLoading && !isCooldownActive && (
-                <p className="text-xs text-muted-foreground">
-                  Try Shuffle again or check your connection.
-                </p>
+              {quizError && !isCooldownActive && (
+                <button
+                  type="button"
+                  onClick={onRetryQuiz}
+                  disabled={quizLoading}
+                  className="text-xs underline text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Try Again
+                </button>
               )}
               {isCooldownActive && (
                 <p className={`text-sm ${isMegaEth ? 'text-amber-500' : isLitvm ? 'text-amber-500 font-mono' : isArc ? 'text-amber-500' : 'text-amber-500/80'}`}>

@@ -1,26 +1,26 @@
 # Quiz On Chain
 
-- **Live URL**: [https://quizonchain.vercel.app](https://quizonchain.vercel.app)
+- **Live URL**: [https://quizonchain.app](https://quizonchain.app)
 - **Twitter**: [https://x.com/quizonchain](https://x.com/quizonchain)
 - **GitHub**: [https://github.com/vwsec/quizonchain](https://github.com/vwsec/quizonchain)
 
-## Chain-Specific Deployments
-| Chain | URL | Active Chain |
-|:------|:----|:-------------|
-| Ink | [quizonchain.vercel.app](https://quizonchain.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=ink` |
-| Ink | [quizonink.vercel.app](https://quizonink.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=ink` |
-| Soneium | [quizonsoneium.vercel.app](https://quizonsoneium.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=soneium` |
-| Base | [quizonbase.vercel.app](https://quizonbase.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=base` |
-| Unichain | [quizonunichain.vercel.app](https://quizonunichain.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=unichain` |
-| MegaETH | [quizonmegaeth.vercel.app](https://quizonmegaeth.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=megaeth` |
-| LitVM | [quizonlitvm.vercel.app](https://quizonlitvm.vercel.app) | `NEXT_PUBLIC_ACTIVE_CHAIN=litvm` |
+## Deployment
+
+Single Vercel deployment serving all supported chains from one URL:
+
+| URL |
+|:----|
+| [https://quizonchain.app](https://quizonchain.app) |
 
 ## Description
 Quiz On Chain is a Web3 quiz app about blockchain ecosystems.
 Players connect their wallet, answer 5 questions sourced from
 official blockchain documentation, and save their score
-permanently on-chain. Reach 100 points on any chain to mint
-an exclusive NFT.
+permanently on-chain. All 7 supported chains are available
+from a single page — the app detects the connected wallet's
+chain automatically and routes score submissions to the
+corresponding smart contract. Reach 100 points on any chain
+to mint an exclusive NFT.
 
 ## Features
 - 5 questions per quiz sourced from official blockchain documentation
@@ -28,13 +28,12 @@ an exclusive NFT.
 - Answer feedback shown after each question
 - 1 hour cooldown between on-chain submissions
 - Global leaderboard tracking total points across all players
-- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM
+- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM, Arc
 - NFT mint unlocked at 100 total points per chain
 - Visual bubble explorer — live transactions shown as floating bubbles
 - Network view — standard transaction table explorer
 - Address and transaction search powered by Blockscout API
 - Telegram alerts — real-time high-value transaction monitoring
-- Single-chain deployment mode via `NEXT_PUBLIC_ACTIVE_CHAIN`
 - Free to play, open to everyone
 
 ## Supported Networks
@@ -46,6 +45,7 @@ an exclusive NFT.
 | Unichain | 130      | [unichain.blockscout.com](https://unichain.blockscout.com) |
 | MegaETH  | 4326     | [megaeth.blockscout.com](https://megaeth.blockscout.com) |
 | LitVM    | 4441     | [liteforge.explorer.caldera.xyz](https://liteforge.explorer.caldera.xyz) |
+| Arc      | 15789    | — |
 
 ## Smart Contract Addresses
 
@@ -55,9 +55,11 @@ an exclusive NFT.
 | Ink      | `0x9dAB945F67b53ffCb78f02B1Dd31B731f69e1167` |
 | Soneium  | `0xFcd6909EFAC729DC901775895f3322f8050c7c73` |
 | Base     | `0xCc8Fc975715388171eCAa93A27313379Bd25D881` |
-| Unichain | `0x1f42B65a9C1f873D26881217E86E09e1470A3c6C` |
+| Unichain | `0xfEca7f467dA4E081B431E84cFd0b442dBd548e96` |
 | MegaETH  | `0xd493bb9fadd6226ba1c7ff1b524527855782163e` |
 | LitVM    | `0xBEd500d8d59547269085BBB4fa32Fab4394a4802` |
+| Arc      | `0x8F2F01a73837762b9EB083EB66b63e6B6808Bd40` |
+| Sepolia  | `0xe91E1FeA7652F0eb2A9A266FD5ae52AFB912729e` |
 
 ### QuizNFT Contracts
 | Network  | Address |
@@ -66,8 +68,12 @@ an exclusive NFT.
 | Soneium  | `0x606a662Aa2Cd6d928A939768a2DB73E09B25eF48` |
 | Base     | `0xBD99520780Dce2BfC79d29C044ADf88f449Ecf55` |
 | Unichain | `0x88baBdA85F78eE6dcF63e0bBc78618008F1Fc9E8` |
-| MegaETH  | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` |
-| LitVM    | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` |
+| MegaETH  | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` \* |
+| LitVM    | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` \* |
+| Arc      | `0x734EAf28175E398778082caC79bBcdBccfe1c7bB` |
+| Sepolia  | `0x6F98372246ba85199B58B5c07581e5Bb7DC77045` |
+
+\* Same contract address deployed on both chains.
 
 ## Tech Stack
 - **Framework**: Next.js 15 (App Router), React 19
@@ -105,55 +111,41 @@ NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 # Deployer (Hardhat only)
 PRIVATE_KEY=
 
-# Single-chain deployment (optional)
-# Values: ink | soneium | base | unichain | megaeth | litvm
-NEXT_PUBLIC_ACTIVE_CHAIN=
-
 # App URL
-NEXT_PUBLIC_APP_URL=https://quizonchain.vercel.app
+NEXT_PUBLIC_APP_URL=https://quizonchain.app
 
 # QuizScores Contract Addresses
 NEXT_PUBLIC_CONTRACT_ADDRESS_INK=0x9dAB945F67b53ffCb78f02B1Dd31B731f69e1167
 NEXT_PUBLIC_CONTRACT_ADDRESS_SONEIUM=0xFcd6909EFAC729DC901775895f3322f8050c7c73
 NEXT_PUBLIC_CONTRACT_ADDRESS_BASE=0xCc8Fc975715388171eCAa93A27313379Bd25D881
-NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN=0x1f42B65a9C1f873D26881217E86E09e1470A3c6C
+NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN=0xfEca7f467dA4E081B431E84cFd0b442dBd548e96
 NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH=0xd493bb9fadd6226ba1c7ff1b524527855782163e
 NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM=0xBEd500d8d59547269085BBB4fa32Fab4394a4802
+NEXT_PUBLIC_CONTRACT_ADDRESS_ARC=0x8F2F01a73837762b9EB083EB66b63e6B6808Bd40
+NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA=0xe91E1FeA7652F0eb2A9A266FD5ae52AFB912729e
 
 # QuizNFT Contract Addresses
 NEXT_PUBLIC_NFT_CONTRACT_INK=0x1328C30B73B90DcD59B26D513275644c8B34Ad6d
 NEXT_PUBLIC_NFT_CONTRACT_SONEIUM=0x606a662Aa2Cd6d928A939768a2DB73E09B25eF48
 NEXT_PUBLIC_NFT_CONTRACT_BASE=0xBD99520780Dce2BfC79d29C044ADf88f449Ecf55
 NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN=0x88baBdA85F78eE6dcF63e0bBc78618008F1Fc9E8
+NEXT_PUBLIC_NFT_CONTRACT_MEGAETH=0x800a3843eE97e5e19468e3d62c19f9E93524A510
 NEXT_PUBLIC_NFT_CONTRACT_LITVM=0x800a3843eE97e5e19468e3d62c19f9E93524A510
+NEXT_PUBLIC_NFT_CONTRACT_ARC=0x734EAf28175E398778082caC79bBcdBccfe1c7bB
+NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA=0x6F98372246ba85199B58B5c07581e5Bb7DC77045
 
 # NFT Settings
 NEXT_PUBLIC_NFT_POINTS_THRESHOLD=100
 ```
 
-## Single-Chain Deployment
-
-When `NEXT_PUBLIC_ACTIVE_CHAIN` is set, the app locks to one chain:
-
-```env
-NEXT_PUBLIC_ACTIVE_CHAIN=ink
-```
-
-This changes:
-- App title → "Quiz On Ink"
-- Questions sourced only from Ink documentation
-- Only Ink contract used for score submission
-- Only Ink leaderboard shown
-- Explorer goes directly to Ink explorer
-- Chain-specific theme applied (Ink=purple, Soneium=blue, Base=blue, Unichain=pink, MegaETH=green, LitVM=teal)
-
 ## How It Works
 
-1. **Quiz generation** — Groq fetches docs via Jina Reader, generates 5 questions, returns a signed JWT containing correct answers (prevents client-side cheating)
-2. **Answer verification** — `/api/verify-quiz` verifies the JWT and returns the score
-3. **Score signing** — `/api/sign-score` signs the score with `QUIZ_SIGNER_PRIVATE_KEY` using ECDSA
-4. **On-chain submission** — User submits score + signature to `QuizScores.sol` which verifies via `ECDSA.recover`
-5. **NFT mint** — After 100 total points, `QuizNFT.sol` allows one mint per address per chain
+1. **Connect wallet** — User connects any wallet (RainbowKit). The app detects the connected chain ID and loads the corresponding contract addresses, RPC endpoints, and theme.
+2. **Quiz generation** — Groq fetches docs via Jina Reader, generates 5 questions, returns a signed JWT containing correct answers (prevents client-side cheating)
+3. **Answer verification** — `/api/verify-quiz` verifies the JWT and returns the score
+4. **Score signing** — `/api/sign-score` signs the score with `QUIZ_SIGNER_PRIVATE_KEY` using ECDSA
+5. **On-chain submission** — User submits score + signature to `QuizScores.sol` which verifies via `ECDSA.recover`
+6. **NFT mint** — After 100 total points, `QuizNFT.sol` allows one mint per address per chain
 
 ## Run Locally
 
