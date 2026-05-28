@@ -69,7 +69,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ backgroundColor: '#0f1117' }}>
       <body className="font-sans antialiased">
         <Providers>
           <ThemeUpdater />
