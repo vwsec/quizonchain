@@ -69,11 +69,22 @@ export async function POST(request: Request) {
   console.log("ORIGIN:", request.headers.get("origin"));
   console.log("REFERER:", request.headers.get("referer"));
   console.log("APP_DOMAIN:", process.env.NEXT_PUBLIC_APP_DOMAIN);
-  if (
-    (origin && !(origin === `https://${appDomain}` || origin === `https://www.${appDomain}`)) ||
-    (referer && !(referer === `https://${appDomain}` || referer === `https://www.${appDomain}`))
-  ) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  const normalize = (s: string) => s.replace(/\/$/, "");
+  if (origin) {
+    const isAllowed =
+      normalize(origin) === `https://${appDomain}` ||
+      normalize(origin) === `https://www.${appDomain}`;
+    if (!isAllowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+  }
+  if (referer) {
+    const isAllowed =
+      normalize(referer) === `https://${appDomain}` ||
+      normalize(referer) === `https://www.${appDomain}`;
+    if (!isAllowed) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
   }
 
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
