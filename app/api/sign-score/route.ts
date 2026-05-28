@@ -11,15 +11,28 @@ import { privateKeyToAccount } from "viem/accounts"
 import { jwtVerify } from "jose"
 
 const rateLimit = new Map<string, { count: number; resetTime: number }>()
+const playerRateLimit = new Map<string, { count: number; resetTime: number }>()
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
   const limit = rateLimit.get(ip)
   if (limit && now < limit.resetTime) {
-    if (limit.count >= 5) return false
+    if (limit.count >= 2) return false
     limit.count++
   } else {
     rateLimit.set(ip, { count: 1, resetTime: now + 60_000 })
+  }
+  return true
+}
+
+function checkPlayerRateLimit(playerAddress: string): boolean {
+  const now = Date.now()
+  const limit = playerRateLimit.get(playerAddress)
+  if (limit && now < limit.resetTime) {
+    if (limit.count >= 2) return false
+    limit.count++
+  } else {
+    playerRateLimit.set(playerAddress, { count: 1, resetTime: now + 60_000 })
   }
   return true
 }
@@ -50,6 +63,16 @@ function getSignerPrivateKey(): `0x${string}` {
 }
 
 export async function POST(request: Request) {
+  const origin = request.headers.get('origin')
+  const referer = request.headers.get('referer')
+  const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN ?? "quizonchain.app"
+  if (
+    (origin && !(origin === `https://${appDomain}` || origin === `https://www.${appDomain}`)) ||
+    (referer && !(referer === `https://${appDomain}` || referer === `https://www.${appDomain}`))
+  ) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown"
   if (!checkRateLimit(ip)) {
     return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
@@ -75,6 +98,9 @@ export async function POST(request: Request) {
   }
 
   const { playerAddress, score: clientScore, total, nonce, chainId, contractAddress, quizToken, answers } = parsed.data
+  if (!checkPlayerRateLimit(playerAddress)) {
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+  }
   if (!isAddress(playerAddress)) {
     return NextResponse.json({ error: "Invalid player address" }, { status: 400 })
   }
