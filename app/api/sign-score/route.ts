@@ -66,6 +66,9 @@ export async function POST(request: Request) {
   const origin = request.headers.get('origin')
   const referer = request.headers.get('referer')
   const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN ?? "quizonchain.app"
+  console.log("ORIGIN:", request.headers.get("origin"));
+  console.log("REFERER:", request.headers.get("referer"));
+  console.log("APP_DOMAIN:", process.env.NEXT_PUBLIC_APP_DOMAIN);
   if (
     (origin && !(origin === `https://${appDomain}` || origin === `https://www.${appDomain}`)) ||
     (referer && !(referer === `https://${appDomain}` || referer === `https://www.${appDomain}`))
