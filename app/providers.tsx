@@ -4,14 +4,15 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
+import { WagmiProvider, createConfig, http } from 'wagmi'
 import {
-  getDefaultConfig,
+  getDefaultWallets,
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
 import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
+import { startaleConnector } from '@startale/app-sdk'
 {
   const maybeLocalStorage = (globalThis as unknown as { localStorage?: unknown })
     .localStorage as
@@ -57,10 +58,15 @@ if (!projectId) {
 
 const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
 
-const config = getDefaultConfig({
-  appName: 'Quiz On Chain',
-  projectId,
+const { connectors: rainbowConnectors } = getDefaultWallets({ projectId, appName: 'Quiz On Chain' })
+
+const config = createConfig({
   chains: allChains as any,
+  transports: Object.fromEntries(allChains.map(c => [c.id, http()])),
+  connectors: [
+    ...rainbowConnectors,
+    startaleConnector({ appName: 'Quiz On Chain', appLogoUrl: 'https://quizonchain.app/logo.png' }),
+  ],
 })
 
 function RainbowKitThemeWrapper({ children }: { children: ReactNode }) {

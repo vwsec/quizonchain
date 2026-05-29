@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
-import { useAccount } from "wagmi"
+import { useAccount, useConnect, useSwitchChain } from "wagmi"
 import { getTimeUntilNextSubmissionSeconds } from "@/lib/submitScore"
 import { NftProgressCard } from "./nft-mint"
 import MegaEthLogo from "./megaeth-logo"
@@ -30,6 +30,7 @@ interface HomeScreenProps {
 }
 
 import { useActiveChain } from "@/hooks/use-active-chain"
+import { soneiumMainnet } from "@/lib/chains"
 
 export function HomeScreen({
   onStartQuiz,
@@ -48,6 +49,44 @@ export function HomeScreen({
   const { isConnected: isWalletConnected, connect } = useWallet()
   const { isConnected: isAccountConnected } = useAccount()
   const { chainConfig: cfg, heroTitle, heroSubtitle, heroLabel, isConnected: hookIsConnected } = useActiveChain()
+
+  const [startaleConnecting, setStartaleConnecting] = useState(false)
+  const [startaleError, setStartaleError] = useState<string | null>(null)
+  const { connectAsync, connectors } = useConnect()
+  const { switchChainAsync } = useSwitchChain()
+
+  const handleStartaleConnect = async () => {
+    setStartaleConnecting(true)
+    setStartaleError(null)
+
+    const sc = connectors.find((c) => c.id === 'startaleApp')
+    if (!sc) {
+      setStartaleError('Startale connector not available')
+      setStartaleConnecting(false)
+      return
+    }
+
+    try {
+      await connectAsync({ connector: sc, chainId: soneiumMainnet.id })
+    } catch (err: any) {
+      console.error('connect error', err)
+      const isUserRejection =
+        err?.code === 4001 ||
+        err?.cause?.code === 4001
+      if (isUserRejection) return
+      setStartaleError('Connection failed. Please try again.')
+      setTimeout(() => setStartaleError(null), 4000)
+      return
+    }
+
+    try {
+      await switchChainAsync({ chainId: soneiumMainnet.id })
+    } catch (err: any) {
+      console.error('switchChain error', err)
+    } finally {
+      setStartaleConnecting(false)
+    }
+  }
 
   const hero = { label: heroLabel, title: heroTitle, subtitle: heroSubtitle }
   const safeIsConnected = mounted ? (isWalletConnected || isAccountConnected) : false
@@ -74,7 +113,7 @@ export function HomeScreen({
   if (!mounted) return null
 
   return (
-    <div className="relative z-10 flex min-h-screen items-center justify-center px-4 pt-24 pb-10">
+    <div className="relative z-10 flex min-h-screen items-center justify-center px-4 pt-16 pb-10">
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center text-center">
         {!safeIsConnected && (
@@ -88,19 +127,37 @@ export function HomeScreen({
             </p>
             <button
               onClick={connect}
-              style={{
-                background: 'white',
-                color: '#111',
-                border: 'none',
-                borderRadius: 999,
-                padding: '14px 36px',
-                fontSize: 16,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
+              className="rounded-full bg-white px-9 py-[14px] text-base font-bold text-black"
             >
               Connect Wallet
             </button>
+            <button
+              onClick={handleStartaleConnect}
+              disabled={startaleConnecting}
+              className="flex items-center justify-center gap-2 rounded-full bg-white px-9 py-[14px] text-base font-bold text-black disabled:opacity-50"
+            >
+              <svg width="18" height="18" viewBox="0 0 181 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clipPath="url(#startale-clip)">
+                  <path d="M154.14 63.6385L127.779 89.9995L154.14 116.36L180.501 89.9995L154.14 63.6385Z" fill="black"/>
+                  <path d="M26.8608 63.6399L0.5 90.0004L26.8608 116.361L53.2215 90.0004L26.8608 63.6399Z" fill="black"/>
+                  <path d="M90.4992 0L64.1387 26.3608L90.4992 52.7216L116.86 26.3608L90.4992 0Z" fill="black"/>
+                  <path d="M90.4997 127.278L64.1387 153.639L90.4997 180L116.86 153.639L90.4997 127.278Z" fill="black"/>
+                  <path d="M154.141 26.3613H116.861V63.6413H154.141V26.3613Z" fill="black"/>
+                  <path d="M64.1431 26.3613H26.8633V63.6413H64.1431V26.3613Z" fill="black"/>
+                  <path d="M154.141 116.359H116.861V153.639H154.141V116.359Z" fill="black"/>
+                  <path d="M64.1431 116.359H26.8633V153.639H64.1431V116.359Z" fill="black"/>
+                </g>
+                <defs>
+                  <clipPath id="startale-clip">
+                    <rect width="180" height="180" fill="white" transform="translate(0.5)"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              {startaleConnecting ? "Connecting..." : "Connect with Startale"}
+            </button>
+            {startaleError && (
+              <p className="text-sm text-red-400">{startaleError}</p>
+            )}
           </div>
         )}
         {safeIsConnected && (<>
