@@ -1,8 +1,8 @@
 {
   "accountAssociation": {
-    "header": "",
-    "payload": "",
-    "signature": ""
+    "header": "eyJmaWQiOjkzNjgzMCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDVjMTk4MzFhZWUyNjE4RkVBNjJkZDEwNjMyRTVGYzZBZEZGYjdhNzYifQ",
+    "payload": "eyJkb21haW4iOiJxdWl6b25jaGFpbi5hcHAifQ",
+    "signature": "wC4aicOruUhRrtmfeI2IkaicLaXwyXGfFv/Rot3dHKAOdmP57B+ZM5UuBazNTHC/vXluf5T66MkQBh05DZd22xs="
   },
   "frame": {
     "name": "Quiz On Chain",
