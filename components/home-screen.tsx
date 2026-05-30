@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
@@ -43,9 +43,14 @@ export function HomeScreen({
   cooldownRemaining,
   isCheckingCooldown,
 }: HomeScreenProps) {
+  const readyCalled = useRef(false)
+  if (typeof window !== 'undefined' && !readyCalled.current) {
+    sdk.actions.ready()
+    readyCalled.current = true
+  }
+
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])
-  useEffect(() => { sdk.actions.ready() }, [])
 
   const { isConnected: isWalletConnected, connect } = useWallet()
   const { isConnected: isAccountConnected } = useAccount()
