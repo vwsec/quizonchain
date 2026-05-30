@@ -64,15 +64,6 @@ const nextConfig = {
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }]
   },
-  async redirects() {
-    return [
-      {
-        source: '/.well-known/farcaster.json',
-        destination: 'https://api.farcaster.xyz/miniapps/hosted-manifest/019e765b-2f7f-22a2-decd-9a0458e513e8',
-        permanent: false,
-      },
-    ]
-  },
 }
 
 export default nextConfig
