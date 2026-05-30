@@ -62,27 +62,27 @@ function getSignerPrivateKey(): `0x${string}` {
   return prefixed as `0x${string}`
 }
 
+const ALLOWED_ORIGINS = [
+  'https://quizonchain.app',
+  'https://www.quizonchain.app',
+  'http://localhost:3000',
+  'http://localhost:3100',
+  'https://app.startale.com',
+]
+
+function isAllowed(value: string): boolean {
+  return ALLOWED_ORIGINS.some((allowed) => value.replace(/\/$/, "") === allowed)
+}
+
 export async function POST(request: Request) {
   const origin = request.headers.get('origin')
   const referer = request.headers.get('referer')
-  const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN ?? "quizonchain.app"
-  console.log("ORIGIN:", request.headers.get("origin"));
-  console.log("REFERER:", request.headers.get("referer"));
-  console.log("APP_DOMAIN:", process.env.NEXT_PUBLIC_APP_DOMAIN);
-  const normalize = (s: string) => s.replace(/\/$/, "");
-  if (origin) {
-    const isAllowed =
-      normalize(origin) === `https://${appDomain}` ||
-      normalize(origin) === `https://www.${appDomain}`;
-    if (!isAllowed) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
+  if (origin && !isAllowed(origin)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
   if (referer) {
-    const isAllowed =
-      normalize(referer) === `https://${appDomain}` ||
-      normalize(referer) === `https://www.${appDomain}`;
-    if (!isAllowed) {
+    const refUrl = referer.replace(/\/$/, "")
+    if (!isAllowed(refUrl)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
   }

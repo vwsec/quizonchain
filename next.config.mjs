@@ -8,7 +8,7 @@ const cspHeader = `
     object-src 'none';
     base-uri 'self';
     form-action 'self';
-    frame-ancestors 'none';
+    frame-ancestors 'self' http://localhost:3100 https://app.startale.com;
     connect-src 'self' blob: data:
       https://*.walletconnect.com 
       https://*.walletconnect.org 
@@ -48,7 +48,6 @@ const cspHeader = `
 const securityHeaders = [
   { key: 'Content-Security-Policy', value: cspHeader },
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
-  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

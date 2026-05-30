@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
-import { useAccount, useConnect, useSwitchChain } from "wagmi"
+import { useAccount, useConnect as useWagmiConnect } from "wagmi"
 import { getTimeUntilNextSubmissionSeconds } from "@/lib/submitScore"
 import { NftProgressCard } from "./nft-mint"
 import MegaEthLogo from "./megaeth-logo"
@@ -30,7 +30,7 @@ interface HomeScreenProps {
 }
 
 import { useActiveChain } from "@/hooks/use-active-chain"
-import { soneiumMainnet } from "@/lib/chains"
+import { sdk } from "@farcaster/miniapp-sdk"
 
 export function HomeScreen({
   onStartQuiz,
@@ -44,7 +44,8 @@ export function HomeScreen({
   isCheckingCooldown,
 }: HomeScreenProps) {
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => { setMounted(true) }, [])
+  useEffect(() => { sdk.actions.ready() }, [])
 
   const { isConnected: isWalletConnected, connect } = useWallet()
   const { isConnected: isAccountConnected } = useAccount()
@@ -52,40 +53,27 @@ export function HomeScreen({
 
   const [startaleConnecting, setStartaleConnecting] = useState(false)
   const [startaleError, setStartaleError] = useState<string | null>(null)
-  const { connectAsync, connectors } = useConnect()
-  const { switchChainAsync } = useSwitchChain()
+  const { connectAsync, connectors } = useWagmiConnect()
 
   const handleStartaleConnect = async () => {
-    setStartaleConnecting(true)
-    setStartaleError(null)
-
     const sc = connectors.find((c) => c.id === 'startaleApp')
     if (!sc) {
       setStartaleError('Startale connector not available')
-      setStartaleConnecting(false)
       return
     }
-
+    setStartaleConnecting(true)
+    setStartaleError(null)
     try {
-      await connectAsync({ connector: sc, chainId: soneiumMainnet.id })
+      await connectAsync({ connector: sc })
     } catch (err: any) {
-      console.error('connect error', err)
-      const isUserRejection =
-        err?.code === 4001 ||
-        err?.cause?.code === 4001
-      if (isUserRejection) return
-      setStartaleError('Connection failed. Please try again.')
+      console.error('connect error', err, Object.keys(err), err?.constructor?.name)
+      if (err?.code === 4001 || err?.cause?.code === 4001) return
+      const inIframe = typeof window !== 'undefined' && window.parent !== window
+      setStartaleError(inIframe ? 'Connection failed. Please try again.' : 'Startale Wallet only works inside the Startale App.')
       setTimeout(() => setStartaleError(null), 4000)
       return
     }
-
-    try {
-      await switchChainAsync({ chainId: soneiumMainnet.id })
-    } catch (err: any) {
-      console.error('switchChain error', err)
-    } finally {
-      setStartaleConnecting(false)
-    }
+    setStartaleConnecting(false)
   }
 
   const hero = { label: heroLabel, title: heroTitle, subtitle: heroSubtitle }

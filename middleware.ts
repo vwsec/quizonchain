@@ -1,25 +1,28 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+const ALLOWED_ORIGINS = [
+  'https://quizonchain.app',
+  'https://www.quizonchain.app',
+  'http://localhost:3000',
+  'http://localhost:3100',
+  'https://app.startale.com',
+]
+
+function isAllowed(value: string): boolean {
+  return ALLOWED_ORIGINS.some((allowed) => value.replace(/\/$/, "") === allowed)
+}
+
 export function middleware(request: NextRequest) {
   const origin = request.headers.get('origin')
   const referer = request.headers.get('referer')
 
-  const appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN ?? "quizonchain.app"
-  const normalize = (s: string) => s.replace(/\/$/, "");
-  if (origin) {
-    const isAllowed =
-      normalize(origin) === `https://${appDomain}` ||
-      normalize(origin) === `https://www.${appDomain}`;
-    if (!isAllowed) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
+  if (origin && !isAllowed(origin)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
   if (referer) {
-    const isAllowed =
-      normalize(referer) === `https://${appDomain}` ||
-      normalize(referer) === `https://www.${appDomain}`;
-    if (!isAllowed) {
+    const refUrl = referer.replace(/\/$/, "")
+    if (!isAllowed(refUrl)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
   }

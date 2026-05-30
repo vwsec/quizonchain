@@ -53,10 +53,26 @@ export const metadata: Metadata = {
     shortcut: '/logo.png',
     apple: '/logo.png',
   },
-  other: activeChain === 'base' ? {
-    'base:app_id': '69fcb1ba5f11a2d419d3021c',
-    'base:builder_code': 'bc_2tnkhocu',
-  } : {},
+  other: {
+    ...(activeChain === 'base' ? {
+      'base:app_id': '69fcb1ba5f11a2d419d3021c',
+      'base:builder_code': 'bc_2tnkhocu',
+    } : {}),
+    'fc:miniapp': JSON.stringify({
+      "version": "1",
+      "imageUrl": "https://quizonchain.app/logo.png",
+      "button": {
+        "title": "Play Quiz On Chain",
+        "action": {
+          "type": "launch_miniapp",
+          "url": "https://quizonchain.app",
+          "name": "Quiz On Chain",
+          "splashImageUrl": "https://quizonchain.app/logo.png",
+          "splashBackgroundColor": "#0f0f1a"
+        }
+      }
+    }),
+  },
 }
 
 import { Header } from '@/components/header'
