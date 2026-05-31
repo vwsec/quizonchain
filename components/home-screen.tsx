@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { useWallet } from "./wallet-provider"
 import { Button } from "@/components/ui/button"
 import { Shuffle } from "lucide-react"
@@ -30,6 +30,7 @@ interface HomeScreenProps {
 }
 
 import { useActiveChain } from "@/hooks/use-active-chain"
+import { useFarcasterMiniApp } from "@/hooks/use-farcaster-miniapp"
 import { sdk } from "@farcaster/miniapp-sdk"
 
 export function HomeScreen({
@@ -43,11 +44,18 @@ export function HomeScreen({
   cooldownRemaining,
   isCheckingCooldown,
 }: HomeScreenProps) {
-  const readyCalled = useRef(false)
-  if (typeof window !== 'undefined' && !readyCalled.current) {
-    sdk.actions.ready()
-    readyCalled.current = true
-  }
+  useEffect(() => { sdk.actions.ready() }, [])
+
+  const { isMiniApp, hostSupportsNotifications, notificationDetails, addMiniApp } = useFarcasterMiniApp()
+  const [notifPrompted, setNotifPrompted] = useState(false)
+  const [notifSent, setNotifSent] = useState(false)
+
+  useEffect(() => {
+    if (isMiniApp && hostSupportsNotifications && !notificationDetails && !notifPrompted) {
+      addMiniApp().catch(() => {})
+      setNotifPrompted(true)
+    }
+  }, [isMiniApp, hostSupportsNotifications, notificationDetails, notifPrompted, addMiniApp])
 
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setMounted(true) }, [])

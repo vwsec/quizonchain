@@ -1,18 +1,28 @@
 'use client'
 
+import { Buffer } from 'buffer'
+globalThis.Buffer = Buffer
+
 import '@rainbow-me/rainbowkit/styles.css'
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import {
-  getDefaultWallets,
+  connectorsForWallets,
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
+import {
+  rainbowWallet,
+  coinbaseWallet,
+  walletConnectWallet,
+  injectedWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
 import { startaleConnector } from '@startale/app-sdk'
+import { FarcasterMiniAppProvider } from '@/hooks/use-farcaster-miniapp'
 {
   const maybeLocalStorage = (globalThis as unknown as { localStorage?: unknown })
     .localStorage as
@@ -58,10 +68,23 @@ if (!projectId) {
 
 const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
 
-const { connectors: rainbowConnectors } = getDefaultWallets({ projectId, appName: 'Quiz On Chain' })
+const rainbowConnectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Installed',
+      wallets: [injectedWallet],
+    },
+    {
+      groupName: 'Popular',
+      wallets: [rainbowWallet, coinbaseWallet, walletConnectWallet],
+    },
+  ],
+  { projectId, appName: 'Quiz On Chain' }
+)
 
 const config = createConfig({
   chains: allChains as any,
+  multiInjectedProviderDiscovery: true,
   transports: Object.fromEntries(allChains.map(c => [c.id, http()])),
   connectors: [
     ...rainbowConnectors,
@@ -102,7 +125,9 @@ export function Providers({ children }: { children: ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitThemeWrapper>
-          {children}
+          <FarcasterMiniAppProvider>
+            {children}
+          </FarcasterMiniAppProvider>
         </RainbowKitThemeWrapper>
       </QueryClientProvider>
     </WagmiProvider>

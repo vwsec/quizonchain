@@ -1,14 +1,21 @@
 export const SONEIUM_DOCS_PAGES = [
   "https://docs.soneium.org/docs/builders/overview",
-  "https://docs.soneium.org/docs/builders/network-info",
-  "https://docs.soneium.org/docs/concept/overview",
+  "https://docs.soneium.org/docs/builders/bridging",
+  "https://docs.soneium.org/docs/builders/contracts",
+  "https://docs.soneium.org/docs/builders/fees",
+  "https://docs.soneium.org/docs/builders/faq",
+  "https://docs.soneium.org/docs/",
 ]
 
 export const INK_DOCS_PAGES = [
   "https://docs.inkonchain.com/general/about",
+  "https://docs.inkonchain.com/general/network-information",
   "https://docs.inkonchain.com/build/transaction-fees",
   "https://docs.inkonchain.com/useful-information/the-superchain",
   "https://docs.inkonchain.com/build/getting-started",
+  "https://docs.inkonchain.com/tools/bridges",
+  "https://docs.inkonchain.com/tools/faucets",
+  "https://docs.inkonchain.com/faq",
 ]
 
 export const BASE_DOCS_PAGES = [
@@ -22,6 +29,7 @@ export const BASE_DOCS_PAGES = [
 export const UNICHAIN_DOCS_PAGES = [
   'https://docs.unichain.org/docs/unichain',
   'https://docs.unichain.org/docs/unichain/technical-information/network-information',
+  'https://docs.unichain.org/docs/unichain/getting-started/setting-up-a-wallet',
   'https://docs.unichain.org/docs/unichain/guides/deploy-a-smart-contract',
   'https://docs.unichain.org/docs/building-on-unichain',
 ];
@@ -48,6 +56,8 @@ export const SEPOLIA_DOCS_PAGES = [
   'https://ethereum.org/developers/docs/gas/',
   'https://ethereum.org/developers/docs/accounts/',
   'https://ethereum.org/developers/docs/dapps/',
+  'https://ethereum.org/developers/docs/consensus-mechanisms/',
+  'https://ethereum.org/developers/docs/consensus-mechanisms/pos/',
 ];
 
 export const ARC_DOCS_PAGES = [

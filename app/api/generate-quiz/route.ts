@@ -20,8 +20,8 @@ const BASE_CHAIN_ID = 8453
 const UNICHAIN_CHAIN_ID = 130
 
 const TARGET_CHARS = 3000
-const MIN_COMBINED_CHARS = 500
-const MIN_URL_TEXT_CHARS = 100
+const MIN_COMBINED_CHARS = 800
+const MIN_URL_TEXT_CHARS = 200
 const MAX_URLS_TO_TRY = 6
 const JINA_PREFIX = "https://r.jina.ai/"
 const FETCH_TIMEOUT_MS = 8_000
@@ -185,7 +185,7 @@ async function fetchViaJinaReader(docUrl: string): Promise<string> {
 }
 
 function isValidContent(text: string): boolean {
-  if (text.length < 300) return false;
+  if (text.length < 800) return false;
   const badSignals = ['404', 'not found', 'redirects to', 'page not found', 'access denied', 'login required', 'javascript required'];
   const lowerText = text.toLowerCase();
   const badCount = badSignals.filter(s => lowerText.includes(s)).length;
@@ -543,7 +543,14 @@ async function generateWithGroq(prompt: string, topicAngle: string): Promise<str
         messages: [
           {
             role: "system",
-            content: `You are a blockchain quiz generator v2. Focus this quiz on: ${topicAngle}. Each time you must produce a completely different set of questions — vary the topics, difficulty angles, and technical depth. Never repeat the same question format or subject across generations.`,
+            content: `You are a blockchain quiz generator v2. Focus this quiz on: ${topicAngle}. Each time you must produce a completely different set of questions — vary the topics, difficulty angles, and technical depth. Never repeat the same question format or subject across generations.
+
+HARD RULES — These override all other instructions:
+a) Generate questions and answers ONLY from facts explicitly stated in the documentation provided below. Do NOT use your training knowledge to fill gaps.
+b) NEVER infer technical properties from token names, chain names, currency symbols, or naming conventions.
+c) Your training data may be outdated. Do NOT rely on it for facts about consensus mechanisms, proof systems, protocol versions, or network upgrades. Use ONLY the provided documentation.
+d) If the provided documentation does not contain enough factual content to generate a question with 4 verifiable answer options, skip that topic entirely. Do not guess.
+e) Every answer option must be traceable to a specific sentence in the provided documentation. If you cannot trace it, do not include it.`,
           },
           { role: "user", content: prompt },
         ],
@@ -675,6 +682,12 @@ async function handleGenerateQuiz(
 
     const prompt = `
 Generate exactly 5 high-quality multiple choice questions based ONLY on the documentation below for ${ecosystemName}.
+
+HARD RULES (these override all other instructions):
+- Your training data may be outdated. Answer ONLY from facts explicitly stated in the documentation below.
+- NEVER infer technical properties from token names, chain names, currency symbols, or naming conventions.
+- Every answer option must be traceable to a specific sentence in the provided documentation.
+- If the documentation lacks enough content for 4 verifiable answer options, skip that topic.
 
 STRICT RULES:
 - Focus on this topic area: ${topicAngle}
