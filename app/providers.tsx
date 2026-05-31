@@ -9,16 +9,10 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider, createConfig, http } from 'wagmi'
 import {
-  connectorsForWallets,
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
-import {
-  rainbowWallet,
-  coinbaseWallet,
-  walletConnectWallet,
-  injectedWallet,
-} from '@rainbow-me/rainbowkit/wallets'
+import { walletConnect, coinbaseWallet } from 'wagmi/connectors'
 import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
 import { startaleConnector } from '@startale/app-sdk'
@@ -68,26 +62,13 @@ if (!projectId) {
 
 const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
 
-const rainbowConnectors = connectorsForWallets(
-  [
-    {
-      groupName: 'Installed',
-      wallets: [injectedWallet],
-    },
-    {
-      groupName: 'Popular',
-      wallets: [rainbowWallet, coinbaseWallet, walletConnectWallet],
-    },
-  ],
-  { projectId, appName: 'Quiz On Chain' }
-)
-
 const config = createConfig({
   chains: allChains as any,
   multiInjectedProviderDiscovery: true,
   transports: Object.fromEntries(allChains.map(c => [c.id, http()])),
   connectors: [
-    ...rainbowConnectors,
+    walletConnect({ projectId }),
+    coinbaseWallet(),
     startaleConnector({ appName: 'Quiz On Chain', appLogoUrl: 'https://quizonchain.app/logo.png' }),
   ],
 })
