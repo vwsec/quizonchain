@@ -49,46 +49,33 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
     }
   }
 
+  const getChainAccentColor = () => {
+    if (isMegaEth) return '#00ff88'
+    if (isInk) return '#8b5cf6'
+    if (isUnichain) return '#FF007A'
+    if (isBase) return '#0052FF'
+    if (isSoneium) return '#0047FF'
+    if (isLitvm) return '#00F2FE'
+    if (isArc) return '#4D8EE9'
+    return '#0047FF'
+  }
+
+  const chainAccent = getChainAccentColor()
+
   const getOptionStyles = (index: number) => {
     if (!isAnswered) {
-      if (isMegaEth) {
-        return selectedAnswer === index
-          ? "border-[#00ff88] bg-black text-[#00ff88]"
-          : "border-white/15 bg-black hover:border-white text-white"
+      const baseSelected = `border-2 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : 'rounded-xl'}`
+      const baseUnselected = `${isMegaEth ? 'rounded-none border border-white/15' : isInk ? 'rounded-full border-2' : isUnichain ? 'rounded-2xl border-2' : 'rounded-xl border-2'}`
+      
+      if (selectedAnswer === index) {
+        return `${baseSelected} ${isMegaEth ? 'border-[#00ff88] bg-black text-[#00ff88]' : isLitvm ? 'border-[#00F2FE] bg-[#00F2FE]/10 text-white' : 'border-[var(--chain-accent)] bg-[var(--chain-accent)]/10 text-white'}`
       }
-      if (isInk) {
-        return selectedAnswer === index
-          ? "border-[#7B61FF] bg-[#7B61FF]/10"
-          : "border-white/10 bg-white/5 hover:border-[#7B61FF]/50 text-white"
-      }
-      if (isUnichain) {
-        return selectedAnswer === index
-          ? "border-[#FF007A] bg-[#FF007A]/10"
-          : "border-white/10 bg-white/5 hover:border-[#FF007A]/50 text-white"
-      }
-      if (isBase) {
-        return selectedAnswer === index
-          ? "border-[#0052FF] bg-[#0052FF]/5 text-black"
-          : "border-black/5 bg-black/5 hover:border-[#0052FF]/30 text-black"
-      }
-      if (isSoneium) {
-        return selectedAnswer === index
-          ? "border-[#0047FF] bg-[#0047FF]/10 text-white"
-          : "border-white/10 bg-white/5 hover:border-[#0047FF]/50 text-white"
-      }
-      if (isLitvm) {
-        return selectedAnswer === index
-          ? "border-[#00F2FE] bg-[#00F2FE]/10 text-white"
-          : "border-[#00F2FE]/20 bg-[#0B192C] hover:border-[#00F2FE]/50 text-white"
-      }
-      if (isArc) {
-        return selectedAnswer === index
-          ? "border-[#4D8EE9] bg-[#4D8EE9]/10 text-white"
-          : "border-white/10 bg-white/5 hover:border-[#4D8EE9]/50 text-white"
-      }
-      return selectedAnswer === index
-        ? "border-primary bg-primary/10"
-        : "border-border bg-card/50 hover:border-primary/50 hover:bg-card text-foreground"
+      return `${baseUnselected} ${
+        isMegaEth ? 'border-white/15 bg-black hover:border-white text-white' :
+        isLitvm ? 'border-[#00F2FE]/20 bg-[#0B192C] hover:border-[#00F2FE]/50 text-white' :
+        isBase ? 'border-black/5 bg-black/5 hover:border-[#0052FF]/30 text-black hover:bg-black/10' :
+        'border-white/10 bg-white/5 hover:border-[var(--chain-accent)]/50 hover:bg-white/[0.08] text-white'
+      }`
     }
 
     const isCorrect = index === question.correctIndex
@@ -96,28 +83,28 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
 
     if (isCorrect) {
       return isMegaEth 
-        ? "border-[#00ff88] bg-black text-[#00ff88]" 
-        : "border-[#22c55e] bg-[rgba(34,197,94,0.15)] text-[#22c55e]"
+        ? "border-2 border-[#00ff88] bg-black text-[#00ff88]" 
+        : `border-2 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : 'rounded-xl'} border-[#22c55e] bg-[rgba(34,197,94,0.15)] text-[#22c55e]`
     }
     if (isSelected && !isCorrect) {
       return isMegaEth
-        ? "border-red-500 bg-black text-red-500"
-        : "border-[#ef4444] bg-[rgba(239,68,68,0.15)] text-[#ef4444]"
+        ? "border-2 border-red-500 bg-black text-red-500"
+        : `border-2 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-2xl' : 'rounded-xl'} border-[#ef4444] bg-[rgba(239,68,68,0.15)] text-[#ef4444]`
     }
     return isMegaEth
-      ? "border-white/5 bg-black opacity-30 text-white"
+      ? "border border-white/5 bg-black opacity-30 text-white"
       : isBase
-        ? "border-black/5 bg-black/5 opacity-40 text-black"
+        ? "border-2 border-black/5 bg-black/5 opacity-40 text-black"
       : isLitvm
-        ? "border-[#00F2FE]/10 bg-[#0B192C] opacity-40 text-white/50"
-        : "border-border bg-card/30 opacity-40 text-foreground"
+        ? "border border-[#00F2FE]/10 bg-[#0B192C] opacity-40 text-white/50"
+        : "border-2 border-white/10 bg-white/5 opacity-40 text-white"
   }
 
   return (
     <div className={`flex min-h-screen flex-col items-center justify-center px-4 py-12 ${isMegaEth || isLitvm ? 'font-mono' : ''}`}>
       {/* Background decoration removed - handled by ThemeBackground */}
 
-      <div className="relative z-10 w-full max-w-2xl">
+      <div className="relative z-10 w-full max-w-2xl" style={{ '--chain-accent': chainAccent } as React.CSSProperties}>
         {/* Progress section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-3">
@@ -130,29 +117,35 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
               </span>
             )}
           </div>
-          <Progress 
-            value={progress} 
-            className={`h-1 ${isMegaEth ? 'bg-white/10 rounded-none' : isLitvm ? 'bg-white/5 h-2 rounded-2xl' : isInk || isUnichain ? 'bg-white/5 h-2 rounded-full' : isBase ? 'h-2 bg-black/5 rounded-full' : isSoneium ? 'h-2 bg-white/10 rounded-full' : isArc ? 'h-2 bg-white/10 rounded-full' : 'h-2 bg-card'}`} 
-            style={isMegaEth ? { '--progress-fill': '#00ff88' } as any : isLitvm ? { '--progress-fill': '#00F2FE' } as any : isInk ? { '--progress-fill': '#7B61FF' } as any : isUnichain ? { '--progress-fill': '#FF007A' } as any : isBase ? { '--progress-fill': '#0052FF' } as any : isSoneium ? { '--progress-fill': '#0047FF' } as any : isArc ? { '--progress-fill': '#4D8EE9' } as any : undefined}
-          />
+          <div className={`relative h-2 w-full overflow-hidden ${isMegaEth ? 'bg-white/10 rounded-none' : isLitvm ? 'bg-white/5 rounded-2xl' : isInk || isUnichain ? 'bg-white/5 rounded-full' : isBase ? 'bg-black/5 rounded-full' : isSoneium ? 'bg-white/10 rounded-full' : isArc ? 'bg-white/10 rounded-full' : 'bg-white/10 rounded-full'}`}>
+            <div
+              className={`h-full transition-all duration-500 ease-out ${isMegaEth ? 'rounded-none' : 'rounded-full'}`}
+              style={{
+                width: `${progress}%`,
+                backgroundColor: isMegaEth ? "#00ff88" : isLitvm ? "#00F2FE" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : isArc ? "#4D8EE9" : "#0047FF",
+                boxShadow: `0 0 12px ${isMegaEth ? "#00ff88" : isLitvm ? "#00F2FE" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isSoneium ? "#0047FF" : isArc ? "#4D8EE9" : "#0047FF"}66`,
+                transition: "width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              }}
+            />
+          </div>
         </div>
 
         {/* Question card */}
-        <div className={`p-4 md:p-8 mb-6 border ${
+        <div className={`p-5 md:p-8 mb-6 border transition-all duration-300 ${
           isMegaEth 
-            ? 'border-white/15 bg-black rounded-none' 
+            ? 'border-white/15 bg-black rounded-none hover:border-[#00ff88]/30' 
             : isInk
-              ? 'rounded-2xl md:rounded-3xl border-white/10 bg-white/5 backdrop-blur-lg'
+              ? 'rounded-2xl md:rounded-3xl border-white/10 bg-white/5 backdrop-blur-lg hover:border-[#8b5cf6]/30 hover:shadow-[0_0_40px_rgba(139,92,246,0.05)]'
             : isUnichain
-              ? 'rounded-xl md:rounded-2xl border-white/10 bg-white/5 backdrop-blur-lg'
+              ? 'rounded-xl md:rounded-2xl border-white/10 bg-white/5 backdrop-blur-lg hover:border-[#FF007A]/30'
             : isBase
-              ? 'rounded-xl md:rounded-2xl border-black/5 bg-[#f4f5f7] shadow-sm'
+              ? 'rounded-xl md:rounded-2xl border-black/5 bg-[#f4f5f7] hover:border-[#0052FF]/20'
             : isSoneium
-              ? 'rounded-xl md:rounded-2xl border-[#0047FF]/20 bg-white/[0.03] backdrop-blur-xl shadow-[0_0_50px_rgba(0,71,255,0.05)]'
+              ? 'rounded-xl md:rounded-2xl border-[#0047FF]/20 bg-white/[0.03] backdrop-blur-xl hover:border-[#0047FF]/30'
             : isLitvm
-              ? 'rounded-xl md:rounded-2xl border-[#00F2FE]/20 bg-[#0B192C] backdrop-blur-xl shadow-[0_0_50px_rgba(0,242,254,0.08)]'
+              ? 'rounded-xl md:rounded-2xl border-[#00F2FE]/20 bg-[#0B192C] backdrop-blur-xl hover:border-[#00F2FE]/40 hover:shadow-[0_0_50px_rgba(0,242,254,0.12)]'
             : isArc
-              ? 'rounded-xl md:rounded-2xl border-[#4D8EE9]/20 bg-white/[0.02] backdrop-blur-xl shadow-[0_0_50px_rgba(77,142,233,0.05)]'
+              ? 'rounded-xl md:rounded-2xl border-[#4D8EE9]/20 bg-white/[0.02] backdrop-blur-xl hover:border-[#4D8EE9]/30'
               : 'rounded-xl md:rounded-2xl border-border bg-card/50 backdrop-blur-lg'
         }`}>
           <h2 className={`text-lg md:text-2xl font-semibold text-balance ${isMegaEth ? 'uppercase text-white' : isLitvm ? 'text-[#00F2FE]' : isUnichain ? 'font-serif italic text-white' : isInk ? 'tracking-tight text-white' : isBase ? 'tracking-tighter text-black' : isSoneium ? 'tracking-tight text-white' : 'text-white'}`}>
@@ -204,8 +197,8 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
         {/* Feedback Banner */}
         {isAnswered && question.correctIndex !== undefined && (
           <div className={cn(
-            "mb-8 p-4 border flex items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-300",
-            isMegaEth ? "rounded-none uppercase text-xs tracking-wider" : isLitvm ? "rounded-xl border-[#00F2FE]/30 bg-[#00F2FE]/10 text-white font-mono text-xs" : isInk ? "rounded-full px-6" : isSoneium ? "rounded-xl border-[#0047FF]/30 bg-[#0047FF]/10 text-white" : isArc ? "rounded-xl border-[#4D8EE9]/30 bg-[#4D8EE9]/10 text-white" : "rounded-xl",
+            "mb-8 p-4 border flex items-center gap-3 animate-slide-up",
+            isMegaEth ? "rounded-none uppercase text-xs tracking-wider" : isLitvm ? "rounded-xl border-[#00F2FE]/30 bg-[#00F2FE]/10 text-white font-mono text-xs" : isInk ? "rounded-full px-6 backdrop-blur-md" : isSoneium ? "rounded-xl border-[#0047FF]/30 bg-[#0047FF]/10 text-white backdrop-blur-md" : isArc ? "rounded-xl border-[#4D8EE9]/30 bg-[#4D8EE9]/10 text-white backdrop-blur-md" : "rounded-xl backdrop-blur-md",
             selectedAnswer === question.correctIndex 
               ? (isMegaEth ? "border-[#00ff88] text-[#00ff88]" : isSoneium ? "border-[#00ff88] text-[#00ff88]" : "bg-[rgba(34,197,94,0.15)] border-[#22c55e] text-[#22c55e]")
               : (isMegaEth ? "border-red-500 text-red-500" : "bg-[rgba(239,68,68,0.15)] border-[#ef4444] text-[#ef4444]")
@@ -232,21 +225,21 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
             <Button
               size="lg"
               onClick={handleNext}
-              className={`transition-all duration-200 ${
+              className={`transition-all duration-300 group ${
                 isMegaEth 
                   ? 'rounded-none border border-[#00ff88] bg-black text-[#00ff88] hover:bg-[#00ff88] hover:text-black font-mono uppercase' 
                 : isInk
-                  ? 'rounded-full bg-[#7B61FF] hover:bg-[#6c54e6] text-white font-bold px-8 shadow-[0_0_20px_rgba(123,97,255,0.4)]'
+                  ? 'rounded-full bg-[#7B61FF] hover:bg-[#6c54e6] text-white font-bold px-8 hover:shadow-[0_0_30px_rgba(123,97,255,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                 : isUnichain
-                  ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold px-8 shadow-[0_0_20px_rgba(255,0,122,0.4)]'
+                  ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold px-8 hover:shadow-[0_0_30px_rgba(255,0,122,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                 : isBase
-                  ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold px-8 shadow-lg shadow-[#0052FF]/20'
+                  ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold px-8 hover:shadow-[0_0_30px_rgba(0,82,255,0.5)] hover:scale-[1.02] active:scale-[0.98]'
                 : isSoneium
-                  ? 'rounded-xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold px-8 shadow-[0_0_20px_rgba(0,71,255,0.3)]'
+                  ? 'rounded-xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold px-8 hover:shadow-[0_0_30px_rgba(0,71,255,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                 : isLitvm
-                  ? 'rounded-xl bg-[#00F2FE] hover:bg-[#00C9DB] text-[#0B192C] font-mono font-bold px-8 shadow-[0_0_20px_rgba(0,242,254,0.4)]'
+                  ? 'rounded-xl bg-[#00F2FE] hover:bg-[#00C9DB] text-[#0B192C] font-mono font-bold px-8 hover:shadow-[0_0_30px_rgba(0,242,254,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                 : isArc
-                  ? 'rounded-xl bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white font-bold px-8 shadow-[0_0_20px_rgba(77,142,233,0.3)]'
+                  ? 'rounded-xl bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white font-bold px-8 hover:shadow-[0_0_30px_rgba(77,142,233,0.6)] hover:scale-[1.02] active:scale-[0.98]'
                   : 'bg-primary hover:bg-primary/90 text-primary-foreground font-medium'
               }`}
             >

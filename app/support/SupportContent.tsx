@@ -71,7 +71,7 @@ export default function SupportContent() {
           {/* Contact Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Twitter Card */}
-            <div className={`p-8 transition-all group relative overflow-hidden ${
+            <div className={`p-8 transition-all duration-200 group relative overflow-hidden hover-lift ${
               isMegaEth 
                 ? 'bg-black border border-white/15 rounded-none hover:border-[#00ff88]' 
                 : isInk || isUnichain
@@ -104,21 +104,21 @@ export default function SupportContent() {
                   href="https://x.com/quizonchain"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center justify-center w-full py-4 font-bold transition-all ${
+                  className={`inline-flex items-center justify-center w-full py-4 font-bold transition-all hover:scale-[1.02] active:scale-[0.98] ${
                     isMegaEth 
                       ? 'bg-black border border-[#00ff88] text-[#00ff88] hover:bg-[#00ff88] hover:text-black rounded-none uppercase' 
                       : isInk
-                        ? 'bg-[#7B61FF] hover:bg-[#6c54e6] text-white rounded-full shadow-[0_0_20px_rgba(123,97,255,0.3)]'
+                        ? 'bg-[#7B61FF] hover:bg-[#6c54e6] text-white rounded-full hover:shadow-[0_0_30px_rgba(123,97,255,0.6)]'
                       : isUnichain
-                        ? 'bg-[#FF007A] hover:bg-[#d60066] text-white rounded-2xl shadow-[0_0_20px_rgba(255,0,122,0.3)]'
+                        ? 'bg-[#FF007A] hover:bg-[#d60066] text-white rounded-2xl hover:shadow-[0_0_30px_rgba(255,0,122,0.6)]'
                       : isBase
-                        ? 'bg-[#0052FF] hover:bg-[#0047FF] text-white rounded-full shadow-lg transition-all'
+                        ? 'bg-[#0052FF] hover:bg-[#0047FF] text-white rounded-full hover:shadow-[0_0_30px_rgba(0,82,255,0.5)]'
                       : isLitvm ?'bg-[#0B192C] border border-[#00F2FE] text-[#00F2FE] hover:bg-[#00F2FE] hover:text-[#0B192C] rounded-none'
                   : isArc
-                    ? 'bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white rounded-xl shadow-[0_0_20px_rgba(77,142,233,0.3)]'
+                    ? 'bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white rounded-xl hover:shadow-[0_0_30px_rgba(77,142,233,0.6)]'
                     : !isConnected
                       ? 'bg-white hover:bg-white/80 text-black rounded-xl'
-                      : 'bg-[#0047FF] hover:bg-blue-600 text-white rounded-xl shadow-[0_0_20px_rgba(0,71,255,0.3)]'
+                      : 'bg-[#0047FF] hover:bg-blue-600 text-white rounded-xl hover:shadow-[0_0_30px_rgba(0,71,255,0.6)]'
                   }`}
                 >
                   Open X
@@ -127,7 +127,7 @@ export default function SupportContent() {
             </div>
 
             {/* Discord Card */}
-            <div className={`p-8 transition-all group relative overflow-hidden ${
+            <div className={`p-8 transition-all duration-200 group relative overflow-hidden hover-lift ${
               isMegaEth 
                 ? 'bg-black border border-white/10 rounded-none' 
                 : isInk || isUnichain
@@ -183,7 +183,7 @@ export default function SupportContent() {
                 <AccordionItem 
                   key={i} 
                   value={`item-${i}`}
-                  className={`border px-6 py-2 transition-all ${
+                  className={`border px-6 py-2 transition-all duration-200 hover-lift ${
                     isMegaEth 
                       ? 'border-white/10 bg-black rounded-none data-[state=open]:border-[#00ff88]/50' 
                       : isInk

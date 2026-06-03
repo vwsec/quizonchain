@@ -356,7 +356,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           <button
             onClick={() => setShowMastersOnly(v => !v)}
             disabled={nftLoading || holderSet.size === 0}
-            className={`flex items-center gap-1.5 border px-3 py-2 text-xs font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-40 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-xl' : isBase ? 'rounded-full' : isLitvm ? 'rounded-none' : 'rounded-xl'}`}
+            className={`flex items-center gap-1.5 border px-3 py-2 text-xs font-semibold transition-all hover-lift disabled:cursor-not-allowed disabled:opacity-40 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-xl' : isBase ? 'rounded-full' : isLitvm ? 'rounded-none' : 'rounded-xl'}`}
             style={
               showMastersOnly
                 ? {
@@ -473,11 +473,16 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                 return (
                   <tr
                     key={player.address}
-                    className={`border-b transition-colors ${isBase ? 'border-black/5' : 'border-white/5'} ${
+                    className={`border-b transition-all duration-200 ${isBase ? 'border-black/5' : 'border-white/5'} ${
                       isMe
-                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/20" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/20" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/20" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/20" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/20" : isArc ? "bg-[#4D8EE9]/10 hover:bg-[#4D8EE9]/20" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/20")
+                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/15" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/15" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/15" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/15" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/15" : isArc ? "bg-[#4D8EE9]/10 hover:bg-[#4D8EE9]/15" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/15")
                         : (isBase ? "hover:bg-black/5" : isLitvm ? "hover:bg-white/[0.02]" : "hover:bg-white/5")
                     }`}
+                    style={
+                      isMe && !isBase && !isLitvm
+                        ? { boxShadow: `inset 2px 0 0 ${cfg?.color ?? '#0047FF'}` }
+                        : {}
+                    }
                   >
                     {/* Rank */}
                     <td className="py-4 pl-4 font-medium">

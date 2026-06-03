@@ -286,6 +286,7 @@ export function ResultsScreen({
     : isArc ? 'text-[#4D8EE9]' 
     : isLitvm ? 'text-[#00F2FE]' 
     : 'text-primary'
+  const accentColor = isMegaEth ? '#00ff88' : isInk ? '#8b5cf6' : isUnichain ? '#FF007A' : isBase ? '#0052FF' : isSoneium ? '#0047FF' : isLitvm ? '#00F2FE' : isArc ? '#4D8EE9' : '#0047FF'
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
@@ -293,13 +294,13 @@ export function ResultsScreen({
 
         {/* CARD WRAPPER */}
         <div
-          className={`max-w-sm mx-auto w-full flex flex-col items-center px-8 py-9 ${
-            isMegaEth ? 'bg-[#0a0a0a] rounded-none' :
-            isInk ? 'bg-[#0a0a0a] rounded-2xl' :
+          className={`max-w-sm mx-auto w-full flex flex-col items-center px-8 py-9 transition-all duration-300 ${
+            isMegaEth ? 'bg-black rounded-none shadow-[0_0_30px_rgba(0,255,136,0.05)]' :
+            isInk ? 'bg-[#0a0a0a] rounded-2xl shadow-[0_0_30px_rgba(139,92,246,0.05)]' :
             isSoneium ? 'bg-[#0a0a0a] rounded-2xl' :
             isBase ? 'bg-[#0d0d1a] rounded-2xl' :
-            isUnichain ? 'bg-[#0a0a0a] rounded-3xl' :
-            isLitvm ? 'bg-[#0a0a0a] rounded-xl' :
+            isUnichain ? 'bg-[#0a0a0a] rounded-3xl shadow-[0_0_30px_rgba(255,0,122,0.05)]' :
+            isLitvm ? 'bg-[#0B192C]/90 rounded-xl backdrop-blur-xl shadow-[0_0_30px_rgba(0,242,254,0.05)]' :
             isArc ? 'bg-[#0a0a0a] rounded-2xl' :
             isSepolia ? 'bg-[#0e0e0e] rounded-xl' :
             'bg-[#0a0a0a] rounded-2xl'
@@ -310,7 +311,7 @@ export function ResultsScreen({
                   : isSoneium ? '1px solid rgba(255,255,255,0.08)'
                   : isBase ? `1px solid ${cfg?.color ?? '#0052ff'}33`
                   : isUnichain ? `1px solid ${cfg?.color ?? '#ff007a'}40`
-                  : isLitvm ? '1px solid rgba(255,255,255,0.1)'
+                  : isLitvm ? '1px solid rgba(0, 242, 254, 0.15)'
                   : isArc ? '1px solid rgba(255,255,255,0.12)'
                   : isSepolia ? '1px solid rgba(255,255,255,0.08)'
                   : '1px solid rgba(255,255,255,0.08)',
@@ -335,36 +336,55 @@ export function ResultsScreen({
           </div>
 
           {/* [B] SCORE NUMBER */}
-          <div className={
-            isMegaEth ? 'font-mono text-[80px] font-bold leading-none tracking-[-2px] text-white' :
-            isInk ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
-            isSoneium ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
-            isBase ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
-            isUnichain ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
-            isLitvm ? 'font-sans text-[84px] font-bold leading-none tracking-[-3px] text-white' :
-            isArc ? 'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white' :
-            isSepolia ? 'font-sans text-[84px] font-bold leading-none tracking-[-3px] text-white' :
-            'font-sans text-[88px] font-bold leading-none tracking-[-4px] text-white'
-          }>
-            {score}
-            <span className={
-              isMegaEth ? 'font-mono text-[26px] opacity-35' :
-              isInk ? 'text-[28px] font-light opacity-30' :
-              isSoneium ? 'text-[28px] font-light opacity-30' :
-              isBase ? 'text-[28px] font-light opacity-30' :
-              isUnichain ? 'text-[28px] font-light opacity-30' :
-              isLitvm ? 'text-[26px] font-light opacity-30' :
-              isArc ? 'text-[28px] font-light opacity-30' :
-              isSepolia ? 'text-[26px] font-light opacity-30' :
-              'text-[28px] font-light opacity-30'
+          <div className={`relative ${
+            isMegaEth ? 'font-mono' :
+            isLitvm ? 'font-mono' :
+            'font-sans'
+          }`}>
+            <div style={{
+              position: 'absolute',
+              inset: -20,
+              background: `radial-gradient(ellipse at center, ${accentColor}15 0%, transparent 70%)`,
+              pointerEvents: 'none',
+            }} />
+            <div className={
+              isMegaEth ? 'text-[80px] font-bold leading-none tracking-[-2px] text-white' :
+              isInk ? 'text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+              isSoneium ? 'text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+              isBase ? 'text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+              isUnichain ? 'text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+              isLitvm ? 'text-[84px] font-bold leading-none tracking-[-3px] text-white' :
+              isArc ? 'text-[88px] font-bold leading-none tracking-[-4px] text-white' :
+              isSepolia ? 'text-[84px] font-bold leading-none tracking-[-3px] text-white' :
+              'text-[88px] font-bold leading-none tracking-[-4px] text-white'
             }>
-              {' '}/ {total}
-            </span>
+              {score}
+              <span className={
+                isMegaEth ? 'text-[26px] opacity-35' :
+                isInk ? 'text-[28px] font-light opacity-30' :
+                isSoneium ? 'text-[28px] font-light opacity-30' :
+                isBase ? 'text-[28px] font-light opacity-30' :
+                isUnichain ? 'text-[28px] font-light opacity-30' :
+                isLitvm ? 'text-[26px] font-light opacity-30' :
+                isArc ? 'text-[28px] font-light opacity-30' :
+                isSepolia ? 'text-[26px] font-light opacity-30' :
+                'text-[28px] font-light opacity-30'
+              }>
+                {' '}/ {total}
+              </span>
+            </div>
           </div>
 
           {/* [C] PROGRESS BAR */}
-          <div className="w-full bg-white/10 h-[3px] rounded-full my-5">
-            <div className="h-full rounded-full" style={{ width: `${percentage}%`, backgroundColor: cfg?.color ?? '#00ff88' }} />
+          <div className="w-full bg-white/10 h-[3px] rounded-full my-5 overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-700"
+              style={{
+                width: `${percentage}%`,
+                backgroundColor: accentColor,
+                boxShadow: `0 0 8px ${accentColor}40, 0 0 20px ${accentColor}15`,
+              }}
+            />
           </div>
 
           {/* [D] STAT CHIPS */}
@@ -389,16 +409,16 @@ export function ResultsScreen({
             >
               {percentage}% correct
             </div>
-            <div className={`px-3 py-1.5 text-xs font-medium bg-white/6 border border-white/10 text-white/45 ${
-              isMegaEth ? 'rounded-none' :
-              isInk ? 'rounded-lg' :
-              isSoneium ? 'rounded-full' :
-              isBase ? 'rounded-lg' :
-              isUnichain ? 'rounded-full' :
-              isLitvm ? 'rounded-lg' :
-              isArc ? 'rounded-full' :
-              isSepolia ? 'rounded-md' :
-              'rounded-lg'
+            <div className={`px-3 py-1.5 text-xs font-medium ${
+              isMegaEth ? 'rounded-none bg-black border border-white/15 text-white/45' :
+              isInk ? 'rounded-lg bg-white/[0.04] border border-white/8 text-white/45' :
+              isSoneium ? 'rounded-full bg-white/[0.04] border border-white/8 text-white/45' :
+              isBase ? 'rounded-lg bg-black/5 border border-black/5 text-black/40' :
+              isUnichain ? 'rounded-full bg-white/[0.04] border border-white/8 text-white/45' :
+              isLitvm ? 'rounded-lg bg-[#0B192C] border border-[#00F2FE]/10 text-[#00F2FE]/40' :
+              isArc ? 'rounded-full bg-white/[0.04] border border-white/8 text-white/45' :
+              isSepolia ? 'rounded-md bg-white/[0.04] border border-white/8 text-white/45' :
+              'rounded-lg bg-white/[0.04] border border-white/8 text-white/45'
             }`}>
               {score} pts earned
             </div>
@@ -440,7 +460,7 @@ export function ResultsScreen({
             size="lg"
             onClick={handleAction}
             disabled={txState === "pending" || isCooldownActive || hasSubmittedThisSession || isCheckingCooldown}
-            className={`w-full transition-all duration-300 relative overflow-hidden group ${
+            className={`w-full transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] active:scale-[0.98] ${
               isMegaEth ? 'font-mono font-bold text-[12px] tracking-[0.1em] uppercase rounded-none py-[14px] text-black' :
               isInk ? 'font-sans font-semibold text-[13px] rounded-xl py-[14px] text-white' :
               isSoneium ? 'font-sans font-medium text-[13px] rounded-full py-[14px] text-white' :
@@ -477,7 +497,7 @@ export function ResultsScreen({
             variant="outline"
             size="lg"
             onClick={onRestart}
-            className={`w-full bg-transparent text-white/50 transition-all duration-300 ${
+            className={`w-full bg-transparent text-white/50 transition-all duration-300 hover:text-white/80 hover:border-white/20 ${
               isMegaEth ? 'font-mono text-[11px] uppercase rounded-none py-[13px]' :
               isInk ? 'font-sans text-[12px] rounded-xl py-[13px]' :
               isSoneium ? 'font-sans text-[12px] rounded-full py-[13px]' :
@@ -497,12 +517,12 @@ export function ResultsScreen({
       </div>
 
       {wrongNetwork ? (
-        <div className={`mt-6 p-4 rounded-xl border ${isMegaEth ? 'border-amber-500 bg-black' : isLitvm ? 'border-amber-500 bg-[#0B192C] text-amber-500 font-mono text-xs' : 'border-amber-500/30 bg-amber-500/10'}`}>
-          <p className={`text-sm mb-2 ${isMegaEth ? 'text-amber-500 uppercase' : isLitvm ? 'text-amber-500 font-mono' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
+        <div className={`mt-6 p-4 border backdrop-blur-sm animate-slide-up ${isMegaEth ? 'rounded-none border-amber-500 bg-black' : isLitvm ? 'rounded-xl border-amber-500/30 bg-[#0B192C] font-mono text-xs' : isInk ? 'rounded-2xl border-amber-500/30 bg-amber-500/10 backdrop-blur-md' : isBase ? 'rounded-xl border-amber-500/20 bg-amber-500/5' : isUnichain ? 'rounded-2xl border-amber-500/30 bg-amber-500/10' : 'rounded-xl border-amber-500/30 bg-amber-500/10 backdrop-blur-md'}`}>
+          <p className={`text-sm mb-2 ${isMegaEth ? 'text-amber-500 uppercase' : isLitvm ? 'text-amber-500' : 'text-amber-300'}`}>Wrong Network. Please switch to {chain.name}.</p>
           <Button
             size="sm"
             variant="outline"
-            className={`w-full ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase' : isLitvm ? 'border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10 font-mono' : ''}`}
+            className={`w-full transition-all duration-200 hover:scale-[1.02] ${isMegaEth ? 'rounded-none border-white/20 text-white uppercase hover:bg-white/10' : isLitvm ? 'border-[#00F2FE]/30 bg-[#0B192C] text-[#00F2FE] hover:bg-[#00F2FE]/10' : ''}`}
             onClick={async () => {
               try {
                 await switchChainAsync({ chainId })
@@ -528,25 +548,43 @@ export function ResultsScreen({
       ) : null}
 
       {txState === "failed" ? (
-        <div className="mt-4 w-full max-w-md p-4 rounded-xl border border-destructive/50 bg-destructive/10">
+        <div className={`mt-6 w-full max-w-sm p-4 border backdrop-blur-sm animate-slide-up ${
+          isMegaEth ? 'rounded-none border-red-500/50 bg-black' :
+          isLitvm ? 'rounded-xl border-[#ef4444]/30 bg-[#0B192C]' :
+          'rounded-xl border-destructive/40 bg-destructive/10'
+        }`}>
           <div className="flex items-center gap-2 mb-2">
-            <XCircle className="size-5 shrink-0 text-destructive" />
+            <XCircle className={`size-5 shrink-0 ${isMegaEth ? 'text-red-500' : 'text-destructive'}`} />
             <h3 className="text-sm font-medium text-foreground">Transaction Failed</h3>
           </div>
           <p className="text-xs text-muted-foreground mb-2">{txError}</p>
-          <Button size="sm" variant="outline" onClick={handleRetry} className="w-full">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleRetry}
+            className={`w-full transition-all duration-200 hover:scale-[1.02] ${
+              isMegaEth ? 'rounded-none border-white/20 text-white uppercase hover:bg-white/10' :
+              isLitvm ? 'border-[#00F2FE]/30 text-[#00F2FE] hover:bg-[#00F2FE]/10' : ''
+            }`}
+          >
             Try Again
           </Button>
         </div>
       ) : null}
 
       {txPendingWarning ? (
-        <p className={`text-xs mt-2 ${isMegaEth ? 'text-amber-500 uppercase' : isLitvm ? 'text-[#00F2FE] font-mono' : 'text-amber-400'}`}>{txPendingWarning}</p>
+        <div className={`mt-4 px-4 py-2 backdrop-blur-sm animate-slide-up ${
+          isMegaEth ? 'border border-amber-500/30 bg-black rounded-none' :
+          isLitvm ? 'rounded-xl border border-[#00F2FE]/20 bg-[#0B192C]' :
+          'rounded-xl border border-amber-500/20 bg-amber-500/10'
+        }`}>
+          <p className={`text-xs ${isMegaEth ? 'text-amber-500 uppercase tracking-wider font-mono' : isLitvm ? 'text-[#00F2FE] font-mono' : 'text-amber-400'}`}>{txPendingWarning}</p>
+        </div>
       ) : null}
 
       {showConfirmModal ? (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className={`w-full max-w-md p-6 text-left shadow-2xl border ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-white/10 bg-[#0A0A0F] text-white' : isUnichain ? 'rounded-2xl border-white/10 bg-[#0A0A0F] text-white' : isBase ? 'rounded-2xl border-black/5 bg-white text-black' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 bg-[#0A0A0F] text-white' : isArc ? 'rounded-2xl border-[#4D8EE9]/25 bg-[#0A0A0F] text-white' : isLitvm ? 'rounded-2xl border-[#00F2FE]/25 bg-[#0B192C] text-white font-mono' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
+          <div className={`w-full max-w-md p-6 text-left shadow-2xl border animate-scale-in ${isMegaEth ? 'border-[#00ff88] bg-black rounded-none text-white' : isInk ? 'rounded-3xl border-[#8b5cf6]/20 bg-[#0A0A0F] text-white shadow-[0_0_40px_rgba(139,92,246,0.08)]' : isUnichain ? 'rounded-2xl border-[#FF007A]/20 bg-[#0A0A0F] text-white shadow-[0_0_40px_rgba(255,0,122,0.08)]' : isBase ? 'rounded-2xl border-[#0052FF]/20 bg-white text-black shadow-[0_0_40px_rgba(0,82,255,0.08)]' : isSoneium ? 'rounded-2xl border-[#0047FF]/20 bg-[#0A0A0F] text-white shadow-[0_0_40px_rgba(0,71,255,0.08)]' : isArc ? 'rounded-2xl border-[#4D8EE9]/25 bg-[#0A0A0F] text-white shadow-[0_0_40px_rgba(77,142,233,0.08)]' : isLitvm ? 'rounded-2xl border-[#00F2FE]/25 bg-[#0B192C] text-white font-mono shadow-[0_0_40px_rgba(0,242,254,0.08)]' : 'rounded-2xl border border-white/10 bg-[#161923] text-white'}`}>
             <h3 className={`mb-4 text-xl font-bold ${isMegaEth ? 'uppercase font-mono text-[#00ff88]' : isUnichain ? 'font-serif italic' : isBase ? 'text-black' : isLitvm ? 'text-[#00F2FE]' : ''}`}>
               {isMegaEth ? '// CONFIRM TRANSACTION' : isLitvm ? 'Confirm Transaction' : 'Confirm Transaction'}
             </h3>
@@ -569,21 +607,21 @@ export function ResultsScreen({
                 Cancel
               </Button>
               <Button
-                className={`flex-1 transition-all duration-200 ${
+                className={`flex-1 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
                   isMegaEth 
                     ? 'rounded-none bg-[#00ff88] text-black hover:bg-[#00ff88]/80 font-mono uppercase font-bold' 
                   : isInk
-                    ? 'rounded-full bg-[#7B61FF] hover:bg-[#6c54e6] text-white font-bold'
+                    ? 'rounded-full bg-[#7B61FF] hover:bg-[#6c54e6] text-white font-bold hover:shadow-[0_0_25px_rgba(139,92,246,0.5)]'
                   : isUnichain
-                    ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold'
+                    ? 'rounded-2xl bg-[#FF007A] hover:bg-[#d60066] text-white font-bold hover:shadow-[0_0_25px_rgba(255,0,122,0.5)]'
                   : isBase
-                    ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold shadow-lg shadow-[#0052FF]/20'
+                    ? 'rounded-full bg-[#0052FF] hover:bg-[#0047FF] text-white font-bold hover:shadow-[0_0_25px_rgba(0,82,255,0.4)]'
                   : isSoneium
-                    ? 'rounded-2xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold shadow-lg shadow-[#0047FF]/20'
+                    ? 'rounded-2xl bg-[#0047FF] hover:bg-[#003bd9] text-white font-bold hover:shadow-[0_0_25px_rgba(0,71,255,0.5)]'
                   : isArc
-                    ? 'rounded-2xl bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white font-bold shadow-lg shadow-[#4D8EE9]/20'
+                    ? 'rounded-2xl bg-[#4D8EE9] hover:bg-[#3A7BD6] text-white font-bold hover:shadow-[0_0_25px_rgba(77,142,233,0.5)]'
                   : isLitvm
-                    ? 'rounded-2xl bg-[#00F2FE] hover:bg-[#00C9DB] text-[#0B192C] font-bold shadow-lg shadow-[#00F2FE]/20'
+                    ? 'rounded-2xl bg-[#00F2FE] hover:bg-[#00C9DB] text-[#0B192C] font-bold hover:shadow-[0_0_25px_rgba(0,242,254,0.6)]'
                     : 'bg-[#0047FF] hover:bg-[#0047FF]/90'
                 }`}
                 onClick={handleConfirmedSubmitScore}

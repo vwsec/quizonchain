@@ -1211,22 +1211,22 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
           </div>
 
           <div className="flex flex-wrap gap-1.5 md:gap-3">
-            <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
+            <div className={`${isBase ? 'bg-black/5 border-black/5' : isLitvm ? 'bg-[#0B192C]/50 border-[#00F2FE]/10' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm transition-all duration-200 hover:scale-[1.02]`}>
               <div className="flex items-center gap-1 md:gap-2 mb-0.5 md:mb-1">
-                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Total TXs</span>
+                <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : isLitvm ? 'text-[#00F2FE]/50' : 'text-gray-500'}`}>Total TXs</span>
                 <div className="flex items-center gap-1 md:gap-1.5 ml-auto translate-y-[-1px]">
                   <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
                   <span className="text-[7px] md:text-[9px] font-black text-green-500 tracking-[0.2em] uppercase">Live</span>
                 </div>
               </div>
-              <span className={`text-xs md:text-lg font-mono ${isBase ? 'text-black' : 'text-white'}`}>{stats.totalTxs}</span>
+              <span className={`text-xs md:text-lg font-mono ${isBase ? 'text-black' : isLitvm ? 'text-[#00F2FE]' : 'text-white'}`}>{stats.totalTxs}</span>
             </div>
-            <div className={`${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
-              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Latest Block</span>
+            <div className={`${isBase ? 'bg-black/5 border-black/5' : isLitvm ? 'bg-[#0B192C]/50 border-[#00F2FE]/10' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm transition-all duration-200 hover:scale-[1.02]`}>
+              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : isLitvm ? 'text-[#00F2FE]/50' : 'text-gray-500'}`}>Latest Block</span>
               <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.latestBlock || '-'}</span>
             </div>
-            <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm`}>
-              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : 'text-gray-500'}`}>Avg Gas</span>
+            <div className={`hidden sm:flex ${isBase ? 'bg-black/5 border-black/5' : isLitvm ? 'bg-[#0B192C]/50 border-[#00F2FE]/10' : 'bg-white/[0.04] border-white/[0.08] backdrop-blur-md'} border rounded-lg md:rounded-xl px-2 md:px-4 py-1 md:py-2 flex flex-col shadow-sm transition-all duration-200 hover:scale-[1.02]`}>
+              <span className={`text-[10px] md:text-xs uppercase font-bold tracking-wider ${isBase ? 'text-black/30' : isLitvm ? 'text-[#00F2FE]/50' : 'text-gray-500'}`}>Avg Gas</span>
               <span className={`text-xs md:text-lg font-mono`} style={{ color: config.color }}>{stats.avgGas}</span>
             </div>
           </div>
@@ -1572,7 +1572,9 @@ export default function BubbleExplorer({ chain, initialAddress, initialTxHash }:
                 </div>
               ) : searchResult && searchResult.type === 'transaction' ? (
                 /* Detailed Transaction Card */
-                <div className="w-full max-w-4xl bg-[#0e0f18] border border-white/10 rounded-2xl md:rounded-[40px] shadow-2xl relative min-h-[650px] flex flex-col overflow-hidden">
+                <div className="w-full max-w-4xl bg-[#0e0f18] border border-white/10 rounded-2xl md:rounded-[40px] shadow-2xl relative min-h-[650px] flex flex-col overflow-hidden transition-all duration-300"
+                  style={!isBase ? { boxShadow: isLitvm ? '0 0 60px rgba(0,242,254,0.05), 0 25px 80px rgba(0,0,0,0.5)' : '0 25px 80px rgba(0,0,0,0.5), 0 0 60px ' + config.color + '05' } : {}}
+                >
                    <div className="p-4 md:p-8">
                      <div className="flex justify-between items-start mb-10">
                        <div className="space-y-1.5">

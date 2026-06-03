@@ -15,6 +15,7 @@ import SoneiumLogo from "./soneium-logo"
 import LitvmLogo from "./litvm-logo"
 import ArcLogo from "./arc-logo"
 import QuizOnChainLogo from "@/components/quiz-on-chain-logo"
+import { SignInWithBase } from "./sign-in-with-base"
 
 interface HomeScreenProps {
   onStartQuiz: () => void
@@ -132,6 +133,12 @@ export function HomeScreen({
             >
               Connect Wallet
             </button>
+            {cfg?.chainId === 8453 && (
+              <div className="flex flex-col items-center gap-2 mt-3 w-full">
+                <span className="text-xs text-gray-400 dark:text-gray-500">or</span>
+                <SignInWithBase />
+              </div>
+            )}
             <button
               onClick={handleStartaleConnect}
               disabled={startaleConnecting}

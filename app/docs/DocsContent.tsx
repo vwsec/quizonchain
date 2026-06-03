@@ -287,7 +287,7 @@ export default function DocsContent() {
                     }`}>
                       {i + 1}
                     </div>
-                    <div className={`p-4 md:p-6 flex-1 transition-all border ${
+                    <div className={`p-4 md:p-6 flex-1 transition-all duration-200 border hover-lift ${
                       isMegaEth 
                         ? 'bg-black border-white/10 rounded-none hover:border-[#00ff88]/30' 
                         : isInk
@@ -330,7 +330,7 @@ export default function DocsContent() {
                       : isArc
                         ? 'rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:border-[#4D8EE9]/50 backdrop-blur-xl text-white'
                         : !isConnected ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-white/30' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
-                  }`}>
+                  } transition-all duration-200 hover-lift`}>
                     <div>
                       <div className="flex items-center gap-4 mb-5">
                         <div className={`relative w-8 h-8 overflow-hidden p-1 flex-shrink-0 ${isMegaEth ? 'bg-black border border-white/15 rounded-none' : isLitvm ? 'border border-[#00F2FE]/30 rounded-none bg-[#0B192C]' : 'rounded-full bg-white/10'}`}>
@@ -577,10 +577,8 @@ export default function DocsContent() {
                           ? 'border-black/5 bg-[#f4f5f7] rounded-2xl data-[state=open]:bg-white shadow-sm transition-all'
                         : isLitvm
                           ? 'border-[#00F2FE]/20 bg-[#0B192C] rounded-none data-[state=open]:border-[#00F2FE]/50'
-                          : !isConnected
-  ? 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-white/30'
-  : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-[#0047FF]/30'
-                    }`}
+                          : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-white/30 transition-all duration-200 hover-lift'
+                      }`}
                   >
                     <AccordionTrigger className={`text-lg font-bold hover:no-underline py-6 ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth ? 'uppercase text-sm tracking-tight' : isInk || isUnichain ? 'tracking-tight' : isLitvm ?'text-sm tracking-tight' : ''}`}>
                       <div className="flex items-start text-left gap-4">

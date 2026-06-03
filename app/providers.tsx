@@ -12,7 +12,7 @@ import {
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
-import { walletConnect, coinbaseWallet } from 'wagmi/connectors'
+import { walletConnect, coinbaseWallet, baseAccount } from 'wagmi/connectors'
 import { useActiveChain } from '@/hooks/use-active-chain'
 import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
 import { startaleConnector } from '@startale/app-sdk'
@@ -62,15 +62,21 @@ if (!projectId) {
 
 const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
 
+const connectors = [
+  walletConnect({ projectId }),
+  coinbaseWallet(),
+  startaleConnector({ appName: 'Quiz On Chain', appLogoUrl: 'https://quizonchain.app/logo.png' }),
+]
+
+if (typeof window !== 'undefined') {
+  connectors.push(baseAccount({ appName: 'Quiz On Chain' }))
+}
+
 const config = createConfig({
   chains: allChains as any,
   multiInjectedProviderDiscovery: true,
   transports: Object.fromEntries(allChains.map(c => [c.id, http()])),
-  connectors: [
-    walletConnect({ projectId }),
-    coinbaseWallet(),
-    startaleConnector({ appName: 'Quiz On Chain', appLogoUrl: 'https://quizonchain.app/logo.png' }),
-  ],
+  connectors,
 })
 
 function RainbowKitThemeWrapper({ children }: { children: ReactNode }) {

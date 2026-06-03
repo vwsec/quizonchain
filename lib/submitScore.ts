@@ -1,3 +1,4 @@
+import { getBaseAccountWalletClient } from '@/lib/base-account-store'
 import {
   BaseError,
   concatHex,
@@ -405,9 +406,11 @@ export async function estimateSubmitScoreGas(params: {
  * - 130: NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN
  */
 export function useSubmitScore() {
-  const { data: walletClient } = useWalletClient()
+  const { data: walletClientFromWagmi } = useWalletClient()
   const publicClient = usePublicClient()
   const { chain, address } = useAccount()
+
+  const walletClient = walletClientFromWagmi ?? getBaseAccountWalletClient()
 
   return async (
     params: { score: number; total: number; quizToken?: string; userAnswers?: number[] },

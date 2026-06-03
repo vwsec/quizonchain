@@ -61,7 +61,23 @@ export function Header() {
     nav.matchStart ? pathname.startsWith(nav.href) : pathname === nav.href
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 ${isMegaEth ? 'bg-black border-b border-white/10' : isInk || isUnichain ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-white/5' : isBase ? 'bg-white/90 backdrop-blur-md border-b border-black/5' : isSoneium ? 'bg-[#00040F]/80 backdrop-blur-xl border-b border-[#0047FF]/10' : isLitvm ? 'bg-[#0B192C]/90 backdrop-blur-xl border-b border-[#00F2FE]/10' : isArc ? 'bg-[#000B24]/90 backdrop-blur-xl border-b border-[#4D8EE9]/10' : ''}`}>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 ${
+        isMegaEth ? 'bg-black border-b border-white/10' :
+        isInk ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-[#8b5cf6]/10' :
+        isUnichain ? 'bg-[#0a0a0f]/80 backdrop-blur-md border-b border-[#FF007A]/10' :
+        isBase ? 'bg-white/90 backdrop-blur-md border-b border-black/5' :
+        isSoneium ? 'bg-[#00040F]/80 backdrop-blur-xl border-b border-[#0047FF]/10' :
+        isLitvm ? 'bg-[#0B192C]/90 backdrop-blur-xl border-b border-[#00F2FE]/10' :
+        isArc ? 'bg-[#000B24]/90 backdrop-blur-xl border-b border-[#4D8EE9]/10' :
+        ''
+      }`}
+      style={
+        isConnected && !isMegaEth && !isBase
+          ? { boxShadow: `0 1px 20px ${cfg?.color ?? 'transparent'}08` }
+          : undefined
+      }
+    >
       <div className="flex items-center justify-between px-4 py-4 md:px-8">
         <Link href="/" className="flex items-center gap-2 shrink-0">
           {!isMegaEth && (
@@ -102,18 +118,18 @@ export function Header() {
                       ? 'bg-[#4D8EE9] text-white rounded-lg'
                       : 'bg-[#0047FF] text-white rounded-lg'
               const inactiveClass = isMegaEth || isInk || isUnichain || isSoneium || isArc
-                ? 'bg-transparent text-white/50 hover:text-white'
+                ? 'bg-transparent text-white/50 hover:text-white hover:bg-white/[0.05]'
                 : isLitvm
-                  ? 'bg-transparent text-[#E2E8F0]/50 hover:text-[#00F2FE] transition-colors'
+                  ? 'bg-transparent text-[#E2E8F0]/50 hover:text-[#00F2FE] hover:bg-[#00F2FE]/5'
                 : isBase
-                  ? 'bg-transparent text-black/50 hover:text-black'
-                  : 'bg-transparent text-[rgba(255,255,255,0.5)] hover:text-white'
+                  ? 'bg-transparent text-black/50 hover:text-black hover:bg-black/5'
+                  : 'bg-transparent text-[rgba(255,255,255,0.5)] hover:text-white hover:bg-white/[0.05]'
 
               return (
                 <Link
                   key={nav.href}
                   href={nav.href}
-                  className={`px-3 py-1.5 text-sm transition-all duration-200 text-center min-w-[80px] ${isMegaEth ? 'font-mono uppercase font-medium' : isInk || isUnichain || isArc ? 'font-semibold tracking-tight' : isLitvm ? 'font-semibold tracking-wide' : 'font-medium'} ${
+                  className={`px-3 py-1.5 text-sm transition-all duration-200 text-center min-w-[80px] hover-lift ${isMegaEth ? 'font-mono uppercase font-medium' : isInk || isUnichain || isArc ? 'font-semibold tracking-tight' : isLitvm ? 'font-semibold tracking-wide' : 'font-medium'} ${
                     active ? activeClass : inactiveClass
                   }`}
                   style={isLitvm ? { fontFamily: "'Rajdhani', Arial, sans-serif" } : undefined}
@@ -161,7 +177,7 @@ export function Header() {
                       <SheetClose asChild key={nav.href}>
                         <Link
                           href={nav.href}
-                          className={`flex items-center px-4 py-3 text-base font-medium transition-all rounded-lg ${
+                          className={`flex items-center px-4 py-3 text-base font-medium transition-all duration-200 rounded-lg hover-lift ${
                             active
                               ? !isConnected
                                 ? 'bg-white/10 text-white'
