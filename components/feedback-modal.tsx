@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { X, ImageUp, Loader2 } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { useActiveChain } from "@/hooks/use-active-chain"
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"]
 const MAX_FILES = 4
@@ -31,6 +32,14 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
   const [telegramUsernameError, setTelegramUsernameError] = useState("")
   const [xUsernameError, setXUsernameError] = useState("")
   const [evmAddressError, setEvmAddressError] = useState("")
+  const [mounted, setMounted] = useState(false)
+  const { isConnected } = useActiveChain()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const themed = mounted && isConnected
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const reset = useCallback(() => {
@@ -189,9 +198,9 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md border-t-2 border-t-[var(--primary)]">
+      <DialogContent className={cn("sm:max-w-md border-t-2", themed ? "border-t-[var(--primary)]" : "border-t-white/20")}>
         <DialogHeader>
-          <DialogTitle className="bg-gradient-to-r from-[var(--hero-gradient-from)] to-[var(--hero-gradient-to)] bg-clip-text text-transparent">Give Feedback</DialogTitle>
+          <DialogTitle className={cn(themed ? "bg-gradient-to-r from-[var(--hero-gradient-from)] to-[var(--hero-gradient-to)] bg-clip-text text-transparent" : "text-white")}>Give Feedback</DialogTitle>
           <DialogDescription>
             Help us improve — report bugs, suggest features, or share your thoughts.
           </DialogDescription>
@@ -290,7 +299,9 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               onClick={() => !submitting && !success && fileInputRef.current?.click()}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 rounded-lg border-2 border-dashed py-3 px-4 text-sm transition-colors cursor-pointer",
-                "text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)]",
+                themed
+                  ? "text-[var(--muted-foreground)] hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                  : "text-[var(--muted-foreground)] hover:border-white/50 hover:text-white",
                 (submitting || success) && "pointer-events-none opacity-50",
               )}
             >

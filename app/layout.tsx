@@ -95,9 +95,9 @@ export default function RootLayout({
             <Header />
             {children}
           </WalletProvider>
+          <FeedbackButton />
         </Providers>
         <Toaster theme="dark" position="top-center" richColors />
-        <FeedbackButton />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
