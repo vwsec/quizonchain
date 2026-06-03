@@ -76,6 +76,7 @@ export const metadata: Metadata = {
 }
 
 import { Header } from '@/components/header'
+import { FeedbackButton } from '@/components/feedback-button'
 import { WalletProvider } from '@/components/wallet-provider'
 import { ThemeUpdater } from '@/components/theme-updater'
 
@@ -96,6 +97,7 @@ export default function RootLayout({
           </WalletProvider>
         </Providers>
         <Toaster theme="dark" position="top-center" richColors />
+        <FeedbackButton />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

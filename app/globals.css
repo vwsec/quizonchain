@@ -42,6 +42,9 @@
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: #0047FF;
+  --hero-gradient-from: #0047FF;
+  --hero-gradient-to: #0033cc;
+  --progress-fill: #0047FF;
 }
 
 /* Dark mode not needed - Soneium theme is already dark */
@@ -290,6 +293,9 @@
   --card: rgba(255, 255, 255, 0.05);
   --card-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.1);
+  --hero-gradient-from: #0047FF;
+  --hero-gradient-to: #0033cc;
+  --progress-fill: #0047FF;
   letter-spacing: -0.01em;
 }
 
@@ -299,6 +305,30 @@
 
 /* MegaETH Theme */
 .theme-megaeth {
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #00ff88;
+  --primary-foreground: #000000;
+  --card: rgba(255, 255, 255, 0.03);
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+  --secondary: rgba(0, 255, 136, 0.1);
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #00ff88;
+  --accent-foreground: #000000;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #00ff88;
+  --success-foreground: #000000;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #00ff88;
+  --hero-gradient-from: #00ff88;
+  --hero-gradient-to: #00cc6d;
+  --progress-fill: #00ff88;
   background: #000000 !important;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }
@@ -353,6 +383,30 @@
 
 /* Unichain Theme */
 .theme-unichain {
+  --background: #080810;
+  --foreground: #ffffff;
+  --primary: #ff007a;
+  --primary-foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #ffffff;
+  --popover: #080810;
+  --popover-foreground: #ffffff;
+  --secondary: rgba(255, 0, 122, 0.1);
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #ff007a;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #ff007a;
+  --hero-gradient-from: #ff007a;
+  --hero-gradient-to: #cc0062;
+  --progress-fill: #ff007a;
   font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
 }
 
@@ -366,6 +420,30 @@
 
 /* Ink Theme */
 .theme-ink {
+  --background: #050508;
+  --foreground: #ffffff;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.05);
+  --card-foreground: #ffffff;
+  --popover: #050508;
+  --popover-foreground: #ffffff;
+  --secondary: rgba(139, 92, 246, 0.1);
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.6);
+  --accent: #8b5cf6;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.1);
+  --ring: #8b5cf6;
+  --hero-gradient-from: #8b5cf6;
+  --hero-gradient-to: #6d28d9;
+  --progress-fill: #8b5cf6;
   letter-spacing: -0.02em;
 }
 
@@ -411,6 +489,9 @@
   --chart-5: #93c5fd;
   --radius: 0.5rem;
   font-family: var(--font-sans) !important;
+  --hero-gradient-from: #0000ff;
+  --hero-gradient-to: #0000cc;
+  --progress-fill: #0000ff;
 }
 
 .theme-base body {
@@ -475,6 +556,9 @@
   --sidebar-accent-foreground: #E2E8F0;
   --sidebar-border: rgba(0, 242, 254, 0.15);
   --sidebar-ring: #00F2FE;
+  --hero-gradient-from: #00F2FE;
+  --hero-gradient-to: #00c2cb;
+  --progress-fill: #00F2FE;
 
   font-family: 'Outfit', 'Outfit Variablefont Wght', Arial, sans-serif !important;
 }
@@ -617,6 +701,9 @@
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #4D8EE9;
+  --hero-gradient-from: #4D8EE9;
+  --hero-gradient-to: #3a6db8;
+  --progress-fill: #4D8EE9;
 
   font-family: 'DM Sans', 'Space Grotesk', Arial, sans-serif !important;
 }
