@@ -1,0 +1,20 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjkzNjgzMCwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDVjMTk4MzFhZWUyNjE4RkVBNjJkZDEwNjMyRTVGYzZBZEZGYjdhNzYifQ",
+    "payload": "eyJkb21haW4iOiJxdWl6b25jaGFpbi5hcHAifQ",
+    "signature": "wC4aicOruUhRrtmfeI2IkaicLaXwyXGfFv/Rot3dHKAOdmP57B+ZM5UuBazNTHC/vXluf5T66MkQBh05DZd22xs="
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Quiz On Chain",
+    "iconUrl": "https://quizonchain.app/icon.svg",
+    "homeUrl": "https://quizonchain.app",
+    "imageUrl": "https://quizonchain.app/logo.png",
+    "buttonTitle": "Play Quiz",
+    "splashImageUrl": "https://quizonchain.app/logo.png",
+    "splashBackgroundColor": "#0f0f1a",
+    "description": "A Web3 quiz app on Soneium. Answer AI-generated questions from official docs, earn on-chain points, and mint a free NFT badge at 100 points.",
+    "primaryCategory": "education",
+    "tags": ["quiz", "education", "blockchain", "soneium"]
+  }
+}

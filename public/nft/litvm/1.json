@@ -1,0 +1,10 @@
+{
+  "name": "Quiz On Chain — Master",
+  "description": "Awarded to players who reached 100 points on Quiz On Chain quiz app. A permanent proof of blockchain knowledge.",
+  "image": "/nft/litvm.png",
+  "attributes": [
+    { "trait_type": "Achievement", "value": "100 Points Master" },
+    { "trait_type": "App", "value": "Quiz On Chain" },
+    { "trait_type": "Type", "value": "Knowledge Badge" }
+  ]
+}

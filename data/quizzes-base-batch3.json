@@ -1,0 +1,2827 @@
+{
+  "meta": {
+    "ecosystem": "Base",
+    "batchId": "base-2026-07-11-batch3",
+    "generatedAt": "2026-07-11T06:55:11Z",
+    "totalQuizzes": 256,
+    "questionsPerSession": 5
+  },
+  "quizzes": [
+    {
+      "question": "What are Base Accounts?",
+      "options": [
+        "Smart accounts using account abstraction",
+        "Traditional externally owned wallets",
+        "Hardware wallet addresses",
+        "Multi-signature vaults only"
+      ],
+      "correctIndex": 0,
+      "id": 0
+    },
+    {
+      "question": "Base Accounts are best described as:",
+      "options": [
+        "Centralized exchange deposit addresses",
+        "Smart contract wallets that work across chains",
+        "Read-only blockchain explorers",
+        "Offline cold storage solutions"
+      ],
+      "correctIndex": 1,
+      "id": 1
+    },
+    {
+      "question": "What technology powers Base Accounts?",
+      "options": [
+        "Merkle tree proofs",
+        "Sharded state channels",
+        "Account abstraction (smart contract wallets)",
+        "Threshold signatures only"
+      ],
+      "correctIndex": 2,
+      "id": 2
+    },
+    {
+      "question": "Base Accounts use account abstraction to provide:",
+      "options": [
+        "Higher block rewards for miners",
+        "Faster block propagation",
+        "Lower gas costs for validators",
+        "Smart wallets for onchain interactions"
+      ],
+      "correctIndex": 3,
+      "id": 3
+    },
+    {
+      "question": "Which of the following is true about Base Accounts?",
+      "options": [
+        "They are smart contract wallets that enable account abstraction",
+        "They are traditional EOA wallets",
+        "They can only be used on testnet",
+        "They require a monthly subscription"
+      ],
+      "correctIndex": 0,
+      "id": 4
+    },
+    {
+      "question": "What is the main benefit of Base Accounts being smart wallets?",
+      "options": [
+        "Higher transaction throughput",
+        "Easier onboarding and onchain interactions",
+        "Lower energy consumption",
+        "Increased block rewards"
+      ],
+      "correctIndex": 1,
+      "id": 5
+    },
+    {
+      "question": "Base Accounts can be integrated into apps for what purpose?",
+      "options": [
+        "Running validator nodes",
+        "Mining cryptocurrency",
+        "Payments and onchain interactions",
+        "Hosting static websites"
+      ],
+      "correctIndex": 2,
+      "id": 6
+    },
+    {
+      "question": "How do Base Accounts improve user onboarding?",
+      "options": [
+        "By eliminating gas fees entirely",
+        "By requiring KYC verification",
+        "By using a centralized login system",
+        "Through account abstraction that simplifies wallet setup and use"
+      ],
+      "correctIndex": 3,
+      "id": 7
+    },
+    {
+      "question": "Which statement about Base Accounts is FALSE?",
+      "options": [
+        "They are traditional externally owned accounts (EOAs)",
+        "They are smart contract wallets",
+        "They use account abstraction technology",
+        "They can work across chains"
+      ],
+      "correctIndex": 0,
+      "id": 8
+    },
+    {
+      "question": "Base Accounts are designed primarily as:",
+      "options": [
+        "Mining pool accounts",
+        "Smart wallets for onchain interactions",
+        "Validator staking contracts",
+        "Governance voting proxies"
+      ],
+      "correctIndex": 1,
+      "id": 9
+    },
+    {
+      "question": "Which of the following is NOT a feature of Base Accounts?",
+      "options": [
+        "Smart contract wallet functionality",
+        "Account abstraction for onboarding",
+        "Integrated Bitcoin mining",
+        "Cross-chain compatibility"
+      ],
+      "correctIndex": 2,
+      "id": 10
+    },
+    {
+      "question": "What type of wallet does a Base Account represent?",
+      "options": [
+        "A custodial wallet controlled by Coinbase",
+        "A paper wallet for cold storage",
+        "A hardware wallet requiring physical device",
+        "A smart contract wallet using account abstraction"
+      ],
+      "correctIndex": 3,
+      "id": 11
+    },
+    {
+      "question": "Base Accounts enable developers to:",
+      "options": [
+        "Integrate smart wallet functionality into apps for payments",
+        "Create their own Layer-1 blockchain",
+        "Mint their own native cryptocurrency",
+        "Launch validator nodes on Base"
+      ],
+      "correctIndex": 0,
+      "id": 12
+    },
+    {
+      "question": "Compared to traditional EOAs, Base Accounts offer:",
+      "options": [
+        "Faster transaction finality",
+        "Smart wallet capabilities with account abstraction",
+        "Lower staking requirements",
+        "Higher block rewards"
+      ],
+      "correctIndex": 1,
+      "id": 13
+    },
+    {
+      "question": "Base Accounts are smart contract wallets that work:",
+      "options": [
+        "Only on Ethereum mainnet",
+        "Only on Base testnet",
+        "Across multiple chains",
+        "Only within a single dApp"
+      ],
+      "correctIndex": 2,
+      "id": 14
+    },
+    {
+      "question": "What makes Base Accounts different from regular crypto wallets?",
+      "options": [
+        "They use Proof of Work for security",
+        "They require monthly maintenance fees",
+        "They can only receive, not send, transactions",
+        "They are smart contract wallets rather than simple EOAs"
+      ],
+      "correctIndex": 3,
+      "id": 15
+    },
+    {
+      "question": "Account abstraction in Base Accounts helps with:",
+      "options": [
+        "Easier onboarding and more flexible wallet logic",
+        "Higher gas limits",
+        "Faster block production",
+        "Lower validator counts"
+      ],
+      "correctIndex": 0,
+      "id": 16
+    },
+    {
+      "question": "Which use case is specifically mentioned for integrating Base Accounts?",
+      "options": [
+        "Running a mining pool",
+        "Payments within apps",
+        "Operating a domain name service",
+        "Managing DNS records"
+      ],
+      "correctIndex": 1,
+      "id": 17
+    },
+    {
+      "question": "Base Accounts are an example of what blockchain innovation?",
+      "options": [
+        "Sharding",
+        "Zero-knowledge proofs for privacy",
+        "Account abstraction / smart wallets",
+        "DAG-based consensus"
+      ],
+      "correctIndex": 2,
+      "id": 18
+    },
+    {
+      "question": "What does account abstraction mean in the context of Base Accounts?",
+      "options": [
+        "Accounts are abstracted away and users don't see them",
+        "Accounts are stored in an abstract database off-chain",
+        "Account balances are abstract estimates rather than exact",
+        "Smart wallets replace simple EOAs with programmable logic and better UX"
+      ],
+      "correctIndex": 3,
+      "id": 19
+    },
+    {
+      "question": "Base Accounts function as:",
+      "options": [
+        "Smart contract wallets with cross-chain capability",
+        "Simple key-value stores",
+        "Centralized exchange balances",
+        "Off-chain payment channels"
+      ],
+      "correctIndex": 0,
+      "id": 20
+    },
+    {
+      "question": "Which of the following best describes Base Accounts' cross-chain capability?",
+      "options": [
+        "They only work on Base mainnet",
+        "They are smart wallets designed to work across chains",
+        "They bridge assets automatically without user input",
+        "They rely on a centralized relayer network"
+      ],
+      "correctIndex": 1,
+      "id": 21
+    },
+    {
+      "question": "How can developers use Base Accounts in their applications?",
+      "options": [
+        "By replacing the blockchain entirely",
+        "By using them as database storage",
+        "By integrating them for payments and onchain interactions",
+        "By running them as backend servers"
+      ],
+      "correctIndex": 2,
+      "id": 22
+    },
+    {
+      "question": "Which is NOT a characteristic of Base Accounts?",
+      "options": [
+        "Smart contract wallet architecture",
+        "Account abstraction technology",
+        "Cross-chain operation",
+        "Proof-of-Work mining capability"
+      ],
+      "correctIndex": 3,
+      "id": 23
+    },
+    {
+      "question": "Base Accounts provide smart wallets for:",
+      "options": [
+        "Onchain interactions",
+        "Off-chain data storage",
+        "Hardware device management",
+        "Network routing"
+      ],
+      "correctIndex": 0,
+      "id": 24
+    },
+    {
+      "question": "What role does account abstraction play in Base Accounts?",
+      "options": [
+        "It makes accounts invisible to users",
+        "It enables easier onboarding and flexible wallet logic",
+        "It restricts accounts to read-only mode",
+        "It converts all wallets to multisig"
+      ],
+      "correctIndex": 1,
+      "id": 25
+    },
+    {
+      "question": "Base Accounts can be described as:",
+      "options": [
+        "Centralized user databases",
+        "Block explorer interfaces",
+        "Smart contract wallets for onchain interactions",
+        "Validator management consoles"
+      ],
+      "correctIndex": 2,
+      "id": 26
+    },
+    {
+      "question": "The smart wallet nature of Base Accounts means they:",
+      "options": [
+        "Can only send, not receive",
+        "Require a bank account to operate",
+        "Are limited to testnet use",
+        "Support programmable logic for custom transaction rules"
+      ],
+      "correctIndex": 3,
+      "id": 27
+    },
+    {
+      "question": "Which statement about integrating Base Accounts into apps is true?",
+      "options": [
+        "It enables payment functionality within the app",
+        "It requires forking the Base blockchain",
+        "It converts the app into a blockchain node",
+        "It only works with ERC-721 tokens"
+      ],
+      "correctIndex": 0,
+      "id": 28
+    },
+    {
+      "question": "Base Accounts enable onchain interactions via:",
+      "options": [
+        "Physical hardware tokens",
+        "Smart contract wallets with account abstraction",
+        "Centralized API gateways",
+        "Email-based transaction signing"
+      ],
+      "correctIndex": 1,
+      "id": 29
+    },
+    {
+      "question": "What are Base Agents?",
+      "options": [
+        "Automated trading bots",
+        "Centralized order matching engines",
+        "AI agents that can transact autonomously onchain",
+        "Smart contract auditing tools"
+      ],
+      "correctIndex": 2,
+      "id": 30
+    },
+    {
+      "question": "Base Agents are best described as:",
+      "options": [
+        "Manual trading interfaces",
+        "Block explorer plugins",
+        "Validator monitoring dashboards",
+        "AI agents capable of autonomous onchain transactions"
+      ],
+      "correctIndex": 3,
+      "id": 31
+    },
+    {
+      "question": "What enables Base Agents to transact?",
+      "options": [
+        "Autonomous onchain transaction capabilities",
+        "Manual user approval for every step",
+        "A centralized exchange API key",
+        "Off-chain database queries"
+      ],
+      "correctIndex": 0,
+      "id": 32
+    },
+    {
+      "question": "What is the Base MCP Server?",
+      "options": [
+        "A mining control protocol server",
+        "AI tooling for agent-based development on Base",
+        "A message compression protocol",
+        "A middleware layer for database indexing"
+      ],
+      "correctIndex": 1,
+      "id": 33
+    },
+    {
+      "question": "Base MCP Server provides:",
+      "options": [
+        "Validator staking interfaces",
+        "Network monitoring dashboards",
+        "AI tooling for building agent-based applications",
+        "Cross-chain bridge infrastructure"
+      ],
+      "correctIndex": 2,
+      "id": 34
+    },
+    {
+      "question": "What does MCP stand for in Base MCP Server?",
+      "options": [
+        "Mining Control Protocol",
+        "Message Compression Protocol",
+        "Multi-Chain Protocol",
+        "Model Context Protocol"
+      ],
+      "correctIndex": 3,
+      "id": 35
+    },
+    {
+      "question": "Base Agents can autonomously perform which action?",
+      "options": [
+        "Swapping tokens via agent interactions",
+        "Mining new blocks",
+        "Running validator infrastructure",
+        "Processing fiat withdrawals"
+      ],
+      "correctIndex": 0,
+      "id": 36
+    },
+    {
+      "question": "What payment mechanism is supported with Base Agents?",
+      "options": [
+        "Credit card payments only",
+        "x402 payments (HTTP 402 Payment Required)",
+        "ACH bank transfers",
+        "PayPal integration"
+      ],
+      "correctIndex": 1,
+      "id": 37
+    },
+    {
+      "question": "Base Agents can make and receive:",
+      "options": [
+        "Email notifications",
+        "Text messages",
+        "Payments autonomously",
+        "Governance votes only"
+      ],
+      "correctIndex": 2,
+      "id": 38
+    },
+    {
+      "question": "Which resources are available for AI agent development on Base?",
+      "options": [
+        "Only a single API endpoint",
+        "A proprietary AI model trained on Solidity",
+        "A natural language to bytecode compiler",
+        "MCP server, static docs files, and a prompt library"
+      ],
+      "correctIndex": 3,
+      "id": 39
+    },
+    {
+      "question": "What does x402 enable for Base Agents?",
+      "options": [
+        "Pay-per-request API access using crypto",
+        "Free unlimited API access",
+        "Bulk discounted rate plans",
+        "Monthly subscription billing"
+      ],
+      "correctIndex": 0,
+      "id": 40
+    },
+    {
+      "question": "Which of the following is a resource for Base AI agent development?",
+      "options": [
+        "Mobile SDK for iOS",
+        "Static docs files",
+        "Unity game engine plugin",
+        "Java enterprise library"
+      ],
+      "correctIndex": 1,
+      "id": 41
+    },
+    {
+      "question": "Base Agents represent a fusion of:",
+      "options": [
+        "Traditional banking and DeFi",
+        "Gaming and NFTs",
+        "Blockchain and artificial intelligence",
+        "Supply chain and IoT"
+      ],
+      "correctIndex": 2,
+      "id": 42
+    },
+    {
+      "question": "Through Base Agents, token swaps happen via:",
+      "options": [
+        "Centralized exchange order books",
+        "Manual peer-to-peer negotiation",
+        "Off-chain settlement networks",
+        "Agent-to-agent interactions"
+      ],
+      "correctIndex": 3,
+      "id": 43
+    },
+    {
+      "question": "What type of payments can Base Agents process autonomously?",
+      "options": [
+        "Both making and receiving payments",
+        "Only ERC-20 transfers",
+        "Only fiat currency payments",
+        "Only governance proposal fees"
+      ],
+      "correctIndex": 0,
+      "id": 44
+    },
+    {
+      "question": "The Base MCP Server is designed for:",
+      "options": [
+        "Block production optimization",
+        "Agent-based development and AI tooling",
+        "Liquidity pool management",
+        "Cross-chain message passing"
+      ],
+      "correctIndex": 1,
+      "id": 45
+    },
+    {
+      "question": "Which statement about Base Agents is FALSE?",
+      "options": [
+        "They are AI agents that can transact autonomously",
+        "They can make and receive payments",
+        "They require manual human approval for every transaction",
+        "They can swap tokens via agent interactions"
+      ],
+      "correctIndex": 2,
+      "id": 46
+    },
+    {
+      "question": "What is the relationship between x402 and Base Agents?",
+      "options": [
+        "x402 is a token standard unrelated to agents",
+        "x402 replaces the need for agents entirely",
+        "x402 is a wallet type for storing agent funds",
+        "x402 payments are supported with Base Agents for pay-per-request access"
+      ],
+      "correctIndex": 3,
+      "id": 47
+    },
+    {
+      "question": "Base Agents can autonomously:",
+      "options": [
+        "Transact, swap tokens, and make/receive payments",
+        "Stake ETH on Ethereum",
+        "Modify the Base protocol parameters",
+        "Deploy new Layer-2 rollups"
+      ],
+      "correctIndex": 0,
+      "id": 48
+    },
+    {
+      "question": "Which of the following is NOT a resource available for Base AI agent development?",
+      "options": [
+        "MCP server",
+        "Proprietary trading algorithms",
+        "Static docs files",
+        "Prompt library"
+      ],
+      "correctIndex": 1,
+      "id": 49
+    },
+    {
+      "question": "The Base MCP Server provides AI tooling for:",
+      "options": [
+        "Hardware wallet integration",
+        "Mining pool coordination",
+        "Agent-based development",
+        "DNS record management"
+      ],
+      "correctIndex": 2,
+      "id": 50
+    },
+    {
+      "question": "How do Base Agents handle payments?",
+      "options": [
+        "Through a centralized payment processor",
+        "Via bank wire transfers only",
+        "Through quarterly settlement cycles",
+        "Autonomously, without manual human intervention"
+      ],
+      "correctIndex": 3,
+      "id": 51
+    },
+    {
+      "question": "What model does x402 enable for API access?",
+      "options": [
+        "Pay-per-request using crypto",
+        "Unlimited flat-rate access",
+        "Free tier with ads",
+        "Barter system with tokens"
+      ],
+      "correctIndex": 0,
+      "id": 52
+    },
+    {
+      "question": "Base Agents are:",
+      "options": [
+        "Centralized server bots",
+        "AI agents that can transact autonomously on Base",
+        "Simple smart contract functions",
+        "Off-chain data processors"
+      ],
+      "correctIndex": 1,
+      "id": 53
+    },
+    {
+      "question": "The prompt library for Base AI development contains:",
+      "options": [
+        "Legal documents",
+        "Validator configuration files",
+        "Prompts for AI agent development on Base",
+        "Token sale terms"
+      ],
+      "correctIndex": 2,
+      "id": 54
+    },
+    {
+      "question": "Static docs files are available for AI developers on Base as:",
+      "options": [
+        "Interactive video tutorials",
+        "Live coding workshops",
+        "Printed manuals",
+        "Downloadable reference documentation"
+      ],
+      "correctIndex": 3,
+      "id": 55
+    },
+    {
+      "question": "Which HTTP status code is associated with x402 payments?",
+      "options": [
+        "HTTP 402 Payment Required",
+        "HTTP 200 OK",
+        "HTTP 404 Not Found",
+        "HTTP 500 Internal Server Error"
+      ],
+      "correctIndex": 0,
+      "id": 56
+    },
+    {
+      "question": "What makes Base Agents autonomous?",
+      "options": [
+        "They run on a separate blockchain",
+        "They can transact onchain without manual human intervention for each step",
+        "They are owned by autonomous organizations",
+        "They use renewable energy sources"
+      ],
+      "correctIndex": 1,
+      "id": 57
+    },
+    {
+      "question": "Base Agents can swap tokens via:",
+      "options": [
+        "A centralized exchange API",
+        "Off-chain over-the-counter deals",
+        "Agent-to-agent interactions onchain",
+        "Manual atomic swaps only"
+      ],
+      "correctIndex": 2,
+      "id": 58
+    },
+    {
+      "question": "The x402 payment model with Base Agents is described as:",
+      "options": [
+        "Subscription-based access",
+        "Freemium with premium tiers",
+        "Ad-supported free usage",
+        "Pay-as-you-go for APIs"
+      ],
+      "correctIndex": 3,
+      "id": 59
+    },
+    {
+      "question": "Which Quickstart guides are available for Base?",
+      "options": [
+        "Build an app on Base and Deploy on Base",
+        "Mine Bitcoin on Base and Stake ETH",
+        "Run a validator and create a token",
+        "Launch a DEX and build a lending protocol"
+      ],
+      "correctIndex": 0,
+      "id": 60
+    },
+    {
+      "question": "Base provides notifications to:",
+      "options": [
+        "Replace email entirely",
+        "Add notifications to apps built on Base",
+        "Send SMS marketing messages",
+        "Broadcast block rewards"
+      ],
+      "correctIndex": 1,
+      "id": 61
+    },
+    {
+      "question": "Developers building on Base can accept:",
+      "options": [
+        "Only ETH payments",
+        "Only credit card payments",
+        "B20 token payments in their apps",
+        "Only fiat currency"
+      ],
+      "correctIndex": 2,
+      "id": 62
+    },
+    {
+      "question": "What guide is available for existing applications on Base?",
+      "options": [
+        "Migrate from Web2 to Web3 guide",
+        "Migrate to Mobile App guide",
+        "Migrate to Desktop App guide",
+        "Migrate to Standard Web App guide"
+      ],
+      "correctIndex": 3,
+      "id": 63
+    },
+    {
+      "question": "Builder Codes on Base are available for:",
+      "options": [
+        "App developers, wallet developers, and agent developers",
+        "End users only",
+        "Only enterprise customers",
+        "Only validator operators"
+      ],
+      "correctIndex": 0,
+      "id": 64
+    },
+    {
+      "question": "What rewards program exists for Base builders?",
+      "options": [
+        "A token airdrop for all users",
+        "A Rewards program for builders",
+        "A mining rewards pool",
+        "A staking yield program"
+      ],
+      "correctIndex": 1,
+      "id": 65
+    },
+    {
+      "question": "Base Apps can leverage which payment method?",
+      "options": [
+        "Only traditional bank transfers",
+        "Only PayPal integration",
+        "B20 payments for accepting B20 tokens",
+        "Only cash deposits"
+      ],
+      "correctIndex": 2,
+      "id": 66
+    },
+    {
+      "question": "The Quickstart to Build an app on Base helps developers:",
+      "options": [
+        "Create their own Layer-1 blockchain",
+        "Audit smart contracts automatically",
+        "Launch a cryptocurrency exchange",
+        "Start building applications on Base"
+      ],
+      "correctIndex": 3,
+      "id": 67
+    },
+    {
+      "question": "Base notifications allow app developers to:",
+      "options": [
+        "Add notification functionality to their Base apps",
+        "Mine new blocks",
+        "Validate transactions",
+        "Create new tokens"
+      ],
+      "correctIndex": 0,
+      "id": 68
+    },
+    {
+      "question": "Builder Codes on Base support which types of developers?",
+      "options": [
+        "Only smart contract developers",
+        "App developers, wallet developers, and agent developers",
+        "Only frontend developers",
+        "Only backend developers"
+      ],
+      "correctIndex": 1,
+      "id": 69
+    },
+    {
+      "question": "Which of the following is a Quickstart option on Base?",
+      "options": [
+        "Build a Layer-1 blockchain",
+        "Create a cryptocurrency exchange",
+        "Deploy on Base",
+        "Launch a hardware wallet"
+      ],
+      "correctIndex": 2,
+      "id": 70
+    },
+    {
+      "question": "What is the purpose of the Migrate to Standard Web App guide?",
+      "options": [
+        "To migrate from Ethereum to Solana",
+        "To convert desktop apps to mobile",
+        "To upgrade database schemas",
+        "To help existing apps migrate to a standard web app architecture on Base"
+      ],
+      "correctIndex": 3,
+      "id": 71
+    },
+    {
+      "question": "Base Rewards program is designed for:",
+      "options": [
+        "Builders on the Base ecosystem",
+        "All users who hold Base tokens",
+        "Only institutional investors",
+        "Only NFT collectors"
+      ],
+      "correctIndex": 0,
+      "id": 72
+    },
+    {
+      "question": "Base Apps can accept B20 payments, meaning:",
+      "options": [
+        "Apps must use a centralized payment gateway",
+        "Apps can integrate B20 token as a payment method",
+        "Apps can only accept Ethereum payments",
+        "Apps must convert all payments to fiat"
+      ],
+      "correctIndex": 1,
+      "id": 73
+    },
+    {
+      "question": "Which guide helps developers get started with Base applications?",
+      "options": [
+        "Build a Mining Rig guide",
+        "Deploy a Validator guide",
+        "Build an app on Base Quickstart",
+        "Launch a Token guide"
+      ],
+      "correctIndex": 2,
+      "id": 74
+    },
+    {
+      "question": "Base notifications enable apps to:",
+      "options": [
+        "Mine blocks in the background",
+        "Auto-trade user portfolios",
+        "Modify blockchain parameters",
+        "Notify users about onchain events and updates"
+      ],
+      "correctIndex": 3,
+      "id": 75
+    },
+    {
+      "question": "Builder Codes are designed for which of the following?",
+      "options": [
+        "App developers, wallet developers, and agent developers",
+        "Only institutional partners",
+        "Only Coinbase employees",
+        "Only security auditors"
+      ],
+      "correctIndex": 0,
+      "id": 76
+    },
+    {
+      "question": "Which statement about Base Apps is FALSE?",
+      "options": [
+        "Developers can use the Build an app on Base Quickstart",
+        "Base apps cannot use notifications",
+        "Apps can accept B20 payments",
+        "Base provides a guide to migrate to Standard Web App"
+      ],
+      "correctIndex": 1,
+      "id": 77
+    },
+    {
+      "question": "The Deploy on Base Quickstart helps developers:",
+      "options": [
+        "Deploy a Bitcoin mining operation",
+        "Deploy a cloud server",
+        "Deploy their applications on the Base network",
+        "Deploy a DNS system"
+      ],
+      "correctIndex": 2,
+      "id": 78
+    },
+    {
+      "question": "Base Builder Codes are part of what?",
+      "options": [
+        "The Base mining protocol",
+        "The Base consensus mechanism",
+        "The Base staking system",
+        "The Base rewards and developer support ecosystem"
+      ],
+      "correctIndex": 3,
+      "id": 79
+    },
+    {
+      "question": "Which type of developer can use Builder Codes?",
+      "options": [
+        "Wallet developers",
+        "Only smart contract engineers",
+        "Only frontend designers",
+        "Only database administrators"
+      ],
+      "correctIndex": 0,
+      "id": 80
+    },
+    {
+      "question": "What payment integration is specifically highlighted for Base Apps?",
+      "options": [
+        "ACH transfers",
+        "B20 token payments",
+        "Wire transfers",
+        "PayPal"
+      ],
+      "correctIndex": 1,
+      "id": 81
+    },
+    {
+      "question": "Base notifications feature allows apps to:",
+      "options": [
+        "Create new blockchain networks",
+        "Generate blocks automatically",
+        "Send onchain alerts to users",
+        "Modify consensus parameters"
+      ],
+      "correctIndex": 2,
+      "id": 82
+    },
+    {
+      "question": "The Rewards program on Base is tied to:",
+      "options": [
+        "Token staking",
+        "Running validator nodes",
+        "Mining blocks",
+        "Building and contributing to the ecosystem"
+      ],
+      "correctIndex": 3,
+      "id": 83
+    },
+    {
+      "question": "Base offers Quickstart guides for which two activities?",
+      "options": [
+        "Build an app on Base and Deploy on Base",
+        "Mine Bitcoin and stake Ether",
+        "Create a token and launch a DEX",
+        "Run a node and become a validator"
+      ],
+      "correctIndex": 0,
+      "id": 84
+    },
+    {
+      "question": "What is the Migrate to Standard Web App guide for?",
+      "options": [
+        "Converting Web2 apps to blockchain dApps",
+        "Helping existing apps transition to a standard web app model on Base",
+        "Upgrading from HTTP to HTTPS",
+        "Moving from cloud to on-premise hosting"
+      ],
+      "correctIndex": 1,
+      "id": 85
+    },
+    {
+      "question": "Which of these is NOT a focus area for Base Builder Codes?",
+      "options": [
+        "App developers",
+        "Wallet developers",
+        "Mining pool operators",
+        "Agent developers"
+      ],
+      "correctIndex": 2,
+      "id": 86
+    },
+    {
+      "question": "Base Apps can integrate payments using:",
+      "options": [
+        "Only cryptocurrency, no fiat options mentioned",
+        "Only through third-party processors",
+        "Only via credit cards",
+        "B20 tokens as a payment method"
+      ],
+      "correctIndex": 3,
+      "id": 87
+    },
+    {
+      "question": "Base provides a Rewards program for:",
+      "options": [
+        "Builders contributing to the ecosystem",
+        "All token holders regardless of activity",
+        "Only large institutional investors",
+        "Only Coinbase employees"
+      ],
+      "correctIndex": 0,
+      "id": 88
+    },
+    {
+      "question": "To start building on Base, developers should use:",
+      "options": [
+        "The Base Bitcoin mining tutorial",
+        "The Build an app on Base Quickstart",
+        "The Base hardware wallet setup guide",
+        "The Base staking dashboard"
+      ],
+      "correctIndex": 1,
+      "id": 89
+    },
+    {
+      "question": "Which of the following can Builder Codes be used by?",
+      "options": [
+        "Only enterprise accounts",
+        "Only Coinbase One subscribers",
+        "App developers, wallet developers, and agent developers",
+        "Only verified KYC users"
+      ],
+      "correctIndex": 2,
+      "id": 90
+    },
+    {
+      "question": "B20 is a native token standard for which network?",
+      "options": [
+        "Ethereum",
+        "Solana",
+        "Polygon",
+        "Base"
+      ],
+      "correctIndex": 3,
+      "id": 91
+    },
+    {
+      "question": "B20 is part of which Base upgrade?",
+      "options": [
+        "Beryl upgrade",
+        "Beethoven upgrade",
+        "Catalyst upgrade",
+        "Denali upgrade"
+      ],
+      "correctIndex": 0,
+      "id": 92
+    },
+    {
+      "question": "What does the B20 standard enable for tokens?",
+      "options": [
+        "Tokens to be mined like Bitcoin",
+        "Tokens to be treated as native assets (like ETH) rather than just ERC-20s",
+        "Tokens to be used only for governance",
+        "Tokens to remain as off-chain receipts"
+      ],
+      "correctIndex": 1,
+      "id": 93
+    },
+    {
+      "question": "What does B20 simplify for developers?",
+      "options": [
+        "Block production",
+        "Validator node setup",
+        "Token management",
+        "Network monitoring"
+      ],
+      "correctIndex": 2,
+      "id": 94
+    },
+    {
+      "question": "How can B20 tokens be used on Base?",
+      "options": [
+        "Only for staking",
+        "Only for governance voting",
+        "Only for NFT purchases",
+        "For gas, similar to how ETH works on Ethereum"
+      ],
+      "correctIndex": 3,
+      "id": 95
+    },
+    {
+      "question": "What upgrade introduced the B20 standard?",
+      "options": [
+        "The Beryl upgrade",
+        "The Frontier upgrade",
+        "The Genesis upgrade",
+        "The Horizon upgrade"
+      ],
+      "correctIndex": 0,
+      "id": 96
+    },
+    {
+      "question": "B20 tokens differ from standard ERC-20 tokens because B20 tokens are:",
+      "options": [
+        "Not compatible with Ethereum wallets",
+        "Treated as native assets on Base, similar to how ETH works on Ethereum",
+        "Only usable on testnet",
+        "Non-transferable by design"
+      ],
+      "correctIndex": 1,
+      "id": 97
+    },
+    {
+      "question": "Which statement about B20 is correct?",
+      "options": [
+        "B20 is a sidechain for token transfers",
+        "B20 is a decentralized exchange on Base",
+        "B20 is a native token standard for Base that enables tokens to be treated as native assets",
+        "B20 is a wallet provider for Base"
+      ],
+      "correctIndex": 2,
+      "id": 98
+    },
+    {
+      "question": "B20 tokens can be accepted in apps as:",
+      "options": [
+        "Governance votes only",
+        "Only for NFT minting",
+        "Only for gas fee refunds",
+        "Payments within applications"
+      ],
+      "correctIndex": 3,
+      "id": 99
+    },
+    {
+      "question": "What makes B20 tokens native on Base?",
+      "options": [
+        "They can be treated like ETH as a first-class asset, not just as ERC-20 tokens",
+        "They are pre-mined by the Base team",
+        "They have no smart contract behind them",
+        "They are only available on testnet"
+      ],
+      "correctIndex": 0,
+      "id": 100
+    },
+    {
+      "question": "In what way are B20 tokens similar to ETH on Ethereum?",
+      "options": [
+        "They can be mined through Proof of Work",
+        "They can be used for gas on Base",
+        "They have a fixed supply cap",
+        "They are deflationary by design"
+      ],
+      "correctIndex": 1,
+      "id": 101
+    },
+    {
+      "question": "B20 simplifies token management for:",
+      "options": [
+        "End users only",
+        "Only exchange operators",
+        "Developers building on Base",
+        "Only regulatory compliance officers"
+      ],
+      "correctIndex": 2,
+      "id": 102
+    },
+    {
+      "question": "Which of the following is NOT true about B20?",
+      "options": [
+        "It is part of the Beryl upgrade",
+        "It is a native token standard for Base",
+        "It enables tokens to be treated as native assets",
+        "It is a Layer-2 scaling solution"
+      ],
+      "correctIndex": 3,
+      "id": 103
+    },
+    {
+      "question": "The B20 standard treats tokens as:",
+      "options": [
+        "Native assets like ETH rather than just ERC-20s",
+        "Second-class assets compared to the native coin",
+        "Off-chain IOU receipts",
+        "Non-transferable credits"
+      ],
+      "correctIndex": 0,
+      "id": 104
+    },
+    {
+      "question": "What use case does B20 enable for tokens in apps?",
+      "options": [
+        "Only governance voting",
+        "Gas fee payments and merchant acceptance",
+        "Only NFT metadata storage",
+        "Only oracle price feeds"
+      ],
+      "correctIndex": 1,
+      "id": 105
+    },
+    {
+      "question": "B20 is a token standard that makes tokens:",
+      "options": [
+        "Mineable with specialized hardware",
+        "Non-transferable by default",
+        "First-class native assets on Base",
+        "Only available to institutional investors"
+      ],
+      "correctIndex": 2,
+      "id": 106
+    },
+    {
+      "question": "The Beryl upgrade on Base introduced:",
+      "options": [
+        "A new consensus mechanism",
+        "A hard cap on total supply",
+        "A new programming language",
+        "The B20 native token standard"
+      ],
+      "correctIndex": 3,
+      "id": 107
+    },
+    {
+      "question": "B20 tokens can be used for gas. This means:",
+      "options": [
+        "Users pay gas fees in B20 tokens rather than only in ETH",
+        "B20 tokens replace all other fee tokens",
+        "Gas fees are eliminated on Base",
+        "Only B20 tokens can be transferred"
+      ],
+      "correctIndex": 0,
+      "id": 108
+    },
+    {
+      "question": "How does B20 benefit developers?",
+      "options": [
+        "By requiring less code to deploy tokens",
+        "By simplifying token management through native asset treatment",
+        "By eliminating the need for smart contracts",
+        "By providing free hosting for dApps"
+      ],
+      "correctIndex": 1,
+      "id": 109
+    },
+    {
+      "question": "What is the relationship between B20 and ERC-20?",
+      "options": [
+        "B20 is an extension of ERC-20 that adds more functions",
+        "B20 is a security audit for ERC-20 tokens",
+        "B20 is an alternative to ERC-20 that makes tokens native assets on Base",
+        "B20 converts ERC-20 tokens to NFTs"
+      ],
+      "correctIndex": 2,
+      "id": 110
+    },
+    {
+      "question": "Which upgrade brought native token standard capabilities to Base?",
+      "options": [
+        "The Holland upgrade",
+        "The Istanbul upgrade",
+        "The Shanghai upgrade",
+        "The Beryl upgrade"
+      ],
+      "correctIndex": 3,
+      "id": 111
+    },
+    {
+      "question": "B20 tokens being treated as native assets means:",
+      "options": [
+        "They have first-class status similar to ETH on Ethereum",
+        "They are minted directly by the protocol rather than through contract calls",
+        "They cannot be transferred between wallets",
+        "They exist only off-chain"
+      ],
+      "correctIndex": 0,
+      "id": 112
+    },
+    {
+      "question": "What can developers do with B20 tokens in their apps?",
+      "options": [
+        "Only display B20 balances without transactions",
+        "Accept B20 payments from users",
+        "Only use B20 for testing purposes",
+        "Convert B20 to fiat currency automatically"
+      ],
+      "correctIndex": 1,
+      "id": 113
+    },
+    {
+      "question": "B20 simplifies token management by:",
+      "options": [
+        "Eliminating the need for wallets",
+        "Automatically converting all tokens to ETH",
+        "Treating tokens as native assets instead of just ERC-20 contracts",
+        "Removing the need for private keys"
+      ],
+      "correctIndex": 2,
+      "id": 114
+    },
+    {
+      "question": "What type of standard is B20?",
+      "options": [
+        "A privacy standard",
+        "A consensus mechanism",
+        "A wallet encryption standard",
+        "A native token standard"
+      ],
+      "correctIndex": 3,
+      "id": 115
+    },
+    {
+      "question": "B20 tokens can be used for gas on Base, similar to:",
+      "options": [
+        "How ETH works on Ethereum",
+        "How SOL works on Solana",
+        "How MATIC works on Polygon",
+        "How BNB works on BNB Chain"
+      ],
+      "correctIndex": 0,
+      "id": 116
+    },
+    {
+      "question": "Which of these is a key feature of the B20 standard?",
+      "options": [
+        "Proof of Work mining",
+        "Tokens as native assets on Base",
+        "Anonymous transactions by default",
+        "Automatic yield generation"
+      ],
+      "correctIndex": 1,
+      "id": 117
+    },
+    {
+      "question": "What does the B20 standard enable for payment acceptance?",
+      "options": [
+        "Only native ETH payments are supported",
+        "All payments must go through centralized exchanges",
+        "Apps can accept B20 payments",
+        "Payments require multi-sig approval"
+      ],
+      "correctIndex": 2,
+      "id": 118
+    },
+    {
+      "question": "B20 is part of the Beryl upgrade, which is associated with:",
+      "options": [
+        "Ethereum",
+        "Solana",
+        "Arbitrum",
+        "Base"
+      ],
+      "correctIndex": 3,
+      "id": 119
+    },
+    {
+      "question": "How does B20 change the developer experience on Base?",
+      "options": [
+        "It simplifies token management by making tokens native assets",
+        "It requires more complex token deployment",
+        "It removes smart contract capabilities entirely",
+        "It forces all tokens to be identical"
+      ],
+      "correctIndex": 0,
+      "id": 120
+    },
+    {
+      "question": "B20 tokens enable gas fee payments because:",
+      "options": [
+        "They have a special gas exemption",
+        "They are treated as native assets like ETH on Base",
+        "They are always worth exactly $1",
+        "They are minted by validators on demand"
+      ],
+      "correctIndex": 1,
+      "id": 121
+    },
+    {
+      "question": "What distinguishes B20 from standard ERC-20 tokens?",
+      "options": [
+        "B20 tokens don't have smart contracts",
+        "B20 tokens can only be used for NFTs",
+        "B20 tokens are treated as native assets on Base, not just as contract-managed tokens",
+        "B20 tokens are only for testnet use"
+      ],
+      "correctIndex": 2,
+      "id": 122
+    },
+    {
+      "question": "The Beryl upgrade on Base introduced the:",
+      "options": [
+        "Base token sale",
+        "Base decentralized exchange",
+        "Base governance token",
+        "B20 native token standard"
+      ],
+      "correctIndex": 3,
+      "id": 123
+    },
+    {
+      "question": "Which of the following can B20 tokens be used for?",
+      "options": [
+        "Gas payments on Base and acceptance in apps",
+        "Only as collectible NFTs",
+        "Only as governance tokens for a single DAO",
+        "Only as wrapped Bitcoin on Base"
+      ],
+      "correctIndex": 0,
+      "id": 124
+    },
+    {
+      "question": "What does native asset mean for B20 tokens?",
+      "options": [
+        "They are mined directly from blocks",
+        "They are assets native to the Base blockchain, with first-class status like ETH",
+        "They exist only in a centralized database",
+        "They require special permissions to transfer"
+      ],
+      "correctIndex": 1,
+      "id": 125
+    },
+    {
+      "question": "B20 token standard was introduced to:",
+      "options": [
+        "Replace ERC-20 entirely on all chains",
+        "Eliminate gas fees on Base",
+        "Make token management simpler on Base",
+        "Create a new consensus mechanism"
+      ],
+      "correctIndex": 2,
+      "id": 126
+    },
+    {
+      "question": "What is the Security Council for Base responsible for?",
+      "options": [
+        "Managing user passwords",
+        "Running validator nodes",
+        "Processing fiat withdrawals",
+        "Governing protocol upgrades"
+      ],
+      "correctIndex": 3,
+      "id": 127
+    },
+    {
+      "question": "Security Council members on Base are responsible for:",
+      "options": [
+        "Protocol safety and governing upgrades",
+        "Marketing and community growth",
+        "Token price stabilization",
+        "Writing application code for dApps"
+      ],
+      "correctIndex": 0,
+      "id": 128
+    },
+    {
+      "question": "What guide helps developers avoid issues on Base?",
+      "options": [
+        "Avoid Common Smart Contract Bugs guide",
+        "Avoid Malicious Flags guide",
+        "Avoid High Gas Fees guide",
+        "Avoid Network Congestion guide"
+      ],
+      "correctIndex": 1,
+      "id": 129
+    },
+    {
+      "question": "What programs does Base offer for security issues?",
+      "options": [
+        "Insurance claims program and refund program",
+        "Token recovery program and account freeze program",
+        "Report a Vulnerability program and Bug bounty program",
+        "Dispute resolution program and arbitration program"
+      ],
+      "correctIndex": 2,
+      "id": 130
+    },
+    {
+      "question": "The Base Security Council governs:",
+      "options": [
+        "Token prices on exchanges",
+        "User account passwords",
+        "dApp content moderation",
+        "Protocol upgrades"
+      ],
+      "correctIndex": 3,
+      "id": 131
+    },
+    {
+      "question": "How are Security Council members expected to act?",
+      "options": [
+        "Responsibly for protocol safety",
+        "In their own financial self-interest",
+        "By maximizing trading volume",
+        "By promoting specific dApps"
+      ],
+      "correctIndex": 0,
+      "id": 132
+    },
+    {
+      "question": "Which program allows security researchers to report issues?",
+      "options": [
+        "Referral rewards program",
+        "Report a Vulnerability program",
+        "Bug bounty retainer program",
+        "Security consulting program"
+      ],
+      "correctIndex": 1,
+      "id": 133
+    },
+    {
+      "question": "What does the Bug bounty program on Base offer?",
+      "options": [
+        "Free tokens for all participants",
+        "Guaranteed employment at Coinbase",
+        "Rewards for finding and reporting security vulnerabilities",
+        "Exclusive NFT access"
+      ],
+      "correctIndex": 2,
+      "id": 134
+    },
+    {
+      "question": "Which of the following is NOT part of Base security ecosystem?",
+      "options": [
+        "Security Council",
+        "Report a Vulnerability program",
+        "Bug bounty program",
+        "Token price insurance"
+      ],
+      "correctIndex": 3,
+      "id": 135
+    },
+    {
+      "question": "The Security Council governs protocol upgrades, meaning:",
+      "options": [
+        "They approve or reject changes to the Base protocol",
+        "They set token prices for exchanges",
+        "They manage user wallet passwords",
+        "They create marketing campaigns"
+      ],
+      "correctIndex": 0,
+      "id": 136
+    },
+    {
+      "question": "What is the Avoid Malicious Flags guide for?",
+      "options": [
+        "A guide for reporting malicious users",
+        "Helping developers avoid being flagged as malicious",
+        "A guide for creating malicious smart contracts",
+        "A guide for network monitoring"
+      ],
+      "correctIndex": 1,
+      "id": 137
+    },
+    {
+      "question": "Base encourages security researchers to:",
+      "options": [
+        "Keep vulnerabilities private without reporting",
+        "Exploit vulnerabilities for profit",
+        "Report vulnerabilities through the official program",
+        "Sell vulnerability information to third parties"
+      ],
+      "correctIndex": 2,
+      "id": 138
+    },
+    {
+      "question": "Who comprises the Base Security Council?",
+      "options": [
+        "Elected community members",
+        "Randomly selected token holders",
+        "External auditors only",
+        "Members responsible for protocol safety and governance of upgrades"
+      ],
+      "correctIndex": 3,
+      "id": 139
+    },
+    {
+      "question": "What is the purpose of Base Bug bounty program?",
+      "options": [
+        "To incentivize finding and responsibly disclosing security vulnerabilities",
+        "To reward developers for building popular dApps",
+        "To distribute governance tokens to users",
+        "To fund marketing campaigns"
+      ],
+      "correctIndex": 0,
+      "id": 140
+    },
+    {
+      "question": "The Security Council plays a role in:",
+      "options": [
+        "Day-to-day trading of Base tokens",
+        "Protocol upgrades and network safety",
+        "Marketing and business development",
+        "User interface design"
+      ],
+      "correctIndex": 1,
+      "id": 141
+    },
+    {
+      "question": "What does Avoid Malicious Flags help developers do?",
+      "options": [
+        "Get better search engine rankings",
+        "Create more profitable trading strategies",
+        "Ensure their applications are not mistakenly flagged as malicious",
+        "Reduce gas costs for users"
+      ],
+      "correctIndex": 2,
+      "id": 142
+    },
+    {
+      "question": "Base provides a Report a Vulnerability program for:",
+      "options": [
+        "Reporting poor user experiences",
+        "Reporting spam messages",
+        "Reporting market manipulation",
+        "Reporting security flaws in the Base protocol"
+      ],
+      "correctIndex": 3,
+      "id": 143
+    },
+    {
+      "question": "Which is NOT a responsibility of the Security Council?",
+      "options": [
+        "Setting token listing fees for exchanges",
+        "Governing protocol upgrades",
+        "Ensuring protocol safety",
+        "Voting on protocol changes"
+      ],
+      "correctIndex": 0,
+      "id": 144
+    },
+    {
+      "question": "The Bug bounty program is part of Base:",
+      "options": [
+        "Marketing strategy",
+        "Security and vulnerability management approach",
+        "Token distribution plan",
+        "Validator rewards system"
+      ],
+      "correctIndex": 1,
+      "id": 145
+    },
+    {
+      "question": "How can developers avoid being flagged as malicious?",
+      "options": [
+        "By not deploying smart contracts",
+        "By only using testnet",
+        "By following the Avoid Malicious Flags guide",
+        "By registering with a centralized authority"
+      ],
+      "correctIndex": 2,
+      "id": 146
+    },
+    {
+      "question": "The Security Council for Base is involved in:",
+      "options": [
+        "Managing user funds directly",
+        "Setting cryptocurrency exchange rates",
+        "Writing application code for all dApps",
+        "Approving protocol upgrades to ensure network safety"
+      ],
+      "correctIndex": 3,
+      "id": 147
+    },
+    {
+      "question": "Which of these is true about the Base Bug bounty program?",
+      "options": [
+        "It rewards researchers for finding vulnerabilities",
+        "It requires a subscription fee to participate",
+        "It only covers smart contract bugs, not protocol bugs",
+        "It pays in fiat currency only"
+      ],
+      "correctIndex": 0,
+      "id": 148
+    },
+    {
+      "question": "Security Council members are responsible for:",
+      "options": [
+        "Running marketing campaigns",
+        "Protocol safety and governance",
+        "Managing social media accounts",
+        "Designing user interfaces"
+      ],
+      "correctIndex": 1,
+      "id": 149
+    },
+    {
+      "question": "The Avoid Malicious Flags guide is part of Base:",
+      "options": [
+        "Consensus mechanism documentation",
+        "Tokenomics whitepaper",
+        "Developer documentation to help apps stay in good standing",
+        "Staking guide"
+      ],
+      "correctIndex": 2,
+      "id": 150
+    },
+    {
+      "question": "Base Report a Vulnerability program is for:",
+      "options": [
+        "Reporting lost private keys",
+        "Reporting transaction delays",
+        "Reporting high gas fees",
+        "Reporting protocol and security issues responsibly"
+      ],
+      "correctIndex": 3,
+      "id": 151
+    },
+    {
+      "question": "What role does the Security Council play in Base governance?",
+      "options": [
+        "They govern protocol upgrades for safety and security",
+        "They manage the community treasury",
+        "They set the price of gas fees",
+        "They develop all dApps on Base"
+      ],
+      "correctIndex": 0,
+      "id": 152
+    },
+    {
+      "question": "The Bug bounty program aims to:",
+      "options": [
+        "Distribute tokens to the community",
+        "Improve network security by incentivizing vulnerability discovery",
+        "Increase transaction throughput",
+        "Reduce validator requirements"
+      ],
+      "correctIndex": 1,
+      "id": 153
+    },
+    {
+      "question": "Which statement about Base Security Council is FALSE?",
+      "options": [
+        "They govern protocol upgrades",
+        "They are responsible for protocol safety",
+        "They set gas prices on the network",
+        "They include members responsible for protocol governance"
+      ],
+      "correctIndex": 2,
+      "id": 154
+    },
+    {
+      "question": "What should researchers do if they find a security vulnerability?",
+      "options": [
+        "Post it publicly on social media",
+        "Sell it to the highest bidder",
+        "Keep it secret indefinitely",
+        "Report it via the Report a Vulnerability program"
+      ],
+      "correctIndex": 3,
+      "id": 155
+    },
+    {
+      "question": "The Avoid Malicious Flags guide helps ensure:",
+      "options": [
+        "Applications are not mistakenly marked as malicious",
+        "Transactions process faster",
+        "Token prices remain stable",
+        "Validators earn more rewards"
+      ],
+      "correctIndex": 0,
+      "id": 156
+    },
+    {
+      "question": "Base security approach includes:",
+      "options": [
+        "Only smart contract audits",
+        "Security Council, vulnerability reporting, and bug bounties",
+        "Only third-party insurance",
+        "Only community monitoring"
+      ],
+      "correctIndex": 1,
+      "id": 157
+    },
+    {
+      "question": "How often does the Security Council govern upgrades?",
+      "options": [
+        "Daily through automated processes",
+        "Only during network emergencies",
+        "When protocol upgrades are proposed and need approval",
+        "Never, upgrades are automatic"
+      ],
+      "correctIndex": 2,
+      "id": 158
+    },
+    {
+      "question": "What is the primary goal of Base Bug bounty program?",
+      "options": [
+        "To replace traditional security audits",
+        "To distribute tokens equitably",
+        "To market Base to security firms",
+        "To enhance platform security through community participation"
+      ],
+      "correctIndex": 3,
+      "id": 159
+    },
+    {
+      "question": "Base Report a Vulnerability program expects:",
+      "options": [
+        "Responsible disclosure of security issues",
+        "Immediate public disclosure of all bugs",
+        "Payment in exchange for bug reports",
+        "Legal action against reporters"
+      ],
+      "correctIndex": 0,
+      "id": 160
+    },
+    {
+      "question": "The Security Council governance of protocol upgrades ensures:",
+      "options": [
+        "Updates happen automatically without review",
+        "Changes are reviewed for safety before deployment",
+        "All upgrades are rejected by default",
+        "Only the Base team can propose changes"
+      ],
+      "correctIndex": 1,
+      "id": 161
+    },
+    {
+      "question": "What are Base Ledgers?",
+      "options": [
+        "Personal finance tracking tools",
+        "Simple accounting spreadsheets",
+        "Institutional-grade onchain capital markets",
+        "Validator reward calculators"
+      ],
+      "correctIndex": 2,
+      "id": 162
+    },
+    {
+      "question": "Base Ledgers are similar to which existing product but onchain?",
+      "options": [
+        "PayPal but onchain",
+        "Venmo but onchain",
+        "Robinhood but onchain",
+        "Coinbase Prime but onchain"
+      ],
+      "correctIndex": 3,
+      "id": 163
+    },
+    {
+      "question": "Who are Base Ledgers designed for?",
+      "options": [
+        "Institutions and large-scale capital markets",
+        "Individual retail traders",
+        "Casual NFT collectors",
+        "Small business owners"
+      ],
+      "correctIndex": 0,
+      "id": 164
+    },
+    {
+      "question": "Base Ledgers provide:",
+      "options": [
+        "Personal budgeting tools",
+        "Institutional-grade onchain capital markets",
+        "Gaming leaderboards",
+        "Social media feeds"
+      ],
+      "correctIndex": 1,
+      "id": 165
+    },
+    {
+      "question": "What does institutional-grade mean for Base Ledgers?",
+      "options": [
+        "Designed for individual retail users",
+        "Available only to accredited investors by law",
+        "Built to meet the standards and needs of institutions and large-scale capital markets",
+        "Requires a minimum of $1M to use"
+      ],
+      "correctIndex": 2,
+      "id": 166
+    },
+    {
+      "question": "How do Base Ledgers compare to Coinbase Prime?",
+      "options": [
+        "Base Ledgers have nothing in common with Coinbase Prime",
+        "Base Ledgers replace Coinbase Prime entirely",
+        "Base Ledgers are a subset of Coinbase Prime features",
+        "Base Ledgers are the onchain version of similar institutional services"
+      ],
+      "correctIndex": 3,
+      "id": 167
+    },
+    {
+      "question": "Which of the following BEST describes Base Ledgers?",
+      "options": [
+        "Institutional-grade onchain capital markets",
+        "A consumer crypto wallet",
+        "A blockchain explorer",
+        "An NFT marketplace"
+      ],
+      "correctIndex": 0,
+      "id": 168
+    },
+    {
+      "question": "Base Ledgers target which market segment?",
+      "options": [
+        "Retail DeFi users",
+        "Institutions and large-scale capital markets",
+        "Gaming communities",
+        "Social media platforms"
+      ],
+      "correctIndex": 1,
+      "id": 169
+    },
+    {
+      "question": "What is the relationship between Base Ledgers and Coinbase Prime?",
+      "options": [
+        "Base Ledgers are a competitor to Coinbase Prime",
+        "Base Ledgers are powered by Coinbase Prime backend",
+        "Base Ledgers are similar to Coinbase Prime but fully onchain",
+        "Base Ledgers are older than Coinbase Prime"
+      ],
+      "correctIndex": 2,
+      "id": 170
+    },
+    {
+      "question": "Base Ledgers are designed for:",
+      "options": [
+        "Peer-to-peer lending",
+        "Decentralized social networks",
+        "Supply chain tracking",
+        "Institutional-grade onchain capital markets"
+      ],
+      "correctIndex": 3,
+      "id": 171
+    },
+    {
+      "question": "Which statement about Base Ledgers is FALSE?",
+      "options": [
+        "They are designed for individual retail traders",
+        "They are institutional-grade onchain capital markets",
+        "They are similar to Coinbase Prime but onchain",
+        "They target institutions and large-scale capital markets"
+      ],
+      "correctIndex": 0,
+      "id": 172
+    },
+    {
+      "question": "What does onchain capital markets mean for Base Ledgers?",
+      "options": [
+        "A stock exchange running on Base",
+        "Capital markets activities executed on the blockchain",
+        "A tokenized version of NASDAQ",
+        "A centralized order book synced to the blockchain"
+      ],
+      "correctIndex": 1,
+      "id": 173
+    },
+    {
+      "question": "Base Ledgers are described as similar to Coinbase Prime but:",
+      "options": [
+        "Faster",
+        "Cheaper",
+        "Onchain",
+        "More decentralized"
+      ],
+      "correctIndex": 2,
+      "id": 174
+    },
+    {
+      "question": "Which type of organization would use Base Ledgers?",
+      "options": [
+        "Individual retail investors",
+        "Small online stores",
+        "Social media influencers",
+        "Institutions needing onchain capital market infrastructure"
+      ],
+      "correctIndex": 3,
+      "id": 175
+    },
+    {
+      "question": "Base Ledgers bring what type of markets onchain?",
+      "options": [
+        "Capital markets for institutions",
+        "Prediction markets",
+        "NFT marketplaces",
+        "Gaming marketplaces"
+      ],
+      "correctIndex": 0,
+      "id": 176
+    },
+    {
+      "question": "Base Ledgers are:",
+      "options": [
+        "Personal finance applications",
+        "Institutional-grade onchain capital markets for Base",
+        "Educational blockchain simulators",
+        "Community governance tools"
+      ],
+      "correctIndex": 1,
+      "id": 177
+    },
+    {
+      "question": "The phrase onchain capital markets refers to:",
+      "options": [
+        "Traditional stock trading on the blockchain",
+        "A tokenized real estate platform",
+        "Capital market infrastructure built on a blockchain",
+        "A cryptocurrency index fund"
+      ],
+      "correctIndex": 2,
+      "id": 178
+    },
+    {
+      "question": "Base Ledgers target which audience primarily?",
+      "options": [
+        "Individual retail users",
+        "NFT artists and collectors",
+        "Blockchain developers",
+        "Institutions and large-scale capital market participants"
+      ],
+      "correctIndex": 3,
+      "id": 179
+    },
+    {
+      "question": "What product is Base Ledgers comparable to?",
+      "options": [
+        "Coinbase Prime, but executed onchain",
+        "MetaMask, but institutional grade",
+        "OpenSea, but for capital markets",
+        "Uniswap, but for institutions"
+      ],
+      "correctIndex": 0,
+      "id": 180
+    },
+    {
+      "question": "Which of these would find Base Ledgers most useful?",
+      "options": [
+        "A retail user making small transfers",
+        "An institution managing large-scale onchain capital market operations",
+        "An artist minting NFTs",
+        "A gamer earning in-game rewards"
+      ],
+      "correctIndex": 1,
+      "id": 181
+    },
+    {
+      "question": "What does x402 stand for?",
+      "options": [
+        "A cross-chain bridge protocol",
+        "A token standard for Base",
+        "HTTP 402 Payment Required status code",
+        "A wallet encryption method"
+      ],
+      "correctIndex": 2,
+      "id": 182
+    },
+    {
+      "question": "x402 refers to which HTTP status code?",
+      "options": [
+        "HTTP 200 OK",
+        "HTTP 403 Forbidden",
+        "HTTP 404 Not Found",
+        "HTTP 402 Payment Required"
+      ],
+      "correctIndex": 3,
+      "id": 183
+    },
+    {
+      "question": "What does x402 enable?",
+      "options": [
+        "Pay-per-request API access using cryptocurrency",
+        "Free unlimited API access",
+        "Bulk discount pricing for APIs",
+        "Monthly API subscription plans"
+      ],
+      "correctIndex": 0,
+      "id": 184
+    },
+    {
+      "question": "x402 is described as what kind of model for APIs?",
+      "options": [
+        "Subscription-based model",
+        "Pay-as-you-go model",
+        "Freemium model",
+        "Ad-supported model"
+      ],
+      "correctIndex": 1,
+      "id": 185
+    },
+    {
+      "question": "Which technology supports x402 payments on Base?",
+      "options": [
+        "Base Ledgers",
+        "Base Accounts",
+        "Base Agents",
+        "B20 tokens"
+      ],
+      "correctIndex": 2,
+      "id": 186
+    },
+    {
+      "question": "The number 402 in x402 refers to:",
+      "options": [
+        "The block number where it was activated",
+        "The number of tokens required to use it",
+        "The version number of the standard",
+        "The HTTP status code for Payment Required"
+      ],
+      "correctIndex": 3,
+      "id": 187
+    },
+    {
+      "question": "x402 enables pay-per-request access to:",
+      "options": [
+        "APIs using cryptocurrency",
+        "Validator nodes",
+        "Blockchain storage",
+        "Domain name registration"
+      ],
+      "correctIndex": 0,
+      "id": 188
+    },
+    {
+      "question": "What type of payment model does x402 use?",
+      "options": [
+        "Annual flat fee",
+        "Pay-per-request (each API call costs a small crypto payment)",
+        "Ad-supported monetization",
+        "Donation-based access"
+      ],
+      "correctIndex": 1,
+      "id": 189
+    },
+    {
+      "question": "Which of the following is the HTTP status code for Payment Required?",
+      "options": [
+        "401",
+        "403",
+        "402",
+        "404"
+      ],
+      "correctIndex": 2,
+      "id": 190
+    },
+    {
+      "question": "x402 is supported with which Base technology?",
+      "options": [
+        "Base Ledgers",
+        "Base Accounts",
+        "Builder Codes",
+        "Base Agents"
+      ],
+      "correctIndex": 3,
+      "id": 191
+    },
+    {
+      "question": "What problem does x402 solve?",
+      "options": [
+        "Enabling micropayments for API access without subscriptions",
+        "Slow block finality",
+        "High gas fees on mainnet",
+        "Lack of smart contract support"
+      ],
+      "correctIndex": 0,
+      "id": 192
+    },
+    {
+      "question": "x402 payments use which medium?",
+      "options": [
+        "Credit cards",
+        "Cryptocurrency",
+        "Bank transfers",
+        "Gift cards"
+      ],
+      "correctIndex": 1,
+      "id": 193
+    },
+    {
+      "question": "The pay-as-you-go model of x402 means users pay:",
+      "options": [
+        "A flat monthly fee",
+        "An annual subscription",
+        "For each API request they make",
+        "A one-time lifetime access fee"
+      ],
+      "correctIndex": 2,
+      "id": 194
+    },
+    {
+      "question": "How does x402 relate to Base Agents?",
+      "options": [
+        "x402 replaces Base Agents entirely",
+        "x402 is unrelated to Base Agents",
+        "x402 requires Base Agents to function",
+        "x402 payments are supported with Base Agents for autonomous payments"
+      ],
+      "correctIndex": 3,
+      "id": 195
+    },
+    {
+      "question": "Which of these is NOT true about x402?",
+      "options": [
+        "It is a new token standard for Base",
+        "It is based on the HTTP 402 status code",
+        "It enables pay-per-request API access",
+        "It is supported with Base Agents"
+      ],
+      "correctIndex": 0,
+      "id": 196
+    },
+    {
+      "question": "The HTTP 402 status code means:",
+      "options": [
+        "OK",
+        "Payment Required",
+        "Forbidden",
+        "Not Found"
+      ],
+      "correctIndex": 1,
+      "id": 197
+    },
+    {
+      "question": "x402 enables API access to be:",
+      "options": [
+        "Completely free for all users",
+        "Restricted to whitelisted addresses only",
+        "Paid per request rather than through subscription plans",
+        "Available only during business hours"
+      ],
+      "correctIndex": 2,
+      "id": 198
+    },
+    {
+      "question": "What is the x402 payment model best compared to?",
+      "options": [
+        "A library subscription (pay annually)",
+        "A buffet (pay once, eat all)",
+        "A tip jar (voluntary payments)",
+        "A vending machine (pay per item/request)"
+      ],
+      "correctIndex": 3,
+      "id": 199
+    },
+    {
+      "question": "Which Base feature integrates with x402 for payments?",
+      "options": [
+        "Base Agents",
+        "Base Accounts",
+        "Base Ledgers",
+        "Builder Codes"
+      ],
+      "correctIndex": 0,
+      "id": 200
+    },
+    {
+      "question": "x402 is specifically mentioned as being:",
+      "options": [
+        "A regulatory framework",
+        "Supported with Base Agents",
+        "A consensus mechanism",
+        "A staking protocol"
+      ],
+      "correctIndex": 1,
+      "id": 201
+    },
+    {
+      "question": "The pay-as-you-go model of x402 is ideal for:",
+      "options": [
+        "Long-term subscriptions",
+        "Enterprise license agreements",
+        "APIs where users pay per request with crypto",
+        "Unlimited data plans"
+      ],
+      "correctIndex": 2,
+      "id": 202
+    },
+    {
+      "question": "x402 leverages which existing web standard?",
+      "options": [
+        "DNS records",
+        "SSL certificates",
+        "HTML markup",
+        "HTTP status codes"
+      ],
+      "correctIndex": 3,
+      "id": 203
+    },
+    {
+      "question": "What makes x402 different from traditional API billing?",
+      "options": [
+        "It uses cryptocurrency for per-request micropayments instead of subscriptions",
+        "It is more expensive than traditional billing",
+        "It requires manual invoicing",
+        "It only works on weekends"
+      ],
+      "correctIndex": 0,
+      "id": 204
+    },
+    {
+      "question": "x402 payments are designed for:",
+      "options": [
+        "Large bulk transactions only",
+        "API access where each request can be paid for individually",
+        "One-time setup fees",
+        "Quarterly billing cycles"
+      ],
+      "correctIndex": 1,
+      "id": 205
+    },
+    {
+      "question": "Which protocol is x402 built upon?",
+      "options": [
+        "FTP",
+        "WebSocket",
+        "HTTP",
+        "gRPC"
+      ],
+      "correctIndex": 2,
+      "id": 206
+    },
+    {
+      "question": "What does the Base Bridge allow users to do?",
+      "options": [
+        "Bridge between Base and Solana only",
+        "Convert fiat to cryptocurrency",
+        "Stake tokens for rewards",
+        "Bridge assets between L1 and Base"
+      ],
+      "correctIndex": 3,
+      "id": 207
+    },
+    {
+      "question": "The Solana Bridge allows bridging between:",
+      "options": [
+        "Solana and Base",
+        "Solana and Ethereum",
+        "Solana and Bitcoin",
+        "Solana and Arbitrum"
+      ],
+      "correctIndex": 0,
+      "id": 208
+    },
+    {
+      "question": "What is the Base Batches program?",
+      "options": [
+        "A batch transaction processing tool",
+        "Community events organized by Base",
+        "A token airdrop mechanism",
+        "A smart contract batching library"
+      ],
+      "correctIndex": 1,
+      "id": 209
+    },
+    {
+      "question": "Base offers Grants for:",
+      "options": [
+        "Personal loans for users",
+        "Validator hardware purchases",
+        "Funding projects and building in the ecosystem",
+        "Marketing agency retainers"
+      ],
+      "correctIndex": 2,
+      "id": 210
+    },
+    {
+      "question": "What is Retroactive Funding on Base?",
+      "options": [
+        "Pre-paid grants for future work",
+        "Loans that must be repaid with interest",
+        "Insurance for smart contract failures",
+        "Funding for projects that have already shown impact"
+      ],
+      "correctIndex": 3,
+      "id": 211
+    },
+    {
+      "question": "What types of infrastructure are available on Base?",
+      "options": [
+        "Node Providers, Block Explorers, and Data Indexers",
+        "Only a single block explorer",
+        "Only centralized infrastructure",
+        "No infrastructure, developers build from scratch"
+      ],
+      "correctIndex": 0,
+      "id": 212
+    },
+    {
+      "question": "Where can developers find contract addresses for Base?",
+      "options": [
+        "Contract addresses are not disclosed",
+        "Contract addresses are available for reference",
+        "Contract addresses are randomized daily",
+        "Contract addresses require paid access"
+      ],
+      "correctIndex": 1,
+      "id": 213
+    },
+    {
+      "question": "What programming resources are available for AI development on Base?",
+      "options": [
+        "Only API documentation",
+        "Only video tutorials",
+        "Static Docs Files and a Prompt Library",
+        "Only community forums"
+      ],
+      "correctIndex": 2,
+      "id": 214
+    },
+    {
+      "question": "Base has a Bridge for which two ecosystems?",
+      "options": [
+        "Base Bridge and Bitcoin Bridge",
+        "Base Bridge and Ethereum Bridge only",
+        "Only a single bridge",
+        "Base Bridge (L1 to Base) and Solana Bridge (Solana to Base)"
+      ],
+      "correctIndex": 3,
+      "id": 215
+    },
+    {
+      "question": "Builder Rewards program on Base is designed for:",
+      "options": [
+        "Builders contributing to the ecosystem",
+        "Validators",
+        "Only enterprise customers",
+        "Only Coinbase employees"
+      ],
+      "correctIndex": 0,
+      "id": 216
+    },
+    {
+      "question": "Base Batches are described as:",
+      "options": [
+        "Software development kits",
+        "Community events",
+        "Token standards",
+        "Consensus mechanisms"
+      ],
+      "correctIndex": 1,
+      "id": 217
+    },
+    {
+      "question": "What is available for developers who need to reference Base contracts?",
+      "options": [
+        "Encrypted contract code only",
+        "Contract addresses require NDA",
+        "Contract addresses for reference",
+        "No contract information is public"
+      ],
+      "correctIndex": 2,
+      "id": 218
+    },
+    {
+      "question": "Data Indexers are available on Base for:",
+      "options": [
+        "Mining new blocks",
+        "Storing files permanently",
+        "Running validator nodes",
+        "Indexing and querying blockchain data efficiently"
+      ],
+      "correctIndex": 3,
+      "id": 219
+    },
+    {
+      "question": "Node Providers on Base offer:",
+      "options": [
+        "Access to Base nodes for dApp development",
+        "Mining hardware for sale",
+        "Cloud storage services",
+        "Domain name registration"
+      ],
+      "correctIndex": 0,
+      "id": 220
+    },
+    {
+      "question": "Block Explorers on Base enable users to:",
+      "options": [
+        "Submit transactions manually",
+        "View transactions, blocks, and addresses on the network",
+        "Create new wallets",
+        "Stake tokens directly"
+      ],
+      "correctIndex": 1,
+      "id": 221
+    },
+    {
+      "question": "Which of these is an infrastructure offering on Base?",
+      "options": [
+        "Email hosting",
+        "Social media management",
+        "Block Explorers",
+        "Video streaming"
+      ],
+      "correctIndex": 2,
+      "id": 222
+    },
+    {
+      "question": "What does the Base Bridge facilitate?",
+      "options": [
+        "Token swaps on decentralized exchanges",
+        "Smart contract compilation",
+        "Wallet recovery",
+        "Asset transfers between Layer-1 and Base"
+      ],
+      "correctIndex": 3,
+      "id": 223
+    },
+    {
+      "question": "The Solana Bridge is specifically for bridging between:",
+      "options": [
+        "Solana and Base",
+        "Solana and Ethereum",
+        "Solana and Arbitrum",
+        "Solana and Polygon"
+      ],
+      "correctIndex": 0,
+      "id": 224
+    },
+    {
+      "question": "Retroactive Funding on Base rewards:",
+      "options": [
+        "Future development proposals",
+        "Projects based on their past contributions and impact",
+        "Validators for block production",
+        "Users for transaction volume"
+      ],
+      "correctIndex": 1,
+      "id": 225
+    },
+    {
+      "question": "Base Grants program is for:",
+      "options": [
+        "Personal use grants for individuals",
+        "Hardware purchase subsidies",
+        "Projects building within the Base ecosystem",
+        "Travel expenses for events"
+      ],
+      "correctIndex": 2,
+      "id": 226
+    },
+    {
+      "question": "Which of the following is NOT an infrastructure category on Base?",
+      "options": [
+        "Node Providers",
+        "Block Explorers",
+        "Data Indexers",
+        "Email Service Providers"
+      ],
+      "correctIndex": 3,
+      "id": 227
+    },
+    {
+      "question": "The Prompt Library on Base is a resource for:",
+      "options": [
+        "AI development and agent creation",
+        "Smart contract templates",
+        "Validator configuration",
+        "UI component design"
+      ],
+      "correctIndex": 0,
+      "id": 228
+    },
+    {
+      "question": "Static Docs Files on Base are intended for:",
+      "options": [
+        "Printed marketing materials",
+        "AI and agent-based development reference",
+        "Legal compliance documents",
+        "User onboarding pamphlets"
+      ],
+      "correctIndex": 1,
+      "id": 229
+    },
+    {
+      "question": "Builder Rewards on Base are for:",
+      "options": [
+        "All users who hold Base tokens",
+        "Only validators who run nodes",
+        "Builders who contribute to the Base ecosystem",
+        "Only enterprise partners"
+      ],
+      "correctIndex": 2,
+      "id": 230
+    },
+    {
+      "question": "Base Batches are best described as:",
+      "options": [
+        "Batch transaction processing tool",
+        "Validator batch signing protocol",
+        "Token airdrop mechanism",
+        "Community events for the Base ecosystem"
+      ],
+      "correctIndex": 3,
+      "id": 231
+    },
+    {
+      "id": 232,
+      "question": "What is the primary purpose of Base Account smart wallets?",
+      "options": [
+        "To simplify onchain interactions through account abstraction",
+        "To enable off-chain data storage",
+        "To replace blockchain validators",
+        "To mine new cryptocurrency tokens"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 233,
+      "question": "Which statement about Base Accounts and cross-chain functionality is correct?",
+      "options": [
+        "Base Accounts only work on Base mainnet",
+        "Base Accounts are designed to work across multiple chains",
+        "Base Accounts require a bridging protocol for each chain",
+        "Base Accounts cannot interact with other chains"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 234,
+      "question": "Base Agents use AI to:",
+      "options": [
+        "Mine blocks more efficiently",
+        "Replace all smart contracts",
+        "Transact autonomously on the Base network",
+        "Centralize blockchain governance"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 235,
+      "question": "The Base MCP Server enables developers to:",
+      "options": [
+        "Create new Layer-1 blockchains",
+        "Run validator nodes from a mobile device",
+        "Mine tokens using browser extensions",
+        "Build agent-based applications with AI tooling"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 236,
+      "question": "What type of API access does x402 enable?",
+      "options": [
+        "Pay-per-request API access using cryptocurrency",
+        "Free lifetime access to all APIs",
+        "Monthly subscription for unlimited API calls",
+        "Enterprise license with seat-based pricing"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 237,
+      "question": "What is included in the resources for Base AI agents?",
+      "options": [
+        "A full IDE for smart contract development",
+        "MCP server, static docs files, and a prompt library",
+        "A proprietary programming language",
+        "A GPU cluster for model training"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 238,
+      "question": "What is the relationship between x402 and the HTTP protocol?",
+      "options": [
+        "x402 is a new HTTP method like GET or POST",
+        "x402 replaces HTTP with a new protocol",
+        "x402 uses the HTTP 402 Payment Required status code",
+        "x402 has no relation to HTTP"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 239,
+      "question": "B20 being a native token standard means tokens on Base are:",
+      "options": [
+        "Treated as second-class assets compared to wrapped tokens",
+        "Limited to governance functions only",
+        "Only available for testing purposes",
+        "Treated as native assets like ETH, not just ERC-20s"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 240,
+      "question": "The Beryl upgrade on Base is significant because it:",
+      "options": [
+        "Introduced the B20 native token standard",
+        "Changed the consensus mechanism to Proof of Stake",
+        "Launched the Base mainnet",
+        "Merged Base with the Ethereum mainnet"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 241,
+      "question": "Base Security Council members primarily focus on:",
+      "options": [
+        "Marketing and ecosystem growth",
+        "Protocol safety and governing upgrades",
+        "End-user customer support",
+        "Token price management"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 242,
+      "question": "What should a developer do if their app is mistakenly flagged as malicious?",
+      "options": [
+        "Ignore the flag and continue operating",
+        "Create a new application from scratch",
+        "Follow the Avoid Malicious Flags guide to resolve the issue",
+        "Switch to a different blockchain network"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 243,
+      "question": "What makes Base Ledgers institutional-grade?",
+      "options": [
+        "They are insured by the FDIC",
+        "They require a minimum investment of $10 million",
+        "They are regulated by the SEC",
+        "They are built for institutions and large-scale capital markets"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 244,
+      "question": "How does x402 change the way APIs are accessed?",
+      "options": [
+        "APIs use a pay-as-you-go model with crypto payments per request",
+        "APIs become free for everyone",
+        "APIs require enterprise contracts only",
+        "APIs are accessed through a centralized gateway"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 245,
+      "question": "The Builder Rewards program on Base rewards:",
+      "options": [
+        "Anyone who holds the Base native token",
+        "Builders who contribute to the Base ecosystem",
+        "Only validators who secure the network",
+        "Only enterprise partners with large integrations"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 246,
+      "question": "Base provides infrastructure support through:",
+      "options": [
+        "A proprietary cloud hosting service",
+        "A single centralized API gateway",
+        "Node Providers, Block Explorers, and Data Indexers",
+        "Only community-run infrastructure"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 247,
+      "question": "What does the Solana Bridge allow users to do?",
+      "options": [
+        "Bridge assets between Solana and Ethereum",
+        "Bridge assets between Solana and Bitcoin",
+        "Swap tokens on the Solana DEX ecosystem",
+        "Bridge assets between Solana and Base"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 248,
+      "question": "Retroactive Funding on Base is designed to:",
+      "options": [
+        "Reward projects for their past impact and contributions",
+        "Fund future projects based on proposals",
+        "Provide loans to developers at low interest",
+        "Fund marketing campaigns for existing dApps"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 249,
+      "question": "B20 tokens can be used for gas on Base, which means:",
+      "options": [
+        "B20 tokens replace ETH for all gas payments",
+        "B20 tokens can pay transaction fees like how ETH works on Ethereum",
+        "B20 tokens eliminate gas fees entirely",
+        "B20 tokens are only for governance voting"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 250,
+      "question": "Base Accounts are built on what core technology?",
+      "options": [
+        "Multi-party computation",
+        "Zero-knowledge rollups",
+        "Account abstraction / smart contract wallets",
+        "Sharded database architecture"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 251,
+      "question": "Base Agents can autonomously perform which financial operations?",
+      "options": [
+        "Mining, staking, and validating",
+        "Only reading blockchain data without writing",
+        "Only governance voting operations",
+        "Making payments, receiving payments, and swapping tokens"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 252,
+      "question": "Which statement correctly describes B20?",
+      "options": [
+        "B20 is a native token standard introduced in the Beryl upgrade",
+        "B20 is a DeFi protocol for lending on Base",
+        "B20 is a cross-chain bridge for Base tokens",
+        "B20 is a wallet application for managing Base assets"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 253,
+      "question": "The Report a Vulnerability program on Base is part of:",
+      "options": [
+        "The Base marketing program for bug bounties",
+        "The Base security framework for responsible disclosure",
+        "The Base developer rewards for building dApps",
+        "The Base user feedback system for UX improvements"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 254,
+      "question": "Base Ledgers are most comparable to:",
+      "options": [
+        "MetaMask but for institutional use",
+        "OpenSea but for capital markets",
+        "Coinbase Prime but fully onchain",
+        "Uniswap but with institutional focus"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 255,
+      "question": "What HTTP status code is associated with the x402 payment model?",
+      "options": [
+        "200",
+        "404",
+        "500",
+        "402"
+      ],
+      "correctIndex": 3
+    }
+  ]
+}

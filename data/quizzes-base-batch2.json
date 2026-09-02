@@ -1,0 +1,3433 @@
+{
+  "meta": {
+    "ecosystem": "Base",
+    "batchId": "base-2026-07-11-batch2",
+    "generatedAt": "2026-07-11T06:57:46Z",
+    "totalQuizzes": 311,
+    "questionsPerSession": 5,
+    "correctedAt": "2026-07-11T07:00:00Z"
+  },
+  "quizzes": [
+    {
+      "id": 0,
+      "question": "Which of the following is NOT a correct fee characteristic of Base?",
+      "options": [
+        "The L2 execution fee is always higher than the L1 security fee",
+        "Every transaction has an L2 execution fee and an L1 security fee",
+        "The L1 security fee is typically higher than the L2 execution fee",
+        "The L1 security fee varies with L1 congestion"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 1,
+      "question": "What is the second stage of finality for a Base L2 transaction?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion",
+        "L1 Batch Finality"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 2,
+      "question": "Which bridge would you use to transfer USDC between Base and another chain using Circle's infrastructure?",
+      "options": [
+        "The Base Bridge",
+        "The Solana Bridge",
+        "CCTP",
+        "LayerZero"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 3,
+      "question": "What does 'L1 Batch Inclusion' refer to?",
+      "options": [
+        "Including a transaction in a preconfirmation block",
+        "Waiting for two L1 epochs to pass",
+        "Completing the 7-day withdrawal period",
+        "Posting a Base batch to Ethereum"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 4,
+      "question": "A Base transaction at the Flashblock Inclusion stage (200ms) has a reorg probability described as:",
+      "options": [
+        "Under 0.001%",
+        "Under 0.01%",
+        "Under 0.1%",
+        "Under 1%"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 5,
+      "question": "Which of the following is NOT part of Base's fee model?",
+      "options": [
+        "L2 execution fee (paid to L2 validators/sequencer)",
+        "Validator staking fee (paid to L1 validators)",
+        "L1 security fee (estimated L1 posting cost)",
+        "Minimum base fee (5,000,000 wei)"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 6,
+      "question": "The Base Bridge enables transfers between:",
+      "options": [
+        "Base and Solana",
+        "Base and Arbitrum",
+        "L1 Ethereum and Base",
+        "Base and Optimism"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 7,
+      "question": "At ETH=$2000, how much would the minimum base fee cost for a 200k gas transaction?",
+      "options": [
+        "~$0.0002",
+        "~$0.02",
+        "~$0.20",
+        "~$0.002"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 8,
+      "question": "At the L1 Batch Finality stage, the batch is:",
+      "options": [
+        "Older than 2 epochs on L1",
+        "Included in a Flashblock",
+        "Newly posted to Ethereum",
+        "Awaiting the challenge period"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 9,
+      "question": "The Flashblock Inclusion stage of finality provides:",
+      "options": [
+        "The highest security guarantee of any stage",
+        "The fastest possible preconfirmation at ~200ms with very low reorg risk",
+        "A guarantee the transaction will never reorg",
+        "Finality equivalent to L1 settlement"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 10,
+      "question": "If a challenger wins a dispute game on Base's fault proof system, what can happen?",
+      "options": [
+        "The withdrawal is processed faster",
+        "The challenger receives a penalty",
+        "The L2 chain can reorg",
+        "The transaction fee is refunded"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 11,
+      "question": "At ETH=$2000, the minimum base fee of 0.005 gwei translates to a minimum fee of approximately:",
+      "options": [
+        "$0.00002 for a simple transfer",
+        "$0.02 for a typical swap",
+        "$0.20 for a complex contract interaction",
+        "$0.002 for a 200k gas transaction"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 12,
+      "question": "Which is NOT an intended benefit of the minimum base fee on Base?",
+      "options": [
+        "Elimination of the L1 security fee",
+        "Faster tx inclusion",
+        "More predictable fees",
+        "Spam prevention"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 13,
+      "question": "If the Base Fee Change Denominator is 125, this means the base fee can change by at most:",
+      "options": [
+        "1/125th of the current base fee per block (0.8%)",
+        "1/125th of the current base fee per block with the elasticity multiplier making the max increase 4%",
+        "125 times the current base fee per block",
+        "125 wei per block"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 14,
+      "question": "The Base Bridge uses standard bridge contracts from which ecosystem?",
+      "options": [
+        "Arbitrum",
+        "Polygon",
+        "Optimism",
+        "zkSync"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 15,
+      "question": "L2 Block Inclusion reorg probability is described as 'Near 0%'. This means:",
+      "options": [
+        "Reorgs happen approximately 1% of the time",
+        "The transaction is guaranteed to never reorg",
+        "Reorg probability equals Ethereum's reorg probability",
+        "Reorgs are theoretically possible but extremely unlikely"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 16,
+      "question": "Which of the following is NOT a GasPriceOracle method on Base?",
+      "options": [
+        "getTotalL1Fee",
+        "getL1Fee",
+        "l1BaseFee",
+        "blobBaseFee"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 17,
+      "question": "If L2 demand on Base suddenly spikes, the base fee can increase by at most:",
+      "options": [
+        "6% per block",
+        "4% per block",
+        "12.5% per block",
+        "1% per block"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 18,
+      "question": "The Jovian upgrade introduced a minimum base fee. Which benefit does it NOT provide?",
+      "options": [
+        "Faster transaction inclusion",
+        "More predictable fees",
+        "Lower L1 posting costs",
+        "Spam prevention"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 19,
+      "question": "If a Base block uses exactly 400M gas (the maximum), what happens to subsequent blocks?",
+      "options": [
+        "The block is automatically split into two blocks",
+        "The next block is limited to 200M gas",
+        "The sequencer pauses block production for 2 seconds",
+        "The base fee increases by up to 4% in the next block due to EIP-1559"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 20,
+      "question": "How does finality for regular Base L2 transactions differ from withdrawal transactions?",
+      "options": [
+        "Regular L2 transactions finalize quickly; only withdrawals must wait 7 days",
+        "They are the same \u2014 both wait 7 days",
+        "Withdrawals finalize in seconds; regular transactions wait 7 days",
+        "Both finalize in approximately 2 minutes"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 21,
+      "question": "Which of the following is NOT a method available on the GasPriceOracle predeploy?",
+      "options": [
+        "getL1Fee",
+        "getL2FeeEstimate",
+        "getL1FeeUpperBound",
+        "blobBaseFee"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 22,
+      "question": "The four stages of finality on Base in order are:",
+      "options": [
+        "L2 Block Inclusion, Flashblock Inclusion, L1 Batch Inclusion, L1 Batch Finality",
+        "L1 Batch Inclusion, L1 Batch Finality, Flashblock Inclusion, L2 Block Inclusion",
+        "Flashblock Inclusion, L2 Block Inclusion, L1 Batch Inclusion, L1 Batch Finality",
+        "Flashblock Inclusion, L2 Block Inclusion, L1 Batch Finality, L1 Batch Inclusion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 23,
+      "question": "The EIP-1559 elasticity mechanism on Base (Elasticity = 6, Denominator = 125) means that a block at full 400M gas would:",
+      "options": [
+        "Decrease the base fee by 50% since the block is too full",
+        "Have no effect on the base fee",
+        "Reset the base fee to the minimum",
+        "Increase the base fee by at most 4% in the next block since the target is exceeded"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 24,
+      "question": "The 7-day period for withdrawals gives the Fault Proof system time to:",
+      "options": [
+        "Detect and challenge invalid state transitions",
+        "Process the transaction off-chain",
+        "Generate the L1 proof",
+        "Sync with Ethereum validators"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 25,
+      "question": "The Fault Proof system's 7-day challenge period is a security feature that:",
+      "options": [
+        "Slows down the bridge to reduce network congestion",
+        "Protects bridged funds by allowing invalid withdrawals to be disputed before finalization",
+        "Ensures the sequencer has enough time to batch all withdrawals",
+        "Charges users interest for the duration of the wait"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 26,
+      "question": "The 'minimum base fee' introduced by the Jovian upgrade means:",
+      "options": [
+        "All transactions must pay at least $1 in fees",
+        "The L1 security fee has a minimum of 5,000,000 wei",
+        "The L2 base fee cannot go below 5,000,000 wei, preventing spam and ensuring reliable inclusion",
+        "The base fee is fixed at 5,000,000 wei and never changes"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 27,
+      "question": "Which GasPriceOracle method should be called to retrieve the current L1 base fee on Ethereum?",
+      "options": [
+        "getL1Fee()",
+        "getL1FeeUpperBound()",
+        "blobBaseFee()",
+        "l1BaseFee()"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 28,
+      "question": "Flashblocks on Base have access to what gas budget?",
+      "options": [
+        "The full 400M gas block limit",
+        "Half the block gas limit",
+        "100M gas per Flashblock",
+        "Only the remaining gas after the sequencer fee is deducted"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 29,
+      "question": "A withdrawal from Base to Ethereum requires the 7-day challenge period because:",
+      "options": [
+        "The Ethereum L1 takes 7 days to confirm L2 block data",
+        "The Fault Proof system needs time to detect any invalid state transitions before funds are released",
+        "The Base sequencer produces one block every 7 days for withdrawals",
+        "CCTP requires all USDC transfers to wait 7 days"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 30,
+      "question": "Which statement about Base finality is FALSE?",
+      "options": [
+        "Regular L2 transactions do NOT need to wait 7 days",
+        "Withdrawals from Base to Ethereum must wait 7 days",
+        "All Base transactions require a 7-day wait to be considered final",
+        "There are four stages of finality for L2 transactions"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 31,
+      "question": "What is the first stage of finality for a Base L2 transaction?",
+      "options": [
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion",
+        "L1 Batch Finality",
+        "Flashblock Inclusion"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 32,
+      "question": "What is the minimum base fee in gwei on Base Mainnet?",
+      "options": [
+        "0.005 gwei",
+        "0.0005 gwei",
+        "0.05 gwei",
+        "0.5 gwei"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 33,
+      "question": "The four stages of finality on Base provide:",
+      "options": [
+        "Four separate blockchains that each must confirm the transaction",
+        "Increasing levels of confirmation security from ~200ms to ~20 minutes",
+        "A single checkpoint at the 20-minute mark",
+        "A choice between speed and security for each transaction"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 34,
+      "question": "What BEST describes the Fault Proof system on Base?",
+      "options": [
+        "A system that automatically rejects all withdrawals",
+        "A software tool for proving Solidity code correctness",
+        "A mechanism that allows challenges to invalid L2 state transitions within a 7-day window",
+        "A validator that double-checks every L2 transaction before inclusion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 35,
+      "question": "Which of the following is NOT affected by the Jovian upgrade's minimum base fee?",
+      "options": [
+        "Transaction inclusion speed",
+        "Fee predictability",
+        "Spam resistance",
+        "The 7-day withdrawal period"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 36,
+      "question": "The L2 execution fee on Base adjusts dynamically using EIP-1559. What is the purpose of this adjustment?",
+      "options": [
+        "To match L2 demand \u2014 fees rise when blocks are full and fall when they are not",
+        "To keep fees exactly the same for every transaction",
+        "To always charge the maximum possible fee",
+        "To match L1 gas prices exactly"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 37,
+      "question": "When Ethereum gas prices spike, Base transactions become:",
+      "options": [
+        "Cheaper because users switch to L2",
+        "More expensive because the L1 security fee increases",
+        "Unaffected \u2014 L2 fees are independent of L1",
+        "Free \u2014 fees are waived during high congestion"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 38,
+      "question": "What is the reorg probability classification for Flashblock Inclusion?",
+      "options": [
+        "Near 0%",
+        "Effectively 0%",
+        "Under 0.001%",
+        "Over 0.1%"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 39,
+      "question": "What type of bridge contracts does the Base Bridge use?",
+      "options": [
+        "Custom proprietary bridge contracts",
+        "Circle's CCTP contracts",
+        "Wormhole bridge contracts",
+        "Optimism's standard bridge contracts"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 40,
+      "question": "The Solana Bridge enables which cross-chain flow?",
+      "options": [
+        "Solana to Base",
+        "Ethereum L1 to Base",
+        "Base to Arbitrum",
+        "Optimism to Solana"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 41,
+      "question": "How long does L2 Block Inclusion typically take on Base?",
+      "options": [
+        "~200 milliseconds",
+        "~2 seconds",
+        "~2 minutes",
+        "~20 minutes"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 42,
+      "question": "How does the 7-day withdrawal period on Base compare to the finality of regular L2 transactions?",
+      "options": [
+        "Both regular transactions and withdrawals have a 7-day wait",
+        "Regular transactions finalize in 7 days; withdrawals finalize instantly",
+        "Regular L2 transactions finalize in stages from ~200ms to ~20m; only withdrawals have a 7-day wait",
+        "Neither regular transactions nor withdrawals have any wait period"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 43,
+      "question": "The 400M gas block limit on Base applies to:",
+      "options": [
+        "Only the sequencer's blocks",
+        "Only withdrawal transactions",
+        "Only L1 batch submissions",
+        "Flashblocks \u2014 they have access to the full budget"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 44,
+      "question": "EIP-1559 on Base adjusts the L2 base fee based on:",
+      "options": [
+        "Block utilization \u2014 when blocks are above target, the base fee increases",
+        "L1 gas prices \u2014 when L1 is expensive, the L2 fee adjusts",
+        "Validator voting \u2014 validators decide the fee each block",
+        "User tips \u2014 the base fee is the median of all tips received"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 45,
+      "question": "The 7-day withdrawal period for Base to Ethereum withdrawals exists for which purpose?",
+      "options": [
+        "To give users time to change their minds",
+        "To allow the Fault Proof system to provide high security for bridged funds",
+        "To batch multiple withdrawals together for efficiency",
+        "To accumulate enough fees to cover L1 posting costs"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 46,
+      "question": "The maximum gas per L2 block on Base is:",
+      "options": [
+        "100 million",
+        "200 million",
+        "400 million",
+        "800 million"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 47,
+      "question": "The EIP-1559 mechanism on Base adjusts the L2 execution fee based on:",
+      "options": [
+        "L1 gas prices",
+        "The number of active validators",
+        "The USDC exchange rate",
+        "L2 demand for block space"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 48,
+      "question": "The EIP-1559 elasticity multiplier of 6 on Base means:",
+      "options": [
+        "The block target can be exceeded by up to 6x before the fee increase formula changes",
+        "The base fee is multiplied by 6 every block",
+        "6 transactions fit in each block",
+        "The block gas limit is 6 times the Ethereum block gas limit"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 49,
+      "question": "What is the relationship between the 400M block gas limit and the ~60-70M target gas per block?",
+      "options": [
+        "The target is a minimum; blocks must always reach 60-70M gas",
+        "The block gas limit is a hard ceiling; the target is a lower utilization point for stable fee markets",
+        "The block gas limit and target are identical values",
+        "The target is updated every block based on sequencer preference"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 50,
+      "question": "The Elasticity Multiplier of 6 and Base Fee Change Denominator of 125 on Base mean:",
+      "options": [
+        "The base fee can never increase",
+        "Each block produces 6 transactions maximum",
+        "The block can fill up to 6x the target before fees increase sharply",
+        "The minimum base fee is multiplied by 125"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 51,
+      "question": "The L1 (security) fee on Base covers:",
+      "options": [
+        "The cost of executing the transaction on the L2",
+        "The fee paid to validators for block production",
+        "The cost of running the sequencer infrastructure",
+        "The estimated cost of publishing the transaction on L1"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 52,
+      "question": "Base L2 transactions achieve different levels of finality depending on:",
+      "options": [
+        "How many stages of the finality pipeline have been completed",
+        "The transaction fee paid",
+        "The size of the transaction",
+        "The type of wallet used"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 53,
+      "question": "CCTP (Cross-Chain Transfer Protocol) can be used to transfer USDC between which chains?",
+      "options": [
+        "Only between Ethereum and Base",
+        "Between any supported chains including Base, Ethereum, Solana, and others",
+        "Only between Solana and Base",
+        "Only between Ethereum mainnet and testnet"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 54,
+      "question": "How quickly does Flashblock Inclusion occur on Base?",
+      "options": [
+        "Approximately 2 seconds",
+        "Approximately 2 minutes",
+        "Approximately 200 milliseconds",
+        "Approximately 20 minutes"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 55,
+      "question": "What is the block gas limit for Base L2 blocks?",
+      "options": [
+        "100M gas",
+        "200M gas",
+        "800M gas",
+        "400M gas"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 56,
+      "question": "What security guarantee does the 7-day withdrawal period provide?",
+      "options": [
+        "It ensures enough time for the Fault Proof system to detect invalid withdrawals",
+        "It guarantees the sequencer collects maximum fees",
+        "It allows users to cancel their withdrawal at any point",
+        "It enables batch processing to reduce L1 costs"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 57,
+      "question": "The Solana Bridge, Base Bridge, and CCTP are all examples of:",
+      "options": [
+        "L1 Ethereum protocols",
+        "Cross-chain transfer infrastructure available on Base",
+        "Base-native DEX platforms",
+        "EIP-1559 fee mechanisms"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 58,
+      "question": "Which of the following correctly links the finality stage with its time?",
+      "options": [
+        "Flashblock Inclusion ~2s, L2 Block Inclusion ~200ms, L1 Batch Inclusion ~20m, L1 Batch Finality ~2m",
+        "Flashblock Inclusion ~20m, L2 Block Inclusion ~2m, L1 Batch Inclusion ~2s, L1 Batch Finality ~200ms",
+        "Flashblock Inclusion ~200ms, L2 Block Inclusion ~2s, L1 Batch Inclusion ~2m, L1 Batch Finality ~20m",
+        "Flashblock Inclusion ~2m, L2 Block Inclusion ~20m, L1 Batch Inclusion ~200ms, L1 Batch Finality ~2s"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 59,
+      "question": "A dApp developer wants to show users a confirmation as quickly as possible after sending a transaction. Which stage of finality is sufficient for most user-facing purposes?",
+      "options": [
+        "Only L1 Batch Finality",
+        "Only after 7 days",
+        "None \u2014 Base transactions cannot be considered final",
+        "L1 Batch Inclusion or earlier stages since reorg risk is minimal"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 60,
+      "question": "The 64 L1 block threshold for L1 Batch Finality corresponds to approximately:",
+      "options": [
+        "20 minutes on Ethereum at 12-second block times",
+        "2 minutes on Ethereum",
+        "7 days on Ethereum",
+        "200ms on Ethereum"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 61,
+      "question": "Which GasPriceOracle method is used for a quick L1 fee estimate before the transaction is fully constructed?",
+      "options": [
+        "getL1Fee(bytes)",
+        "getL1FeeUpperBound(uint256)",
+        "l1BaseFee()",
+        "blobBaseFee()"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 62,
+      "question": "Which stage of finality takes approximately 20 minutes for a Base L2 transaction?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Finality",
+        "L1 Batch Inclusion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 63,
+      "question": "5,000,000 wei is equivalent to:",
+      "options": [
+        "0.0005 gwei",
+        "0.05 gwei",
+        "0.5 gwei",
+        "0.005 gwei"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 64,
+      "question": "If the Fault Proof system detects an invalid withdrawal, it:",
+      "options": [
+        "Challenges it through a dispute game",
+        "Automatically approves the withdrawal",
+        "Routes the withdrawal through a different bridge",
+        "Increases the withdrawal fee"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 65,
+      "question": "The four stages of finality on Base apply to which type of transactions?",
+      "options": [
+        "Withdrawal transactions only",
+        "Regular Base L2 transactions",
+        "Deposit transactions only",
+        "All transactions including withdrawals"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 66,
+      "question": "With a 400M gas limit and 2-second block time, Base can process a large amount of transactions. This throughput is further enhanced by:",
+      "options": [
+        "Larger per-transaction gas limits",
+        "Reducing the block gas limit",
+        "Flashblocks which provide 200ms preconfirmations",
+        "Increasing the EIP-1559 denominator"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 67,
+      "question": "The L1 security fee on Base is important because:",
+      "options": [
+        "It pays for Base's sequencer infrastructure",
+        "It funds the Base developer grants program",
+        "It is distributed as rewards to L2 validators",
+        "It covers the cost of publishing transaction data to Ethereum for security"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 68,
+      "question": "At L1 Batch Finality, a batch must be older than:",
+      "options": [
+        "2 epochs (64 L1 blocks)",
+        "1 epoch (32 L1 blocks)",
+        "3 epochs (96 L1 blocks)",
+        "4 epochs (128 L1 blocks)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 69,
+      "question": "Which of the following is NOT true about withdrawal transactions on Base?",
+      "options": [
+        "They must wait 7 days to finalize",
+        "They have the same finality stages as regular L2 transactions",
+        "They are protected by the Fault Proof system",
+        "They move value from Base back to Ethereum L1"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 70,
+      "question": "At ETH=$2000, a minimum base fee of 0.005 gwei for a 200k gas transaction would cost approximately:",
+      "options": [
+        "$0.00002",
+        "$0.02",
+        "$0.002",
+        "$0.20"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 71,
+      "question": "What happens to the L1 security fee when Ethereum gas prices are low?",
+      "options": [
+        "It increases to maintain sequencer revenue",
+        "It remains unchanged",
+        "It is replaced by an L2 execution fee surcharge",
+        "It decreases, making Base cheaper to use"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 72,
+      "question": "Which is NOT a true statement about Base's relationship with Ethereum?",
+      "options": [
+        "Base withdrawals complete in ~2 minutes like deposits",
+        "Base posts transaction batches to Ethereum for data availability",
+        "An Ethereum L1 reorg can cause a reorg on Base",
+        "Base uses Ethereum for its security via L1 batch publication"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 73,
+      "question": "The minimum base fee helps prevent what on Base?",
+      "options": [
+        "Flashblock creation",
+        "Spam transactions",
+        "Withdrawal delays",
+        "Bridge disputes"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 74,
+      "question": "Which is NOT a benefit of the minimum base fee introduced by the Jovian upgrade?",
+      "options": [
+        "Faster transaction inclusion",
+        "More predictable fees",
+        "Lower L1 security fees",
+        "Spam prevention"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 75,
+      "question": "The GasPriceOracle predeploy method 'blobBaseFeeScalar()' returns:",
+      "options": [
+        "The L2 execution fee scalar",
+        "The minimum priority fee",
+        "The withdrawal fee scalar",
+        "The scalar used to calculate the L1 fee based on blob base fee"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 76,
+      "question": "The target gas per block of ~60-70M is less than the 400M gas limit because:",
+      "options": [
+        "The elasticity mechanism targets a lower utilization to manage fee volatility",
+        "The remaining gas is reserved for bridge transactions",
+        "Half the block gas is allocated to L1 data posting",
+        "The sequencer caps block production at 60-70M"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 77,
+      "question": "Deposits to Base (~2 minutes) are faster than withdrawals (~7 days) because:",
+      "options": [
+        "Deposits go through a separate high-speed bridge",
+        "Deposits don't require fault proof challenge periods since moving value onto an L2 is safe",
+        "Deposits bypass the sequencer entirely",
+        "Deposits use CCTP while withdrawals use the standard bridge"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 78,
+      "question": "The minimum base fee of 5,000,000 wei (0.005 gwei) on Base was introduced by:",
+      "options": [
+        "The Regolith upgrade",
+        "The Bedrock upgrade",
+        "The Jovian upgrade",
+        "An Ethereum hard fork"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 79,
+      "question": "What is NOT a factor in determining the L1 security fee on Base?",
+      "options": [
+        "L1 congestion",
+        "Ethereum base fee",
+        "Transaction data size",
+        "The number of Base validators online"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 80,
+      "question": "The time range from Flashblock Inclusion (~200ms) to L1 Batch Finality (~20m) spans approximately:",
+      "options": [
+        "20 minutes",
+        "1 minute",
+        "5 minutes",
+        "7 days"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 81,
+      "question": "The L1 security fee varies with L1 congestion because:",
+      "options": [
+        "The sequencer is on L1",
+        "Base uses Ethereum for data availability",
+        "L1 validators process Base transactions",
+        "ETH is the native gas token of Base"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 82,
+      "question": "The getL1Fee method is best used when:",
+      "options": [
+        "A quick upper bound estimate is needed",
+        "The user wants to know the minimum base fee",
+        "The transaction has been fully RLP-encoded and you need the exact fee",
+        "The developer wants to check L1 congestion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 83,
+      "question": "What does a 'Flashblock' refer to on Base?",
+      "options": [
+        "A block produced every 2 seconds",
+        "A batch posted to Ethereum",
+        "A finalized block on L1",
+        "A preconfirmation block by the sequencer (~200ms)"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 84,
+      "question": "How long does a deposit from L1 Ethereum to Base typically take?",
+      "options": [
+        "~2 minutes",
+        "~200 milliseconds",
+        "~2 seconds",
+        "~7 days"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 85,
+      "question": "Flashblock Inclusion happens at ~200ms. What fraction of a second is 200ms?",
+      "options": [
+        "One-tenth",
+        "One-fifth",
+        "One-half",
+        "Three-quarters"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 86,
+      "question": "Blocks on Base target approximately how much gas usage?",
+      "options": [
+        "40 million",
+        "100 million",
+        "60-70 million",
+        "200 million"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 87,
+      "question": "During Flashblock Inclusion, by whom is the transaction included in a preconfirmation block?",
+      "options": [
+        "The validator set",
+        "The Ethereum L1",
+        "The fault proof challenger",
+        "The sequencer"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 88,
+      "question": "At the L1 Batch Inclusion stage, the transaction's batch has been:",
+      "options": [
+        "Posted to Ethereum",
+        "Preconfirmed by the sequencer",
+        "Distributed to validator nodes",
+        "Waited for 2 L1 epochs"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 89,
+      "question": "A transaction that has been included in a Flashblock preconfirmation block has a reorg probability of:",
+      "options": [
+        "Under 0.1%",
+        "Under 0.001%",
+        "Under 1%",
+        "Under 10%"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 90,
+      "question": "What is the significance of 64 L1 blocks in Base's finality model?",
+      "options": [
+        "64 L1 blocks equals approximately 7 days",
+        "Each L2 batch contains exactly 64 L1 blocks",
+        "A batch must be older than 2 epochs (64 L1 blocks) to achieve L1 Batch Finality",
+        "The sequencer must wait 64 L1 blocks before posting a batch"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 91,
+      "question": "What happens to the L1 security fee when Ethereum gas prices are high?",
+      "options": [
+        "It decreases to compensate users",
+        "It remains unchanged",
+        "It is waived entirely",
+        "It increases because posting data becomes more expensive"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 92,
+      "question": "CCTP stands for:",
+      "options": [
+        "Cross-Chain Transfer Protocol",
+        "Cross-Chain Transaction Processing",
+        "Cross-Chain Token Protocol",
+        "Cross-Chain Transfer Payment"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 93,
+      "question": "Why should users submit Base transactions when L1 gas is low?",
+      "options": [
+        "The L2 execution fee is waived during low L1 gas periods",
+        "The L1 security fee component of Base transactions will be lower",
+        "Only high-value transactions are processed when L1 gas is high",
+        "Base blocks are produced faster when L1 gas is low"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 94,
+      "question": "If the L2 base fee on Base doubles (minimum 36 seconds at full blocks), this shows:",
+      "options": [
+        "A network failure",
+        "The minimum base fee being applied",
+        "The EIP-1559 mechanism responding to high demand",
+        "The L1 security fee overriding the L2 fee"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 95,
+      "question": "Base's Jovian upgrade introduced a minimum base fee. What problem does this solve?",
+      "options": [
+        "Reducing the per-transaction gas limit",
+        "Increasing the block time",
+        "Removing the L1 security fee",
+        "Spam prevention and more predictable transaction fees"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 96,
+      "question": "The Fault Proof system's 7-day challenge period provides high security for:",
+      "options": [
+        "Bridged funds during withdrawal",
+        "All regular L2 transactions",
+        "Flashblock preconfirmations",
+        "L1 batch submissions"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 97,
+      "question": "Which of the following correctly describes a scenario where Flashblock Inclusion is NOT the finality stage needed?",
+      "options": [
+        "A user wants to see their swap result in under a second",
+        "A user is withdrawing USDC from Base to Ethereum and should expect a 7-day wait",
+        "A dApp shows a transaction as confirmed after the sequencer preconfirms it",
+        "A developer considers a transaction final after 200ms"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 98,
+      "question": "How does Base's block time compare to Ethereum's block time?",
+      "options": [
+        "Base blocks are produced every 12 seconds, matching Ethereum",
+        "Base blocks are produced every 200ms, matching Flashblocks",
+        "Base blocks are produced every 2 seconds, much faster than Ethereum's ~12 seconds",
+        "Base blocks are produced every 20 minutes, much slower than Ethereum"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 99,
+      "question": "The Solana Bridge is used for transfers between:",
+      "options": [
+        "Ethereum and Base",
+        "Solana and Ethereum",
+        "Base and Arbitrum",
+        "Solana and Base"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 100,
+      "question": "How long do deposits (transactions from L1 to Base) typically take to finalize?",
+      "options": [
+        "~2 minutes",
+        "~200 milliseconds",
+        "~2 seconds",
+        "~7 days"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 101,
+      "question": "The EIP-1559 target gas per block on Base of ~60-70M is designed to:",
+      "options": [
+        "Ensure blocks are never more than 70M gas",
+        "Maintain stable base fee levels at typical usage while allowing bursts up to 400M",
+        "Force some transactions to wait for future blocks",
+        "Match Ethereum's 30M gas target exactly"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 102,
+      "question": "When a withdrawal from Base to Ethereum completes the 7-day challenge period without any valid challenges:",
+      "options": [
+        "The withdrawal must wait another 7 days",
+        "The withdrawal is automatically cancelled",
+        "The withdrawal is considered final and the funds are released on L1",
+        "The user must restart the withdrawal process"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 103,
+      "question": "The L2 execution fee on Base adjusts with demand using which mechanism?",
+      "options": [
+        "First-price auction",
+        "A fixed fee schedule",
+        "Proof of Work difficulty adjustment",
+        "EIP-1559"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 104,
+      "question": "Which of the following about Base finality stages is correct?",
+      "options": [
+        "Reorg probability decreases with each successive stage of finality",
+        "All four stages have the same reorg probability",
+        "Later stages have higher reorg probability than earlier stages",
+        "Reorg probability is not relevant for L2 transactions"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 105,
+      "question": "If a Base block reaches capacity (400M gas) and stays full for 18 consecutive blocks, what happens to the base fee?",
+      "options": [
+        "The base fee stays the same",
+        "The base fee doubles (increases by ~4% each block for 18 blocks)",
+        "The base fee decreases to encourage more usage",
+        "The base fee is reset to the minimum"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 106,
+      "question": "What does it mean that Base's per-transaction gas limit is ~16.7M?",
+      "options": [
+        "Each block can hold at most 16.7M gas",
+        "The maximum transaction fee is 16.7M gwei",
+        "A single transaction cannot consume more than approximately 16.7M gas",
+        "A transaction must use at least 16.7M gas to be processed"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 107,
+      "question": "The GasPriceOracle predeploy is located at which address?",
+      "options": [
+        "0x42000000000000000000000000000000000000F",
+        "0x000000000000000000000000000000000000000F",
+        "0x42000000000000000000000000000000000000FF",
+        "0x420000000000000000000000000000000000000F"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 108,
+      "question": "What is the EIP-1559 Elasticity Multiplier on Base?",
+      "options": [
+        "6",
+        "2",
+        "8",
+        "12"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 109,
+      "question": "CCTP is used on Base for transferring which asset cross-chain?",
+      "options": [
+        "ETH",
+        "USDC",
+        "DAI",
+        "WBTC"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 110,
+      "question": "Which GasPriceOracle method returns the blob base fee?",
+      "options": [
+        "getL1Fee(bytes)",
+        "l1BaseFee()",
+        "blobBaseFee()",
+        "baseFeeScalar()"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 111,
+      "question": "Which stage of finality is the fastest for a Base L2 transaction?",
+      "options": [
+        "L1 Batch Finality",
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion",
+        "Flashblock Inclusion"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 112,
+      "question": "The getL1FeeUpperBound method is best used when:",
+      "options": [
+        "A quick estimate is needed before the transaction is fully constructed",
+        "The transaction has already been signed and RLP-encoded",
+        "The user wants to know the blob base fee",
+        "The user needs to estimate L2 execution costs"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 113,
+      "question": "How does depositing from Ethereum to Base (deposit) differ from withdrawing from Base to Ethereum?",
+      "options": [
+        "Deposits and withdrawals both take 7 days",
+        "Deposits finalize in ~2 minutes; withdrawals take 7 days due to the fault proof challenge period",
+        "Deposits take 7 days; withdrawals finalize in ~2 minutes",
+        "Both deposits and withdrawals finalize in ~2 minutes"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 114,
+      "question": "Which statement about Base transaction fees is TRUE?",
+      "options": [
+        "The L2 execution fee is always higher than the L1 security fee",
+        "Both fees are equal for every transaction",
+        "The L1 security fee is typically higher than the L2 execution fee",
+        "Base transactions have no L1 security fee"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 115,
+      "question": "If Ethereum's L1 base fee increases significantly, how does this affect Base users?",
+      "options": [
+        "Their Base transactions become cheaper as users move to L2",
+        "There is no effect \u2014 L2 fees are completely independent",
+        "Base transactions are rejected until L1 fees drop",
+        "Their Base transactions cost more because the L1 security fee is higher"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 116,
+      "question": "The 7-day challenge period exists to allow:",
+      "options": [
+        "The Fault Proof system to detect and challenge invalid state transitions",
+        "Users to claim refunds",
+        "Validators to earn staking rewards",
+        "The sequencer to batch transactions"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 117,
+      "question": "At the L2 Block Inclusion stage, the transaction has been:",
+      "options": [
+        "Included in a preconfirmation block",
+        "Built into an L2 block and distributed to validator nodes",
+        "Posted to Ethereum as a batch",
+        "Finalized after 2 L1 epochs"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 118,
+      "question": "What is the Base Fee Change Denominator for EIP-1559 on Base?",
+      "options": [
+        "100",
+        "200",
+        "125",
+        "250"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 119,
+      "question": "Which would you use to transfer ETH between Ethereum L1 and Base?",
+      "options": [
+        "CCTP",
+        "Solana Bridge",
+        "Any DEX on Base",
+        "The Base Bridge"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 120,
+      "question": "What is the difference between L1 Batch Inclusion and L1 Batch Finality?",
+      "options": [
+        "L1 Batch Inclusion occurs when the batch is posted (~2m); L1 Batch Finality occurs 2 L1 epochs later (~20m)",
+        "They are the same thing with different names",
+        "L1 Batch Finality occurs at ~2m; L1 Batch Inclusion occurs at ~20m",
+        "L1 Batch Inclusion requires the batch to be older than 2 epochs on L1"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 121,
+      "question": "Withdrawals from Base to Ethereum require a challenge period of:",
+      "options": [
+        "~2 minutes",
+        "~7 days",
+        "~20 minutes",
+        "~30 days"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 122,
+      "question": "What is the primary bridge for transferring assets between L1 Ethereum and Base?",
+      "options": [
+        "The Solana Bridge",
+        "The Polygon Bridge",
+        "The Base Bridge",
+        "The Arbitrum Bridge"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 123,
+      "question": "What is the minimum base fee for Base Mainnet?",
+      "options": [
+        "500,000 wei (0.0005 gwei)",
+        "50,000,000 wei (0.05 gwei)",
+        "500,000,000 wei (0.5 gwei)",
+        "5,000,000 wei (0.005 gwei)"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 124,
+      "question": "Which parameter determines how much the base fee can increase per block on Base?",
+      "options": [
+        "(Elasticity Multiplier - 1) / Base Fee Change Denominator",
+        "Block gas limit / target gas per block",
+        "Maximum priority fee / minimum base fee",
+        "L1 base fee \u00d7 L2 gas used"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 125,
+      "question": "Which fee is typically higher for a Base transaction?",
+      "options": [
+        "L2 execution fee",
+        "L1 security fee",
+        "They are always equal",
+        "It varies unpredictably based on L2 congestion"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 126,
+      "question": "Which contract provides gas price estimation on Base?",
+      "options": [
+        "The L1 CrossDomainMessenger",
+        "The BaseFee Vault contract",
+        "The GasPriceOracle at 0x420000000000000000000000000000000000000F",
+        "The Sequencer Fee Vault"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 127,
+      "question": "The Fault Proof system on Base is designed to:",
+      "options": [
+        "Speed up all transactions",
+        "Reduce gas fees for all users",
+        "Eliminate the need for the Base sequencer",
+        "Provide high security for bridged funds by allowing challenges within the 7-day period"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 128,
+      "question": "Deposits from Ethereum to Base finalize in approximately:",
+      "options": [
+        "2 minutes",
+        "200 milliseconds",
+        "2 seconds",
+        "20 minutes"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 129,
+      "question": "At L1 Batch Inclusion, what has occurred?",
+      "options": [
+        "The sequencer included the tx in a Flashblock",
+        "The Base batch has been posted to Ethereum",
+        "The transaction has been distributed to validator nodes",
+        "The 7-day challenge period has expired"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 130,
+      "question": "The combination of 400M gas limit and ~60-70M target gas provides:",
+      "options": [
+        "A hard cap on total transactions per day",
+        "A guarantee that fees never increase",
+        "Headroom for sudden demand spikes without extreme fee increases",
+        "A mechanism to reduce block time below 2 seconds"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 131,
+      "question": "How long does L1 Batch Finality take?",
+      "options": [
+        "~200 milliseconds",
+        "~2 seconds",
+        "~2 minutes",
+        "~20 minutes"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 132,
+      "question": "What is the fourth and final stage of finality for a Base L2 transaction?",
+      "options": [
+        "L1 Batch Finality",
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 133,
+      "question": "Which statement about Flashblock Inclusion is accurate?",
+      "options": [
+        "It is the slowest stage of finality, occurring after 7 days",
+        "It is the fastest stage of finality, occurring at approximately 200ms",
+        "It has the highest reorg probability of all four stages",
+        "It only applies to high-value transactions"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 134,
+      "question": "How does the Fault Proof system protect funds during a Base withdrawal?",
+      "options": [
+        "By requiring two-factor authentication from the user",
+        "By holding funds in a multi-signature wallet",
+        "By allowing any participant to challenge invalid withdrawals within the 7-day window",
+        "By auditing all transactions before the bridge processes them"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 135,
+      "question": "The L1 security fee is typically higher than:",
+      "options": [
+        "The withdrawal fee",
+        "The bridge fee",
+        "The deposit fee",
+        "The L2 execution fee"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 136,
+      "question": "The maximum base fee increase per block on Base is:",
+      "options": [
+        "(Elasticity - 1) / Denominator = 4%",
+        "Elasticity / Denominator = 4.8%",
+        "Denominator / Elasticity = 20.8%",
+        "(Elasticity + 1) / Denominator = 5.6%"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 137,
+      "question": "Flashblock Inclusion reorg probability is described as 'Under 0.001%'. This means:",
+      "options": [
+        "1 in 100 transactions might reorg",
+        "Fewer than 1 in 100,000 transactions might reorg",
+        "Approximately 1 in 10,000 transactions might reorg",
+        "Reorgs are guaranteed to never happen"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 138,
+      "question": "The Base Bridge uses Optimism's standard bridge contracts. This means:",
+      "options": [
+        "Base's bridge is completely different from Optimism's",
+        "Base and Optimism share the same liquidity pool",
+        "Base reuses well-tested bridge infrastructure from the Optimism ecosystem",
+        "Base cannot operate independently of Optimism's bridge"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 139,
+      "question": "How many stages of increasing finality exist for L2 transactions on Base?",
+      "options": [
+        "Two",
+        "Three",
+        "Five",
+        "Four"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 140,
+      "question": "The difference between getL1Fee and getL1FeeUpperBound on the GasPriceOracle is:",
+      "options": [
+        "getL1FeeUpperBound gives a quick upper estimate; getL1Fee gives the exact fee for a fully RLP-encoded tx",
+        "getL1Fee is faster; getL1FeeUpperBound is more accurate",
+        "getL1Fee works for L2 fees; getL1FeeUpperBound works for L1 fees",
+        "They are the same method with different names"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 141,
+      "question": "At a 2-second block time, how long does it take at minimum to double the base fee?",
+      "options": [
+        "9 seconds",
+        "36 seconds",
+        "18 seconds",
+        "72 seconds"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 142,
+      "question": "Which is faster on Base?",
+      "options": [
+        "A withdrawal from Base to Ethereum",
+        "Both take the same amount of time",
+        "A deposit from Ethereum to Base",
+        "Neither is possible on Base"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 143,
+      "question": "Which of the following best describes Base's finality model?",
+      "options": [
+        "A single instant finality checkpoint",
+        "Probabilistic finality over 7 days",
+        "A two-phase commit protocol",
+        "Four increasing stages of finality from ~200ms to ~20 minutes"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 144,
+      "question": "Which type of transfer on Base requires a 7-day waiting period?",
+      "options": [
+        "L2 to L1 withdrawals",
+        "L1 to L2 deposits",
+        "L2 to L2 token swaps",
+        "L2 NFT transfers"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 145,
+      "question": "What happens when a Flashblock is produced?",
+      "options": [
+        "The full L2 block is finalized on Ethereum",
+        "The sequencer includes transactions in a preconfirmation block at ~200ms",
+        "Validators vote on block validity",
+        "The 7-day challenge period begins"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 146,
+      "question": "The GasPriceOracle predeploy provides methods including:",
+      "options": [
+        "getL2Fee, getL2FeeUpperBound, l2BaseFee",
+        "getBridgeFee, getWithdrawalFee, getDepositFee",
+        "getL1Fee, getL1FeeUpperBound, l1BaseFee, blobBaseFee, baseFeeScalar, blobBaseFeeScalar",
+        "estimateGas, gasPrice, maxFeePerGas"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 147,
+      "question": "The 7-day withdrawal period on Base protects users by:",
+      "options": [
+        "Charging interest on withdrawn funds",
+        "Giving the sequencer time to batch the withdrawal",
+        "Running automated security scans on the user's wallet",
+        "Allowing time for the Fault Proof system to verify and challenge the withdrawal"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 148,
+      "question": "What is the reorg probability classification for L1 Batch Inclusion?",
+      "options": [
+        "Effectively 0%",
+        "Under 0.001%",
+        "Near 0%",
+        "Under 0.1%"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 149,
+      "question": "When would a Base user benefit most from using CCTP instead of the Base Bridge?",
+      "options": [
+        "When transferring ETH between L1 and Base",
+        "When transferring USDC natively between Base and other supported chains without wrapping",
+        "When transferring any ERC-20 token between L1 and Base",
+        "When performing a token swap on a Base DEX"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 150,
+      "question": "What is the Elasticity Multiplier for EIP-1559 on Base?",
+      "options": [
+        "2",
+        "8",
+        "6",
+        "12"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 151,
+      "question": "Arrange the stages of finality from fastest to slowest:",
+      "options": [
+        "L1 Batch Inclusion, Flashblock Inclusion, L2 Block Inclusion, L1 Batch Finality",
+        "L2 Block Inclusion, Flashblock Inclusion, L1 Batch Finality, L1 Batch Inclusion",
+        "L1 Batch Finality, L1 Batch Inclusion, L2 Block Inclusion, Flashblock Inclusion",
+        "Flashblock Inclusion, L2 Block Inclusion, L1 Batch Inclusion, L1 Batch Finality"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 152,
+      "question": "The block gas limit of 400M on Base allows for:",
+      "options": [
+        "Very large blocks that can include many transactions or complex operations",
+        "Only simple token transfers",
+        "Maximum one smart contract interaction per block",
+        "Blocks that are smaller than Ethereum's"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 153,
+      "question": "Which stage of finality occurs at the ~2 second mark?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion",
+        "L1 Batch Finality"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 154,
+      "question": "If a developer deploys a contract that uses 20M gas, what happens on Base?",
+      "options": [
+        "The transaction succeeds normally",
+        "The transaction uses multiple Flashblocks",
+        "The transaction is rejected because it exceeds the ~16.7M per-tx gas limit",
+        "The gas limit is automatically increased"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 155,
+      "question": "The 7-day withdrawal period allows the Fault Proof system to:",
+      "options": [
+        "Process the withdrawal off-chain for faster finality",
+        "Generate interest on the withdrawn amount",
+        "Batch multiple withdrawals into a single transaction",
+        "Provide high security for bridged funds by enabling challenges"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 156,
+      "question": "What does 'finality' mean in the context of blockchain transactions?",
+      "options": [
+        "The point at which a transaction becomes irreversible",
+        "The point at which a transaction is included in a block",
+        "The point at which a transaction is broadcast to the network",
+        "The point at which a transaction is signed by the user"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 157,
+      "question": "The per-transaction gas limit of ~16.7M on Base is approximately what fraction of the block gas limit?",
+      "options": [
+        "1/4 (one quarter)",
+        "1/24 (one twenty-fourth)",
+        "1/2 (one half)",
+        "1/10 (one tenth)"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 158,
+      "question": "Which bridge infrastructure does Base rely on for L1\u2194L2 transfers?",
+      "options": [
+        "Arbitrum's standard bridge contracts",
+        "zkSync's standard bridge contracts",
+        "Optimism's standard bridge contracts",
+        "Custom proprietary bridge contracts"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 159,
+      "question": "The 2-second block time on Base compared to Ethereum's 12-second block time means:",
+      "options": [
+        "Base produces 12 blocks for every 1 Ethereum block",
+        "Base is faster but produces smaller blocks",
+        "Base blocks contain fewer transactions than Ethereum blocks",
+        "Base can produce 6 blocks for every 1 Ethereum block"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 160,
+      "question": "The minimum base fee contributes to faster transaction inclusion by:",
+      "options": [
+        "Discouraging extremely low-fee transactions that delay inclusion",
+        "Increasing block size",
+        "Reducing the number of validators",
+        "Bypassing the EIP-1559 mechanism"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 161,
+      "question": "If the Fault Proof system identifies an invalid state transition during a withdrawal, what happens?",
+      "options": [
+        "The withdrawal is automatically approved to avoid delays",
+        "A dispute game is initiated, and if the challenger wins, the L2 chain can reorg",
+        "The withdrawal fee is returned to the user",
+        "The Base network pauses all transactions"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 162,
+      "question": "Which GasPriceOracle method provides the exact L1 fee for a fully RLP-encoded transaction?",
+      "options": [
+        "getL1FeeUpperBound(uint256)",
+        "l1BaseFee()",
+        "getL1Fee(bytes)",
+        "baseFeeScalar()"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 163,
+      "question": "A Base transaction's L1 security fee varies directly with:",
+      "options": [
+        "L2 block utilization \u2014 when L2 is busy, the L1 fee increases",
+        "The transaction's gas limit on L2",
+        "The number of Base validators",
+        "L1 congestion \u2014 when Ethereum gas is high, the L1 security fee increases"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 164,
+      "question": "Which of the following is a valid way to bridge assets to Base from Ethereum?",
+      "options": [
+        "Use the Base Bridge which uses Optimism's standard bridge contracts",
+        "Only through centralized exchanges",
+        "Only through CCTP for all assets",
+        "There is no way to bridge assets to Base"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 165,
+      "question": "Which two stages of finality are considered to have effectively 0% reorg probability?",
+      "options": [
+        "Flashblock Inclusion and L2 Block Inclusion",
+        "L1 Batch Inclusion and L1 Batch Finality",
+        "L2 Block Inclusion and L1 Batch Inclusion",
+        "Flashblock Inclusion and L1 Batch Finality"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 166,
+      "question": "Regular Base L2 transactions such as swaps and sends do NOT need to:",
+      "options": [
+        "Pay gas fees",
+        "Be signed by the user's private key",
+        "Wait 7 days to finalize",
+        "Pass through the sequencer"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 167,
+      "question": "A user depositing ETH from Ethereum to Base can expect the funds to arrive in approximately:",
+      "options": [
+        "200 milliseconds",
+        "2 seconds",
+        "20 minutes",
+        "2 minutes"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 168,
+      "question": "Users can save on Base transaction costs by:",
+      "options": [
+        "Submitting transactions when L1 gas prices are low",
+        "Using a different wallet",
+        "Always setting the highest priority fee",
+        "Batching transactions through a third-party relayer"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 169,
+      "question": "Base's block time of 2 seconds means the network produces approximately:",
+      "options": [
+        "5 blocks per minute",
+        "30 blocks per minute",
+        "60 blocks per minute",
+        "120 blocks per minute"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 170,
+      "question": "Which of the following is NOT a valid statement about Base's EIP-1559 parameters?",
+      "options": [
+        "Elasticity Multiplier = 6",
+        "Base Fee Change Denominator = 125",
+        "Minimum base fee = 0.5 gwei",
+        "Max base fee increase per block = 4%"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 171,
+      "question": "Base's EIP-1559 parameters include an Elasticity Multiplier of 6 and a Base Fee Change Denominator of 125. Together these mean:",
+      "options": [
+        "The base fee is multiplied by 6 every 125 blocks",
+        "The base fee never increases because 6 is less than 125",
+        "The base fee doubles every 6 blocks",
+        "The base fee can increase up to 4% per block when blocks are full"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 172,
+      "question": "Which of these scenarios describes a correct use of the Base Bridge?",
+      "options": [
+        "Transferring ETH from Ethereum L1 to Base (a deposit)",
+        "Swapping tokens on a Base DEX",
+        "Minting an NFT on Base",
+        "Deploying a smart contract to Base"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 173,
+      "question": "Which of the following is NOT a method on the GasPriceOracle?",
+      "options": [
+        "getL1Fee(bytes)",
+        "getL2BaseFee()",
+        "getL1FeeUpperBound(uint256)",
+        "blobBaseFee()"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 174,
+      "question": "How long does it take for a Base batch to go from being posted to Ethereum (L1 Batch Inclusion) to being considered final (L1 Batch Finality)?",
+      "options": [
+        "~200ms",
+        "~2 seconds",
+        "~18 minutes",
+        "~7 days"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 175,
+      "question": "What security mechanism protects bridged funds during the withdrawal window?",
+      "options": [
+        "Multi-signature wallets",
+        "Insurance funds",
+        "Third-party auditors",
+        "The Fault Proof system"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 176,
+      "question": "What is the per-transaction gas limit on Base?",
+      "options": [
+        "~16.7M",
+        "~4.2M",
+        "~8.4M",
+        "~33.4M"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 177,
+      "question": "The 7-day withdrawal challenge period exists because:",
+      "options": [
+        "The Base sequencer needs time to accumulate enough funds",
+        "Moving value from L2 to L1 requires security guarantees via the Fault Proof system",
+        "Ethereum requires a minimum 7-day wait for all cross-chain transfers",
+        "Users should have time to reconsider their withdrawal"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 178,
+      "question": "Which of the following is NOT a valid bridge option for Base?",
+      "options": [
+        "The Base Bridge for L1\u2194L2 transfers",
+        "CCTP for native USDC transfers",
+        "Arbitrum Bridge for Arbitrum\u2194Base transfers",
+        "Solana Bridge for Solana\u2194Base transfers"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 179,
+      "question": "If a user wants to move USDC from Solana to Base, which bridge should they use?",
+      "options": [
+        "The Base Bridge",
+        "CCTP directly",
+        "Any of the above",
+        "Solana Bridge"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 180,
+      "question": "Which of these could potentially cause a reorg on Base?",
+      "options": [
+        "An Ethereum L1 reorg",
+        "A user sending a large transaction",
+        "A validator going offline",
+        "High gas prices on L2"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 181,
+      "question": "Which stage of finality involves posting a batch to Ethereum?",
+      "options": [
+        "Flashblock Inclusion",
+        "L1 Batch Inclusion",
+        "L2 Block Inclusion",
+        "All of the above"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 182,
+      "question": "A Base user wants to minimize transaction costs. Which strategy would help?",
+      "options": [
+        "Using a different wallet that charges lower fees",
+        "Always sending large amounts per transaction",
+        "Submitting transactions when L1 gas prices are low to reduce the L1 security fee",
+        "Submitting transactions during peak L2 hours for faster inclusion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 183,
+      "question": "Which is NOT a correct statement about Base's block gas limit?",
+      "options": [
+        "It is 400M gas per L2 block",
+        "Flashblocks use the full 400M budget",
+        "It applies to the L2 blocks produced by the sequencer",
+        "It is 400M gas per transaction"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 184,
+      "question": "How does the per-transaction gas limit of ~16.7M relate to the block gas limit of 400M?",
+      "options": [
+        "Approximately 24 transactions could fit in a full block",
+        "Exactly 400 transactions could fit in a full block",
+        "Only 1 transaction fits per block",
+        "The per-transaction limit is irrelevant to the block limit"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 185,
+      "question": "At 2-second block times, approximately how many blocks can Base produce per minute?",
+      "options": [
+        "5 blocks",
+        "30 blocks",
+        "15 blocks",
+        "60 blocks"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 186,
+      "question": "Base was built by which company?",
+      "options": [
+        "Optimism Foundation",
+        "Ethereum Foundation",
+        "Coinbase",
+        "Circle"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 187,
+      "question": "The Fault Proof system on Base is designed to protect which type of transaction?",
+      "options": [
+        "All L2 regular transactions",
+        "L1 to L2 deposits",
+        "CCTP transfers only",
+        "L2 to L1 withdrawals during the 7-day challenge period"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 188,
+      "question": "Which GasPriceOracle method returns the base fee scalar?",
+      "options": [
+        "baseFeeScalar()",
+        "getL1Fee(bytes)",
+        "blobBaseFee()",
+        "getL1FeeUpperBound(uint256)"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 189,
+      "question": "Which of the following is NOT a difference between regular L2 transactions and withdrawal transactions on Base?",
+      "options": [
+        "Regular L2 transactions finalize in minutes; withdrawals take 7 days",
+        "Regular L2 transactions use the L2 EIP-1559 fee mechanism; withdrawals use a separate fee schedule",
+        "Regular L2 transactions have four stages of finality; withdrawals have a different process",
+        "Regular L2 transactions can be seen instantly in the user's wallet; withdrawals require waiting"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 190,
+      "question": "A Base block can use up to 400M gas, but the elasticity mechanism targets ~60-70M gas. The headroom of ~330M gas allows for:",
+      "options": [
+        "Higher fees for validators",
+        "Larger transactions than Ethereum allows",
+        "Sudden demand spikes to be handled without extreme base fee increases",
+        "More blocks per second"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 191,
+      "question": "The per-transaction gas limit of ~16.7M is designed to:",
+      "options": [
+        "Fill an entire block in one transaction",
+        "Be the maximum allowed by Ethereum",
+        "Be half of the block gas limit",
+        "Fit in a single Flashblock"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 192,
+      "question": "Which asset does CCTP specialize in transferring?",
+      "options": [
+        "USDC",
+        "ETH",
+        "BTC",
+        "SOL"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 193,
+      "question": "The EIP-1559 elasticity mechanism on Base targets approximately how much gas per block?",
+      "options": [
+        "200M gas",
+        "60-70M gas",
+        "400M gas",
+        "16.7M gas"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 194,
+      "question": "The Jovian upgrade's minimum base fee of 5,000,000 wei is denominated in:",
+      "options": [
+        "ETH",
+        "Gwei",
+        "Wei",
+        "USDC"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 195,
+      "question": "The 7-day withdrawal period on Base is a security measure that:",
+      "options": [
+        "Prevents users from withdrawing too frequently",
+        "Generates interest on the withdrawn funds",
+        "Gives the sequencer time to process the request",
+        "Allows time for the Fault Proof system to detect invalid withdrawals"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 196,
+      "question": "Which bridge enables transfers between Solana and Base?",
+      "options": [
+        "Solana Bridge",
+        "Wormhole",
+        "CCTP",
+        "The Base Bridge"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 197,
+      "question": "Flashblocks on Base allow for:",
+      "options": [
+        "Only high-value transactions to be included",
+        "Preconfirmation of transactions within ~200ms with access to the full 400M gas block budget",
+        "Blocks that are submitted directly to Ethereum",
+        "Transactions that skip the EIP-1559 fee mechanism"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 198,
+      "question": "Which of the following is NOT a valid GasPriceOracle method?",
+      "options": [
+        "getL1Fee",
+        "getL1FeeUpperBound",
+        "estimateL1Fee",
+        "l1BaseFee"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 199,
+      "question": "Which of the following is NOT a characteristic of Flashblock Inclusion?",
+      "options": [
+        "Takes approximately 200ms",
+        "Transaction is included in a preconfirmation block",
+        "Under 0.001% reorg probability",
+        "Requires the transaction to be posted to L1 first"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 200,
+      "question": "Base uses EIP-1559 for adjusting which fee?",
+      "options": [
+        "The L2 execution fee",
+        "The L1 security fee",
+        "The bridge fee",
+        "The withdrawal fee"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 201,
+      "question": "What happens to Base if Ethereum experiences a reorg?",
+      "options": [
+        "Base remains unaffected",
+        "It can cause a reorg on Base",
+        "Base shuts down temporarily",
+        "Base increases its block time"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 202,
+      "question": "With Flashblocks enabled, Base blocks are produced every:",
+      "options": [
+        "2 seconds",
+        "12 seconds",
+        "200 milliseconds",
+        "200 microseconds"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 203,
+      "question": "Which statement about Base bridging is TRUE?",
+      "options": [
+        "The Base Bridge and CCTP serve the same purpose for all tokens",
+        "CCTP is exclusive to Solana\u2194Base transfers",
+        "The Base Bridge only supports ETH transfers",
+        "The Base Bridge handles L1\u2194L2 transfers (any asset) while CCTP handles native USDC cross-chain transfers"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 204,
+      "question": "Which is a valid way for a developer to estimate the L1 security fee component of a Base transaction?",
+      "options": [
+        "Calling getL1FeeUpperBound with a gas limit estimate before the tx is built",
+        "Taking the L2 gas limit and multiplying by the L2 base fee",
+        "Checking the Base Bridge contract for fee schedules",
+        "Using the eth_estimateGas RPC method"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 205,
+      "question": "Which is NOT a throughput-related parameter on Base?",
+      "options": [
+        "Block gas limit of 400M",
+        "Maximum withdrawal amount of 100 ETH",
+        "Per-transaction gas limit of ~16.7M",
+        "Target gas per block of ~60-70M"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 206,
+      "question": "The Base Bridge 7-day withdrawal period is a security measure that applies to which direction of transfer?",
+      "options": [
+        "L1 to L2 deposits only",
+        "Both deposits and withdrawals",
+        "L2 to L1 withdrawals only",
+        "Neither \u2014 the 7-day period applies to all Base transactions"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 207,
+      "question": "After a transaction achieves L2 Block Inclusion, what is the next stage of finality?",
+      "options": [
+        "Flashblock Inclusion",
+        "L1 Batch Finality",
+        "Withdrawal Finality",
+        "L1 Batch Inclusion"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 208,
+      "question": "A developer building on Base needs to estimate the L1 security fee for a transaction. Which GasPriceOracle method should they use for a quick estimate?",
+      "options": [
+        "getL1FeeUpperBound for a quick upper bound estimate before the tx is fully built",
+        "getL1Fee for a quick estimate on unsigned transactions",
+        "l1BaseFee which returns the complete fee",
+        "blobBaseFee which returns the L2 execution fee"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 209,
+      "question": "The relationship between Base and Ethereum for the L1 security fee is that:",
+      "options": [
+        "Base is a fork of Ethereum so there are no L1 fees",
+        "Base users pay an estimated cost to publish their transaction data on Ethereum",
+        "Ethereum pays Base a subsidy for each transaction",
+        "L1 fees are waived for Base users"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 210,
+      "question": "Besides Ethereum, Base has a bridge connecting it to which other major blockchain?",
+      "options": [
+        "Bitcoin",
+        "Polygon",
+        "Solana",
+        "Avalanche"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 211,
+      "question": "Which of the following requires the longest time to achieve finality on Base?",
+      "options": [
+        "A regular token swap on a Base DEX",
+        "A deposit from Ethereum L1 to Base",
+        "An NFT mint on Base",
+        "A withdrawal from Base to Ethereum L1"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 212,
+      "question": "Which is NOT a valid statement about the GasPriceOracle?",
+      "options": [
+        "It returns the current ETH/USD price for fee conversion",
+        "It is a predeploy at 0x420000000000000000000000000000000000000F",
+        "It provides 6 methods for fee estimation",
+        "It can estimate both L1 and L2 fees"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 213,
+      "question": "A dApp wants to display a fee breakdown to users. What are the two fee components they should show?",
+      "options": [
+        "The base fee and the priority fee",
+        "The L2 execution fee and the L1 security fee",
+        "The sequencer fee and the validator fee",
+        "The deposit fee and the withdrawal fee"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 214,
+      "question": "When a user submits a transaction on Base during high L1 congestion periods:",
+      "options": [
+        "Only the L2 execution fee increases",
+        "Fees are capped at a maximum amount",
+        "The L1 security fee increases due to higher L1 data posting costs",
+        "The transaction is rejected"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 215,
+      "question": "The minimum amount of time to double the base fee on Base is:",
+      "options": [
+        "9 blocks \u00d7 2s = 18 seconds",
+        "36 blocks \u00d7 2s = 72 seconds",
+        "72 blocks \u00d7 2s = 144 seconds",
+        "18 blocks \u00d7 2s = 36 seconds"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 216,
+      "question": "At the Flashblock Inclusion stage, the transaction has been:",
+      "options": [
+        "Included in a preconfirmation block by the sequencer",
+        "Finalized on Ethereum L1",
+        "Distributed to all validator nodes",
+        "Posted to an L1 batch"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 217,
+      "question": "What is the reorg probability for a transaction that has achieved Flashblock Inclusion?",
+      "options": [
+        "Under 5%",
+        "Under 0.001%",
+        "Under 1%",
+        "Over 5%"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 218,
+      "question": "Which of the following is required for a transaction to achieve L1 Batch Inclusion?",
+      "options": [
+        "The transaction must wait 7 days",
+        "The sequencer must include it in a Flashblock",
+        "The Base batch must be posted to Ethereum",
+        "The user must pay an additional bridge fee"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 219,
+      "question": "The L2 (execution) fee on Base covers:",
+      "options": [
+        "The cost of posting the transaction to Ethereum",
+        "The cost of bridging assets between chains",
+        "The cost of block space on Ethereum",
+        "The cost of executing the transaction on the L2"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 220,
+      "question": "After L2 Block Inclusion, the transaction has been built into an L2 block and distributed to validator nodes. The reorg probability is:",
+      "options": [
+        "Near 0%",
+        "Under 0.001%",
+        "Under 0.1%",
+        "Approximately 0.5%"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 221,
+      "question": "CCTP is operated by which company?",
+      "options": [
+        "Coinbase",
+        "Circle",
+        "Optimism",
+        "Jump Crypto"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 222,
+      "question": "Which of the following is a valid way to bridge USDC to Base from another chain?",
+      "options": [
+        "Only the Base Bridge",
+        "Only through third-party bridges",
+        "CCTP for native USDC transfers across supported chains",
+        "USDC cannot be bridged to Base"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 223,
+      "question": "Which parameter determines the minimum base fee on Base Mainnet?",
+      "options": [
+        "The EIP-1559 elasticity multiplier",
+        "The L1 base fee on Ethereum",
+        "Voting by Base validators",
+        "The Jovian upgrade set a minimum base fee of 5,000,000 wei"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 224,
+      "question": "What is the address of the GasPriceOracle predeploy on Base?",
+      "options": [
+        "0x420000000000000000000000000000000000000F",
+        "0x4200000000000000000000000000000000000010",
+        "0x000000000000000000000000000000000000000F",
+        "0x4200000000000000000000000000000000000042"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 225,
+      "question": "The GasPriceOracle predeploy method 'blobBaseFee()' returns:",
+      "options": [
+        "The L2 base fee on Base",
+        "The blob base fee for EIP-4844 blob data",
+        "The minimum base fee on Base",
+        "The priority fee for the next block"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 226,
+      "question": "Every Base transaction has how many distinct costs?",
+      "options": [
+        "One \u2014 the execution fee",
+        "Three \u2014 execution, storage, and data fees",
+        "Two \u2014 an L2 execution fee and an L1 security fee",
+        "Four \u2014 gas, priority, bridge, and protocol fees"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 227,
+      "question": "If an Ethereum reorg occurs, what could happen to Base?",
+      "options": [
+        "Nothing \u2014 Base is completely independent of Ethereum's consensus",
+        "Base increases its block time to compensate",
+        "Base pauses block production until Ethereum stabilizes",
+        "It can cause a reorg on Base because Base depends on Ethereum for data availability"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 228,
+      "question": "Which is NOT a characteristic of the four-stage finality model on Base?",
+      "options": [
+        "All transactions must pass through all four stages",
+        "Each stage provides increasing security",
+        "Reorg probability decreases at each stage",
+        "Regular L2 transactions progress through stages from ~200ms to ~20m"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 229,
+      "question": "What distinguishes CCTP from the Base Bridge?",
+      "options": [
+        "CCTP is slower than the Base Bridge",
+        "CCTP is a Circle-operated protocol for native USDC transfers, while the Base Bridge handles general L1\u2194L2 transfers",
+        "CCTP only works on testnet",
+        "The Base Bridge only supports USDC"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 230,
+      "question": "The Jovian upgrade introduced which feature to Base?",
+      "options": [
+        "Flashblocks",
+        "Cross-chain messaging",
+        "Minimum base fee",
+        "Native account abstraction"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 231,
+      "question": "The L1 security fee exists on Base because:",
+      "options": [
+        "Ethereum validators secure the Base chain",
+        "The Base sequencer runs on Ethereum",
+        "Base is a private blockchain",
+        "Base pays Ethereum for data availability"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 232,
+      "question": "The target block time of 2 seconds on Base compares to Ethereum's block time of approximately:",
+      "options": [
+        "12 seconds",
+        "2 seconds",
+        "15 seconds",
+        "20 minutes"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 233,
+      "question": "What is the EIP-1559 Base Fee Change Denominator on Base?",
+      "options": [
+        "100",
+        "125",
+        "200",
+        "250"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 234,
+      "question": "The L1 security fee varies with what factor?",
+      "options": [
+        "L2 block size",
+        "The number of Base validators",
+        "L1 congestion",
+        "The price of USDC"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 235,
+      "question": "Base's minimum base fee ensures that:",
+      "options": [
+        "All transactions cost the same amount",
+        "The L1 security fee is always lower than the L2 fee",
+        "Transactions are processed in FIFO order",
+        "There is a floor price for L2 execution, preventing spam and ensuring predictable fees"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 236,
+      "question": "Withdrawals from Base to Ethereum L1 require a waiting period of:",
+      "options": [
+        "7 days",
+        "2 minutes",
+        "20 minutes",
+        "14 days"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 237,
+      "question": "Approximately how much time passes between Flashblock Inclusion and L2 Block Inclusion?",
+      "options": [
+        "~200ms",
+        "~1.8 seconds (from 200ms to 2s)",
+        "~2 minutes",
+        "~20 minutes"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 238,
+      "question": "Which of the following scenarios would NOT trigger a reorg on Base?",
+      "options": [
+        "An Ethereum L1 reorg",
+        "A challenger winning a dispute game",
+        "A user sending a transaction with a low gas price",
+        "A successful challenge in the Fault Proof system"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 239,
+      "question": "What happens if a challenger successfully proves a withdrawal is invalid?",
+      "options": [
+        "The withdrawal is processed anyway",
+        "The challenger is banned from the network",
+        "The withdrawal fee is refunded to the user",
+        "The L2 chain can reorg to correct the state"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 240,
+      "question": "A Base batch posted to Ethereum has effectively what level of reorg probability?",
+      "options": [
+        "Effectively 0% reorg",
+        "Near 0% reorg",
+        "Under 0.001% reorg",
+        "Under 1% reorg"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 241,
+      "question": "Which statement about Base bridging is FALSE?",
+      "options": [
+        "Deposits from L1 to Base take approximately 2 minutes",
+        "Deposits from L1 to Base take 7 days",
+        "Withdrawals from Base to L1 take 7 days",
+        "CCTP can be used for USDC transfers"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 242,
+      "question": "When blocks are full on Base, the EIP-1559 mechanism responds by:",
+      "options": [
+        "Reducing the block time to fit more transactions",
+        "Pausing non-essential transactions",
+        "Increasing the base fee up to 4% per block until demand subsides or the target is met",
+        "Splitting blocks into smaller Flashblocks"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 243,
+      "question": "The Base Bridge uses standard bridge contracts from which rollup framework?",
+      "options": [
+        "Arbitrum's Nitro stack",
+        "zkSync's Era stack",
+        "StarkNet's stack",
+        "Optimism's OP Stack"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 244,
+      "question": "The Base Bridge uses standard bridge contracts from Optimism. This means:",
+      "options": [
+        "The Base Bridge is built on well-audited, battle-tested code from the OP Stack",
+        "The Base Bridge and Optimism Bridge share the same address",
+        "Transactions on the Base Bridge must go through Optimism's sequencer",
+        "Base bridge fees are set by the Optimism Foundation"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 245,
+      "question": "What upgrade introduced the minimum base fee on Base?",
+      "options": [
+        "Regolith upgrade",
+        "Jovian upgrade",
+        "Bedrock upgrade",
+        "Canyon upgrade"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 246,
+      "question": "Which finality stage is most appropriate for a merchant accepting on-chain payments on Base?",
+      "options": [
+        "Only L1 Batch Finality is acceptable",
+        "The 7-day withdrawal finality",
+        "Flashblock Inclusion or L2 Block Inclusion for most use cases given the near-zero reorg risk",
+        "No stage is sufficient for merchant use"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 247,
+      "question": "Which statement about the 7-day period on Base is FALSE?",
+      "options": [
+        "It applies only to withdrawals from Base to Ethereum",
+        "It allows the Fault Proof system to provide security",
+        "It exists to protect bridged funds",
+        "It applies to all regular L2 token transfers"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 248,
+      "question": "Which GasPriceOracle method returns the current L1 base fee?",
+      "options": [
+        "l1BaseFee()",
+        "getL1Fee(bytes)",
+        "getL1FeeUpperBound(uint256)",
+        "baseFeeScalar()"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 249,
+      "question": "How many methods are available on the GasPriceOracle predeploy on Base?",
+      "options": [
+        "Three",
+        "Six",
+        "Four",
+        "Five"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 250,
+      "question": "Which scenario can trigger a reorg of the L2 chain on Base?",
+      "options": [
+        "A user paying too little gas",
+        "The sequencer producing blocks too quickly",
+        "A challenger winning a dispute game",
+        "A L1 batch being posted on time"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 251,
+      "question": "Which GasPriceOracle method returns the blob base fee scalar?",
+      "options": [
+        "blobBaseFee()",
+        "baseFeeScalar()",
+        "getL1FeeUpperBound(uint256)",
+        "blobBaseFeeScalar()"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 252,
+      "question": "The GasPriceOracle predeploy on Base provides developers access to:",
+      "options": [
+        "L1 fee estimation methods for understanding the total transaction cost",
+        "A live price feed for ETH/USD",
+        "Validator selection information",
+        "Sequencer uptime statistics"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 253,
+      "question": "Which of the following requires a 7-day challenge period?",
+      "options": [
+        "A deposit from Ethereum to Base via the Base Bridge",
+        "A withdrawal from Base to Ethereum via the Base Bridge",
+        "A USDC transfer from Base to Solana via CCTP",
+        "A token swap on a Base DEX"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 254,
+      "question": "Which stage of finality is NOT appropriate for a user withdrawing assets from Base to Ethereum?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Finality",
+        "L1 Batch Inclusion"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 255,
+      "question": "The Solana Bridge for Base enables:",
+      "options": [
+        "L1 Ethereum to Base deposits",
+        "Base to Arbitrum transfers",
+        "Optimism to Base transfers",
+        "Asset transfers between Solana and Base"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 256,
+      "question": "The Base Bridge was built using Optimism's standard bridge contracts. This benefits Base because:",
+      "options": [
+        "It leverages well-audited and battle-tested bridge infrastructure",
+        "It allows Base and Optimism to share a single bridge",
+        "It means Base cannot customize its bridge logic",
+        "It requires Optimism to process all Base withdrawals"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 257,
+      "question": "What is the reorg probability classification for L1 Batch Finality?",
+      "options": [
+        "Under 0.001%",
+        "Effectively 0%",
+        "Near 0%",
+        "Under 1%"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 258,
+      "question": "What makes the L1 security fee on Base variable?",
+      "options": [
+        "It is voted on by Base token holders every block",
+        "It depends on how many validators are online",
+        "It depends on L1 congestion \u2014 when Ethereum gas is expensive, posting data costs more",
+        "It is set by the Base sequencer based on profitability targets"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 259,
+      "question": "Which of the following is NOT a bridge or protocol available on Base?",
+      "options": [
+        "Base Bridge for L1\u2194L2 transfers",
+        "Solana Bridge for Solana\u2194Base transfers",
+        "CCTP for native USDC transfers",
+        "zkSync Bridge for zkSync\u2194Base transfers"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 260,
+      "question": "Circle's CCTP enables:",
+      "options": [
+        "Native USDC transfers between supported chains including Base",
+        "Any token transfer between any chains",
+        "Smart contract calls across chains",
+        "NFT bridging between L2s"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 261,
+      "question": "What is the target block time on Base?",
+      "options": [
+        "200 milliseconds",
+        "2 seconds",
+        "12 seconds",
+        "2 minutes"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 262,
+      "question": "Two epochs on Ethereum L1 equals approximately how many L1 blocks?",
+      "options": [
+        "32",
+        "128",
+        "64",
+        "256"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 263,
+      "question": "The 7-day challenge period for withdrawals allows:",
+      "options": [
+        "Users to cancel their withdrawal at any time",
+        "Validators to vote on the withdrawal",
+        "The sequencer to optimize batch ordering",
+        "The Fault Proof system to detect and challenge invalid withdrawals"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 264,
+      "question": "Unlike standalone L1 blockchains, Base transactions include an L1 security fee because:",
+      "options": [
+        "Base is a Layer-2 that posts transaction data to Ethereum",
+        "Base uses Ethereum miners to verify transactions",
+        "Base charges extra fees to increase revenue",
+        "The L1 fee goes to Base validators as rewards"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 265,
+      "question": "The Jovian upgrade's minimum base fee of 5,000,000 wei helps prevent:",
+      "options": [
+        "Withdrawal delays",
+        "Economic denial-of-service attacks through spam transactions",
+        "Cross-chain messaging failures",
+        "Validator stake slashing"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 266,
+      "question": "CCTP (Cross-Chain Transfer Protocol) works by:",
+      "options": [
+        "Wrapping tokens through a bridge contract",
+        "Using atomic swaps between users",
+        "Locking and minting USDC across supported chains including Base",
+        "Batching all transfers through a central relayer"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 267,
+      "question": "Which is NOT one of the four stages of finality for Base L2 transactions?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Inclusion",
+        "7-Day Challenge Completion"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 268,
+      "question": "The 2-second block time on Base combined with 400M gas limit gives a theoretical maximum throughput of:",
+      "options": [
+        "200M gas per second",
+        "400M gas per second",
+        "200M gas per block",
+        "800M gas per second"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 269,
+      "question": "When can a user save on the L1 security fee?",
+      "options": [
+        "By using a larger gas limit",
+        "By submitting during low L1 gas",
+        "By adding a higher priority fee",
+        "By waiting for a holiday"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 270,
+      "question": "What is the role of the GasPriceOracle predeploy at 0x420000000000000000000000000000000000000F?",
+      "options": [
+        "It stores the current ETH/USD price for fee conversion",
+        "It manages the sequencer's fee vault",
+        "It provides L1 fee estimation methods for Base transactions",
+        "It executes token swaps for gas payments"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 271,
+      "question": "What condition must be met for a batch to achieve L1 Batch Finality?",
+      "options": [
+        "It must be included in a Flashblock",
+        "It must pass the 7-day challenge period",
+        "It must be signed by all validators",
+        "It must be older than 2 epochs (64 L1 blocks)"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 272,
+      "question": "How long is the withdrawal period for L2 to L1 transfers on Base?",
+      "options": [
+        "~7 days",
+        "~2 minutes",
+        "~20 minutes",
+        "~30 days"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 273,
+      "question": "The GasPriceOracle predeploy method 'baseFeeScalar()' returns:",
+      "options": [
+        "The L2 base fee value",
+        "The scalar used to calculate the L1 fee based on L1 base fee",
+        "The minimum base fee in gwei",
+        "The EIP-1559 elasticity multiplier"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 274,
+      "question": "The L2 execution fee on Base is determined primarily by:",
+      "options": [
+        "L1 gas prices",
+        "The number of validators online",
+        "The L2 EIP-1559 mechanism which adjusts based on L2 demand",
+        "The amount of value being transferred"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 275,
+      "question": "What is the reorg probability classification for L2 Block Inclusion?",
+      "options": [
+        "Under 0.001%",
+        "Effectively 0%",
+        "Under 5%",
+        "Near 0%"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 276,
+      "question": "The block time of 2 seconds on Base means there are approximately how many blocks per day?",
+      "options": [
+        "43,200 blocks",
+        "7,200 blocks",
+        "86,400 blocks",
+        "720,000 blocks"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 277,
+      "question": "Which of the following is NOT a valid comparison between Flashblock Inclusion and L2 Block Inclusion?",
+      "options": [
+        "Flashblock is ~200ms; L2 Block is ~2s",
+        "Flashblock requires L1 posting; L2 Block does not",
+        "Flashblock is a sequencer preconfirmation; L2 Block is distributed to validators",
+        "Flashblock has under 0.001% reorg risk; L2 Block has near 0% reorg risk"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 278,
+      "question": "The 400M gas block limit on Base with a 2-second block time provides:",
+      "options": [
+        "Exactly the same throughput as Ethereum",
+        "Lower throughput than most L2s",
+        "High throughput capacity with room for demand spikes",
+        "Enough space for one complex transaction per block"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 279,
+      "question": "A user withdrawing $1M USDC from Base to Ethereum should be aware that:",
+      "options": [
+        "The transfer is instant and irreversible",
+        "The withdrawal must be split into multiple transactions",
+        "The withdrawal incurs no fees",
+        "The withdrawal will take at least 7 days due to the fault proof challenge period"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 280,
+      "question": "A single transaction on Base can use at most approximately how much gas?",
+      "options": [
+        "16.7M",
+        "4.2M",
+        "8.4M",
+        "33.4M"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 281,
+      "question": "The maximum base fee increase per block on Base is approximately:",
+      "options": [
+        "1%",
+        "4%",
+        "2%",
+        "8%"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 282,
+      "question": "Flashblock Inclusion's 'Under 0.001% reorg probability' means the chance of a reorg is:",
+      "options": [
+        "Moderate \u2014 about 1 in 1,000",
+        "High \u2014 about 1 in 100",
+        "Extremely low \u2014 less than 1 in 100,000",
+        "Certain \u2014 every Flashblock eventually reorgs"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 283,
+      "question": "The GasPriceOracle predeploy method 'l1BaseFee()' returns:",
+      "options": [
+        "The minimum base fee on Base L2",
+        "The total fee for a specific transaction",
+        "The L2 base fee on Base",
+        "The current L1 base fee on Ethereum"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 284,
+      "question": "The Fault Proof system on Base operates during the 7-day withdrawal window by:",
+      "options": [
+        "Allowing anyone to challenge the validity of a withdrawal, triggering a dispute game",
+        "Automatically rejecting all withdrawals above $10,000",
+        "Requiring multi-sig approval for every withdrawal",
+        "Running automated checks every hour"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 285,
+      "question": "How many blocks are needed at minimum to double the base fee on Base?",
+      "options": [
+        "9 blocks",
+        "18 blocks",
+        "36 blocks",
+        "72 blocks"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 286,
+      "question": "Only which type of Base transaction must wait 7 days?",
+      "options": [
+        "Regular token swaps on Base",
+        "Deposits from Ethereum to Base",
+        "Withdrawals from Base to Ethereum",
+        "Flashblock preconfirmations"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 287,
+      "question": "The deposit time of ~2 minutes from L1 to Base is faster than the 7-day withdrawal because:",
+      "options": [
+        "Deposits use a priority queue",
+        "Deposits bypass the EIP-1559 mechanism",
+        "Deposits are processed by a separate sequencer",
+        "Deposits have no challenge period"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 288,
+      "question": "A user bridges USDC from Solana to Base. Which infrastructure do they use?",
+      "options": [
+        "The Solana Bridge for Solana\u2194Base transfers",
+        "The Base Bridge which connects to all chains",
+        "CCTP which is restricted to Ethereum\u2194Base only",
+        "An Optimism bridge via a detour through Ethereum"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 289,
+      "question": "What is the target gas per block on Base?",
+      "options": [
+        "~30-40M",
+        "~60-70M",
+        "~90-100M",
+        "~200M"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 290,
+      "question": "What is the primary purpose of the L1 security fee on Base?",
+      "options": [
+        "To generate profit for the sequencer",
+        "To pay Base developers",
+        "To cover the estimated cost of publishing transaction data to Ethereum",
+        "To fund the Fault Proof system"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 291,
+      "question": "Which of the following is NOT a correct application of the Base Bridge?",
+      "options": [
+        "Depositing ETH from L1 Ethereum to Base (~2 min finality)",
+        "Withdrawing USDC from Base to L1 Ethereum (7-day challenge period)",
+        "Transferring USDC from Solana to Base",
+        "Swapping tokens on a Base DEX"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 292,
+      "question": "Which is NOT a method on the GasPriceOracle predeploy?",
+      "options": [
+        "getL1FeeLowerBound",
+        "getL1Fee",
+        "getL1FeeUpperBound",
+        "blobBaseFee"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 293,
+      "question": "Which is NOT a factor considered when the GasPriceOracle calculates the L1 fee?",
+      "options": [
+        "The current L1 base fee",
+        "The L2 priority fee paid by the user",
+        "The scalar values (baseFeeScalar, blobBaseFeeScalar)",
+        "The transaction data or blob data"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 294,
+      "question": "What is the reorg probability for a transaction that has reached L2 Block Inclusion?",
+      "options": [
+        "Under 0.001%",
+        "Approximately 5%",
+        "Near 0%",
+        "Between 1-5%"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 295,
+      "question": "Which of the following would NOT cause a reorg on Base?",
+      "options": [
+        "Ethereum L1 reorg",
+        "A successful fault proof challenge",
+        "A challenger winning a dispute game",
+        "A user paying the minimum base fee"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 296,
+      "question": "Base blocks are produced faster than Ethereum blocks. Base's target block time is:",
+      "options": [
+        "2 seconds vs Ethereum's 12 seconds",
+        "200ms vs Ethereum's 2 seconds",
+        "12 seconds vs Ethereum's 2 seconds",
+        "200ms vs Ethereum's 12 seconds"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 297,
+      "question": "Why is the per-transaction gas limit set to ~16.7M on Base?",
+      "options": [
+        "To match Ethereum's per-transaction limit exactly",
+        "To ensure each transaction can fit in a Flashblock",
+        "To maximize sequencer revenue per transaction",
+        "To allow complex multi-contract interactions"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 298,
+      "question": "A trader wants to wait until the reorg probability is effectively 0% before considering a transaction settled. Which stages satisfy this?",
+      "options": [
+        "Flashblock Inclusion only",
+        "L2 Block Inclusion only",
+        "L1 Batch Inclusion and L1 Batch Finality",
+        "Only L1 Batch Finality"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 299,
+      "question": "What is the third stage of finality for a Base L2 transaction?",
+      "options": [
+        "Flashblock Inclusion",
+        "L2 Block Inclusion",
+        "L1 Batch Finality",
+        "L1 Batch Inclusion"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 300,
+      "question": "How long does L1 Batch Inclusion typically take?",
+      "options": [
+        "~2 minutes",
+        "~200 milliseconds",
+        "~2 seconds",
+        "~20 minutes"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 301,
+      "question": "What is the purpose of the per-transaction gas limit of ~16.7M on Base?",
+      "options": [
+        "To match Ethereum's block gas limit exactly",
+        "To ensure each transaction can fit within a single Flashblock",
+        "To limit the total transactions per day",
+        "To reduce the computational load on validators"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 302,
+      "question": "Approximately how much time passes between L1 Batch Inclusion and L1 Batch Finality?",
+      "options": [
+        "~200ms",
+        "~2 seconds",
+        "~18 minutes (from 2m to 20m)",
+        "~7 days"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 303,
+      "question": "The getL1FeeUpperBound method on the GasPriceOracle is useful for:",
+      "options": [
+        "Calculating the exact fee for a signed transaction",
+        "Estimating the L2 execution fee only",
+        "Retrieving the minimum base fee",
+        "Getting a quick estimate before fully constructing a transaction, to judge affordability"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 304,
+      "question": "Which statement about transaction finality on Base is TRUE?",
+      "options": [
+        "Regular L2 transactions achieve finality through a series of stages ranging from ~200ms to ~20m",
+        "All transactions on Base require 7 days to finalize",
+        "Base transactions never achieve finality because of potential reorgs",
+        "Only deposits from Ethereum achieve finality within seconds"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 305,
+      "question": "The minimum base fee on Base Mainnet is:",
+      "options": [
+        "0.0005 gwei",
+        "0.005 gwei",
+        "0.05 gwei",
+        "0.5 gwei"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 306,
+      "question": "The target gas per block on Base is achieved via:",
+      "options": [
+        "The sequencer's manual adjustment",
+        "Validator voting on block size",
+        "The EIP-1559 elasticity mechanism",
+        "L1 gas price oracle inputs"
+      ],
+      "correctIndex": 2
+    },
+    {
+      "id": 307,
+      "question": "What is the relationship between Flashblocks (200ms) and the 2-second block time on Base?",
+      "options": [
+        "Flashblocks replace the 2-second blocks entirely",
+        "Flashblocks are unrelated to block production",
+        "Flashblocks are only available for high-fee transactions",
+        "Flashblocks provide preconfirmations at 200ms while full L2 blocks are produced every 2 seconds"
+      ],
+      "correctIndex": 3
+    },
+    {
+      "id": 308,
+      "question": "Deposits from Ethereum to Base are faster than withdrawals because:",
+      "options": [
+        "Deposits don't require fault proof validation",
+        "Deposits use a different blockchain",
+        "Deposits skip the sequencer",
+        "Deposits are processed in batches"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "id": 309,
+      "question": "At the L2 Block Inclusion stage, the sequencer has built the transaction into an L2 block and distributed it to:",
+      "options": [
+        "The Ethereum L1 contract",
+        "Validator nodes",
+        "The user's wallet",
+        "The bridge contract"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "id": 310,
+      "question": "What are the two costs associated with every Base transaction?",
+      "options": [
+        "A base fee and a priority fee",
+        "A transaction fee and a bridge fee",
+        "An L2 (execution) fee and an L1 (security) fee",
+        "A protocol fee and a sequencer fee"
+      ],
+      "correctIndex": 2
+    }
+  ]
+}

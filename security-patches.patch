@@ -1,0 +1,239 @@
+*** Begin Patch
+*** Update File: contracts/QuizScores.sol
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.20;
++
++import "@openzeppelin/contracts/utils/Pausable.sol";
+
+ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+ import "@openzeppelin/contracts/access/Ownable.sol";
+@@ -9,7 +10,8 @@
+ import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+
+-contract QuizScores is ReentrancyGuard, Ownable {
++contract QuizScores is ReentrancyGuard, Ownable, Pausable {
+     using ECDSA for bytes32;
+     using MessageHashUtils for bytes32;
+@@ -24,6 +26,10 @@
+     address public trustedSigner;
+
+     address[] public players;
++    uint256 public constant DOMAIN_SEPARATOR = keccak256(
++        abi.encode("QuizScores", "1", block.chainid, address(this))
++    );
++
+     mapping(address => bool) public hasPlayed;
+     mapping(address => uint256) public totalPoints;
+     mapping(address => uint256) public totalGames;
+@@ -44,6 +50,15 @@
+     event MaxTotalUpdated(uint8 previousMaxTotal, uint8 newMaxTotal);
+     event ScoreCleared(address indexed player);
++
++    event Paused(address account);
++    event Unpaused(address account);
++
++    error EnforcedPause();
++    error ExpectedPause();
++
+     constructor(address initialTrustedSigner) Ownable(msg.sender) {
+         require(initialTrustedSigner != address(0), "Signer cannot be zero");
+         trustedSigner = initialTrustedSigner;
+@@ -53,6 +68,10 @@
+     function submitScore(uint8 score, uint8 total, bytes calldata sig) external nonReentrant {
+         uint256 previousSubmissionAt = lastSubmissionAt[msg.sender];
+         require(
+             block.timestamp >= previousSubmissionAt + cooldownPeriod,
+             "Submission cooldown active"
+         );
++
++        whenNotPaused();
++
+         require(total == maxTotal, "Total must equal max total");
+         require(score <= total, "Score cannot exceed total");
+         require(_isValidSignature(msg.sender, score, total, sig), "Invalid signature");
+@@ -83,6 +102,20 @@
+         emit CooldownPeriodUpdated(previousCooldown, newCooldown);
+     }
+ 
++    function pause() external onlyOwner {
++        _pause();
++        emit Paused(msg.sender);
++    }
++
++    function unpause() external onlyOwner {
++        _unpause();
++        emit Unpaused(msg.sender);
++    }
++
++    function _pause() internal virtual {
++        _paused = true;
++    }
++
++    function _unpause() internal virtual {
++        _paused = false;
++    }
++
+     function setTrustedSigner(address newSigner) external onlyOwner {
+         require(newSigner != address(0), "Signer cannot be zero");
+         address previousSigner = trustedSigner;
+@@ -139,12 +172,19 @@
+     }
+ 
+     function _isValidSignature(
+-        address player,
+-        uint8 score,
+-        uint8 total,
+-        bytes calldata sig
++        address player,
++        uint8 score,
++        uint8 total,
++        bytes calldata sig,
++        uint256 nonce
+     ) internal view returns (bool) {
+-        bytes32 digest = keccak256(
+-            abi.encode(player, score, total, nonces[player], block.chainid, address(this))
++        bytes32 digest = keccak256(
++            abi.encode(
++                DOMAIN_SEPARATOR,
++                player,
++                score,
++                total,
++                nonce,
++                block.chainid,
++                address(this)
++            )
+         ).toEthSignedMessageHash();
+         return digest.recover(sig) == trustedSigner;
+     }
+*** End Patch
+
+*** Begin Patch
+*** Update File: contracts/QuizNFT.sol
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: MIT
+ pragma solidity ^0.8.20;
++
++import "@openzeppelin/contracts/utils/Pausable.sol";
+
+ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+@@ -10,7 +11,8 @@
+ import "@openzeppelin/contracts/utils/Strings.sol";
+
+-contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
++contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
+     uint256 public totalMinted;
+     string public baseTokenURI;
+     address public quizScoresContract;
+@@ -15,6 +17,10 @@
+     mapping(address => bool) public hasMinted;
+ 
+     event NFTMinted(address indexed player, uint256 tokenId);
+     event BaseURIUpdated(string previousURI, string newURI);
+     event ThresholdUpdated(uint256 previousThreshold, uint256 newThreshold);
+     event QuizContractUpdated(address previousContract, address newContract);
++    event Paused(address account);
++    event Unpaused(address account);
++
++    error EnforcedPause();
++    error ExpectedPause();
+ 
+     constructor(
+         address _quizScoresContract,
+@@ -35,6 +41,10 @@
+     function mint() external nonReentrant {
+         require(!hasMinted[msg.sender], "Already minted");
+         require(_hasReachedThreshold(msg.sender), "Not enough points");
++
++        whenNotPaused();
++
+         hasMinted[msg.sender] = true;
+         totalMinted++;
+         uint256 tokenId = totalMinted;
+@@ -59,13 +69,22 @@
+     function _hasReachedThreshold(address player) internal view returns (bool) {
+         (bool success, bytes memory data) = quizScoresContract.staticcall(
+             abi.encodeWithSignature("totalPoints(address)", player)
+         );
+-        if (!success || data.length == 0) return false;
+-        uint256 points = abi.decode(data, (uint256));
++        if (!success) return false;
++        if (data.length < 32) return false;
++        uint256 points;
++        try abi.decode(data, (uint256)) returns (uint256 p) {
++            points = p;
++        } catch {
++            return false;
++        }
+         return points >= pointsThreshold;
+     }
+ 
++    function pause() external onlyOwner {
++        _pause();
++        emit Paused(msg.sender);
++    }
++
++    function unpause() external onlyOwner {
++        _unpause();
++        emit Unpaused(msg.sender);
++    }
++
+     function canMint(address player) external view returns (bool) {
+         return !hasMinted[player] && _hasReachedThreshold(player);
+     }
+@@ -94,6 +113,23 @@
+         emit QuizContractUpdated(previous, _quizScoresContract);
+     }
+ 
++    // Two-step ownership transfer for critical admin functions
++    address public pendingQuizScoresContract;
++
++    function proposeQuizScoresContract(address _quizScoresContract) external onlyOwner {
++        require(_quizScoresContract != address(0), "Invalid address");
++        pendingQuizScoresContract = _quizScoresContract;
++    }
++
++    function acceptQuizScoresContract() external onlyOwner {
++        require(pendingQuizScoresContract != address(0), "No pending contract");
++        address previous = quizScoresContract;
++        quizScoresContract = pendingQuizScoresContract;
++        pendingQuizScoresContract = address(0);
++        emit QuizContractUpdated(previous, quizScoresContract);
++    }
++
+     // Added: max supply cap
+     uint256 public maxSupply = 10000;
+ 
+     function setMaxSupply(uint256 _maxSupply) external onlyOwner {
+         require(_maxSupply > 0, "Max supply must be > 0");
+         maxSupply = _maxSupply;
+     }
+ 
+     function mint() external nonReentrant {
+         require(!hasMinted[msg.sender], "Already minted");
+         require(_hasReachedThreshold(msg.sender), "Not enough points");
+         require(totalMinted < maxSupply, "Max supply reached");
+ 
+         whenNotPaused();
+ 
+         hasMinted[msg.sender] = true;
+         totalMinted++;
+         uint256 tokenId = totalMinted;
+ 
+         _safeMint(msg.sender, tokenId);
+         _setTokenURI(
+             tokenId,
+             string(
+                 abi.encodePacked(
+                     baseTokenURI,
+                     "/",
+                     Strings.toString(tokenId),
+                     ".json"
+                 )
+             )
+         );
+ 
+         emit NFTMinted(msg.sender, tokenId);
+     }
+*** End Patch

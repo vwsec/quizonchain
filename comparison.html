@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Generation — Key Strategy Comparison</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+  :root {
+    --bg: #0b0b0f;
+    --surface: #131318;
+    --surface-2: #1a1a22;
+    --border: #22222e;
+    --text: #e8e8ed;
+    --text-dim: #888899;
+    --text-muted: #5c5c6e;
+    --green: #22c55e;
+    --green-bg: rgba(34,197,94,0.10);
+    --red: #ef4444;
+    --red-bg: rgba(239,68,68,0.08);
+    --amber: #f59e0b;
+    --amber-bg: rgba(245,158,11,0.10);
+    --blue: #3b82f6;
+    --blue-bg: rgba(59,130,246,0.10);
+    --cyan: #06b6d4;
+    --width: 1400px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .container { width: 100%; max-width: var(--width); }
+
+  /* Header */
+  header { margin-bottom: 48px; }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: var(--text-dim);
+    font-size: 15px;
+  }
+
+  /* Strategy Row */
+  .strategies {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .strategy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    position: relative;
+  }
+
+  .strategy-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .strategy-card .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 12px;
+  }
+
+  .badge-current {
+    background: rgba(245,158,11,0.12);
+    color: var(--amber);
+  }
+
+  .badge-proposed {
+    background: rgba(6,182,212,0.12);
+    color: var(--cyan);
+  }
+
+  .badge-win {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+
+  .badge-loss {
+    background: var(--red-bg);
+    color: var(--red);
+  }
+
+  /* Flow diagram */
+  .flow { margin: 20px 0; }
+
+  .flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    position: relative;
+  }
+
+  .flow-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 32px;
+    bottom: -4px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .flow-marker {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .flow-marker-green { background: var(--green-bg); color: var(--green); }
+  .flow-marker-red { background: var(--red-bg); color: var(--red); }
+  .flow-marker-amber { background: var(--amber-bg); color: var(--amber); }
+  .flow-marker-blue { background: var(--blue-bg); color: var(--blue); }
+  .flow-marker-dim { background: var(--surface-2); color: var(--text-muted); }
+
+  .flow-content {
+    font-size: 13px;
+    padding-top: 2px;
+    color: var(--text-dim);
+  }
+
+  .flow-content strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .flow-content .tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    margin-left: 6px;
+  }
+
+  .tag-time { background: var(--blue-bg); color: var(--blue); }
+  .tag-token { background: var(--amber-bg); color: var(--amber); }
+  .tag-green { background: var(--green-bg); color: var(--green); }
+  .tag-red { background: var(--red-bg); color: var(--red); }
+
+  .branch {
+    padding-left: 36px;
+    border-left: 2px solid var(--border);
+    margin: 4px 0 4px 12px;
+  }
+
+  .branch-item {
+    padding: 6px 0 6px 12px;
+    font-size: 13px;
+    color: var(--text-dim);
+    position: relative;
+  }
+
+  .branch-item::before {
+    content: '└─';
+    position: absolute;
+    left: -10px;
+    color: var(--text-muted);
+  }
+
+  .outcome {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .outcome-good { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .outcome-bad { background: var(--red-bg); border-left: 3px solid var(--red); }
+  .outcome-neutral { background: var(--amber-bg); border-left: 3px solid var(--amber); }
+
+  /* Comparison Table */
+  .comparison-section h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-weight: 600;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  thead th:first-child { width: 28%; }
+  thead th:not(:first-child) { width: 24%; }
+
+  tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  tbody tr:hover td {
+    background: rgba(255,255,255,0.02);
+  }
+
+  td .label {
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  td .desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+
+  .stat-highlight {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .stat-win { color: var(--green); }
+  .stat-loss { color: var(--red); }
+  .stat-neutral { color: var(--amber); }
+
+  /* Token waste bar */
+  .waste-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .waste-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--surface-2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .waste-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s;
+  }
+
+  .waste-bar-fill-green { background: var(--green); width: 1.25%; }
+  .waste-bar-fill-red { background: var(--red); width: 100%; }
+
+  /* Footer */
+  footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .strategies { grid-template-columns: 1fr; }
+    body { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Key Strategy Comparison</h1>
+    <p>Current sequential fallthrough vs proposed parallel ping — timing &amp; token cost</p>
+  </header>
+
+  <!-- Strategy Cards -->
+  <div class="strategies">
+
+    <!-- Current -->
+    <div class="strategy-card">
+      <span class="badge badge-current">CURRENT</span>
+      <h2>Sequential Fallthrough</h2>
+      <p class="subtitle">Try key1 → key2 → key3 in sequence</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-amber">1</div>
+          <div class="flow-content">
+            <strong>Scrape docs</strong> — 6 URLs via Jina Reader in parallel
+            <span class="tag tag-time">~8s</span>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-amber">2</div>
+          <div class="flow-content">
+            <strong>Key1 → Groq LLM</strong>
+            <span class="tag tag-time">30s timeout</span>
+            <span class="tag tag-token">~1500 tok</span>
+          </div>
+        </div>
+
+        <div class="branch">
+          <div class="branch-item">✅ Succeeds → done <span class="tag tag-green">~10–21s total</span></div>
+          <div class="branch-item">❌ 429 / timeout / error → try key2</div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-amber">3</div>
+          <div class="flow-content">
+            <strong>Key2 → Groq LLM</strong>
+            <span class="tag tag-time">30s timeout</span>
+            <span class="tag tag-token">~1500 tok</span>
+          </div>
+        </div>
+
+        <div class="branch">
+          <div class="branch-item">✅ Succeeds → done <span class="tag tag-amber">~11–50s total</span></div>
+          <div class="branch-item">❌ Fail → try key3</div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-amber">4</div>
+          <div class="flow-content">
+            <strong>Key3 → Groq LLM</strong>
+            <span class="tag tag-time">30s timeout</span>
+            <span class="tag tag-token">~1500 tok</span>
+          </div>
+        </div>
+
+        <div class="branch">
+          <div class="branch-item">✅ Succeeds → done <span class="tag tag-amber">~11–90s total</span></div>
+          <div class="branch-item">❌ All fail → fallback <span class="tag tag-green">~11–19s if fast</span> <span class="tag tag-red">60s→504 if timeout</span></div>
+        </div>
+      </div>
+
+      <div class="outcome outcome-bad">
+        <strong>⚠ All-keys-timeout case:</strong> 3 × 30s = 90s needed, but <code>maxDuration=60</code> kills the function → user gets a <strong>504 Gateway Timeout</strong>, not fallback questions
+      </div>
+    </div>
+
+    <!-- Proposed -->
+    <div class="strategy-card">
+      <span class="badge badge-proposed">PROPOSED</span>
+      <h2>Parallel Ping → Generate</h2>
+      <p class="subtitle">Ping all keys in parallel, pick a working one, then generate</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-amber">1</div>
+          <div class="flow-content">
+            <strong>Scrape docs</strong> — 6 URLs via Jina Reader in parallel
+            <span class="tag tag-time">~8s</span>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-blue">2</div>
+          <div class="flow-content">
+            <strong>Ping all 3 keys</strong> — parallel, tiny payload (~20 tok each)
+            <span class="tag tag-time">5s timeout</span>
+            <span class="tag tag-token">~75 tok total</span>
+          </div>
+        </div>
+
+        <div class="branch">
+          <div class="branch-item">2–3 keys healthy → <strong>pick first, generate once</strong> <span class="tag tag-green">~15s total</span></div>
+          <div class="branch-item">1 key healthy → generate on that key <span class="tag tag-green">~15s</span></div>
+          <div class="branch-item">0 keys healthy → instantly fallback <span class="tag tag-green">~13s</span></div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-marker flow-marker-green">3</div>
+          <div class="flow-content">
+            <strong>Generate on chosen key</strong> — full prompt, known-working API
+            <span class="tag tag-time">~2–5s</span>
+            <span class="tag tag-token">~2000 tok (gen only)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="outcome outcome-good">
+        <strong>✅ Always graceful:</strong> ping phase completes in ~5s regardless. If all keys fail, fallback reaches the user in ~13s instead of a 504.
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="comparison-section">
+    <h3>Side-by-Side Metrics</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Current (Sequential)</th>
+          <th>Proposed (Ping → Gen)</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="label">Best case</span><div class="desc">key1 works immediately</div></td>
+          <td><span class="stat-highlight">~10s</span></td>
+          <td><span class="stat-highlight stat-neutral">~15s</span><div class="desc">+5s from ping phase</div></td>
+          <td><span class="stat-loss">-5s slower</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">Typical</span><div class="desc">key1 429, key2 works</div></td>
+          <td><span class="stat-highlight stat-neutral">~11–38s</span></td>
+          <td><span class="stat-highlight stat-win">~15–21s</span><div class="desc">stable, no serial delay</div></td>
+          <td><span class="stat-win">2× faster</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">All fail (fast)</span><div class="desc">429/empty per key</div></td>
+          <td><span class="stat-highlight">~11–19s</span><div class="desc">fallback works</div></td>
+          <td><span class="stat-highlight stat-win">~13s</span><div class="desc">fallback, no waste</div></td>
+          <td><span class="stat-neutral">Similar</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">All fail (timeout)</span><div class="desc">each key hangs 30s</div></td>
+          <td><span class="stat-highlight stat-loss">60s → 504 ❌</span><div class="desc">no fallback, error to user</div></td>
+          <td><span class="stat-highlight stat-win">~13–21s ✅</span><div class="desc">fallback, no crash</div></td>
+          <td><span class="stat-win">Always graceful</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">Token waste (all fail)</span><div class="desc">tokens burned on dead keys</div></td>
+          <td>
+            <div class="waste-bar">
+              <span class="stat-highlight stat-loss">~6000</span>
+              <div class="waste-bar-track"><div class="waste-bar-fill waste-bar-fill-red"></div></div>
+            </div>
+            <div class="desc">3 full generations wasted</div>
+          </td>
+          <td>
+            <div class="waste-bar">
+              <span class="stat-highlight stat-win">~75</span>
+              <div class="waste-bar-track"><div class="waste-bar-fill waste-bar-fill-green"></div></div>
+            </div>
+            <div class="desc">3 tiny pings wasted</div>
+          </td>
+          <td><span class="stat-win">80× less waste</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">Token cost per success</span><div class="desc">including waste on failed attempts</div></td>
+          <td>
+            <span class="stat-highlight stat-neutral">~2000–6000</span>
+            <div class="desc">depends how many keys fail first</div>
+          </td>
+          <td>
+            <span class="stat-highlight stat-win">~2075</span>
+            <div class="desc">~75 ping + ~2000 gen (fixed)</div>
+          </td>
+          <td><span class="stat-win">Predictable</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">Graceful fallback?</span><div class="desc">user always gets a quiz?</div></td>
+          <td><span class="stat-loss">❌ Only if keys fail fast</span><div class="desc">timeout case = 504</div></td>
+          <td><span class="stat-win">✅ Always</span><div class="desc">5s ping timeout per key</div></td>
+          <td><span class="stat-win">Reliable</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    Assumptions: Jina scrape ~8s, Groq gen ~2–5s, each key timeout 30s (current) / 5s (proposed), <code>maxDuration=60</code>.
+  </footer>
+
+</div>
+</body>
+</html>
