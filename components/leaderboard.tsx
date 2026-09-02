@@ -181,7 +181,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       if (chainFilter === 'Global') {
         const res = await fetchGlobalLeaderboard()
         setTotalPlayers(res.players.length)
-        const top = res.players.slice(0, 20)
+        const top = res.players.slice(0, 100)
         setData(top)
         rawDataRef.current = top
         setFailedNetworks(res.failedChains)
@@ -203,7 +203,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           try {
             const players = await getChainLeaderboard(chainConfig)
             setTotalPlayers(players.length)
-            const top = players.slice(0, 20)
+            const top = players.slice(0, 100)
             setData(top)
             rawDataRef.current = top
             void loadNftData(top)
@@ -635,9 +635,9 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       </div>
 
       {/* ── Footer ────────────────────────────────────────────────────────── */}
-      {!loading && totalPlayers > 20 && !showMastersOnly && (
+      {!loading && totalPlayers > 100 && !showMastersOnly && (
         <div className="mt-4 text-center text-sm text-gray-400">
-          Showing top 20 of {totalPlayers} unique players
+          Showing top 100 of {totalPlayers} unique players
         </div>
       )}
       {showMastersOnly && !nftLoading && (
