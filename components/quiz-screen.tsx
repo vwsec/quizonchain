@@ -172,7 +172,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
         {/* Feedback */}
         {isAnswered && question.correctIndex !== undefined && (
           <div className={cn(
-            'mb-8 p-3 sm:p-4 border flex items-center gap-2 sm:gap-3 animate-slide-up',
+            'mb-4 sm:mb-8 p-3 sm:p-4 border flex items-center gap-2 sm:gap-3 animate-slide-up',
             ui.radiusSm,
             selectedAnswer === question.correctIndex
               ? 'bg-[rgba(34,197,94,0.15)] border-[#22c55e] text-[#22c55e]'
@@ -197,8 +197,8 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
         )}
 
         {isAnswered && (
-          <div className="flex justify-end">
-            <Button size="lg" onClick={handleNext} className={cn('px-6 md:px-8 h-12', ui.btnPrimary)}>
+          <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-4 sm:gap-0">
+            <Button size="lg" onClick={handleNext} className={cn('w-full sm:w-auto px-6 md:px-8 h-12 flex-shrink-0', ui.btnPrimary)}>
               {currentQuestion < questions.length - 1 ? (
                 <>
                   <span className="hidden sm:inline">Next Question</span><span className="sm:hidden">Next</span>
