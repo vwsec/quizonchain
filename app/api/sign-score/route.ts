@@ -65,17 +65,20 @@ function getSignerPrivateKey(): `0x${string}` {
 const ALLOWED_ORIGINS = [
   'https://quizonchain.app',
   'https://www.quizonchain.app',
-  'https://quizonchaintest.vercel.app',
-  'https://quizonchain0.vercel.app',
-  'https://quizonchain1.vercel.app',
-  'https://quizonchain2.vercel.app',
   'http://localhost:3000',
   'http://localhost:3100',
   'https://app.startale.com',
 ]
 
+// Vercel assigns each deployment a random <project>-<hash>.vercel.app URL, so a
+// fixed allowlist of preview names (quizonchain0/1/2) breaks every other preview.
+// Allow any first-party Vercel deployment + the canonical domain, matching the
+// same gate as middleware.ts so the origin check can't drift between the two.
 function isAllowed(value: string): boolean {
-  return ALLOWED_ORIGINS.some((allowed) => value.replace(/\/$/, "") === allowed)
+  const normalized = value.endsWith('/') ? value.slice(0, -1) : value
+  if (ALLOWED_ORIGINS.includes(normalized)) return true
+  if (/^https:\/\/quizonchain[a-z0-9-]*\.vercel\.app$/.test(normalized)) return true
+  return false
 }
 
 export async function POST(request: Request) {
@@ -85,8 +88,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
   if (referer) {
-    const refUrl = referer.replace(/\/$/, "")
-    if (!isAllowed(refUrl)) {
+    let refOrigin: string
+    try {
+      refOrigin = new URL(referer).origin
+    } catch {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+    if (!isAllowed(refOrigin)) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
   }
