@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import type { Question } from "@/lib/quiz-data"
 import { cn } from "@/lib/utils"
 import { ChevronRight, CheckCircle, XCircle } from "lucide-react"
 import { useChainUI } from "@/hooks/use-chain-ui"
+import { useQuizFlow } from "@/components/quiz-flow-context"
 
 interface QuizScreenProps {
   questions: Question[]
@@ -19,8 +20,14 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
   const answersRef = useRef<number[]>(Array(questions.length).fill(-1))
 
   const ui = useChainUI()
+  const { setActive } = useQuizFlow()
   const question = questions[currentQuestion]
   const progress = ((currentQuestion + 1) / questions.length) * 100
+
+  useEffect(() => {
+    setActive(true)
+    return () => setActive(false)
+  }, [setActive])
 
   const handleSelectAnswer = (index: number) => {
     if (isAnswered) return

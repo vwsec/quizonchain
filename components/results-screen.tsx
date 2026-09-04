@@ -19,6 +19,7 @@ import { useChainUI } from "@/hooks/use-chain-ui"
 import { cn } from "@/lib/utils"
 import { NFT_CONTRACTS, NFT_ABI } from "@/lib/nft-contracts"
 import { NftMintModal } from "@/components/nft-mint"
+import { useQuizFlow } from "@/components/quiz-flow-context"
 
 const EXPLORER_APIS: Record<number, string> = {
   1868: "https://soneium.blockscout.com/api/v2",
@@ -92,7 +93,13 @@ export function ResultsScreen({
   const chainId = useChainId()
   const { chainConfig: cfg } = useActiveChain()
   const ui = useChainUI()
+  const { setActive } = useQuizFlow()
   const chain = getSoneiumChainById(chainId) ?? soneiumMainnet
+
+  useEffect(() => {
+    setActive(true)
+    return () => setActive(false)
+  }, [setActive])
   const { switchChainAsync } = useSwitchChain()
   const { chainId: walletChainId, isConnected, chain: walletChain, address } = useAccount()
   const publicClient = usePublicClient()

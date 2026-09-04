@@ -5,17 +5,22 @@ import { MessageSquarePlus } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FeedbackModal } from "@/components/feedback-modal"
 import { useActiveChain } from "@/hooks/use-active-chain"
+import { useQuizFlowActive } from "@/components/quiz-flow-context"
 
 export function FeedbackButton() {
   const [open, setOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { isConnected } = useActiveChain()
+  const isQuizFlowActive = useQuizFlowActive()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   const themed = mounted && isConnected
+
+  // Hide during quiz flow (quiz screen + results screen) to avoid FAB collision
+  if (isQuizFlowActive) return null
 
   return (
     <>
