@@ -45,6 +45,9 @@ interface NftCache {
 }
 const nftCache = new Map<string, NftCache>() // key = chainFilter
 
+// NFTMinted(address indexed player, uint256 tokenId)
+const NFT_MINTED_TOPIC0 = "0x4cc0a9c4a99ddc700de1af2c9f916a7cbfdb71f14801ccff94061ad1ef8a8040"
+
 async function fetchNftData(
   chainFilter: ChainFilterType,
   playerAddresses: string[]
@@ -80,7 +83,7 @@ async function fetchNftData(
   const holderSet = new Set<string>()
   let totalMinted = 0
 
-  // For each chain, fetch totalMinted + hasMinted for all players in parallel
+  // Fetch totalMinted + all holders from NFTMinted events
   await Promise.allSettled(
     chainsToQuery.map(async ({ chain, nftAddress }) => {
       const client = createPublicClient({ chain, transport: http() })
@@ -97,23 +100,46 @@ async function fetchNftData(
         // ignore per-chain errors
       }
 
-      // Fetch hasMinted for every player in parallel
-      const unique = [...new Set(playerAddresses.map(a => a.toLowerCase()))]
-      const results = await Promise.allSettled(
-        unique.map(addr =>
-          client.readContract({
-            address: nftAddress,
-            abi: NFT_ABI,
-            functionName: "hasMinted",
-            args: [addr as `0x${string}`],
-          }) as Promise<boolean>
-        )
-      )
-      results.forEach((r, i) => {
-        if (r.status === "fulfilled" && r.value) {
-          holderSet.add(unique[i])
+      // Fetch all holders from NFTMinted events (paginated)
+      // This is the correct way — get ALL minters, not just top players
+      try {
+        const logs = await client.getLogs({
+          address: nftAddress,
+          event: {
+            type: 'event',
+            name: 'NFTMinted',
+            inputs: [
+              { name: 'player', type: 'address', indexed: true },
+              { name: 'tokenId', type: 'uint256', indexed: false },
+            ],
+          },
+          fromBlock: BigInt(0),
+          toBlock: 'latest',
+        })
+        for (const log of logs) {
+          // topics[1] = indexed player address (32-byte padded)
+          const player = '0x' + (log.topics[1] as string).slice(26)
+          holderSet.add(player.toLowerCase())
         }
-      })
+      } catch {
+        // Fallback: check hasMinted for provided players if event scan fails
+        const unique = [...new Set(playerAddresses.map(a => a.toLowerCase()))]
+        const results = await Promise.allSettled(
+          unique.map(addr =>
+            client.readContract({
+              address: nftAddress,
+              abi: NFT_ABI,
+              functionName: "hasMinted",
+              args: [addr as `0x${string}`],
+            }) as Promise<boolean>
+          )
+        )
+        results.forEach((r, i) => {
+          if (r.status === "fulfilled" && r.value) {
+            holderSet.add(unique[i])
+          }
+        })
+      }
     })
   )
 
