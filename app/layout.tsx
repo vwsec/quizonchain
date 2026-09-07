@@ -2,8 +2,10 @@ import type { Metadata } from 'next'
 import { Orbitron, Exo_2, Rajdhani, Outfit } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from 'sonner'
-import './globals.css'
+import { Providers } from './providers'
 import { Web3Gate } from '@/components/web3-gate'
+import { WalletProvider } from '@/components/wallet-provider'
+import './globals.css'
 
 const orbitron = Orbitron({ subsets: ['latin'], variable: '--font-orbitron' });
 const exo2 = Exo_2({ subsets: ['latin'], variable: '--font-exo2' });
@@ -88,7 +90,11 @@ export default function RootLayout({
         <link rel="preload" as="image" href="/logo.webp" fetchPriority="high" />
       </head>
       <body className="font-body antialiased safe-top safe-bottom min-h-dvh">
-        <Web3Gate>{children}</Web3Gate>
+        <Providers>
+          <WalletProvider>
+            <Web3Gate>{children}</Web3Gate>
+          </WalletProvider>
+        </Providers>
         <Toaster theme="dark" position="top-right" richColors />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

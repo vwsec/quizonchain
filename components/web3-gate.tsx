@@ -11,9 +11,9 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
-// Lazy chunk: wagmi/RainbowKit/viem + all connector SDKs + app chrome stay
-// out of the initial JS payload entirely; fetched at parse time instead.
-const AppShell = dynamic(() => import('@/components/app-shell'), {
+// Lazy chunk: only the heavy UI chrome (Header, ThemeBackground, FeedbackButton, etc.)
+// wagmi/RainbowKit/viem + all connector SDKs stay out of the initial JS payload.
+const AppChrome = dynamic(() => import('@/components/app-chrome'), {
   ssr: false,
   loading: () => <Splash />,
 })
@@ -115,5 +115,10 @@ function Splash() {
 export function Web3Gate({ children }: { children: ReactNode }) {
   // No idle-delay gate: fetching the chunk starts at parse time, so the
   // splash below is only a brief dynamic-import fallback.
-  return <AppShell>{children}</AppShell>
+  return (
+    <>
+      <AppChrome />
+      {children}
+    </>
+  )
 }
