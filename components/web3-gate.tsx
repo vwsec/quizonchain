@@ -18,14 +18,15 @@ let chromeHasLoadedOnce = false
 
 // Lazy chunk: only the heavy UI chrome (Header, ThemeBackground, FeedbackButton, etc.)
 // wagmi/RainbowKit/viem + all connector SDKs stay out of the initial JS payload.
-const AppChrome = dynamic(() => import('@/components/app-chrome'), {
+const AppChrome = dynamic(() =>
+  import('@/components/app-chrome').then((mod) => {
+    // Flip flag once the chunk resolves so subsequent re-mounts skip the splash.
+    chromeHasLoadedOnce = true
+    return mod
+  }),
+{
   ssr: false,
   loading: () => (chromeHasLoadedOnce ? null : <Splash />),
-})
-
-// Flip flag once the chunk resolves so subsequent re-mounts get null fallback.
-import('@/components/app-chrome').then(() => {
-  chromeHasLoadedOnce = true
 })
 
 function Splash() {
