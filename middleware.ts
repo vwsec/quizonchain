@@ -44,7 +44,7 @@ const BLOCKED_BOT_PATTERNS = [
 // from script-src (Lighthouse flags both as ineffective CSP).
 const cspWithNonce = (nonce: string) => `
   default-src 'self';
-  script-src 'self' 'strict-dynamic' 'nonce-${nonce}' https://va.vercel-scripts.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-${nonce}' https://va.vercel-scripts.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://*.walletconnect.com https://*.walletconnect.org;
   font-src 'self' data:;
@@ -64,23 +64,17 @@ const cspWithNonce = (nonce: string) => `
     https://mainnet.unichain.org
     https://mainnet.megaeth.com
     https://soneium.blockscout.com
-    https://explorer.inkonchain.com
     https://base.blockscout.com
     https://unichain.blockscout.com
     https://megaeth.blockscout.com
     https://carrot.megaeth.com
-    https://www.megaexplorer.xyz
-    https://liteforge.explorer.caldera.xyz
     https://liteforge.rpc.caldera.xyz
     wss://liteforge.rpc.caldera.xyz
-    https://testnet.arcscan.app
     https://rpc.testnet.arc.network
     wss://rpc.testnet.arc.network
     https://rpc.blockdaemon.testnet.arc.network
     https://rpc.drpc.testnet.arc.network
     https://rpc.quicknode.testnet.arc.network
-    https://eth-sepolia.blockscout.com
-    wss://eth-sepolia.blockscout.com
     https://ethereum-sepolia-rpc.publicnode.com
     https://rpc2.sepolia.org
     https://rpc.sepolia.org;
