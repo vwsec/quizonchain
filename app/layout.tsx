@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Orbitron, Exo_2, Rajdhani, Outfit } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Toaster } from 'sonner'
+import { Suspense } from 'react'
 import { Providers } from './providers'
 import { Web3Gate } from '@/components/web3-gate'
 import { WalletProvider } from '@/components/wallet-provider'
@@ -92,7 +93,9 @@ export default function RootLayout({
       <body className="font-body antialiased safe-top safe-bottom min-h-dvh">
         <Providers>
           <WalletProvider>
-            <Web3Gate>{children}</Web3Gate>
+            <Web3Gate>
+              <Suspense fallback={null}>{children}</Suspense>
+            </Web3Gate>
           </WalletProvider>
         </Providers>
         <Toaster theme="dark" position="top-right" richColors />

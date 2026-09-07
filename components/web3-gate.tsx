@@ -11,11 +11,21 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
+// Module-level flag: survives component re-mounts, resets only on full page reload.
+// Shows the branded splash on FIRST load only; re-mounts (nav transitions,
+// Fast Refresh, React 19 re-renders) get null fallback.
+let chromeHasLoadedOnce = false
+
 // Lazy chunk: only the heavy UI chrome (Header, ThemeBackground, FeedbackButton, etc.)
 // wagmi/RainbowKit/viem + all connector SDKs stay out of the initial JS payload.
 const AppChrome = dynamic(() => import('@/components/app-chrome'), {
   ssr: false,
-  loading: () => <Splash />,
+  loading: () => (chromeHasLoadedOnce ? null : <Splash />),
+})
+
+// Flip flag once the chunk resolves so subsequent re-mounts get null fallback.
+import('@/components/app-chrome').then(() => {
+  chromeHasLoadedOnce = true
 })
 
 function Splash() {
@@ -115,10 +125,5 @@ function Splash() {
 export function Web3Gate({ children }: { children: ReactNode }) {
   // No idle-delay gate: fetching the chunk starts at parse time, so the
   // splash below is only a brief dynamic-import fallback.
-  return (
-    <>
-      <AppChrome />
-      {children}
-    </>
-  )
+  return <AppChrome>{children}</AppChrome>
 }
