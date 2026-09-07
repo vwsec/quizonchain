@@ -1,5 +1,4 @@
-// static 404 prerender bakes inline RSC scripts without the CSP nonce; force-dynamic lets middleware attach it
-export const dynamic = 'force-dynamic'
+// static 404 prerender
 
 export default function NotFound() {
   return (
