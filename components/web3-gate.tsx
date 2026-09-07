@@ -7,27 +7,9 @@
 // is downloaded and hydrated. This gate shows a branded loading screen with
 // a REAL progress counter (tracks the lazy chunk's resource loads via
 // PerformanceObserver, like donprod.uk), then mounts the real app.
-import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
-
-// Module-level flag: survives component re-mounts, resets only on full page reload.
-// Shows the branded splash on FIRST load only; re-mounts (nav transitions,
-// Fast Refresh, React 19 re-renders) get null fallback.
-let chromeHasLoadedOnce = false
-
-// Lazy chunk: only the heavy UI chrome (Header, ThemeBackground, FeedbackButton, etc.)
-// wagmi/RainbowKit/viem + all connector SDKs stay out of the initial JS payload.
-const AppChrome = dynamic(() =>
-  import('@/components/app-chrome').then((mod) => {
-    // Flip flag once the chunk resolves so subsequent re-mounts skip the splash.
-    chromeHasLoadedOnce = true
-    return mod
-  }),
-{
-  ssr: false,
-  loading: () => (chromeHasLoadedOnce ? null : <Splash />),
-})
+import AppChrome from '@/components/app-chrome'
 
 function Splash() {
   const [pct, setPct] = useState(0)
@@ -124,7 +106,20 @@ function Splash() {
 }
 
 export function Web3Gate({ children }: { children: ReactNode }) {
-  // No idle-delay gate: fetching the chunk starts at parse time, so the
-  // splash below is only a brief dynamic-import fallback.
+  // ponytail lite: no dynamic import, just gate on mount. The AppChrome
+  // component is statically imported but only mounted after the splash
+  // finishes. This avoids chunk-loading issues entirely while keeping
+  // the branded loading screen.
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    // Wait for next paint so the splash is visible before heavy work.
+    // wagmi bundle loads at parse time, so this brief delay lets the
+    // branded splash show while web3 context hydrates.
+    const id = requestAnimationFrame(() => setReady(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  if (!ready) return <Splash />
   return <AppChrome>{children}</AppChrome>
 }
