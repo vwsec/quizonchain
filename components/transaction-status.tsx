@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { useRouter } from "next/navigation"
 import { getTxInternalUrl } from "@/lib/chains"
 import { Loader2, ExternalLink, CheckCircle } from "lucide-react"
 
@@ -19,7 +18,6 @@ export function TransactionStatus({
   txHash,
   chainId,
 }: TransactionStatusProps) {
-  const router = useRouter()
   if (state === "idle") return null
 
   return (
@@ -49,17 +47,17 @@ export function TransactionStatus({
           <span className="text-sm font-medium text-foreground">
             Confirmed
           </span>
-          <button
-            onClick={() => {
-              if (txHash && chainId) {
-                router.push(getTxInternalUrl(chainId, txHash))
-              }
-            }}
-            className="ml-auto flex items-center gap-1 text-sm text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
-          >
-            View
-            <ExternalLink className="size-3" />
-          </button>
+          {txHash && chainId ? (
+            <a
+              href={getTxInternalUrl(chainId, txHash)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto flex items-center gap-1 text-sm text-primary hover:underline"
+            >
+              View
+              <ExternalLink className="size-3" />
+            </a>
+          ) : null}
         </>
       )}
     </div>
