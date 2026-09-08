@@ -21,37 +21,6 @@ import { NFT_CONTRACTS, NFT_ABI } from "@/lib/nft-contracts"
 import { NftMintModal } from "@/components/nft-mint"
 import { useQuizFlow } from "@/components/quiz-flow-context"
 
-const EXPLORER_APIS: Record<number, string> = {
-  1868: "https://soneium.blockscout.com/api/v2",
-  57073: "https://explorer.inkonchain.com/api/v2",
-  8453: "https://base.blockscout.com/api/v2",
-  130: "https://unichain.blockscout.com/api/v2",
-  4326: "https://megaeth.blockscout.com/api/v2",
-  4441: "https://liteforge.explorer.caldera.xyz/api/v2",
-  5042002: "https://testnet.arcscan.app/api/v2",
-  11155111: "https://eth-sepolia.blockscout.com/api/v2",
-}
-
-async function pollExplorerTx(
-  chainId: number,
-  txHash: string,
-  maxWaitMs = 15_000,
-): Promise<void> {
-  const apiBase = EXPLORER_APIS[chainId]
-  if (!apiBase) return
-  const url = `${apiBase}/transactions/${txHash}`
-  const deadline = Date.now() + maxWaitMs
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(url)
-      if (res.ok) return
-    } catch {
-      // network error, retry
-    }
-    await new Promise((r) => setTimeout(r, 2_000))
-  }
-}
-
 interface ResultsScreenProps {
   score: number
   totalQuestions: number
@@ -321,8 +290,6 @@ export function ResultsScreen({
 
     if (result.success) {
       setTxHash(result.hash)
-      // Keep "Pending…" visible while the block explorer indexes the tx
-      await pollExplorerTx(chainId, result.hash)
       setTxState("confirmed")
       onScoreSubmitted?.()
       // Advance wallet progress on server
