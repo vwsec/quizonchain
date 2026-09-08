@@ -499,7 +499,6 @@ export function ResultsScreen({
                 ui.btnPrimary
               )}
               style={{ 
-                backgroundColor: accentColor,
                 boxShadow: txState !== "pending" && !isCooldownActive && !hasSubmittedThisSession ? `0 4px 20px ${accentColor}33` : undefined
               }}
             >
@@ -620,7 +619,6 @@ export function ResultsScreen({
               </Button>
               <Button
                 className={cn('flex-1', ui.btnPrimary)}
-                style={{ backgroundColor: accentColor }}
                 onClick={handleConfirmedSubmitScore}
                 disabled={!isConnected || !contractAddress}
               >
