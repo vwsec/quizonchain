@@ -44,7 +44,7 @@ const BLOCKED_BOT_PATTERNS = [
 // from script-src (Lighthouse flags both as ineffective CSP).
 const cspWithNonce = (nonce: string) => `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-${nonce}' https://va.vercel-scripts.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://api.web3modal.org;
   style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https://*.walletconnect.com https://*.walletconnect.org;
   font-src 'self' data:;
@@ -58,17 +58,22 @@ const cspWithNonce = (nonce: string) => `
     https://*.coinbase.com
     https://*.walletlink.org
     wss://*.walletlink.org
-    https://rpc-gel.inkonchain.com
+    https://api.web3modal.org
+    https://pulse.walletconnect.org
+    https://rpc-*.infinitechain.com
     https://rpc.soneium.org
     https://mainnet.base.org
     https://mainnet.unichain.org
     https://mainnet.megaeth.com
+    https://rpc-gel.inkonchain.com
     https://soneium.blockscout.com
     https://base.blockscout.com
     https://unichain.blockscout.com
     https://megaeth.blockscout.com
     https://carrot.megaeth.com
     https://liteforge.rpc.caldera.xyz
+    https://liteforge.explorer.caldera.xyz
+    https://explorer.inkonchain.com
     wss://liteforge.rpc.caldera.xyz
     https://rpc.testnet.arc.network
     wss://rpc.testnet.arc.network

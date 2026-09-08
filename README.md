@@ -30,10 +30,6 @@ to mint an exclusive NFT.
 - Global leaderboard tracking total points across all players
 - Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM, Arc, Sepolia
 - NFT mint unlocked at 100 total points per chain
-- Visual bubble explorer — live transactions shown as floating bubbles
-- Network view — standard transaction table explorer
-- Address and transaction search powered by Blockscout API
-- Telegram alerts — real-time high-value transaction monitoring
 - Free to play, open to everyone
 
 ## Supported Networks
@@ -92,10 +88,6 @@ to mint an exclusive NFT.
 |:------|:------------|
 | `/` | Quiz home — start quiz, view progress toward NFT |
 | `/leaderboard` | Global and per-chain leaderboards |
-| `/explorer` | Chain selection for bubble explorer |
-| `/explorer/[chain]` | Live transaction bubble visualization |
-| `/explorer/[chain]/[address]` | Address network view |
-| `/explorer/[chain]/tx/[hash]` | Transaction detail page |
 | `/docs` | App documentation |
 | `/support` | Contact and support |
 

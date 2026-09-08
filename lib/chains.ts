@@ -124,18 +124,7 @@ export function getSoneiumChainById(chainId: number) {
 
 /** Internal explorer transaction URL for deep-linking. */
 export function getTxInternalUrl(chainId: number, txHash: string): string {
-  const mapping: Record<number, string> = {
-    1868: 'soneium',
-    57073: 'ink',
-    8453: 'base',
-    130: 'unichain',
-     4326: 'megaeth',
-     4441: 'litvm',
-     5042002: 'arc',
-     11155111: 'sepolia',
-  }
-  const slug = mapping[chainId] || 'soneium'
-  return `/explorer/${slug}/tx/${txHash}`
+  return getTxExplorerUrl(chainId, txHash)
 }
 
 /** Block explorer transaction URL for supported chains. */

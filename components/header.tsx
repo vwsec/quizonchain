@@ -21,7 +21,6 @@ const NAV_ITEMS = [
   { href: '/', label: 'Quiz' },
   { href: '/leaderboard', label: 'Leaderboard' },
   { href: '/docs', label: 'Docs' },
-  { href: '/explorer', label: 'Explorer', matchStart: true },
   { href: '/support', label: 'Support' }
 ]
 
@@ -43,7 +42,7 @@ export function Header() {
   if (!mounted) return null
 
   const isActiveLink = (nav: typeof NAV_ITEMS[number]) =>
-    nav.matchStart ? pathname.startsWith(nav.href) : pathname === nav.href
+    pathname === nav.href
 
   const titleClass = cn(
     'text-lg font-bold whitespace-nowrap tracking-tight',
