@@ -7,14 +7,15 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 import { useEffect, useState, type ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider, createConfig, http } from 'wagmi'
+import { WagmiProvider, createConfig, http, type CreateConnectorFn } from 'wagmi'
 import {
   RainbowKitProvider,
   darkTheme,
 } from '@rainbow-me/rainbowkit'
 import { walletConnect, coinbaseWallet, baseAccount } from 'wagmi/connectors'
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from '@/lib/chains'
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet } from '@/lib/chains'
 import { startaleConnector } from '@startale/app-sdk'
+import { abstractWalletConnector } from '@abstract-foundation/agw-react/connectors'
 import { FarcasterMiniAppProvider } from '@/hooks/use-farcaster-miniapp'
 import { activeChainConfig, activeChainKey } from '@/lib/active-chain-config'
 {
@@ -60,9 +61,9 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set.')
 }
 
-const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet]
+const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet]
 
-const connectors = [
+const connectors: CreateConnectorFn[] = [
   walletConnect({ projectId }),
   coinbaseWallet(),
   startaleConnector({ appName: 'Quiz On Chain', appLogoUrl: 'https://quizonchain.app/logo.png' }),
@@ -70,6 +71,7 @@ const connectors = [
 
 if (typeof window !== 'undefined') {
   connectors.push(baseAccount({ appName: 'Quiz On Chain' }))
+  connectors.push(abstractWalletConnector())
 }
 
 const config = createConfig({

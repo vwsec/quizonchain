@@ -3356,7 +3356,7 @@
       "question": "What security model does BitSNARK use?",
       "options": [
         "m-of-n multisig",
-        "1/n security — a single honest verifier can maintain system integrity",
+        "1/n security \u2014 a single honest verifier can maintain system integrity",
         "Proof-of-Stake",
         "Proof-of-Authority"
       ],
@@ -3399,10 +3399,10 @@
       "id": 308,
       "question": "Which security property applies to the Grail Bridge?",
       "options": [
-        "Custodial — funds held by third parties",
-        "Non-custodial — no third party ever holds user funds",
-        "Semi-custodial — funds held by Litecoin Foundation",
-        "Custodial — funds held by multisig signers"
+        "Custodial \u2014 funds held by third parties",
+        "Non-custodial \u2014 no third party ever holds user funds",
+        "Semi-custodial \u2014 funds held by Litecoin Foundation",
+        "Custodial \u2014 funds held by multisig signers"
       ],
       "correctIndex": 1
     },
@@ -3532,7 +3532,7 @@
       "question": "How does ZK-proof verification compare to consensus-based systems per the BitcoinOS team?",
       "options": [
         "Both are equally secure",
-        "ZK bridges provide mathematical guarantees — even a single honest node ensures the bridge's integrity",
+        "ZK bridges provide mathematical guarantees \u2014 even a single honest node ensures the bridge's integrity",
         "Consensus is more secure than ZK proofs",
         "ZK proofs require 51% honest validators"
       ],
@@ -3653,7 +3653,7 @@
       "question": "How does revenue sharing work for $LITVM holders?",
       "options": [
         "They receive mining rewards",
-        "They receive a share of sequencer fees — fees generated from transaction ordering and batching",
+        "They receive a share of sequencer fees \u2014 fees generated from transaction ordering and batching",
         "They receive airdrops of other tokens",
         "They receive discounts on bridge fees"
       ],
@@ -3752,7 +3752,7 @@
       "question": "Who can run a BOS node?",
       "options": [
         "Only Litecoin Foundation members",
-        "Anyone — participation is permissionless",
+        "Anyone \u2014 participation is permissionless",
         "Only approved validators",
         "Only the LitVM team"
       ],
@@ -3763,7 +3763,7 @@
       "question": "How does the Grail Bridge handle fraud?",
       "options": [
         "Fraud is ignored",
-        "Fraud proofs are deterministic and publicly verifiable — invalid operations can be challenged and penalized",
+        "Fraud proofs are deterministic and publicly verifiable \u2014 invalid operations can be challenged and penalized",
         "A centralized committee reviews fraud",
         "Fraud is resolved via community voting"
       ],
@@ -3774,7 +3774,7 @@
       "question": "What is a key reason ZK bridges are considered more secure than traditional bridges?",
       "options": [
         "They are cheaper to operate",
-        "ZK-proof verification has a definitive, verifiable answer — like solving a math problem, with no reliance on honest majority",
+        "ZK-proof verification has a definitive, verifiable answer \u2014 like solving a math problem, with no reliance on honest majority",
         "They are faster",
         "They require less code"
       ],
@@ -4192,7 +4192,7 @@
       "question": "What should developers NOT assume about LitVM short-term timing?",
       "options": [
         "That block numbers are sequential",
-        "Precise short-term timing (< 1 hour) — it is unreliable",
+        "Precise short-term timing (< 1 hour) \u2014 it is unreliable",
         "That zkLTC is available",
         "That the network is live"
       ],
@@ -4271,7 +4271,7 @@
         "~$0.50 per transfer",
         "Sub-cent fees: simple transfer ~$0.001, DEX swap ~$0.01-0.02, contract deployment ~$0.05-0.50",
         "~$1 per transaction",
-        "Free — no gas fees"
+        "Free \u2014 no gas fees"
       ],
       "correctIndex": 1
     },
@@ -4852,7 +4852,7 @@
       "question": "What is the mantra of LitVM?",
       "options": [
         "\"Programmable Money\"",
-        "\"Hard Money Web3\" — bringing scarcity, security, and decentralization to programmable blockchain apps",
+        "\"Hard Money Web3\" \u2014 bringing scarcity, security, and decentralization to programmable blockchain apps",
         "\"Litecoin 2.0\"",
         "\"The People's Blockchain\""
       ],
@@ -4896,7 +4896,7 @@
       "question": "What happens if a user encounters 'Invalid opcode' on Remix while deploying to LitVM?",
       "options": [
         "The wallet is empty",
-        "The EVM version might not match — try selecting a different EVM version in the compiler settings",
+        "The EVM version might not match \u2014 try selecting a different EVM version in the compiler settings",
         "The contract has syntax errors",
         "The network is down"
       ],
@@ -4929,7 +4929,7 @@
       "question": "Are user funds safe if LitVM has issues?",
       "options": [
         "No, funds could be lost",
-        "Yes — because zkLTC is backed 1:1 by LTC on Litecoin mainchain, users can always bridge back to native LTC with on-chain verified proofs",
+        "Yes \u2014 because zkLTC is backed 1:1 by LTC on Litecoin mainchain, users can always bridge back to native LTC with on-chain verified proofs",
         "Only if they have the private keys",
         "Only if they have less than $1000"
       ],
@@ -4950,7 +4950,7 @@
       "id": 449,
       "question": "What developer grants are available for LitVM?",
       "options": [
-        "None",
+        "No grants currently announced",
         "51% of total $LITVM token supply reserved for community and ecosystem via Litecoin DAO, including grants and bootstrapping capital",
         "Only Ethereum Foundation grants",
         "Only bug bounties"
@@ -4984,7 +4984,7 @@
       "question": "Will stablecoins be available on LitVM?",
       "options": [
         "No, only LTC-based assets",
-        "Yes — USDC, USDT and other stablecoins via Arbitrum Bridge, plus expected Litecoin-based stablecoins",
+        "Yes \u2014 USDC, USDT and other stablecoins via Arbitrum Bridge, plus expected Litecoin-based stablecoins",
         "Only LTC-based stablecoins",
         "Only algorithmic stablecoins"
       ],
@@ -5149,7 +5149,7 @@
       "question": "What should developers use for time-sensitive logic on LitVM?",
       "options": [
         "Assume fixed 12-second block intervals",
-        "Account for variable block times — don't assume fixed block intervals",
+        "Account for variable block times \u2014 don't assume fixed block intervals",
         "Use block.number directly",
         "Use blockhash for timing"
       ],
@@ -5424,7 +5424,7 @@
       "question": "How does Safe on LitVM protect against single point of failure?",
       "options": [
         "By using a single private key",
-        "By requiring a configurable threshold of signers to approve any transaction — M-of-N approval",
+        "By requiring a configurable threshold of signers to approve any transaction \u2014 M-of-N approval",
         "By storing funds in a cold wallet",
         "By using a hardware wallet"
       ],
@@ -5435,7 +5435,7 @@
       "question": "What is the Safe transaction feature that reduces gas costs on LitVM?",
       "options": [
         "Off-chain signatures",
-        "Batch transactions — bundling multiple operations into a single signing step",
+        "Batch transactions \u2014 bundling multiple operations into a single signing step",
         "Fee discounts",
         "Zero fees"
       ],
@@ -6084,7 +6084,7 @@
       "question": "What is a trustless bridge in the context of LitVM?",
       "options": [
         "A bridge that requires trust in intermediaries",
-        "A bridge with no reliance on third-party custodians — security comes from mathematical ZK proof guarantees",
+        "A bridge with no reliance on third-party custodians \u2014 security comes from mathematical ZK proof guarantees",
         "A bridge with no fees",
         "A bridge that operates only on Litecoin"
       ],
@@ -6095,7 +6095,7 @@
       "question": "What trust property does the Grail Bridge eliminate compared to traditional multisig bridges?",
       "options": [
         "Transaction costs",
-        "The need to trust an honest majority — only 1 honest node needed",
+        "The need to trust an honest majority \u2014 only 1 honest node needed",
         "Block confirmations",
         "Smart contract execution"
       ],
@@ -6116,8 +6116,8 @@
       "id": 555,
       "question": "What is the key end-to-end flow for moving assets from Ethereum to LitVM?",
       "options": [
-        "User LTC on Litecoin → Bridge → zkLTC",
-        "User deposits assets on Ethereum via Arbitrum bridge contract → After confirmations, assets credited on LitVM",
+        "User LTC on Litecoin \u2192 Bridge \u2192 zkLTC",
+        "User deposits assets on Ethereum via Arbitrum bridge contract \u2192 After confirmations, assets credited on LitVM",
         "User pays directly",
         "User swaps on a DEX"
       ],
@@ -6259,7 +6259,7 @@
       "id": 568,
       "question": "What is the RPC configuration for LitVM mainnet in the development tools?",
       "options": [
-        "RPC_URL_MAINNET_TBD — mainnet RPC coming after TGE",
+        "RPC_URL_MAINNET_TBD \u2014 mainnet RPC coming after TGE",
         "https://mainnet.litvm.com/rpc",
         "https://litvm.io/rpc",
         "https://rpc.litvm-mainnet.xyz"
@@ -6315,7 +6315,7 @@
       "question": "What is the error handling approach for a failed bridge transaction on LitVM?",
       "options": [
         "Contact the exchange",
-        "Check bridge UI status, ensure sufficient fees, wait for confirmations — contact Telegram support if issues persist >1 hour",
+        "Check bridge UI status, ensure sufficient fees, wait for confirmations \u2014 contact Telegram support if issues persist >1 hour",
         "Restart the bridge",
         "Submit a support ticket via email"
       ],
@@ -6336,7 +6336,7 @@
       "id": 575,
       "question": "What is the token economics breakdown for $LITVM governance?",
       "options": [
-        "The full tokenomics can be found at litvm.com/blog/litvm-token — 51% community allocation via Litecoin DAO, revenue sharing from sequencer fees, governance rights",
+        "The full tokenomics can be found at litvm.com/blog/litvm-token \u2014 51% community allocation via Litecoin DAO, revenue sharing from sequencer fees, governance rights",
         "100% team allocation",
         "50% community, 50% team",
         "100% community allocation"
@@ -6381,7 +6381,7 @@
       "question": "Why does the gas limit show an artificially high value on some LitVM blocks?",
       "options": [
         "Because of a display bug",
-        "To accommodate variable L1 posting costs — the actual execution limit is 32 million",
+        "To accommodate variable L1 posting costs \u2014 the actual execution limit is 32 million",
         "To reduce transaction fees",
         "To speed up transaction processing"
       ],
@@ -6413,7 +6413,7 @@
       "id": 582,
       "question": "What does 'block.prevrandao' return on LitVM compared to Ethereum post-Merge?",
       "options": [
-        "Same as Ethereum — the randao value",
+        "Same as Ethereum \u2014 the randao value",
         "Returns the constant 1 on LitVM",
         "Returns block.difficulty",
         "Returns the previous block's hash"
@@ -6513,7 +6513,7 @@
       "question": "What programming language integration does Succinct SP1 provide for ZK development?",
       "options": [
         "Solidity",
-        "Standard Rust — developers can write ZK programs in Rust, making ZK accessible to all developers",
+        "Standard Rust \u2014 developers can write ZK programs in Rust, making ZK accessible to all developers",
         "Python",
         "JavaScript"
       ],
@@ -7285,7 +7285,7 @@
         "100 gwei",
         "\"auto\"",
         "0",
-        "Not specified"
+        "Configured per-deployment"
       ],
       "correctIndex": 1
     },
@@ -9779,7 +9779,7 @@
       "id": 888,
       "question": "What is Litecoin's role in LitVM security?",
       "options": [
-        "None",
+        "None \u2014 Litecoin PoW secures the settlement layer",
         "14+ years of uninterrupted PoW security",
         "Only for governance",
         "Only as a token"
@@ -9790,7 +9790,7 @@
       "id": 889,
       "question": "What is Ethereum's role in LitVM security?",
       "options": [
-        "None",
+        "None \u2014 Ethereum serves as the Phase 1 settlement layer",
         "World's most decentralized smart contract platform (Phase 1 settlement)",
         "Only as a token",
         "Only for RPC"
@@ -9999,7 +9999,7 @@
       "id": 908,
       "question": "What Litecoin-native asset support is planned for the future?",
       "options": [
-        "None",
+        "No Litecoin-native assets are planned currently",
         "Litecoin Ordinals, Litecoin Runes, LTC-20, BitcoinOS Charms",
         "Only Ordinals",
         "Only Runes"
@@ -10307,9 +10307,9 @@
       "id": 936,
       "question": "What does the hardhat test output show when a test passes?",
       "options": [
-        "√ passes",
-        "✓ passes",
-        "√ succeeds",
+        "\u221a passes",
+        "\u2713 passes",
+        "\u221a succeeds",
         "PASS"
       ],
       "correctIndex": 0
@@ -10703,7 +10703,7 @@
       "id": 972,
       "question": "What AI capabilities are possible on LitVM?",
       "options": [
-        "None",
+        "No AI capabilities are planned for LitVM currently",
         "AI agents and AI-integrated applications",
         "Only machine learning inference",
         "Only data analysis"

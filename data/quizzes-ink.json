@@ -1794,8 +1794,8 @@
       "question": "Which Ink networks does Routescan support?",
       "options": [
         "Ink Mainnet only",
-        "None",
         "Ink Sepolia only",
+        "Both Ink Mainnet and Sepolia",
         "Ink Mainnet and Ink Sepolia"
       ],
       "correctIndex": 3
@@ -2587,7 +2587,7 @@
       "options": [
         "A red X",
         "Nothing changes",
-        "A checkmark ✅",
+        "A checkmark \u2705",
         "A warning icon"
       ],
       "correctIndex": 2
@@ -2753,7 +2753,7 @@
         "A red warning",
         "A spinner",
         "No change",
-        "A checkmark ✅"
+        "A checkmark \u2705"
       ],
       "correctIndex": 3
     },
@@ -5227,7 +5227,7 @@
       "options": [
         "By the letter C",
         "By a wrench icon",
-        "By a deployment arrow icon ▶️",
+        "By a deployment arrow icon \u25b6\ufe0f",
         "By a red square"
       ],
       "correctIndex": 2
@@ -5303,7 +5303,7 @@
       "question": "What currency symbol is set for the Ink Sepolia network in Remix?",
       "options": [
         "INK",
-        "Ink",
+        "Ink Sepolia",
         "SepoliaETH",
         "ETH"
       ],
@@ -6611,7 +6611,7 @@
       "id": 600,
       "question": "Which Ink network does Alchemy support according to the docs?",
       "options": [
-        "None",
+        "Ink Testnet",
         "Ink Mainnet",
         "Both Ink Mainnet and Sepolia",
         "Ink Sepolia only"
@@ -7095,7 +7095,7 @@
       "id": 644,
       "question": "The Indexers doc lists how many primary indexing providers for Ink?",
       "options": [
-        "None",
+        "Zero",
         "One (Goldsky only)",
         "Two (Goldsky and Alchemy)",
         "Three"

@@ -15,23 +15,29 @@ const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
   { id: 'LitVM', label: 'LitVM', iconUrl: '/chains/litvm.png' },
   { id: 'Arc Testnet', label: 'Arc', iconUrl: '/chains/arc.png' },
-  { id: 'Sepolia', label: 'Sepolia', iconUrl: null },
+  { id: 'Abstract', label: 'Abstract', iconUrl: '/chains/abstract.png' },
+  { id: 'Sepolia', label: 'Sepolia', iconUrl: '/chains/sepolia.svg' },
 ]
 
 const CHAIN_ACCENT: Record<string, string> = {
   Ink: "#8B5CF6",
-  Soneium: "#0047FF",
-  Base: "#0052FF",
+  Soneium: "#45DCE8",
+  Base: "#0000ff",
   Unichain: "#FF007A",
   MegaETH: "#00ff88",
   LitVM: "#00F2FE",
   "Arc Testnet": "#4D8EE9",
+  Abstract: "#00b30f",
+  Sepolia: "#cbaeff",
 }
 
 function getTabAccent(tabId: ChainFilterType): string | null {
-  if (tabId === 'Global' || tabId === 'Sepolia') return null
+  if (tabId === 'Global') return null
   return CHAIN_ACCENT[tabId] ?? null
 }
+
+// Dark text on light accents, white text on dark accents (mirrors profile CTA contrast)
+const LIGHT_ACCENT_TABS = new Set(['MegaETH', 'LitVM', 'Soneium', 'Sepolia'])
 
 export default function LeaderboardContent() {
   const [activeTab, setActiveTab] = useState<ChainFilterType>('Global')
@@ -44,7 +50,7 @@ export default function LeaderboardContent() {
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id
             const accent = getTabAccent(tab.id)
-            const isNeutralTab = tab.id === 'Global' || tab.id === 'Sepolia'
+            const isNeutralTab = tab.id === 'Global'
             return (
               <button
                 key={tab.id}
@@ -54,10 +60,8 @@ export default function LeaderboardContent() {
                   ui.radiusSm,
                   isActive
                     ? isNeutralTab
-                      ? ui.isLight
-                        ? 'bg-black/10 text-black'
-                        : 'bg-white/10 text-white'
-                      : 'text-white'
+                      ? 'bg-white/10 text-white'
+                      : LIGHT_ACCENT_TABS.has(tab.id) ? 'text-[#0B0B0F]' : 'text-white'
                     : ui.tabInactive,
                 )}
                 style={isActive && !isNeutralTab && accent ? {

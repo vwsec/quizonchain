@@ -179,6 +179,7 @@ export function ResultsScreen({
     if (id === 4441) return "LitVM"
     if (id === 5042002) return "Arc Testnet"
     if (id === 11155111) return "Sepolia"
+    if (id === 2741) return "Abstract"
     return mounted ? (walletChain?.name ?? "Web3") : "Web3"
   })()
 
@@ -297,7 +298,7 @@ export function ResultsScreen({
         fetch("/api/advance-progress", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chainId, address: address.toLowerCase() }),
+          body: JSON.stringify({ chainId, address: address.toLowerCase(), quizToken }),
         }).catch((err) => console.warn("[advance-progress] failed:", err))
       }
       // Dispatch sync event for other tabs
@@ -352,8 +353,8 @@ export function ResultsScreen({
           className={cn('max-w-sm mx-auto w-full flex flex-col items-center px-8 py-9 transition-colors duration-300 animate-scale-in', ui.cardStrong)}
           style={{ borderColor: `${ui.accent}33` }}
         >
-          <div className={cn('text-[10px] tracking-[0.14em] uppercase mb-6', ui.accentClass)}>
-            {ui.key === 'megaeth' ? '// SCORE RESULT' : 'Score Result'}
+          <div className={cn('text-[10px] tracking-[0.14em] uppercase mb-6 font-mono', ui.accentClass)}>
+            {ui.labelPrefix}Score Result
           </div>
 
           <div className="relative">
@@ -365,8 +366,7 @@ export function ResultsScreen({
             />
             <div className={cn(
               'text-[clamp(2.5rem,13vw,5.5rem)] md:text-[88px] font-bold leading-none tracking-tight animate-[scale-in_0.6s_cubic-bezier(0.34,1.56,0.64,1)]',
-              ui.isLight ? 'text-black' : 'text-white',
-              ui.fontMono && 'font-mono',
+              'text-white',
             )}>
               {displayScore}
               <span className="text-[clamp(0.875rem,4vw,1.75rem)] md:text-[28px] font-light opacity-30">
@@ -407,7 +407,7 @@ export function ResultsScreen({
             </div>
           </div>
 
-          <h2 className={cn('text-center mb-1.5 font-semibold text-[15px]', ui.isLight ? 'text-black' : 'text-white')}>
+          <h2 className={cn('text-center mb-1.5 font-semibold text-[15px]', 'text-white')}>
             {getMessage()}
           </h2>
           <p className={cn('text-center mb-6 text-xs', ui.bodyMuted)}>
@@ -427,7 +427,7 @@ export function ResultsScreen({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Trophy className={cn("size-4", totalPoints !== null && totalPoints >= 100 ? "text-yellow-400 animate-[float_4s_infinite]" : "opacity-40")} />
-                  <span className={cn('text-xs font-bold tracking-wider', ui.isLight ? 'text-black' : 'text-white')}>
+                  <span className={cn('text-xs font-bold tracking-wider', 'text-white')}>
                     {totalPoints !== null && totalPoints >= 100 ? "NFT BADGE UNLOCKED!" : "MASTER NFT BADGE"}
                   </span>
                 </div>
@@ -447,13 +447,10 @@ export function ResultsScreen({
                     <button
                       onClick={() => setShowNftModal(true)}
                       className={cn(
-                        "w-full cursor-pointer py-2 px-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] rounded-lg text-white",
-                        ui.btnPrimary
+                        "w-full cursor-pointer py-2 px-3 text-xs font-bold flex items-center justify-center gap-1.5",
+                        ui.btnPrimary,
+                        "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
                       )}
-                      style={{
-                        background: `linear-gradient(135deg, ${accentColor}, ${accentColor}cc)`,
-                        boxShadow: `0 0 15px ${accentColor}40`,
-                      }}
                     >
                       <Sparkles className="size-3.5" />
                       Claim Master NFT Now
@@ -495,8 +492,9 @@ export function ResultsScreen({
               onClick={handleAction}
               disabled={txState === "pending" || isCooldownActive || hasSubmittedThisSession || isCheckingCooldown}
               className={cn(
-                'w-full transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-md hover:shadow-lg disabled:hover:scale-100 disabled:opacity-50 relative overflow-hidden group', 
-                ui.btnPrimary
+                'w-full shadow-md hover:shadow-lg disabled:hover:scale-100 disabled:opacity-50 relative overflow-hidden group',
+                ui.btnPrimary,
+                'transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]',
               )}
               style={{ 
                 boxShadow: txState !== "pending" && !isCooldownActive && !hasSubmittedThisSession ? `0 4px 20px ${accentColor}33` : undefined
@@ -582,7 +580,7 @@ export function ResultsScreen({
                 href={getTxInternalUrl(chainId, txHash)}
                 target="_blank"
                 rel="noreferrer"
-                className={cn('flex-1 text-center', ui.btnOutline)}
+                className={cn('flex flex-1 items-center justify-center min-h-9 px-3 text-sm font-medium', ui.btnOutline)}
               >
                 View on Explorer
               </a>
@@ -600,8 +598,8 @@ export function ResultsScreen({
       {showConfirmModal ? (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 p-4 safe-top safe-bottom backdrop-blur-md">
           <div className={cn('w-full max-w-md p-6 text-left shadow-2xl border animate-scale-in max-h-[85dvh] overflow-y-auto', ui.cardStrong)}>
-            <h3 className={cn('mb-4 text-xl font-bold', ui.accentClass)}>
-              {ui.key === 'megaeth' ? '// CONFIRM TRANSACTION' : 'Confirm Transaction'}
+            <h3 className={cn('mb-4 text-xl font-bold font-mono', ui.accentClass)}>
+              {ui.labelPrefix}Confirm Transaction
             </h3>
             <div className={cn('space-y-3 text-sm', ui.bodyMuted)}>
               <p><span className={ui.accentClass}>Chain:</span> {chain.name} ({chainId})</p>

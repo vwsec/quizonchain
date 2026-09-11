@@ -16,7 +16,7 @@ Single Vercel deployment serving all supported chains from one URL:
 Quiz On Chain is a Web3 quiz app about blockchain ecosystems.
 Players connect their wallet, answer 5 questions sourced from
 official blockchain documentation, and save their score
-permanently on-chain. All 8 supported chains are available
+permanently on-chain. All 9 supported chains are available
 from a single page — the app detects the connected wallet's
 chain automatically and routes score submissions to the
 corresponding smart contract. Reach 100 points on any chain
@@ -28,7 +28,7 @@ to mint an exclusive NFT.
 - Answer feedback shown after each question
 - 1 hour cooldown between on-chain submissions
 - Global leaderboard tracking total points across all players
-- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM, Arc, Sepolia
+- Per-chain leaderboards: Ink, Soneium, Base, Unichain, MegaETH, LitVM, Arc, Sepolia, Abstract
 - NFT mint unlocked at 100 total points per chain
 - Free to play, open to everyone
 
@@ -43,6 +43,7 @@ to mint an exclusive NFT.
 | LitVM       | 4441     | [liteforge.explorer.caldera.xyz](https://liteforge.explorer.caldera.xyz) |
 | Arc Testnet | 5042002  | [testnet.arcscan.app](https://testnet.arcscan.app) |
 | Sepolia     | 11155111 | [eth-sepolia.blockscout.com](https://eth-sepolia.blockscout.com) |
+| Abstract    | 2741     | [abscan.org](https://abscan.org) |
 
 ## Smart Contract Addresses
 
@@ -57,6 +58,7 @@ to mint an exclusive NFT.
 | LitVM    | `0xBEd500d8d59547269085BBB4fa32Fab4394a4802` |
 | Arc      | `0x8F2F01a73837762b9EB083EB66b63e6B6808Bd40` |
 | Sepolia  | `0xe91E1FeA7652F0eb2A9A266FD5ae52AFB912729e` |
+| Abstract | TBD (not deployed yet) |
 
 ### QuizNFT Contracts
 | Network  | Address |
@@ -69,6 +71,7 @@ to mint an exclusive NFT.
 | LitVM    | `0x800a3843eE97e5e19468e3d62c19f9E93524A510` \* |
 | Arc      | `0x734EAf28175E398778082caC79bBcdBccfe1c7bB` |
 | Sepolia  | `0x6F98372246ba85199B58B5c07581e5Bb7DC77045` |
+| Abstract | TBD (not deployed yet) |
 
 \* Same contract address deployed on both chains.
 
@@ -122,6 +125,7 @@ NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH=0xd493bB9faDD6226ba1C7Ff1b524527855782163e
 NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM=0xBEd500d8d59547269085BBB4fa32Fab4394a4802
 NEXT_PUBLIC_CONTRACT_ADDRESS_ARC=0x8F2F01a73837762b9EB083EB66b63e6B6808Bd40
 NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA=0xe91E1FeA7652F0eb2A9A266FD5ae52AFB912729e
+NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT=  # TBD — not deployed yet
 
 # QuizNFT Contract Addresses
 NEXT_PUBLIC_NFT_CONTRACT_INK=0x1328C30B73B90DcD59B26D513275644c8B34Ad6d
@@ -132,6 +136,7 @@ NEXT_PUBLIC_NFT_CONTRACT_MEGAETH=0x800a3843eE97e5e19468e3d62c19f9E93524A510
 NEXT_PUBLIC_NFT_CONTRACT_LITVM=0x800a3843eE97e5e19468e3d62c19f9E93524A510
 NEXT_PUBLIC_NFT_CONTRACT_ARC=0x734EAf28175E398778082caC79bBcdBccfe1c7bB
 NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA=0x6F98372246ba85199B58B5c07581e5Bb7DC77045
+NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT=  # TBD — not deployed yet
 
 # NFT Settings
 NEXT_PUBLIC_NFT_POINTS_THRESHOLD=100

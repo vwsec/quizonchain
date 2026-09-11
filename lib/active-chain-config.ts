@@ -28,7 +28,7 @@ const CHAIN_CONFIGS = {
     name: 'Soneium',
     chainId: 1868,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    color: '#0047FF',
+    color: '#45DCE8',
     rpc: 'https://rpc.soneium.org',
     explorer: 'https://soneium.blockscout.com',
     blockscoutApi: 'https://soneium.blockscout.com/api/v2',
@@ -53,7 +53,7 @@ const CHAIN_CONFIGS = {
     name: 'Base',
     chainId: 8453,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    color: '#0052ff',
+    color: '#0000ff',
     rpc: 'https://mainnet.base.org',
     explorer: 'https://basescan.org',
     blockscoutApi: 'https://base.blockscout.com/api/v2',
@@ -142,7 +142,7 @@ const CHAIN_CONFIGS = {
     name: 'Sepolia',
     chainId: 11155111,
     nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    color: '#0047FF',
+    color: '#cbaeff',
     rpc: 'https://ethereum-sepolia-rpc.publicnode.com',
     explorer: 'https://eth-sepolia.blockscout.com',
     blockscoutApi: 'https://eth-sepolia.blockscout.com/api/v2',
@@ -188,6 +188,26 @@ const CHAIN_CONFIGS = {
     nftMetadataPath: '/nft/arc/1.json',
     nftImage: '/nft/arc.png',
   },
+  abstract: {
+    name: 'Abstract',
+    chainId: 2741,
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    color: '#00b30f',
+    rpc: 'https://api.mainnet.abs.xyz',
+    explorer: 'https://abscan.org',
+    blockscoutApi: '',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT!,
+    nftContract: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT!,
+    docsPages: [
+      'https://docs.abs.xyz/connect-to-abstract',
+      'https://docs.abs.xyz',
+    ],
+    heroTitle: 'The Knowledge of Abstract',
+    heroSubtitle: 'Test your Abstract blockchain knowledge',
+    heroLabel: 'ABSTRACT',
+    nftMetadataPath: '/nft/abstract/1.json',
+    nftImage: '/nft/abstract.png',
+  },
 } as const;
 
 type ChainKey = keyof typeof CHAIN_CONFIGS;
@@ -201,6 +221,7 @@ const CHAIN_ID_TO_KEY: Record<number, ChainKey> = {
   4441: 'litvm',
   5042002: 'arc',
   11155111: 'sepolia',
+  2741: 'abstract',
 };
 
 export function getChainConfig(chainId: number) {
@@ -215,9 +236,11 @@ export function getThemeName(config: { name: string } | undefined): string {
   if (name === 'Ink') return 'ink';
   if (name === 'Unichain') return 'unichain';
   if (name === 'Base') return 'base';
-  if (name === 'Soneium' || name === 'Sepolia') return 'soneium';
+  if (name === 'Soneium') return 'soneium';
+  if (name === 'Sepolia') return 'sepolia';
   if (name === 'LitVM') return 'litvm';
   if (name === 'Arc Testnet') return 'arc';
+  if (name === 'Abstract') return 'abstract';
   return '';
 }
 

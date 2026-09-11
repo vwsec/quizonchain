@@ -50,6 +50,7 @@ sec_repport.md
 
 # AI and Tool generated directories
 .agents/
+.claude/
 .hermes/
 .cursor/
 design-system/

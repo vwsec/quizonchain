@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { X, ImageUp, Loader2 } from "lucide-react"
+import { X, ImageUp, Loader2, CheckCircle } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { useActiveChain } from "@/hooks/use-active-chain"
+import { useChainUI } from "@/hooks/use-chain-ui"
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"]
 const MAX_FILES = 4
@@ -34,6 +35,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
   const [evmAddressError, setEvmAddressError] = useState("")
   const [mounted, setMounted] = useState(false)
   const { isConnected } = useActiveChain()
+  const ui = useChainUI()
 
   useEffect(() => {
     setMounted(true)
@@ -312,7 +314,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
             {imagePreviews.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {imagePreviews.map((preview, i) => (
-                  <div key={preview} className="relative size-20 rounded-md overflow-hidden border">
+                  <div key={preview} className="relative size-20 rounded-lg overflow-hidden border">
                     <img
                       src={preview}
                       alt={`Upload ${i + 1}`}
@@ -337,7 +339,7 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
           )}
 
           {success && (
-            <p className="text-sm text-[var(--success)]">✅ Feedback received! Thank you for helping us improve the app. We truly appreciate your feedback and will review it as soon as possible.</p>
+            <p className="text-sm text-[var(--success)] flex items-start gap-1.5"><CheckCircle className="size-4 shrink-0 mt-0.5" /> Feedback received! Thank you for helping us improve the app. We truly appreciate your feedback and will review it as soon as possible.</p>
           )}
 
           <div className="flex justify-end gap-2">
@@ -345,10 +347,11 @@ export function FeedbackModal({ open, onOpenChange }: FeedbackModalProps) {
               variant="outline"
               onClick={() => handleOpenChange(false)}
               disabled={submitting}
+              className={cn(ui.btnOutline)}
             >
               Cancel
             </Button>
-            <Button onClick={handleSubmit} disabled={submitting || success}>
+            <Button onClick={handleSubmit} disabled={submitting || success} className={cn(ui.btnPrimary)}>
               {submitting && <Loader2 className="size-4 animate-spin" />}
               {submitting ? "Sending..." : success ? "Sent!" : "Send Feedback"}
             </Button>

@@ -6,13 +6,15 @@ import Link from "next/link"
 import { useAccount } from "wagmi"
 import { createPublicClient, http, isAddress, type Chain } from "viem"
 import { fetchGlobalLeaderboard, getChainLeaderboard, type GlobalPlayer } from "@/lib/chain-leaderboard"
-import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet } from "@/lib/chains"
+import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet } from "@/lib/chains"
 import { NFT_ABI } from "@/lib/nft-contracts"
 import { AlertCircle, Star } from "lucide-react"
 
-export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Sepolia'
+export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Sepolia' | 'Abstract'
 
-import { useActiveChain } from "@/hooks/use-active-chain"
+import { useChainUI } from "@/hooks/use-chain-ui"
+import { accentTextClass } from "@/lib/chain-ui"
+import { cn } from "@/lib/utils"
 
 // ─── NFT contract addresses per chain ────────────────────────────────────────
 const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
@@ -24,6 +26,7 @@ const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
   LitVM:   process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
   'Arc Testnet': process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
   Sepolia: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA,
+  Abstract: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT,
 }
 
 const CHAIN_FOR_NAME: Record<string, Chain> = {
@@ -35,6 +38,7 @@ const CHAIN_FOR_NAME: Record<string, Chain> = {
   LitVM:   litvmTestnet,
   'Arc Testnet': arcTestnet,
   Sepolia: sepoliaTestnet,
+  Abstract: abstractMainnet,
 }
 
 // ─── 5-minute in-memory cache ─────────────────────────────────────────────────
@@ -155,15 +159,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   useEffect(() => setMounted(true), [])
 
   const { address } = useAccount()
-  const { chainConfig: cfg, isConnected } = useActiveChain()
-  const isMegaEth = isConnected && cfg?.name === 'MegaETH'
-  const isInk = isConnected && cfg?.name === 'Ink'
-  const isUnichain = isConnected && cfg?.name === 'Unichain'
-  const isBase = isConnected && cfg?.name === 'Base'
-  const isSoneium = isConnected && (cfg?.name === 'Soneium' || cfg?.name === 'Sepolia')
-  const isLitvm = isConnected && cfg?.name === 'LitVM'
-  const isArc = isConnected && cfg?.name === 'Arc Testnet'
-  const isSepolia = isConnected && cfg?.name === 'Sepolia'
+  const ui = useChainUI()
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<GlobalPlayer[]>([])
@@ -182,13 +178,14 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       ? Object.values(NFT_CONTRACT_MAP).some(a => a && isAddress(a))
       : !!(NFT_CONTRACT_MAP[chainFilter] && isAddress(NFT_CONTRACT_MAP[chainFilter]!))
 
-  // Keep a ref to current raw data so NFT refresh doesn't need the whole loadLeaderboard cycle
-  const rawDataRef = useRef<GlobalPlayer[]>([])
+  // Keep a ref to ALL players (not sliced) so Masters filter can access full list
+  const allPlayersRef = useRef<GlobalPlayer[]>([])
 
   const loadNftData = useCallback(async (players: GlobalPlayer[]) => {
     if (!hasNftContract || players.length === 0) return
     setNftLoading(true)
     try {
+      // Pass all players - fetchNftData scans all events anyway, but we pass all for fallback
       const addrs = players.map(p => p.address)
       const { holderSet: hs, totalMinted: tm } = await fetchNftData(chainFilter, addrs)
       setHolderSet(hs)
@@ -207,11 +204,13 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       if (chainFilter === 'Global') {
         const res = await fetchGlobalLeaderboard()
         setTotalPlayers(res.players.length)
+        // Store ALL players for Masters filter, but display only top 100 by default
+        allPlayersRef.current = res.players
         const top = res.players.slice(0, 100)
         setData(top)
-        rawDataRef.current = top
         setFailedNetworks(res.failedChains)
-        void loadNftData(top)
+        // Fetch NFT data for ALL players so Masters filter works correctly
+        void loadNftData(res.players)
       } else {
         setFailedNetworks([])
 
@@ -224,15 +223,18 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         else if (chainFilter === 'LitVM') chainConfig = { chain: litvmTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!, chainName: "LitVM" }
         else if (chainFilter === 'Arc Testnet') chainConfig = { chain: arcTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC!, chainName: "Arc Testnet" }
         else if (chainFilter === 'Sepolia') chainConfig = { chain: sepoliaTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA!, chainName: "Sepolia" }
+        else if (chainFilter === 'Abstract') chainConfig = { chain: abstractMainnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT!, chainName: "Abstract" }
 
         if (chainConfig?.contractAddress) {
           try {
             const players = await getChainLeaderboard(chainConfig)
             setTotalPlayers(players.length)
+            // Store ALL players for Masters filter
+            allPlayersRef.current = players
             const top = players.slice(0, 100)
             setData(top)
-            rawDataRef.current = top
-            void loadNftData(top)
+            // Fetch NFT data for ALL players so Masters filter works correctly
+            void loadNftData(players)
           } catch (err) {
             const msg = err instanceof Error ? err.message.split('\n')[0] : String(err)
             if (process.env.NODE_ENV === 'development') {
@@ -240,12 +242,12 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             }
             setFailedNetworks([chainFilter])
             setData([])
-            rawDataRef.current = []
+            allPlayersRef.current = []
             setTotalPlayers(0)
           }
         } else {
           setData([])
-          rawDataRef.current = []
+          allPlayersRef.current = []
           setTotalPlayers(0)
         }
       }
@@ -266,7 +268,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
 
   // Derived display list (apply Masters filter)
   const displayData = showMastersOnly
-    ? data.filter(p => holderSet.has(p.address.toLowerCase()))
+    ? allPlayersRef.current.filter(p => holderSet.has(p.address.toLowerCase()))
     : data
 
   const truncateAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
@@ -282,7 +284,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       case "LitVM":
       case "LitVM LiteForge": iconUrl = '/chains/litvm.png'; break
       case "Arc Testnet": iconUrl = '/chains/arc.png'; break
-      case "Sepolia": iconUrl = ''; break
+      case "Sepolia": iconUrl = '/chains/sepolia.svg'; break
     }
     if (iconUrl) {
       return (
@@ -293,7 +295,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           title={chainName}
           width={20}
           height={20}
-          className={`w-5 h-5 rounded-full shrink-0 object-cover border ${isBase ? 'border-black/10 bg-black/5' : 'border-white/10 bg-black/20'}`}
+          className={`w-5 h-5 rounded-full shrink-0 object-cover border border-white/10 bg-black/20`}
         />
       )
     }
@@ -309,48 +311,22 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   if (!mounted) return null
 
   return (
-    <div className={`w-full max-w-4xl mx-auto p-6 transition-all ${
-      isMegaEth 
-        ? 'bg-black border border-white/15 rounded-none font-mono shadow-none' 
-        : isInk
-          ? 'backdrop-blur-2xl bg-white/[0.02] border border-white/[0.08] rounded-3xl shadow-[0_0_40px_rgba(123,97,255,0.05)]'
-        : isUnichain
-          ? 'backdrop-blur-2xl bg-white/[0.02] border border-white/[0.08] rounded-2xl shadow-[0_0_40px_rgba(255,0,122,0.05)]'
-        : isBase
-          ? 'bg-[#f4f5f7] border border-black/5 rounded-2xl shadow-sm'
-        : isLitvm
-          ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none font-mono shadow-none'
-        : isArc
-          ? 'backdrop-blur-xl bg-[#000B24]/60 border border-[#4D8EE9]/15 rounded-2xl shadow-2xl'
-          : 'backdrop-blur-xl bg-black/40 border border-white/10 rounded-2xl shadow-2xl'
-    }`}>
+    <div className="w-full max-w-4xl mx-auto p-6 transition-all backdrop-blur-xl bg-black/60 border border-white/10 rounded-2xl shadow-2xl">
 
       {/* Header row */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          {isMegaEth && <div className="text-[10px] text-[#00ff88] uppercase mb-1 tracking-widest font-mono">// LEADERBOARD</div>}
-          {isLitvm && <div className="text-[10px] text-[#00F2FE] lowercase mb-1 tracking-widest font-mono">{'>>'} leaderboard</div>}
-          {isArc && <div className="text-[10px] text-[#4D8EE9] uppercase mb-1 tracking-widest">Leaderboard</div>}
-          <h2 className={`font-bold ${isMegaEth ? 'text-3xl uppercase font-mono text-white' : isInk ? 'text-2xl tracking-tighter text-white' : isUnichain ? 'text-2xl font-serif italic text-white' : isBase ? 'text-2xl tracking-tighter text-black' : isLitvm ?'text-3xl font-mono text-[#E2E8F0]' : 'text-2xl text-white'}`}>
+          <div className={cn('text-[10px] uppercase mb-1 tracking-widest', ui.label)}>
+            {ui.labelPrefix}Leaderboard
+          </div>
+          <h2 className={`font-bold ${ui.heading}`}>
             {titlePrefix} Leaderboard
           </h2>
         </div>
         <button
           onClick={loadLeaderboard}
           disabled={loading}
-          className={`p-2 transition-colors disabled:opacity-50 flex items-center justify-center ${
-            isMegaEth 
-              ? 'bg-black border border-white/15 rounded-none text-white hover:border-white' 
-              : isInk
-                ? 'rounded-full bg-white/5 hover:bg-[#7B61FF] text-white hover:shadow-[0_0_15px_rgba(123,97,255,0.4)]'
-              : isUnichain
-                ? 'rounded-xl bg-white/5 hover:bg-[#FF007A] text-white hover:shadow-[0_0_15px_rgba(255,0,122,0.4)]'
-              : isBase
-                ? 'rounded-full bg-black/5 hover:bg-[#0052FF] text-black hover:text-white transition-all'
-              : isLitvm
-                ? 'bg-[#0B192C] border border-[#00F2FE]/30 text-[#E2E8F0] hover:border-[#00F2FE] rounded-none'
-                : 'rounded-lg bg-white/5 hover:bg-white/10 text-white'
-          }`}
+          className={cn('p-2 transition-colors disabled:opacity-50 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-white', ui.radiusSm)}
           aria-label="Refresh Leaderboard"
         >
           <svg className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -364,48 +340,45 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         <div className="mb-4 flex flex-wrap items-center gap-2 md:gap-3">
           {/* Masters count card */}
           <div
-            className={`flex items-center gap-2 border px-4 py-2.5 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-3xl' : isUnichain ? 'rounded-2xl' : isBase ? 'rounded-full shadow-sm' : isLitvm ? 'rounded-none' : 'rounded-xl'}`}
-            style={{
-              borderColor: isMegaEth ? "rgba(0,255,136,0.25)" : isInk ? "rgba(123,97,255,0.25)" : isUnichain ? "rgba(255,0,122,0.25)" : isBase ? "rgba(0,82,255,0.2)" : isLitvm ? "rgba(0,242,254,0.25)" : isArc ? "rgba(77,142,233,0.25)" : "rgba(255,215,0,0.25)",
-              background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : isArc ? "rgba(77,142,233,0.05)" : "rgba(255,215,0,0.05)",
-            }}
+            className="flex items-center gap-2 border px-4 py-2.5 rounded-xl"
+            style={{ borderColor: `${ui.accent}40`, background: `${ui.accent}0D` }}
           >
             {nftLoading ? (
               <div
                 className="h-3.5 w-3.5 animate-spin rounded-full border-2"
-                style={{ borderColor: "rgba(255,255,255,0.1)", borderTopColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700" }}
+                style={{ borderColor: "rgba(255,255,255,0.1)", borderTopColor: ui.accent }}
               />
             ) : (
-              <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-4 h-4 shrink-0" />
+              <Star fill={ui.accent} color={ui.accent} className="w-4 h-4 shrink-0" />
             )}
-            <span className={`text-sm font-semibold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>
+            <span className="text-sm font-semibold text-white">
               {nftLoading ? "…" : totalMinted}
             </span>
-            <span className={`text-xs ${isBase ? 'text-black/50' : 'text-white/50'}`}>Masters</span>
+            <span className="text-xs text-white/50">Masters</span>
           </div>
 
           {/* Show Masters Only toggle */}
           <button
             onClick={() => setShowMastersOnly(v => !v)}
             disabled={nftLoading || holderSet.size === 0}
-            className={`flex items-center gap-1.5 border px-3 py-2 text-xs font-semibold transition-all hover-lift disabled:cursor-not-allowed disabled:opacity-40 ${isMegaEth ? 'rounded-none' : isInk ? 'rounded-full' : isUnichain ? 'rounded-xl' : isBase ? 'rounded-full' : isLitvm ? 'rounded-none' : 'rounded-xl'}`}
+            className="flex items-center gap-1.5 border px-3 py-2 text-xs font-semibold transition-all hover-lift disabled:cursor-not-allowed disabled:opacity-40 rounded-xl"
             style={
               showMastersOnly
                 ? {
-                    background: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "linear-gradient(135deg, #FFD700 0%, #FFA500 100%)",
-                    borderColor: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700",
-                    color: isBase ? "#ffffff" : isLitvm ? "#0B192C" : isArc ? "#ffffff" : "#000",
+                    background: ui.accent,
+                    borderColor: ui.accent,
+                    color: "#fff",
                   }
                 : {
-                    borderColor: isMegaEth ? "rgba(0,255,136,0.3)" : isInk ? "rgba(123,97,255,0.3)" : isUnichain ? "rgba(255,0,122,0.3)" : isBase ? "rgba(0,82,255,0.3)" : isLitvm ? "rgba(0,242,254,0.3)" : isArc ? "rgba(77,142,233,0.3)" : "rgba(255,215,0,0.3)",
-                    background: isMegaEth ? "rgba(0,255,136,0.05)" : isInk ? "rgba(123,97,255,0.05)" : isUnichain ? "rgba(255,0,122,0.05)" : isBase ? "#ffffff" : isLitvm ? "rgba(0,242,254,0.05)" : isArc ? "rgba(77,142,233,0.05)" : "rgba(255,215,0,0.05)",
-                    color: isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700",
+                    borderColor: `${ui.accent}4D`,
+                    background: `${ui.accent}0D`,
+                    color: ui.accent,
                   }
             }
           >
             <Star
-              fill={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : isArc ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : isSoneium ? "#0047FF" : "#FFD700")}
-              color={showMastersOnly ? (isBase ? "#fff" : isLitvm ? "#0B192C" : isArc ? "#fff" : "#000") : (isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : isSoneium ? "#0047FF" : "#FFD700")}
+              fill={showMastersOnly ? "#fff" : ui.accent}
+              color={showMastersOnly ? "#fff" : ui.accent}
               className="w-3.5 h-3.5 shrink-0"
             />
             <span className="whitespace-nowrap">{showMastersOnly ? "All Players" : "Show Masters Only"}</span>
@@ -453,7 +426,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       <div className="overflow-x-auto -mx-6 px-6 scrollbar-hide">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className={`border-b text-xs sm:text-sm ${isMegaEth ? 'border-white/15 text-white/40 uppercase' : isBase ? 'border-black/5 text-black/40' : isSoneium ? 'border-[#0047FF]/10 text-white/40' : isLitvm ? 'border-[#00F2FE]/15 text-[#E2E8F0]/40' : 'border-white/10 text-gray-400'}`}>
+            <tr className="border-b text-xs sm:text-sm border-white/10 text-gray-400">
               <th className="pb-3 pl-4 font-medium sticky left-0 bg-inherit whitespace-nowrap z-10">Rank</th>
               <th className="pb-3 font-medium whitespace-nowrap">Wallet</th>
               {chainFilter === 'Global' && (
@@ -467,20 +440,20 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           <tbody>
             {loading && data.length === 0 ? (
               Array.from({ length: 6 }).map((_, i) => (
-                <tr key={i} className={`border-b animate-pulse ${isBase ? 'border-black/5' : 'border-white/5'}`}>
+                <tr key={i} className="border-b animate-pulse border-white/5">
                   {/* Rank placeholder */}
                   <td className="py-4.5 pl-4">
                     <div className="flex items-center gap-2">
-                      <div className={`size-4 rounded-full ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
-                      <div className={`w-6 h-4 rounded ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                      <div className="size-4 rounded-full bg-white/10" />
+                      <div className="w-6 h-4 rounded bg-white/10" />
                     </div>
                   </td>
                   {/* Wallet address placeholder */}
                   <td className="py-4.5">
                     <div className="flex items-center gap-2">
-                      <div className={`w-28 h-4 rounded ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                      <div className="w-28 h-4 rounded bg-white/10" />
                       {i < 2 && (
-                        <div className={`w-14 h-4 rounded-full ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                        <div className="w-14 h-4 rounded-full bg-white/10" />
                       )}
                     </div>
                   </td>
@@ -488,20 +461,20 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                   {chainFilter === 'Global' && (
                     <td className="py-4.5">
                       <div className="flex items-center gap-1">
-                        <div className={`size-5 rounded-full ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
-                        <div className={`size-5 rounded-full ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                        <div className="size-5 rounded-full bg-white/10" />
+                        <div className="size-5 rounded-full bg-white/10" />
                       </div>
                     </td>
                   )}
                   {/* Stats columns */}
                   <td className="py-4.5">
-                    <div className={`w-10 h-4 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                    <div className="w-10 h-4 rounded ml-auto bg-white/10" />
                   </td>
                   <td className="py-4.5 hidden md:table-cell">
-                    <div className={`w-8 h-4 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                    <div className="w-8 h-4 rounded ml-auto bg-white/10" />
                   </td>
                   <td className="py-4.5 pr-4 hidden md:table-cell">
-                    <div className={`w-10 h-4 rounded ml-auto ${isBase ? 'bg-black/10' : 'bg-white/10'}`} />
+                    <div className="w-10 h-4 rounded ml-auto bg-white/10" />
                   </td>
                 </tr>
               ))
@@ -526,12 +499,10 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     {!showMastersOnly && (
                       <Link
                         href="/"
-                        className={`inline-flex cursor-pointer items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white shadow-md ${
-                          isMegaEth || isLitvm ? 'rounded-none font-mono' : 'rounded-xl'
-                        }`}
+                        className="inline-flex cursor-pointer items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white shadow-md rounded-xl"
                         style={{
-                          background: `linear-gradient(135deg, ${cfg?.color ?? '#0047FF'}, ${(cfg?.color ?? '#0047FF')}cc)`,
-                          boxShadow: `0 4px 15px ${(cfg?.color ?? '#0047FF')}33`
+                          background: `linear-gradient(135deg, ${ui.accent}, ${ui.accent}cc)`,
+                          boxShadow: `0 4px 15px ${ui.accent}33`
                         }}
                       >
                         Start Quiz Challenge
@@ -541,36 +512,28 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                 </td>
               </tr>
             ) : (
-              displayData.map((player) => {
+displayData.map((player) => {
                 const isHolder = holderSet.has(player.address.toLowerCase())
                 const isMe = player.address.toLowerCase() === address?.toLowerCase()
-                const rankColor = isMegaEth 
-                  ? (player.rank === 1 ? 'text-[#00ff88]' : 'text-white')
-                  : isInk
-                    ? (player.rank === 1 ? 'text-[#7B61FF]' : 'text-white/60')
-                  : isUnichain
-                    ? (player.rank === 1 ? 'text-[#FF007A]' : 'text-white/60')
-                  : isBase
-                    ? (player.rank === 1 ? 'text-[#0052FF]' : 'text-black/60')
-                  : isSoneium
-                    ? (player.rank === 1 ? 'text-[#0047FF]' : 'text-white/60')
-                  : isLitvm
-                    ? (player.rank === 1 ? 'text-[#00F2FE]' : 'text-[#E2E8F0]/60')
-                  : isArc
-                    ? (player.rank === 1 ? 'text-[#4D8EE9]' : 'text-white/60')
-                    : (player.rank === 1 ? "text-yellow-400" : player.rank === 2 ? "text-gray-300" : player.rank === 3 ? "text-amber-600" : "text-gray-500")
+                const rankColor = player.rank === 1
+                  ? accentTextClass(ui)
+                  : player.rank === 2
+                    ? "text-gray-300"
+                    : player.rank === 3
+                      ? "text-amber-600"
+                      : "text-white/60"
 
                 return (
                   <tr
                     key={player.address}
-                    className={`border-b transition-all duration-200 ${isBase ? 'border-black/5' : 'border-white/5'} ${
+                    className={`border-b transition-all duration-200 border-white/5 ${
                       isMe
-                        ? (isMegaEth ? "bg-white/5" : isInk ? "bg-[#7B61FF]/10 hover:bg-[#7B61FF]/15" : isUnichain ? "bg-[#FF007A]/10 hover:bg-[#FF007A]/15" : isBase ? "bg-[#0052FF]/10 hover:bg-[#0052FF]/15" : isSoneium ? "bg-[#0047FF]/10 hover:bg-[#0047FF]/15" : isLitvm ? "bg-[#00F2FE]/10 hover:bg-[#00F2FE]/15" : isArc ? "bg-[#4D8EE9]/10 hover:bg-[#4D8EE9]/15" : "bg-[#0047FF]/10 hover:bg-[#0047FF]/15")
-                        : (isBase ? "hover:bg-black/5" : isLitvm ? "hover:bg-white/[0.02]" : "hover:bg-white/5")
+                        ? "bg-[var(--chain-accent)]/10 hover:bg-[var(--chain-accent)]/15"
+                        : "hover:bg-white/5"
                     }`}
                     style={
-                      isMe && !isBase && !isLitvm
-                        ? { boxShadow: `inset 2px 0 0 ${cfg?.color ?? '#0047FF'}` }
+                      isMe
+                        ? { boxShadow: `inset 2px 0 0 ${ui.accent}`, ['--chain-accent' as string]: ui.accent }
                         : {}
                     }
                   >
@@ -578,7 +541,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     <td className="py-4 pl-4 font-medium">
                       <div className="flex items-center gap-2">
                         {player.rank === 1 && (
-                          <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-4 h-4" />
+                          <Star fill={ui.accent} color={ui.accent} className="w-4 h-4" />
                         )}
                         <span className={rankColor}>
                           #{player.rank}
@@ -587,7 +550,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                     </td>
 
                     {/* Wallet address + badges */}
-                    <td className={`py-4 font-mono text-xs md:text-sm ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>
+                    <td className="py-4 font-mono text-xs md:text-sm text-white">
                       <div className="flex items-center gap-2 flex-wrap min-w-0">
                         <span className="truncate">{truncateAddress(player.address)}</span>
 
@@ -595,43 +558,20 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                         {isHolder && hasNftContract && (
                           <span
                             title="NFT Master — reached 100 points"
-                            className={`flex items-center gap-0.5 border px-1.5 py-0.5 text-[10px] font-bold ${
-                              isMegaEth 
-                                ? 'bg-black border-[#00ff88] text-[#00ff88] rounded-none uppercase' 
-                                : isInk
-                                  ? 'bg-[rgba(123,97,255,0.1)] border-[rgba(123,97,255,0.4)] text-[#7B61FF] rounded-full'
-                                : isUnichain
-                                  ? 'bg-[rgba(255,0,122,0.1)] border-[rgba(255,0,122,0.4)] text-[#FF007A] rounded-full'
-                                : isBase
-                                  ? 'bg-[rgba(0,82,255,0.1)] border-[rgba(0,82,255,0.4)] text-[#0052FF] rounded-full'
-                                : isLitvm ?'bg-[rgba(0,242,254,0.1)] border-[rgba(0,242,254,0.4)] text-[#00F2FE] rounded-none'
-                                  : isArc ? 'bg-[rgba(77,142,233,0.1)] border-[rgba(77,142,233,0.4)] text-[#4D8EE9] rounded-full'
-                                    : 'bg-[rgba(255,215,0,0.1)] border-[rgba(255,215,0,0.4)] text-[#FFD700] rounded-full'
-                            }`}
+                            className="flex items-center gap-0.5 border px-1.5 py-0.5 text-[10px] font-bold rounded-full uppercase"
+                            style={{ background: `${ui.accent}1A`, borderColor: `${ui.accent}66`, color: ui.accent }}
                           >
-                            <Star fill={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} color={isMegaEth ? "#00ff88" : isInk ? "#7B61FF" : isUnichain ? "#FF007A" : isBase ? "#0052FF" : isLitvm ? "#00F2FE" : isArc ? "#4D8EE9" : "#FFD700"} className="w-2.5 h-2.5" />
+                            <Star fill={ui.accent} color={ui.accent} className="w-2.5 h-2.5" />
                             Master
                           </span>
                         )}
 
                         {/* You badge */}
                         {isMe && (
-                          <span className={`text-[10px] ${isLitvm ? 'lowercase' : 'uppercase'} font-bold tracking-wider px-2 py-0.5 ${
-
-                            isMegaEth 
-                              ? 'bg-[#00ff88] text-black rounded-none' 
-                              : isInk
-                                ? 'bg-[#7B61FF] text-white rounded-full'
-                              : isUnichain
-                                ? 'bg-[#FF007A] text-white rounded-xl'
-                              : isBase
-                                ? 'bg-[#0052FF] text-white rounded-full'
-                              : isLitvm
-                                ? 'bg-[#00F2FE] text-[#0B192C] rounded-none'
-                              : isArc
-                                ? 'bg-[#4D8EE9] text-white rounded-full'
-                                : 'bg-[#0047FF] text-white rounded-full'
-                          }`}>
+                          <span
+                            className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full text-white"
+                            style={{ backgroundColor: ui.accent }}
+                          >
                             You
                           </span>
                         )}
@@ -647,9 +587,9 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                       </td>
                     )}
 
-                    <td className={`py-4 text-right font-bold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth || isLitvm ? 'font-mono' : ''}`}>{player.points}</td>
-                    <td className={`py-4 text-right hidden md:table-cell ${isBase ? 'text-black/40' : isLitvm ? 'text-[#E2E8F0]/40' : 'text-white/40'}`}>{player.games}</td>
-                    <td className={`py-4 pr-4 text-right font-medium hidden md:table-cell ${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : isArc ? 'text-[#4D8EE9]' : 'text-[#0047FF]'}`}>
+                    <td className="py-4 text-right font-bold text-white">{player.points}</td>
+                    <td className="py-4 text-right hidden md:table-cell text-white/40">{player.games}</td>
+                    <td className={cn("py-4 pr-4 text-right font-medium hidden md:table-cell", accentTextClass(ui))}>
                       {Math.round(player.avg)}%
                     </td>
                   </tr>

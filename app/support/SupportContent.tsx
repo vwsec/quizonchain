@@ -42,17 +42,12 @@ const FAQS = [
 export default function SupportContent() {
   const ui = useChainUI()
 
-  const pageTitle =
-    ui.key === 'megaeth' ? '// SUPPORT'
-    : ui.key === 'litvm' ? '>> support'
-    : 'Support'
-
   return (
     <main className={cn(ui.pageMain, ui.page, 'md:px-8')}>
       <div className="max-w-4xl mx-auto space-y-16">
         <div className="text-center space-y-4 animate-slide-up">
           <p className={ui.label}>{ui.labelPrefix}Help Center</p>
-          <h1 className={ui.heading}>{pageTitle}</h1>
+          <h1 className={ui.heading}>Support</h1>
           <p className={ui.subheading}>Need help? We are here for you.</p>
         </div>
 
@@ -61,12 +56,12 @@ export default function SupportContent() {
             <div className={cn(
               'w-12 h-12 flex items-center justify-center',
               ui.radiusSm,
-              ui.isLight ? 'bg-[#0052FF]/10 text-[#0052FF]' : 'bg-white/10 text-white',
+              'bg-white/10 text-white',
             )}>
               <XIcon className="w-6 h-6" />
             </div>
             <div>
-              <h3 className={cn('text-2xl font-bold mb-2', ui.isLight ? 'text-black' : 'text-white')}>
+              <h3 className={cn('text-2xl font-bold mb-2', 'text-white')}>
                 Twitter / X
               </h3>
               <p className={cn('leading-relaxed', ui.bodyMuted)}>
@@ -88,12 +83,12 @@ export default function SupportContent() {
               'w-12 h-12 flex items-center justify-center',
               ui.radiusSm,
               ui.bodyMuted,
-              ui.isLight ? 'bg-black/5' : 'bg-white/5',
+              'bg-white/5',
             )}>
               <MessageSquare className="w-6 h-6" />
             </div>
             <div>
-              <h3 className={cn('text-2xl font-bold mb-2', ui.isLight ? 'text-black' : 'text-white')}>
+              <h3 className={cn('text-2xl font-bold mb-2', 'text-white')}>
                 Community
               </h3>
               <p className={cn('leading-relaxed', ui.bodyMuted)}>
@@ -120,7 +115,7 @@ export default function SupportContent() {
               >
                 <AccordionTrigger className={cn(
                   'hover:no-underline font-semibold text-left cursor-pointer',
-                  ui.isLight ? 'text-black' : 'text-white',
+                  'text-white',
                 )}>
                   {faq.q}
                 </AccordionTrigger>

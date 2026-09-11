@@ -10,11 +10,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { useWallet } from "@/components/wallet-provider"
-import { useActiveChain } from "@/hooks/use-active-chain"
 import { useChainUI } from "@/hooks/use-chain-ui"
+import { accentTextClass } from "@/lib/chain-ui"
 import { NFT_CONTRACTS } from "@/lib/nft-contracts"
-import { megaEth, soneiumMainnet, unichain } from "@/lib/chains"
+import { megaEth, soneiumMainnet, unichain, abstractMainnet } from "@/lib/chains"
 
 const SECTIONS = [
   { id: "about", title: "About" },
@@ -101,20 +100,24 @@ const NETWORKS = [
     iconUrl: "/chains/arc.png",
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC,
   },
+  {
+    name: "Abstract",
+    id: 2741,
+    gasToken: "ETH",
+    explorer: "abscan.org",
+    iconUrl: abstractMainnet.iconUrl || "/chains/abstract.png",
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT,
+  },
 ]
 
 export default function DocsContent() {
   const [activeSection, setActiveSection] = useState("about")
-  const { isConnected } = useWallet()
-  const { chainConfig: cfg } = useActiveChain()
   const ui = useChainUI()
-  const isMegaEth = ui.key === 'megaeth'
-  const isInk = ui.key === 'ink'
-  const isUnichain = ui.key === 'unichain'
-  const isBase = ui.key === 'base'
-  const isSoneium = ui.key === 'soneium'
-  const isLitvm = ui.key === 'litvm'
-  const isArc = ui.key === 'arc'
+
+  // Dark number on light accents, white number on dark accents (mirrors profile CTA contrast)
+  const stepNumberText = ['default', 'megaeth', 'litvm', 'soneium', 'sepolia'].includes(ui.key)
+    ? 'text-[#0B0B0F]'
+    : 'text-white'
 
   const displayNetworks = NETWORKS
 
@@ -159,7 +162,7 @@ export default function DocsContent() {
   }
 
   const networkText = "multiple blockchain ecosystems"
-  const step2Text = "Choose from Ink, Soneium, Base, Unichain, MegaETH, LitVM, or Arc"
+  const step2Text = "Choose from Ink, Soneium, Base, Unichain, MegaETH, LitVM, Arc, or Abstract"
 
   return (
     <main className={cn("relative z-10 min-h-screen pt-28 pb-12 px-4 md:px-8", ui.page)}>
@@ -168,7 +171,7 @@ export default function DocsContent() {
           <aside className="hidden md:block w-[260px] shrink-0 sticky top-[80px] self-start h-fit max-h-[calc(100vh-100px)] overflow-y-auto">
             <nav className="space-y-1 pr-4">
               <h3 className={cn('text-xs font-semibold tracking-wider mb-4 px-3', ui.label)}>
-                {ui.key === 'megaeth' ? '// DOCUMENTATION' : ui.key === 'litvm' ? '>> documentation' : 'Documentation'}
+                {ui.labelPrefix}Documentation
               </h3>
               {SECTIONS.map((section) => (
                 <button
@@ -176,39 +179,9 @@ export default function DocsContent() {
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
                     "w-full text-left px-3 py-2 text-sm font-medium transition-all duration-200 border-l-[2px]",
-                    isMegaEth 
-                      ? activeSection === section.id
-                        ? "text-[#00ff88] border-[#00ff88] bg-[#00ff88]/5 rounded-none uppercase"
-                        : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-none uppercase"
-                      : isInk
-                        ? activeSection === section.id
-                          ? "text-[#7B61FF] border-[#7B61FF] bg-[#7B61FF]/10 rounded-r-3xl"
-                          : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-r-3xl"
-                        : isUnichain
-                          ? activeSection === section.id
-                            ? "text-[#FF007A] border-[#FF007A] bg-[#FF007A]/10 rounded-r-2xl"
-                            : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-r-2xl"
-                      : isBase
-                        ? activeSection === section.id
-                          ? "text-[#0052FF] border-[#0052FF] bg-[#0052FF]/5 rounded-r-full"
-                          : "text-black/40 border-transparent hover:text-black hover:bg-black/5 rounded-r-full"
-                      : isLitvm
-                        ? activeSection === section.id
-                          ? "text-[#00F2FE] border-[#00F2FE] bg-[#00F2FE]/10 rounded-none lowercase font-mono"
-                          : "text-[#E2E8F0]/40 border-transparent hover:text-[#E2E8F0] hover:bg-white/5 rounded-none lowercase font-mono"
-                      : isArc
-                        ? activeSection === section.id
-                          ? "text-[#4D8EE9] border-[#4D8EE9] bg-[#4D8EE9]/10 rounded-r-full"
-                          : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-r-full"
-                      : isSoneium
-                          ? activeSection === section.id
-                            ? "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-r-full shadow-[inset_0_0_10px_rgba(0,71,255,0.1)]"
-                            : "text-white/40 border-transparent hover:text-white hover:bg-white/5 rounded-r-full"
-: activeSection === section.id
-  ? !isConnected
-    ? "text-white border-white/20 bg-white/[0.08] rounded-md"
-    : "text-[#0047FF] border-[#0047FF] bg-[#0047FF]/10 rounded-md"
-  : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-md"
+                    activeSection === section.id
+                      ? cn("rounded-r-full border-[var(--chain-accent)] bg-white/5", accentTextClass(ui))
+                      : "text-gray-400 hover:text-white hover:bg-white/5 border-transparent rounded-r-full"
                   )}
                 >
                   {section.title}
@@ -220,42 +193,22 @@ export default function DocsContent() {
           {/* Content Area */}
           <div className="flex-1 min-w-0 max-w-4xl space-y-24">
             <section id="about">
-              <h1 className={`text-4xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] tracking-tight text-white' : isUnichain ? 'border-[#FF007A] font-serif italic text-white' : isBase ? 'border-[#0052FF] tracking-tighter text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// WHAT IS QUIZ ON CHAIN?' : 'What is Quiz On Chain?'}
+              <h1 className="text-4xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}What is Quiz On Chain?
               </h1>
-              <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5 shadow-sm' : isSoneium ? 'rounded-2xl bg-white/[0.03] border-[#0047FF]/20 backdrop-blur-xl shadow-[0_0_30px_rgba(0,71,255,0.05)]' : isLitvm ? 'bg-[#0B192C] border border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/70 leading-relaxed text-lg font-medium' : isSoneium ? 'text-white/80 leading-relaxed text-lg font-medium' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
+              <div className="p-8 border arc-card rounded-xl">
+                <p className="text-gray-300 leading-relaxed text-lg">
                   Quiz On Chain is a Web3 quiz application that tests your knowledge of {networkText}. Answer 5 questions generated from official documentation, then submit your score on-chain to compete on the global leaderboard.
                 </p>
               </div>
             </section>
 
             <section id="how-it-works">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isSoneium ? 'border-[#0047FF] text-white tracking-tight' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// HOW IT WORKS' : isLitvm ? '>> how it works' : 'How It Works'}
+              <h2 className="text-3xl font-extrabold mb-10 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}How It Works
               </h2>
               <div className="relative space-y-10 pl-4 md:pl-0">
-                {!isMegaEth && !isInk && !isUnichain && !isBase && !isSoneium && !isLitvm && !isArc && (
-                  <div className={`absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b hidden md:block ${isConnected ? 'from-[#0047FF] via-[#0047FF]/20 to-[#0047FF]' : 'from-white/20 via-white/10 to-white/20'}`} />
-                )}
-                {isLitvm && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#00F2FE] via-[#00F2FE]/20 to-[#00F2FE] hidden md:block" />
-                )}
-                {isArc && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#4D8EE9] via-[#4D8EE9]/20 to-[#4D8EE9] hidden md:block" />
-                )}
-                {isSoneium && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0047FF] via-[#0047FF]/10 to-[#0047FF] hidden md:block shadow-[0_0_10px_rgba(0,71,255,0.2)]" />
-                )}
-                {isBase && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#0052FF] via-[#0052FF]/20 to-[#0052FF] hidden md:block" />
-                )}
-                {isInk && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#7B61FF] via-[#7B61FF]/20 to-[#7B61FF] hidden md:block" />
-                )}
-                {isUnichain && (
-                  <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[#FF007A] via-[#FF007A]/20 to-[#FF007A] hidden md:block" />
-                )}
+                <div className="absolute left-[27px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[var(--chain-accent)] via-[var(--chain-accent)]/20 to-[var(--chain-accent)] hidden md:block" />
                 
                 {[
                   { step: "Step 1", title: "Connect your wallet", desc: "" },
@@ -266,46 +219,12 @@ export default function DocsContent() {
                   { step: "Step 6", title: "Earn NFTs", desc: "Reach 100 points to mint an exclusive QuizMaster NFT and gain Master status" }
                 ].map((item, i) => (
                   <div key={i} className="flex gap-3 md:gap-8 relative items-start group">
-                    <div className={`flex-shrink-0 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center font-black text-base md:text-xl z-20 transition-transform group-hover:scale-110 ${
-                      isMegaEth 
-                        ? 'bg-black border border-[#00ff88] text-[#00ff88] rounded-none' 
-                        : isInk
-                          ? 'rounded-full bg-[#7B61FF] text-white shadow-[0_0_20px_rgba(123,97,255,0.4)]'
-                        : isUnichain
-                          ? 'rounded-xl md:rounded-2xl bg-[#FF007A] text-white shadow-[0_0_20px_rgba(255,0,122,0.4)]'
-                        : isBase
-                          ? 'rounded-full bg-[#0052FF] text-white shadow-lg shadow-[#0052FF]/20'
-                        : isSoneium
-                          ? 'rounded-full bg-[#0047FF] text-white shadow-[0_0_25px_rgba(0,71,255,0.5)]'
-                        : isLitvm
-                          ? 'bg-[#00F2FE] text-[#0B192C] rounded-none shadow-[0_0_20px_rgba(0,242,254,0.4)]'
-                        : isArc
-                          ? 'rounded-full bg-[#4D8EE9] text-white shadow-[0_0_20px_rgba(77,142,233,0.4)]'
-                          : !isConnected
-  ? 'rounded-full bg-white/10 text-white'
-  : 'rounded-full bg-[#0047FF] text-white shadow-[0_0_20px_rgba(0,71,255,0.4)]'
-                    }`}>
+                    <div className={`flex-shrink-0 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center font-black text-base md:text-xl z-20 transition-transform group-hover:scale-110 rounded-full bg-[var(--chain-accent)] ${stepNumberText}`}>
                       {i + 1}
                     </div>
-                    <div className={`p-4 md:p-6 flex-1 transition-all duration-200 border hover-lift ${
-                      isMegaEth 
-                        ? 'bg-black border-white/10 rounded-none hover:border-[#00ff88]/30' 
-                        : isInk
-                          ? 'rounded-2xl md:rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#7B61FF]/50'
-                        : isUnichain
-                          ? 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] hover:border-[#FF007A]/50 text-white'
-                        : isBase
-                          ? 'rounded-xl md:rounded-2xl bg-[#f4f5f7] border-black/5 hover:border-[#0052FF]/30 text-black'
-                        : isSoneium
-                          ? 'rounded-xl md:rounded-2xl bg-white/[0.02] border-[#0047FF]/10 hover:bg-white/[0.04] hover:border-[#0047FF]/40 text-white backdrop-blur-xl'
-                        : isLitvm
-                          ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]/50'
-                        : isArc
-                          ? 'rounded-xl md:rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:bg-white/[0.04] hover:border-[#4D8EE9]/40 text-white backdrop-blur-xl'
-                          : 'rounded-xl md:rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:bg-white/[0.06] text-white'
-                    }`}>
-                      <h4 className={`text-base md:text-xl font-bold mb-1 md:mb-2 ${isMegaEth || isLitvm ?'' : ''}`}>{item.step}: {item.title}</h4>
-                      <p className={`${isMegaEth ? 'text-white/40 text-sm leading-relaxed' : isBase ? 'text-black/60 text-sm md:text-base leading-relaxed' : isSoneium ? 'text-white/50 text-sm md:text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/50 text-sm leading-relaxed' : 'text-gray-400 text-sm md:text-base leading-relaxed'}`}>{item.desc}</p>
+                    <div className="p-4 md:p-6 flex-1 transition-all duration-200 border hover-lift arc-card rounded-xl">
+                      <h4 className="text-base md:text-xl font-bold mb-1 md:mb-2 text-white">{item.step}: {item.title}</h4>
+                      <p className="text-gray-400 text-sm md:text-base leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -313,27 +232,15 @@ export default function DocsContent() {
             </section>
  
             <section id="supported-networks">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ? 'border-[#00F2FE] text-[#E2E8F0]' : isArc ? 'border-[#4D8EE9] text-white' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// SUPPORTED NETWORKS' : isLitvm ? '>> supported networks' : "Supported Networks"}
+              <h2 className="text-3xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}Supported Networks
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {displayNetworks.map((network) => (
-                  <div key={network.name} className={`p-6 transition-all flex flex-col justify-between border ${
-                    isMegaEth 
-                      ? 'bg-black border-white/10 rounded-none hover:border-[#00ff88]/30' 
-                      : isInk
-                        ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#7B61FF]/50'
-                      : isUnichain
-                        ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#FF007A]/50'
-                      : isLitvm
-                        ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none hover:border-[#00F2FE]/50'
-                      : isArc
-                        ? 'rounded-2xl bg-white/[0.02] border-[#4D8EE9]/10 hover:border-[#4D8EE9]/50 backdrop-blur-xl text-white'
-                        : !isConnected ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-white/30' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md hover:border-[#0047FF]/50'
-                  } transition-all duration-200 hover-lift`}>
+                  <div key={network.name} className="p-6 transition-all flex flex-col justify-between border arc-card rounded-xl hover:border-[var(--chain-accent)]/50 transition-all duration-200 hover-lift">
                     <div>
                       <div className="flex items-center gap-4 mb-5">
-                        <div className={`relative w-8 h-8 overflow-hidden p-1 flex-shrink-0 ${isMegaEth ? 'bg-black border border-white/15 rounded-none' : isLitvm ? 'border border-[#00F2FE]/30 rounded-none bg-[#0B192C]' : 'rounded-full bg-white/10'}`}>
+                        <div className="relative w-8 h-8 overflow-hidden p-1 flex-shrink-0 rounded-full bg-white/10">
                           <Image
                             src={network.iconUrl}
                             alt={network.name}
@@ -341,24 +248,24 @@ export default function DocsContent() {
                             className="object-contain"
                           />
                         </div>
-                        <h4 className={`text-2xl font-bold ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth || isLitvm ?'' : ''}`}>{network.name}</h4>
+                        <h4 className="text-2xl font-bold text-white">{network.name}</h4>
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-center justify-between text-sm">
-                          <span className={`${isMegaEth ? 'text-white/20 uppercase tracking-widest text-[10px]' : isBase ? 'text-black/40 font-medium tracking-tight uppercase' : isLitvm ?'text-[#E2E8F0]/30 tracking-widest text-[10px]' : 'text-gray-500 font-medium tracking-tight uppercase'}`}>Chain ID</span>
-                          <span className={`font-mono px-2 py-0.5 ${isMegaEth ? 'text-[#00ff88] bg-white/5 rounded-none' : isBase ? 'text-black/60 bg-black/5 rounded' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'text-gray-300 bg-white/5 rounded'}`}>{network.id}</span>
+                          <span className="text-gray-500 font-medium tracking-tight uppercase">Chain ID</span>
+                          <span className="font-mono px-2 py-0.5 text-[var(--chain-accent)] bg-white/5 rounded">{network.id}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className={`${isMegaEth ? 'text-white/20 uppercase tracking-widest text-[10px]' : isBase ? 'text-black/40 font-medium tracking-tight uppercase' : isLitvm ?'text-[#E2E8F0]/30 tracking-widest text-[10px]' : 'text-gray-500 font-medium tracking-tight uppercase'}`}>Gas Token</span>
-                          <span className={`font-mono px-2 py-0.5 ${isMegaEth ? 'text-[#00ff88] bg-white/5 rounded-none' : isBase ? 'text-black/60 bg-black/5 rounded' : isLitvm ? 'text-[#00F2FE] bg-white/5' : 'text-gray-300 bg-white/5 rounded'}`}>{network.gasToken}</span>
+                          <span className="text-gray-500 font-medium tracking-tight uppercase">Gas Token</span>
+                          <span className="font-mono px-2 py-0.5 text-[var(--chain-accent)] bg-white/5 rounded">{network.gasToken}</span>
                         </div>
                         <div className="flex items-center justify-between text-sm">
-                          <span className={`${isMegaEth ? 'text-white/20 uppercase tracking-widest text-[10px]' : isBase ? 'text-black/40 font-medium tracking-tight uppercase' : isLitvm ?'text-[#E2E8F0]/30 tracking-widest text-[10px]' : 'text-gray-500 font-medium tracking-tight uppercase'}`}>Explorer</span>
+                          <span className="text-gray-500 font-medium tracking-tight uppercase">Explorer</span>
                           <a
                             href={`https://${network.explorer}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`flex items-center gap-1 transition-colors ${isMegaEth ? 'text-[#00ff88] hover:text-[#00ff88]/70' : isInk ? 'text-[#7B61FF] hover:text-[#7B61FF]/80' : isUnichain ? 'text-[#FF007A] hover:text-[#FF007A]/80' : isLitvm ? 'text-[#00F2FE] hover:text-[#00F2FE]/80' : !isConnected ? 'text-white/60 hover:text-white' : 'text-[#0047FF] hover:text-[#0047FF]/80'}`}
+                            className="flex items-center gap-1 transition-colors text-[var(--chain-accent)] hover:opacity-70"
                           >
                             {network.explorer}
                             <ExternalLink className="w-3 h-3" />
@@ -372,31 +279,31 @@ export default function DocsContent() {
             </section>
 
             <section id="smart-contract">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// SMART CONTRACT' : isLitvm ? '>> smart contract' : 'Smart Contract'}
+              <h2 className="text-3xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}Smart Contract
               </h2>
               <div className="space-y-8">
-                <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                  <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    Your scores are stored permanently on-chain using the <code className={`px-1.5 py-0.5 rounded ${isMegaEth ? 'text-[#00ff88] bg-white/5 font-mono' : isInk ? 'text-[#7B61FF] bg-[#7B61FF]/10' : isUnichain ? 'text-[#FF007A] bg-[#FF007A]/10' : isBase ? 'text-[#0052FF] bg-black/5' : isLitvm ? 'text-[#00F2FE] bg-white/5 font-mono' : !isConnected ? 'text-white bg-white/10' : 'text-[#0047FF] bg-[#0047FF]/10'}`}>QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
+                <div className="p-8 border arc-card rounded-xl">
+                  <p className="text-gray-300 leading-relaxed text-lg">
+                    Your scores are stored permanently on-chain using the <code className="px-1.5 py-0.5 rounded text-[var(--chain-accent)] bg-white/10 font-mono">QuizScores</code> smart contract deployed on each network. The contract records your score, total questions, and timestamp. A trusted signer verifies each score before it can be submitted, preventing cheating.
                   </p>
                 </div>
                 
-                <div className={`overflow-hidden border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isUnichain ? 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isBase ? 'rounded-2xl border-black/5 bg-white shadow-sm' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm'}`}>
+                <div className="overflow-hidden border arc-card rounded-xl">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className={`${isMegaEth ? 'bg-white/5' : isBase ? 'bg-black/5' : isLitvm ? 'bg-white/5' : 'bg-white/[0.04]'}`}>
-                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>Network</th>
-                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>Contract Address</th>
+                      <tr className="bg-white/5">
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b text-gray-500 border-white/10">Network</th>
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b text-gray-500 border-white/10">Contract Address</th>
                       </tr>
                     </thead>
-                    <tbody className={`divide-y ${isMegaEth ? 'divide-white/10' : isLitvm ? 'divide-[#00F2FE]/15' : 'divide-white/[0.08]'}`}>
+                    <tbody className="divide-y divide-white/[0.08]">
                       {displayNetworks.map((network) => (
-                        <tr key={network.name} className={`transition-colors group ${isBase ? 'hover:bg-black/5' : isLitvm ? 'hover:bg-white/[0.01]' : 'hover:bg-white/[0.01]'}`}>
-                          <td className={`px-6 py-5 font-bold tracking-tight ${isMegaEth ? 'text-white uppercase' : isBase ? 'text-black' : isLitvm ?'text-[#E2E8F0]' : 'text-white'}`}>{network.name}</td>
+                        <tr key={network.name} className="transition-colors group hover:bg-white/[0.02]">
+                          <td className="px-6 py-5 font-bold tracking-tight text-white">{network.name}</td>
                           <td className="px-6 py-5">
                             <div className="flex items-center justify-between gap-4">
-                              <span className={`font-mono text-xs break-all leading-relaxed transition-colors ${isMegaEth ? 'text-white/40 group-hover:text-[#00ff88]' : isBase ? 'text-black/40 group-hover:text-black/80' : isLitvm ? 'text-[#E2E8F0]/40 group-hover:text-[#00F2FE]' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                              <span className="font-mono text-xs break-all leading-relaxed transition-colors text-gray-400 group-hover:text-gray-200">
                                 {network.address || "..."}
                               </span>
                               {network.address && <CopyButton text={network.address} />}
@@ -408,27 +315,27 @@ export default function DocsContent() {
                   </table>
                 </div>
 
-                <h3 className={`text-lg font-bold mb-4 ${isMegaEth ? 'text-[#00ff88] uppercase' : isLitvm ? 'text-[#00F2FE] lowercase' : 'text-white'}`}>
+                <h3 className="text-lg font-bold mb-4 text-[var(--chain-accent)]">
                   QuizNFT
                 </h3>
-                <div className={`overflow-hidden border ${isMegaEth ? 'bg-black border-white/15 rounded-none shadow-none' : isInk ? 'rounded-3xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isUnichain ? 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm' : isBase ? 'rounded-2xl border-black/5 bg-white shadow-sm' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl border-white/[0.08] bg-white/[0.02] backdrop-blur-sm'}`}>
+                <div className="overflow-hidden border arc-card rounded-xl">
                   <table className="w-full text-left border-collapse">
                     <thead>
-                      <tr className={`${isMegaEth ? 'bg-white/5' : isBase ? 'bg-black/5' : isLitvm ? 'bg-white/5' : 'bg-white/[0.04]'}`}>
-                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>Network</th>
-                        <th className={`px-6 py-4 text-xs font-bold ${isLitvm ? 'lowercase' : 'uppercase'} tracking-widest border-b ${isMegaEth ? 'text-white/40 border-white/10' : isBase ? 'text-black/40 border-black/5' : isLitvm ? 'text-[#E2E8F0]/40 border-[#00F2FE]/15' : 'text-gray-500 border-white/[0.08]'}`}>NFT Contract Address</th>
+                      <tr className="bg-white/5">
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b text-gray-500 border-white/10">Network</th>
+                        <th className="px-6 py-4 text-xs font-bold uppercase tracking-widest border-b text-gray-500 border-white/10">NFT Contract Address</th>
                       </tr>
                     </thead>
-                    <tbody className={`divide-y ${isMegaEth ? 'divide-white/10' : isLitvm ? 'divide-[#00F2FE]/15' : 'divide-white/[0.08]'}`}>
+                    <tbody className="divide-y divide-white/[0.08]">
                       {displayNetworks.map((network) => {
                         const nftAddr = NFT_CONTRACTS[network.id]
                         const displayAddr = nftAddr || "—"
                         return (
-                          <tr key={network.name} className={`transition-colors group ${isBase ? 'hover:bg-black/5' : isLitvm ? 'hover:bg-white/[0.01]' : 'hover:bg-white/[0.01]'}`}>
-                            <td className={`px-6 py-5 font-bold tracking-tight ${isMegaEth ? 'text-white uppercase' : isBase ? 'text-black' : isLitvm ?'text-[#E2E8F0]' : 'text-white'}`}>{network.name}</td>
+                          <tr key={network.name} className="transition-colors group hover:bg-white/[0.02]">
+                            <td className="px-6 py-5 font-bold tracking-tight text-white">{network.name}</td>
                             <td className="px-6 py-5">
                               <div className="flex items-center justify-between gap-4">
-                                <span className={`font-mono text-xs break-all leading-relaxed transition-colors ${isMegaEth ? 'text-white/40 group-hover:text-[#00ff88]' : isBase ? 'text-black/40 group-hover:text-black/80' : isLitvm ? 'text-[#E2E8F0]/40 group-hover:text-[#00F2FE]' : 'text-gray-400 group-hover:text-gray-200'}`}>
+                                <span className="font-mono text-xs break-all leading-relaxed transition-colors text-gray-400 group-hover:text-gray-200">
                                   {displayAddr}
                                 </span>
                                 {nftAddr && <CopyButton text={nftAddr} />}
@@ -444,62 +351,48 @@ export default function DocsContent() {
             </section>
 
             <section id="scoring">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// SCORING & COOLDOWN' : isLitvm ? '>> scoring & cooldown' : 'Scoring & Cooldown'}
+              <h2 className="text-3xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}Scoring & Cooldown
               </h2>
-              <div className={`p-8 border ${
-                isMegaEth 
-                  ? 'bg-black border-[#00ff88]/30 rounded-none' 
-                  : isInk
-                    ? 'rounded-3xl bg-gradient-to-br from-[#7B61FF]/10 to-transparent border-[#7B61FF]/20 backdrop-blur-md'
-                  : isUnichain
-                    ? 'rounded-2xl bg-gradient-to-br from-[#FF007A]/10 to-transparent border-[#FF007A]/20 backdrop-blur-md'
-                  : isBase
-                    ? 'rounded-2xl bg-gradient-to-br from-[#0052FF]/5 to-transparent border-black/5 shadow-sm'
-                  : isLitvm
-                    ? 'bg-[#0B192C] border-[#00F2FE]/30 rounded-none'
-                    : !isConnected
-  ? 'rounded-2xl bg-white/[0.02] border-white/[0.08] backdrop-blur-md'
-  : 'rounded-2xl bg-gradient-to-br from-[#0047FF]/10 to-transparent border-white/[0.08] backdrop-blur-md'
-              }`}>
-                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 text-base leading-relaxed' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                   Each quiz round consists of 5 questions. Each correct answer awards 1 point for a maximum score of 5 per round. Your score is verified server-side against a signed JWT that was created when the quiz was generated — the server will only sign a valid score, preventing client-side manipulation. The server signs the approved score using ECDSA, and the smart contract verifies this signature before accepting the submission. After submitting a score on-chain, you must wait <span className={`font-bold underline underline-offset-4 ${isMegaEth ? 'text-[#00ff88] decoration-[#00ff88]/50' : isInk ? 'text-white decoration-[#7B61FF]' : isUnichain ? 'text-white decoration-[#FF007A]' : isBase ? 'text-black decoration-[#0052FF]' : isLitvm ? 'text-[#E2E8F0] decoration-[#00F2FE]' : !isConnected ? 'text-white decoration-white/50' : 'text-white decoration-[#0047FF]'}`}>1 hour</span> (contract-enforced) before you can play again. Players pay their own gas for score submission.
+              <div className="p-8 border arc-card rounded-xl">
+                 <p className="text-gray-300 leading-relaxed text-lg">
+                   Each quiz round consists of 5 questions. Each correct answer awards 1 point for a maximum score of 5 per round. Your score is verified server-side against a signed JWT that was created when the quiz was generated — the server will only sign a valid score, preventing client-side manipulation. The server signs the approved score using ECDSA, and the smart contract verifies this signature before accepting the submission. After submitting a score on-chain, you must wait <span className="font-bold underline underline-offset-4 text-[var(--chain-accent)] decoration-[var(--chain-accent)]">1 hour</span> (contract-enforced) before you can play again. Players pay their own gas for score submission.
                  </p>
               </div>
             </section>
 
             <section id="achievements">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// NFT ACHIEVEMENTS' : isLitvm ? '>> nft achievements' : 'NFT Achievements'}
+              <h2 className="text-3xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}NFT Achievements
               </h2>
-              <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                 <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                     Once you reach <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className={`font-bold ${isMegaEth ? 'text-[#00ff88]' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, across all 7 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
+              <div className="p-8 border arc-card rounded-xl">
+                 <p className="text-gray-300 leading-relaxed text-lg">
+                     Once you reach <span className="font-bold text-[var(--chain-accent)]">100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className="font-bold text-[var(--chain-accent)]">"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, across all 8 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, and Abstract. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
                  </p>
               </div>
             </section>
 
             <section id="leaderboard">
-              <h2 className={`text-3xl font-extrabold mb-8 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase text-white' : isInk ? 'border-[#7B61FF] text-white' : isUnichain ? 'border-[#FF007A] text-white' : isBase ? 'border-[#0052FF] text-black' : isLitvm ?'border-[#00F2FE] text-[#E2E8F0]' : !isConnected ? 'border-white/20 text-white' : 'border-[#0047FF] text-white'}`}>
-                {isMegaEth ? '// LEADERBOARD' : isLitvm ? '>> leaderboard' : 'Leaderboard'}
+              <h2 className="text-3xl font-extrabold mb-8 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}Leaderboard
               </h2>
-              <div className={`p-8 border ${isMegaEth ? 'bg-black border-white/15 rounded-none' : isInk ? 'rounded-3xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isUnichain ? 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md' : isBase ? 'rounded-2xl bg-[#f4f5f7] border-black/5' : isLitvm ? 'bg-[#0B192C] border-[#00F2FE]/20 rounded-none' : 'rounded-2xl bg-white/[0.04] border-white/[0.08] backdrop-blur-md'}`}>
-                <p className={`${isMegaEth ? 'text-white/60 text-base leading-relaxed' : isBase ? 'text-black/60 leading-relaxed text-lg' : isLitvm ? 'text-[#E2E8F0]/60 text-base leading-relaxed' : 'text-gray-300 leading-relaxed text-lg'}`}>
-                    The leaderboard tracks total points accumulated across all quizzes. Switch between 8 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, LitVM, and Arc. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH, LitVM, and Arc have their own per-chain tabs but are not included in the global aggregation. Use the <span className={`font-bold ${isMegaEth ? 'text-white' : isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'}`}>Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
+              <div className="p-8 border arc-card rounded-xl">
+                <p className="text-gray-300 leading-relaxed text-lg">
+                    The leaderboard tracks total points accumulated across all quizzes. Switch between 8 tabs: Global, Ink, Soneium, Base, Unichain, MegaETH, LitVM, and Arc. The Global leaderboard aggregates scores from Ink, Soneium, Base, and Unichain. MegaETH, LitVM, and Arc have their own per-chain tabs but are not included in the global aggregation. Use the <span className="font-bold text-white">Show Masters Only</span> filter to see top-tier players who have minted their NFT. Your wallet address is displayed in truncated format for privacy.
                 </p>
               </div>
             </section>
 
             <section id="faq" className="pb-40">
-              <h2 className={`text-3xl font-extrabold mb-10 pl-3 border-l-2 ${isMegaEth ? 'border-[#00ff88] uppercase' : isInk ? 'border-[#7B61FF]' : isUnichain ? 'border-[#FF007A]' : isBase ? 'border-[#0052FF]' : isLitvm ? 'border-[#00F2FE]' : !isConnected ? 'border-white/20' : 'border-[#0047FF]'}`}>
-                {isMegaEth ? '// FAQ' : isLitvm ? '>> faq' : 'FAQ'}
+              <h2 className="text-3xl font-extrabold mb-10 pl-3 border-l-2 text-white border-[var(--chain-accent)]">
+                {ui.labelPrefix}FAQ
               </h2>
               <Accordion type="single" collapsible className="w-full space-y-4">
                 {[
                   { q: "Is the quiz free to play?", a: "Yes, playing the quiz is completely free. Submitting your score on-chain requires a small gas fee." },
                   { q: "How do I get a QuizMaster NFT?", a: "Keep playing and submitting scores! Once your total reaches 100 points on any single chain, a mint button will appear allowing you to claim your exclusive 'The What of Blockchain' (TWOB) NFT." },
                   { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
-                  { q: "Which chains support NFT minting?", a: "All 7 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, and Arc Testnet. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
+                  { q: "Which chains support NFT minting?", a: "All 8 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, and Abstract. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
                   { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
                   { q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." },
                   { q: "Is my quiz score verified before going on-chain?", a: "Yes. When you finish a quiz, your answers are verified server-side against a signed JWT that was created when the quiz was generated. The server will only sign a valid score — preventing any client-side manipulation before the transaction is submitted." }
@@ -507,27 +400,15 @@ export default function DocsContent() {
                   <AccordionItem 
                     key={i} 
                     value={`item-${i}`}
-                    className={`px-6 transition-all border ${
-                      isMegaEth 
-                        ? 'border-white/10 bg-black rounded-none data-[state=open]:border-[#00ff88]/50' 
-                        : isInk
-                          ? 'border-white/10 bg-white/5 rounded-3xl data-[state=open]:border-[#7B61FF]/50 data-[state=open]:bg-white/10 backdrop-blur-sm'
-                        : isUnichain
-                          ? 'border-white/10 bg-white/5 rounded-2xl data-[state=open]:border-[#FF007A]/50 data-[state=open]:bg-white/10 backdrop-blur-sm'
-                        : isBase
-                          ? 'border-black/5 bg-[#f4f5f7] rounded-2xl data-[state=open]:bg-white shadow-sm transition-all'
-                        : isLitvm
-                          ? 'border-[#00F2FE]/20 bg-[#0B192C] rounded-none data-[state=open]:border-[#00F2FE]/50'
-                          : 'border-white/[0.08] bg-white/[0.02] rounded-2xl data-[state=open]:bg-white/[0.04] data-[state=open]:border-white/30 transition-all duration-200 hover-lift'
-                      }`}
+                    className="px-6 transition-all border arc-card border-white/[0.08] data-[state=open]:border-[var(--chain-accent)]/50 rounded-xl transition-all duration-200 hover-lift"
                   >
-                    <AccordionTrigger className={`text-lg font-bold hover:no-underline py-6 ${isBase ? 'text-black' : isLitvm ? 'text-[#E2E8F0]' : 'text-white'} ${isMegaEth ? 'uppercase text-sm tracking-tight' : isInk || isUnichain ? 'tracking-tight' : isLitvm ?'text-sm tracking-tight' : ''}`}>
+                    <AccordionTrigger className="text-lg font-bold hover:no-underline py-6 text-white">
                       <div className="flex items-start text-left gap-4">
-                        <span className={`${isMegaEth ? 'text-[#00ff88]' : isInk ? 'text-[#7B61FF]' : isUnichain ? 'text-[#FF007A]' : isBase ? 'text-[#0052FF]' : isLitvm ? 'text-[#00F2FE]' : !isConnected ? 'text-white' : 'text-[#0047FF]'} shrink-0 font-black`}>Q:</span>
+                        <span className="text-[var(--chain-accent)] shrink-0 font-black">Q:</span>
                         {faq.q}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className={`text-base leading-relaxed pb-6 pl-9 ${isMegaEth ? 'text-white/50 lowercase text-sm' : isBase ? 'text-black/60' : isLitvm ? 'text-[#E2E8F0]/50 text-sm' : 'text-gray-400'}`}>
+                    <AccordionContent className="text-base leading-relaxed pb-6 pl-9 text-gray-400">
                       {faq.a}
                     </AccordionContent>
                   </AccordionItem>

@@ -1,9 +1,0 @@
-Hey Base Africa team 👋
-
-I'm a solo founder from Morocco building Quiz On Chain (quizonchain.app), a Web3 quiz app where players test blockchain knowledge, submit scores on-chain, and earn NFTs.
-
-Already live on Base with "Sign in with Base" and @base-org contracts integrated. Smart contract: 0xCc8Fc975715388171eCAa93A27313379Bd25D881
-
-Would love product/GTM feedback and to go deeper into the Base ecosystem (grants, builder support, anything that helps an African builder scale on Base).
-
-Can we connect?

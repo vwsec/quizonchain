@@ -13,10 +13,14 @@ import BaseLogo from "./base-logo"
 import SoneiumLogo from "./soneium-logo"
 import LitvmLogo from "./litvm-logo"
 import ArcLogo from "./arc-logo"
+import AbstractLogo from "./abstract-logo"
+import SepoliaLogo from "./sepolia-logo"
 import QuizOnChainLogo from "@/components/quiz-on-chain-logo"
 import { SignInWithBase } from "./sign-in-with-base"
+import { SignInWithAbstract } from "./sign-in-with-abstract"
 import { useActiveChain } from "@/hooks/use-active-chain"
 import { useChainUI } from "@/hooks/use-chain-ui"
+import { useConnectionLock, DIRECT_CONNECTOR_IDS } from "@/hooks/use-connection-lock"
 import { useFarcasterMiniApp } from "@/hooks/use-farcaster-miniapp"
 import { sdk } from "@farcaster/miniapp-sdk"
 import { cn } from "@/lib/utils"
@@ -41,6 +45,8 @@ const CHAIN_LOGOS: Record<string, () => ReactNode> = {
   Soneium: () => <SoneiumLogo />,
   LitVM: () => <LitvmLogo />,
   'Arc Testnet': () => <ArcLogo />,
+  Abstract: () => <AbstractLogo />,
+  Sepolia: () => <SepoliaLogo />,
 }
 
 export function HomeScreen({
@@ -74,9 +80,10 @@ export function HomeScreen({
   const { chainConfig: cfg, heroTitle, heroSubtitle, heroLabel, isConnected } = useActiveChain()
   const ui = useChainUI()
 
-  const [startaleConnecting, setStartaleConnecting] = useState(false)
   const [startaleError, setStartaleError] = useState<string | null>(null)
   const { connectAsync, connectors } = useWagmiConnect()
+  const { isActive: startaleActive, isLocked: startaleLocked } = useConnectionLock(DIRECT_CONNECTOR_IDS.startale)
+  const { isLocked: walletLocked } = useConnectionLock()
 
   const handleStartaleConnect = async () => {
     const sc = connectors.find((c) => c.id === 'startaleApp')
@@ -84,7 +91,6 @@ export function HomeScreen({
       setStartaleError('Startale connector not available')
       return
     }
-    setStartaleConnecting(true)
     setStartaleError(null)
     try {
       await connectAsync({ connector: sc })
@@ -94,9 +100,7 @@ export function HomeScreen({
       const inIframe = typeof window !== 'undefined' && window.parent !== window
       setStartaleError(inIframe ? 'Connection failed. Please try again.' : 'Startale Wallet only works inside the Startale App.')
       setTimeout(() => setStartaleError(null), 4000)
-      return
     }
-    setStartaleConnecting(false)
   }
 
   const safeIsConnected = mounted ? (isWalletConnected || isAccountConnected) : false
@@ -134,21 +138,23 @@ export function HomeScreen({
               <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-white/10 via-white/5 to-white/10 opacity-30 blur-md group-hover:opacity-50 transition duration-500"></div>
               <button
                 onClick={connect}
+                disabled={walletLocked}
                 className={cn(
-                  'w-full relative z-10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]',
+                  'flex h-[56px] w-full items-center justify-center relative z-10 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100',
                   ui.connectBtn
                 )}
               >
                 Connect Wallet
               </button>
-              <div className="flex flex-col items-center gap-2 w-full relative z-10">
+              <div className="flex flex-col items-center gap-3 w-full relative z-10">
                 <span className={cn('text-xs', ui.bodyMuted)}>or</span>
                 <SignInWithBase />
               </div>
+              <SignInWithAbstract />
               <button
                 onClick={handleStartaleConnect}
-                disabled={startaleConnecting}
-                className={cn('w-full flex items-center justify-center gap-2 relative z-10', ui.btnSecondary, 'h-12 px-6 disabled:opacity-50')}
+                disabled={startaleActive || startaleLocked}
+                className={cn('w-full flex items-center justify-center gap-2 relative z-10', ui.connectBtn, 'h-[56px] px-6 disabled:opacity-50', 'transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100')}
               >
                 <svg width="18" height="18" viewBox="0 0 181 180" fill="none" aria-hidden="true">
                   <g clipPath="url(#startale-clip)">
@@ -167,7 +173,7 @@ export function HomeScreen({
                     </clipPath>
                   </defs>
                 </svg>
-                {startaleConnecting ? "Connecting..." : "Connect with Startale"}
+                {startaleActive ? "Connecting..." : "Connect with Startale"}
               </button>
               {startaleError && (
                 <p className="text-sm text-red-400">{startaleError}</p>
@@ -195,48 +201,21 @@ export function HomeScreen({
           <div className="animate-slide-up w-full flex flex-col items-center">
             {ChainLogo && ChainLogo()}
 
-            <div className={cn(
-              "mb-6 flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs font-semibold backdrop-blur-md transition-all duration-300 shadow-md",
-              ui.key === 'megaeth' ? 'border-[#00ff88]/30 bg-black/60 text-[#00ff88]' :
-              ui.key === 'litvm' ? 'border-[#00F2FE]/30 bg-[#0B192C]/80 text-[#00F2FE] shadow-[0_0_15px_rgba(0,242,254,0.1)]' :
-              ui.key === 'arc' ? 'border-[#4D8EE9]/30 bg-[#000B24]/80 text-[#4D8EE9] shadow-[0_0_15px_rgba(77,142,233,0.1)]' :
-              ui.key === 'soneium' ? 'border-[#0047FF]/30 bg-[#00040F]/80 text-[#0047FF] shadow-[0_0_15px_rgba(0,71,255,0.1)]' :
-              ui.key === 'unichain' ? 'border-[#FF007A]/30 bg-[#080810]/80 text-[#FF007A] shadow-[0_0_15px_rgba(255,0,122,0.1)]' :
-              ui.key === 'ink' ? 'border-[#8b5cf6]/30 bg-[#050508]/80 text-[#8b5cf6] shadow-[0_0_15px_rgba(139,92,246,0.1)]' :
-              ui.key === 'base' ? 'border-[#0052FF]/20 bg-white/80 text-[#0052FF] shadow-sm' :
-              'border-white/10 bg-white/[0.03]'
-            )}>
+            <div
+              className="mb-6 flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs font-semibold backdrop-blur-md transition-all duration-300 shadow-md"
+              style={{ borderColor: `${ui.accent}50`, backgroundColor: `${ui.accent}10`, color: ui.accent, boxShadow: `0 0 15px ${ui.accent}15` }}
+            >
               <span className="relative flex h-2 w-2">
-                <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-                  ui.key === 'megaeth' ? 'bg-[#00ff88]' :
-                  ui.key === 'litvm' ? 'bg-[#00F2FE]' :
-                  ui.key === 'arc' ? 'bg-[#4D8EE9]' :
-                  ui.key === 'soneium' ? 'bg-[#0047FF]' :
-                  ui.key === 'unichain' ? 'bg-[#FF007A]' :
-                  ui.key === 'ink' ? 'bg-[#8b5cf6]' :
-                  ui.key === 'base' ? 'bg-[#0052FF]' :
-                  'bg-white'
-                )}></span>
-                <span className={cn("relative inline-flex rounded-full h-2 w-2",
-                  ui.key === 'megaeth' ? 'bg-[#00ff88]' :
-                  ui.key === 'litvm' ? 'bg-[#00F2FE]' :
-                  ui.key === 'arc' ? 'bg-[#4D8EE9]' :
-                  ui.key === 'soneium' ? 'bg-[#0047FF]' :
-                  ui.key === 'unichain' ? 'bg-[#FF007A]' :
-                  ui.key === 'ink' ? 'bg-[#8b5cf6]' :
-                  ui.key === 'base' ? 'bg-[#0052FF]' :
-                  'bg-white'
-                )}></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: ui.accent }}></span>
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: ui.accent }}></span>
               </span>
-              <span className={cn(ui.label, 'text-xs uppercase font-bold tracking-widest leading-none select-none', ui.isLight && 'text-black/85')}>
+              <span className={cn(ui.label, 'text-xs uppercase font-bold tracking-widest leading-none select-none')}>
                 {ui.labelPrefix}{heroLabel}
               </span>
             </div>
 
             <h1 className={cn(ui.heading, 'mb-4')}>
-              {cfg?.name === 'Unichain' ? (
-                <>The <span className="italic text-[#FF007A]">Knowledge</span> of Unichain</>
-              ) : heroTitle}
+              {heroTitle}
             </h1>
 
             <p className={cn(ui.subheading, 'mb-8')}>{heroSubtitle}</p>
@@ -286,7 +265,7 @@ export function HomeScreen({
                   </button>
                 )}
                 {isCooldownActive && (
-                  <p className={cn('text-sm text-amber-500/90', ui.fontMono && 'font-mono')}>
+                  <p className="text-sm text-amber-500/90">
                     You&apos;ve recently submitted your score. Wait for the cooldown to play again.
                   </p>
                 )}
@@ -300,7 +279,7 @@ export function HomeScreen({
                 { value: 'Free', label: 'To Play' },
               ].map((item) => (
                 <div key={item.label} className={cn(ui.statCard, 'py-3 md:py-5')}>
-                  <div className={cn('text-xl md:text-2xl font-bold', ui.isLight ? 'text-black' : ui.accentClass)}>
+                  <div className={cn('text-xl md:text-2xl font-bold', ui.accentClass)}>
                     {item.value}
                   </div>
                   <div className={cn('text-xs md:text-sm mt-0.5', ui.bodyMuted)}>{item.label}</div>

@@ -14,6 +14,7 @@ const chainScoresVar: Record<number, string> = {
    4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
    5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
    11155111: "NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA",
+   2741: "NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT",
 }
 
 const chainNftVar: Record<number, string> = {
@@ -25,6 +26,7 @@ const chainNftVar: Record<number, string> = {
    4441: "NEXT_PUBLIC_NFT_CONTRACT_LITVM",
    5042002: "NEXT_PUBLIC_NFT_CONTRACT_ARC",
    11155111: "NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA",
+   2741: "NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT",
 }
 
 const chainUriMap: Record<number, string> = {
@@ -36,6 +38,7 @@ const chainUriMap: Record<number, string> = {
    4441: "https://quizonchain.com/nft/litvm",
    5042002: "https://quizonchain.com/nft/arc",
    11155111: "https://quizonchain.com/nft/sepolia",
+   2741: "https://quizonchain.com/nft/abstract",
 }
 
 async function main() {

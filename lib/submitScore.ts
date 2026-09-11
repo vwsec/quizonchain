@@ -17,6 +17,7 @@ import {
   litvmTestnet,
   arcTestnet,
   sepoliaTestnet,
+  abstractMainnet,
 } from '@/lib/chains'
 
 const CHAIN_MAINNET = 1868
@@ -27,6 +28,7 @@ const CHAIN_MEGAETH_MAINNET = 4326
 const CHAIN_LITVM_TESTNET = 4441
 const CHAIN_ARC_TESTNET = 5042002
 const CHAIN_SEPOLIA_TESTNET = 11155111
+const CHAIN_ABSTRACT_MAINNET = 2741
 
 export const quizScoresAbi = [
   {
@@ -263,9 +265,23 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
     }
     return addr
   }
+  if (chainId === CHAIN_ABSTRACT_MAINNET) {
+    const raw = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT
+    if (!raw?.trim()) {
+      return {
+        success: false,
+        error: 'NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT is not configured for this build.',
+      }
+    }
+    const addr = raw.trim() as Address
+    if (!isAddress(addr)) {
+      return { success: false, error: 'Invalid Abstract contract address in env.' }
+    }
+    return addr
+  }
   return {
     success: false,
-    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}), Arc (${CHAIN_ARC_TESTNET}), Sepolia (${CHAIN_SEPOLIA_TESTNET}).`,
+    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}), Arc (${CHAIN_ARC_TESTNET}), Sepolia (${CHAIN_SEPOLIA_TESTNET}), Abstract (${CHAIN_ABSTRACT_MAINNET}).`,
   }
 }
 
@@ -284,6 +300,7 @@ function getViemChain(chainId: number) {
   if (chainId === CHAIN_LITVM_TESTNET) return litvmTestnet
   if (chainId === CHAIN_ARC_TESTNET) return arcTestnet
   if (chainId === CHAIN_SEPOLIA_TESTNET) return sepoliaTestnet
+  if (chainId === CHAIN_ABSTRACT_MAINNET) return abstractMainnet
   return null
 }
 

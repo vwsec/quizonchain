@@ -46,11 +46,11 @@ export default function SoneiumLogo() {
         }}
       >
         <div className="relative group">
-          <div className="absolute inset-0 bg-[#0047FF] rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#45DCE8] to-[#B45CD0] rounded-full blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
           <img 
             src="/chains/soneium.png" 
             alt="Soneium" 
-            className="w-[340px] h-[340px] object-contain relative z-10 drop-shadow-[0_0_30px_rgba(0,71,255,0.3)]"
+            className="w-[340px] h-[340px] object-contain relative z-10 drop-shadow-[0_0_30px_rgba(69,220,232,0.3)]"
           />
         </div>
       </div>

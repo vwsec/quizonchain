@@ -8,6 +8,7 @@ import { NFT_CONTRACTS, NFT_ABI } from "@/lib/nft-contracts"
 import { quizScoresAbi } from "@/lib/submitScore"
 import { useActiveChain } from "@/hooks/use-active-chain"
 import { getChainConfig } from "@/lib/active-chain-config"
+import { getChainUI } from "@/lib/chain-ui"
 import { Trophy, Loader2, ExternalLink, CheckCircle, XCircle, Award, Gem } from "lucide-react"
 import {
   Dialog,
@@ -53,6 +54,7 @@ function getExplorerTxUrl(chainId: number, txHash: string): string {
     4326: `https://megaexplorer.xyz/tx/${txHash}`,
     4441: `https://liteforge.explorer.caldera.xyz/tx/${txHash}`,
     5042002: `https://testnet.arcscan.app/tx/${txHash}`,
+    2741: `https://abscan.org/tx/${txHash}`,
   }
   return urls[chainId] ?? "#"
 }
@@ -66,65 +68,38 @@ function getOpenSeaUrl(chainId: number, contractAddress: string, tokenId: string
     4326: `https://megaexplorer.xyz/token/${contractAddress}/instance/${tokenId}`,
     4441: `https://liteforge.explorer.caldera.xyz/token/${process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM}/instance/${tokenId}`,
     5042002: `https://testnet.arcscan.app/token/${contractAddress}/instance/${tokenId}`,
+    2741: `https://abscan.org/token/${contractAddress}/instance/${tokenId}`,
   }
   return urls[chainId] ?? `https://opensea.io/assets/${contractAddress}/${tokenId}`
 }
 
 // ─── Chain accent helpers ─────────────────────────────────────────────────
 
-function getAccentColor(_name?: string): string {
-  return "#FBBF24"
+// Single source of truth: shared ChainUIProfile accent (covers all chains,
+// including Sepolia). Gold fallback only when no chain is resolved.
+function getAccentColor(name?: string): string {
+  if (!name) return '#FBBF24'
+  return getChainUI(name, true).accent
 }
 
 function getButtonGradient(): string {
   return "linear-gradient(135deg, #FBBF24, #F59E0B)"
 }
 
-function getButtonBorderRadius(name: string | undefined): string {
-  const map: Record<string, string> = {
-    MegaETH: "rounded-none",
-    Ink: "rounded-full",
-    Unichain: "rounded-2xl",
-    Base: "rounded-xl",
-    Soneium: "rounded-2xl",
-    LitVM: "rounded-xl",
-    "Arc Testnet": "rounded-2xl",
-  }
-  return map[name ?? ""] ?? "rounded-xl"
+function getButtonBorderRadius(_name: string | undefined): string {
+  return "rounded-xl"
 }
 
-function getBadgeBorderRadius(name: string | undefined): string {
-  const map: Record<string, string> = {
-    MegaETH: "rounded-none",
-    Ink: "rounded-full",
-    Unichain: "rounded-2xl",
-    Base: "rounded-full",
-    Soneium: "rounded-2xl",
-    LitVM: "rounded-xl",
-    "Arc Testnet": "rounded-2xl",
-  }
-  return map[name ?? ""] ?? "rounded-full"
+function getBadgeBorderRadius(_name: string | undefined): string {
+  return "rounded-xl"
 }
 
-function getContainerBorderRadius(name: string | undefined): string {
-  const map: Record<string, string> = {
-    MegaETH: "rounded-none",
-    Ink: "rounded-2xl",
-    Unichain: "rounded-2xl",
-    Base: "rounded-xl",
-    Soneium: "rounded-2xl",
-    LitVM: "rounded-xl",
-    "Arc Testnet": "rounded-2xl",
-  }
-  return map[name ?? ""] ?? "rounded-2xl"
+function getContainerBorderRadius(_name: string | undefined): string {
+  return "rounded-xl"
 }
 
-function getChainFontClass(name: string | undefined): string {
-  const map: Record<string, string> = {
-    MegaETH: "font-mono uppercase",
-    LitVM: "font-mono",
-  }
-  return map[name ?? ""] ?? ""
+function getChainFontClass(_name: string | undefined): string {
+  return ""
 }
 
 function getChainGlow(): string {
@@ -204,7 +179,7 @@ function ConfettiCanvas() {
   return (
     <canvas
       ref={canvasRef}
-      className="pointer-events-none absolute inset-0 h-full w-full rounded-2xl"
+      className="pointer-events-none absolute inset-0 h-full w-full rounded-xl"
     />
   )
 }
@@ -360,7 +335,7 @@ export function NftMintModal({ defaultOpen = false, showTrigger = true, onClose 
         }}
       >
         <Trophy className="size-3.5" />
-        <span>{cfg?.name === "MegaETH" ? "CLAIM NFT" : "Claim NFT"}</span>
+        <span>Claim NFT</span>
       </button>
     ) : null
 
@@ -385,9 +360,8 @@ export function NftMintModal({ defaultOpen = false, showTrigger = true, onClose 
 
       <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose() }}>
         <DialogContent
-          className={`w-full max-w-[90vw] sm:max-w-md border-0 p-0 text-white bg-transparent ${getContainerBorderRadius(cfg?.name)} max-h-[85dvh] overflow-y-auto`}
+          className={`w-full max-w-[90vw] sm:max-w-md p-0 text-white bg-transparent arc-card ${getContainerBorderRadius(cfg?.name)} max-h-[85dvh] overflow-y-auto`}
           style={{
-            background: `radial-gradient(120% 100% at 50% 0%, #171738 0%, #090914 100%)`,
             boxShadow: `0 0 0 1px ${accent}33, 0 32px 100px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)`,
             animation: "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
           }}
@@ -405,11 +379,11 @@ export function NftMintModal({ defaultOpen = false, showTrigger = true, onClose 
         {/* Accent top strip */}
         <div
           className="absolute inset-x-0 top-0 h-[2px]"
-          style={{ background: `linear-gradient(90deg, ${accent}, #8B5CF6)` }}
+          style={{ background: `linear-gradient(90deg, ${accent}00, ${accent}, ${accent}00)` }}
         />
         <div
           className="absolute inset-x-0 top-[2px] h-[1px]"
-          style={{ background: "linear-gradient(90deg, rgba(139,92,246,0.3), transparent)" }}
+          style={{ background: `linear-gradient(90deg, ${accent}4D, transparent)` }}
         />
 
           <div className="px-5 sm:px-6 pb-6 sm:pb-8 pt-5 sm:pt-6 safe-bottom">
@@ -419,7 +393,7 @@ export function NftMintModal({ defaultOpen = false, showTrigger = true, onClose 
                 className={`relative h-36 w-36 md:h-48 md:w-48 overflow-hidden ${getContainerBorderRadius(cfg?.name)} group`}
                 style={{
                   border: `1px solid ${accent}66`,
-                  boxShadow: `0 0 40px ${accent}33, 0 0 80px rgba(139,92,246,0.15), inset 0 0 20px ${accent}22`,
+                  boxShadow: `0 0 40px ${accent}33, 0 0 80px ${accent}26, inset 0 0 20px ${accent}22`,
                 }}
               >
                 {/* Glass shimmer overlay */}
@@ -595,14 +569,14 @@ export function NftMintModal({ defaultOpen = false, showTrigger = true, onClose 
                     {mintState === "pending" ? (
                       <span className="flex items-center justify-center gap-2">
                         <Loader2 className="size-4 animate-spin" />
-                        {cfg?.name === "MegaETH" ? "MINTING..." : "Minting\u2026"}
+                        Minting\u2026
                       </span>
                     ) : !nftContract ? (
-                      cfg?.name === "MegaETH" ? "NFT NOT DEPLOYED" : "NFT not deployed on this chain"
+                      "NFT not deployed on this chain"
                     ) : (
                       <span className="flex items-center justify-center gap-2">
                         <Gem className="size-4" />
-                        {cfg?.name === "MegaETH" ? "MINT NFT" : "Mint NFT"}
+                        Mint NFT
                       </span>
                     )}
                   </button>
@@ -747,7 +721,7 @@ export function NftBadgeTrigger() {
           }}
         >
           <Gem className="size-4" />
-          {cfg?.name === "MegaETH" ? "CLAIM NFT" : "Claim NFT"}
+          Claim NFT
         </button>
       </div>
 
@@ -951,7 +925,7 @@ export function NftProgressCard({ refreshKey = 0 }: NftProgressCardProps) {
                 }}
               >
                 <Gem className="size-4 animate-pulse" />
-                {cfg?.name === "MegaETH" ? "CLAIM NFT" : "Claim NFT"}
+                Claim NFT
               </button>
             </div>
           )}

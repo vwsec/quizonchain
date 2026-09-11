@@ -63,6 +63,11 @@ const config = {
       chainId: 11155111,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    abstractMainnet: {
+      url: "https://api.mainnet.abs.xyz",
+      chainId: 2741,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
   },
   etherscan: {
     apiKey: {
@@ -72,6 +77,7 @@ const config = {
       megaethMainnet: "empty",
       litvmTestnet: "empty",
       arcTestnet: "empty",
+      abstractMainnet: "empty",
     },
     customChains: [
       {
@@ -120,6 +126,14 @@ const config = {
         urls: {
           apiURL: "https://testnet.arcscan.app/api",
           browserURL: "https://testnet.arcscan.app",
+        },
+      },
+      {
+        network: "abstractMainnet",
+        chainId: 2741,
+        urls: {
+          apiURL: "https://abscan.org/api",
+          browserURL: "https://abscan.org",
         },
       },
     ],

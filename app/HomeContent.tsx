@@ -94,10 +94,15 @@ function QuizApp() {
       }
 
       // Final dynamic safety check: Verify the ecosystem returned by API matches our current chain
-      const expectedEcosystem = 
+      const expectedEcosystem =
         chainId === 8453 ? "Base" :
         chainId === 130 ? "Unichain" :
         chainId === 1868 ? "Soneium" :
+        chainId === 4326 ? "MegaETH" :
+        chainId === 4441 ? "LitVM" :
+        chainId === 5042002 ? "Arc Testnet" :
+        chainId === 2741 ? "Abstract" :
+        chainId === 11155111 ? "Sepolia" :
         [57073].includes(chainId) ? "Ink" : null;
 
       if (expectedEcosystem && data.ecosystem && data.ecosystem !== expectedEcosystem) {
@@ -293,15 +298,15 @@ export default function HomeContent() {
     <ErrorBoundary
       fallbackRender={({ resetErrorBoundary }) => (
         <main className="min-h-screen flex items-center justify-center px-4">
-          <div className="w-full max-w-md rounded-2xl border border-border bg-card/50 p-6 text-center">
-            <h2 className="text-xl font-semibold text-foreground">Something went wrong</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
+          <div className="w-full max-w-md arc-card rounded-xl p-6 text-center">
+            <h2 className="text-xl font-semibold text-white">Something went wrong</h2>
+            <p className="mt-2 text-sm text-white/60">
               An unexpected error occurred while loading the quiz.
             </p>
             <button
               type="button"
               onClick={resetErrorBoundary}
-              className="mt-4 inline-flex h-10 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="mt-4 inline-flex h-10 items-center rounded-xl bg-white px-4 text-sm font-bold text-black hover:bg-white/90 transition-colors duration-200 cursor-pointer"
             >
               Try again
             </button>

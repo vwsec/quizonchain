@@ -93,6 +93,8 @@ export const arcTestnet = defineChain({
 export const sepoliaTestnet = defineChain({
   id: 11155111,
   name: 'Sepolia',
+  iconUrl: '/chains/sepolia.svg',
+  iconBackground: "#000000",
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
@@ -105,7 +107,17 @@ export const sepoliaTestnet = defineChain({
   },
   blockExplorers: { default: { name: 'Blockscout', url: 'https://eth-sepolia.blockscout.com' } },
   testnet: true,
-});
+})
+
+export const abstractMainnet = defineChain({
+  id: 2741,
+  name: 'Abstract',
+  nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+  rpcUrls: { default: { http: ['https://api.mainnet.abs.xyz'] } },
+  blockExplorers: { default: { name: 'Abscan', url: 'https://abscan.org' } },
+  iconUrl: '/chains/abstract.png',
+  testnet: false,
+})
 
 export const soneiumChains = [
   inkMainnet,
@@ -116,6 +128,7 @@ export const soneiumChains = [
   litvmTestnet,
   arcTestnet,
   sepoliaTestnet,
+  abstractMainnet,
 ] as const
 
 export function getSoneiumChainById(chainId: number) {
@@ -152,6 +165,9 @@ export function getTxExplorerUrl(chainId: number, txHash: string): string {
   }
   if (chainId === 11155111) {
     return `https://eth-sepolia.blockscout.com/tx/${txHash}`
+  }
+  if (chainId === 2741) {
+    return `https://abscan.org/tx/${txHash}`
   }
   return `https://soneium.blockscout.com/tx/${txHash}`
 }

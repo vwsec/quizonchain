@@ -51,9 +51,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
       return cn(
         'border-2 transition-all duration-300 hover:scale-[1.01] hover:shadow-md',
         ui.radiusSm,
-        ui.isLight
-          ? 'border-black/5 bg-black/5 hover:border-[#0052FF]/40 text-black hover:bg-black/10'
-          : 'border-white/10 bg-white/5 hover:border-[var(--chain-accent)] hover:bg-white/[0.08] text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]',
+        'border-white/10 bg-white/5 hover:border-[var(--chain-accent)] hover:bg-white/[0.08] text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.05)]',
       )
     }
 
@@ -77,9 +75,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
     return cn(
       ui.radiusSm,
       'transition-all duration-300 opacity-30 scale-[0.99]',
-      ui.isLight
-        ? 'border-2 border-black/5 bg-black/5 text-black'
-        : 'border-2 border-white/10 bg-white/5 text-white',
+      'border-2 border-white/10 bg-white/5 text-white',
     )
   }
 
@@ -103,7 +99,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
           </div>
           <div className={cn("relative overflow-hidden h-3 sm:h-2", ui.progressTrack)}>
             <div
-              className={cn('h-full transition-all duration-500 ease-out relative overflow-hidden', ui.radiusSm === 'rounded-none' ? 'rounded-none' : 'rounded-full')}
+              className={cn('h-full transition-all duration-500 ease-out relative overflow-hidden rounded-full')}
               style={{
                 width: `${progress}%`,
                 backgroundColor: ui.accent,
@@ -127,9 +123,7 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
           <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-white/[0.03] pointer-events-none" />
           <h2 className={cn(
             'text-lg md:text-2xl font-bold text-balance relative z-10 leading-snug',
-            ui.isLight ? 'text-black' : 'text-white',
-            ui.fontSerif && 'font-serif italic',
-            ui.key === 'litvm' && 'text-[#00F2FE]',
+            'text-white',
           )}>
             {question.question}
           </h2>
@@ -156,18 +150,16 @@ export function QuizScreen({ questions, onComplete }: QuizScreenProps) {
                 <div className="flex items-center gap-4">
                   <span className={cn(
                     'flex items-center justify-center size-10 md:size-8 text-sm font-bold border transition-all duration-300 shrink-0',
-                    ui.radiusSm === 'rounded-full' ? 'rounded-full' : ui.radiusSm,
+                    ui.radiusSm,
                     isAnswered && isCorrect && 'bg-[#22c55e]/20 border-[#22c55e]/50 text-[#22c55e]',
                     isAnswered && isSelected && !isCorrect && 'bg-[#ef4444]/20 border-[#ef4444]/50 text-[#ef4444]',
                     !isAnswered && (
-                      ui.isLight 
-                        ? 'bg-white text-black/40 border-black/5 group-hover:border-[#0052FF]/30 group-hover:text-[#0052FF]' 
-                        : 'bg-white/5 text-white/50 border-white/10 group-hover:border-[var(--chain-accent)] group-hover:text-white'
+                      'bg-white/5 text-white/50 border-white/10 group-hover:border-[var(--chain-accent)] group-hover:text-white'
                     ),
                   )}>
                     {String.fromCharCode(65 + index)}
                   </span>
-                  <span className={cn('font-semibold transition-all duration-300', ui.isLight ? 'text-black' : 'text-white/90 group-hover:text-white')}>{option}</span>
+                  <span className={cn('font-semibold transition-all duration-300', 'text-white/90 group-hover:text-white')}>{option}</span>
                 </div>
                 {isAnswered && isCorrect && <CheckCircle className="size-5 shrink-0 text-[#22c55e] animate-scale-in" />}
                 {isAnswered && isSelected && !isCorrect && <XCircle className="size-5 shrink-0 text-[#ef4444] animate-scale-in" />}

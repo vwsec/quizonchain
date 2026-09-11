@@ -161,7 +161,7 @@ async function buildQuizResponse(
   )
 }
 
-function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet") {
+function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet" | "Sepolia" | "Abstract") {
   if (ecosystemName === "Arc Testnet") {
     return [
       {
@@ -301,6 +301,56 @@ function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unich
           "Bitcoin (BTC)",
           "Ethereum (ETH)",
           "Solana (SOL)",
+        ],
+        correctIndex: 0,
+      },
+    ]
+  }
+
+  if (ecosystemName === "Sepolia") {
+    return [
+      {
+        id: 1,
+        question: "What is the Sepolia testnet used for?",
+        options: [
+          "Testing Ethereum dApps and smart contracts without spending real ETH",
+          "Mining Bitcoin",
+          "Storing files permanently",
+          "Running a social network",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 2,
+        question: "What is the Chain ID of Sepolia?",
+        options: ["1", "11155111", "8453", "137"],
+        correctIndex: 1,
+      },
+      {
+        id: 3,
+        question: "What native token is used for gas on Sepolia?",
+        options: ["BTC", "ETH", "USDC", "SOL"],
+        correctIndex: 1,
+      },
+      {
+        id: 4,
+        question: "How do developers usually get Sepolia ETH?",
+        options: [
+          "From a testnet faucet",
+          "By buying it on a stock exchange",
+          "By mining with a CPU",
+          "By swapping NFTs",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 5,
+        question: "What is a block explorer mainly used for?",
+        options: [
+          "Viewing transaction and block details",
+          "Generating private keys",
+          "Minting tokens without a wallet",
+          "Changing chain consensus rules",
         ],
         correctIndex: 0,
       },

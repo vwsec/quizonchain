@@ -1,17 +1,15 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-export default function BaseLogo() {
+export default function AbstractLogo() {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const targetX = useRef(0);
   const currentX = useRef(0);
-  const rafRef = useRef<number>(null);
-  const [mounted, setMounted] = useState(false);
+  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    setMounted(true);
     const handleMouseMove = (e: MouseEvent) => {
       const centerX = window.innerWidth / 2;
       targetX.current = ((e.clientX - centerX) / centerX) * 20;
@@ -38,8 +36,6 @@ export default function BaseLogo() {
     };
   }, []);
 
-  if (!mounted) return null;
-
   return (
     <div ref={containerRef} className='flex items-center justify-center w-full py-8'>
       <div
@@ -50,21 +46,23 @@ export default function BaseLogo() {
           willChange: 'transform',
         }}
       >
-        <div className="relative h-[280px] w-[280px]">
-          {/* Subtle Glow Background */}
-          <div className="absolute inset-0 rounded-full bg-[#0000ff]/10 blur-[60px]" />
-          
-          {/* The Actual Base Logo Image */}
-          <div className="relative flex h-full w-full items-center justify-center">
-            <Image 
-              src="/chains/base.png"
-              alt="Base Logo"
-              width={280}
-              height={280}
-              className="object-contain drop-shadow-[0_0_30px_rgba(0,0,255,0.4)]"
-              priority
-            />
-          </div>
+        <div style={{
+          position: 'relative',
+          width: 280,
+          height: 280,
+          boxShadow: '0 0 60px rgba(0,179,15,0.2), 0 0 120px rgba(0,179,15,0.08), 0 0 200px rgba(0,179,15,0.03)',
+          borderRadius: 16,
+          overflow: 'hidden',
+          filter: 'drop-shadow(0 0 25px rgba(0,179,15,0.15))',
+          border: '1px solid rgba(0,179,15,0.12)',
+        }}>
+          <Image
+            src="/chains/abstract.png"
+            alt="Abstract Logo"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
       </div>
     </div>

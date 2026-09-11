@@ -72,7 +72,7 @@ export const metadata: Metadata = {
           "url": "https://quizonchain.app",
           "name": "Quiz On Chain",
           "splashImageUrl": "https://quizonchain.app/logo.png",
-          "splashBackgroundColor": "#0f0f1a"
+          "splashBackgroundColor": "#000000"
         }
       }
     }),
@@ -85,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`theme-default ${orbitron.variable} ${exo2.variable} ${rajdhani.variable} ${outfit.variable}`} style={{ backgroundColor: '#0F0F23' }}>
+    <html lang="en" className={`theme-default ${orbitron.variable} ${exo2.variable} ${rajdhani.variable} ${outfit.variable}`} style={{ backgroundColor: '#000000' }}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <link rel="preload" as="image" href="/logo.webp" fetchPriority="high" />

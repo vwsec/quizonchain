@@ -12,6 +12,10 @@ const chainUriMap: Record<number, string> = {
   8453: "https://quizonchain.com/nft/base",      // Base
   130: "https://quizonchain.com/nft/unichain",   // Unichain
   4326: "https://quizonchain.com/nft/megaeth",   // MegaETH
+  4441: "https://quizonchain.com/nft/litvm",     // LitVM
+  5042002: "https://quizonchain.com/nft/arc",    // Arc
+  11155111: "https://quizonchain.com/nft/sepolia", // Sepolia
+  2741: "https://quizonchain.com/nft/abstract",  // Abstract
 }
 
 async function main() {
@@ -38,6 +42,10 @@ async function main() {
     8453: process.env.NEXT_PUBLIC_NFT_CONTRACT_BASE,
     130: process.env.NEXT_PUBLIC_NFT_CONTRACT_UNICHAIN,
     4326: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
+    4441: process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
+    5042002: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
+    11155111: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA,
+    2741: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT,
   }
 
   const contractAddress = contractAddresses[chainId]

@@ -43,6 +43,7 @@ async function main() {
      4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
       5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
       11155111: "NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA",
+      2741: "NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT",
     }
 
   const chainId = hre.network.config.chainId

@@ -18,8 +18,8 @@ const MULTICALL = '0xcA11bde05977b3631167028862bE2a173976CA11';
 const PLAYERS_SLOT = 6n;
 const BATCH = 1000;          // reads per multicall
 const PARALLEL = 6;          // concurrent multicalls
-const SCORE_BATCH = 300;     // players per score multicall (smaller to avoid RPC timeouts)
-const SCORE_PARALLEL = 4;    // concurrent score multicalls
+const SCORE_BATCH = 1000;    // players per score multicall
+const SCORE_PARALLEL = 10;   // concurrent score multicalls
 const OUTPUT = path.join(__dirname, '..', 'public', 'data', 'leaderboard-litvm.json');
 
 const client = createPublicClient({
