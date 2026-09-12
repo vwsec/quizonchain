@@ -170,7 +170,6 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
   const [holderSet, setHolderSet] = useState<Set<string>>(new Set())
   const [totalMinted, setTotalMinted] = useState(0)
   const [nftLoading, setNftLoading] = useState(false)
-  const [showMastersOnly, setShowMastersOnly] = useState(false)
 
   // Track whether this chain has any NFT contract configured
   const hasNftContract =
@@ -261,11 +260,6 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
     return () => clearInterval(interval)
   }, [loadLeaderboard])
 
-  // Derived display list (apply Masters filter)
-  const displayData = showMastersOnly
-    ? data.filter(p => holderSet.has(p.address.toLowerCase()))
-    : data
-
   const truncateAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`
 
   const renderChainBadge = (chainName: string) => {
@@ -351,33 +345,6 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             </span>
             <span className="text-xs text-white/50">Masters</span>
           </div>
-
-          {/* Show Masters Only toggle */}
-          <button
-            onClick={() => setShowMastersOnly(v => !v)}
-            disabled={nftLoading || holderSet.size === 0}
-            className="flex items-center gap-1.5 border px-3 py-2 text-xs font-semibold transition-all hover-lift disabled:cursor-not-allowed disabled:opacity-40 rounded-xl"
-            style={
-              showMastersOnly
-                ? {
-                    background: ui.accent,
-                    borderColor: ui.accent,
-                    color: "#fff",
-                  }
-                : {
-                    borderColor: `${ui.accent}4D`,
-                    background: `${ui.accent}0D`,
-                    color: ui.accent,
-                  }
-            }
-          >
-            <Star
-              fill={showMastersOnly ? "#fff" : ui.accent}
-              color={showMastersOnly ? "#fff" : ui.accent}
-              className="w-3.5 h-3.5 shrink-0"
-            />
-            <span className="whitespace-nowrap">{showMastersOnly ? "All Players" : "Show Masters Only"}</span>
-          </button>
         </div>
       )}
 
@@ -473,7 +440,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                   </td>
                 </tr>
               ))
-            ) : displayData.length === 0 ? (
+            ) : data.length === 0 ? (
               <tr>
                 <td colSpan={chainFilter === 'Global' ? 6 : 5} className="py-16 text-center px-4">
                   <div className="flex flex-col items-center justify-center max-w-sm mx-auto animate-scale-in">
@@ -484,30 +451,26 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
                       </div>
                     </div>
                     <h3 className="text-base font-bold text-foreground mb-1.5 uppercase tracking-wide">
-                      {showMastersOnly ? "No Masters Found" : "Leaderboard Empty"}
+                      Leaderboard Empty
                     </h3>
                     <p className="text-xs text-muted-foreground opacity-75 mb-6 leading-relaxed">
-                      {showMastersOnly 
-                        ? "None of the players on this leaderboard have unlocked their NFT Master badge yet." 
-                        : `Be the first to secure a spot on the ${chainFilter === 'Global' ? 'global' : chainFilter} leaderboard by playing the quiz!`}
+                      Be the first to secure a spot on the ${chainFilter === 'Global' ? 'global' : chainFilter} leaderboard by playing the quiz!
                     </p>
-                    {!showMastersOnly && (
-                      <Link
-                        href="/"
-                        className="inline-flex cursor-pointer items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white shadow-md rounded-xl"
-                        style={{
-                          background: `linear-gradient(135deg, ${ui.accent}, ${ui.accent}cc)`,
-                          boxShadow: `0 4px 15px ${ui.accent}33`
-                        }}
-                      >
-                        Start Quiz Challenge
-                      </Link>
-                    )}
+                    <Link
+                      href="/"
+                      className="inline-flex cursor-pointer items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-white shadow-md rounded-xl"
+                      style={{
+                        background: `linear-gradient(135deg, ${ui.accent}, ${ui.accent}cc)`,
+                        boxShadow: `0 4px 15px ${ui.accent}33`
+                      }}
+                    >
+                      Start Quiz Challenge
+                    </Link>
                   </div>
                 </td>
               </tr>
             ) : (
-displayData.map((player) => {
+data.map((player) => {
                 const isHolder = holderSet.has(player.address.toLowerCase())
                 const isMe = player.address.toLowerCase() === address?.toLowerCase()
                 const rankColor = player.rank === 1
@@ -596,14 +559,9 @@ displayData.map((player) => {
       </div>
 
       {/* ── Footer ────────────────────────────────────────────────────────── */}
-      {!loading && totalPlayers > 100 && !showMastersOnly && (
+      {!loading && totalPlayers > 100 && (
         <div className="mt-4 text-center text-sm text-gray-400">
           Showing top 100 of {totalPlayers} unique players
-        </div>
-      )}
-      {showMastersOnly && !nftLoading && (
-        <div className="mt-4 text-center text-sm text-gray-400">
-          Showing {displayData.length} NFT Master{displayData.length !== 1 ? "s" : ""}
         </div>
       )}
     </div>
