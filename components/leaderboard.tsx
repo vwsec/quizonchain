@@ -178,14 +178,13 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       ? Object.values(NFT_CONTRACT_MAP).some(a => a && isAddress(a))
       : !!(NFT_CONTRACT_MAP[chainFilter] && isAddress(NFT_CONTRACT_MAP[chainFilter]!))
 
-  // Keep a ref to ALL players (not sliced) so Masters filter can access full list
-  const allPlayersRef = useRef<GlobalPlayer[]>([])
+  // Keep a ref to current raw data so NFT refresh doesn't need the whole loadLeaderboard cycle
+  const rawDataRef = useRef<GlobalPlayer[]>([])
 
   const loadNftData = useCallback(async (players: GlobalPlayer[]) => {
     if (!hasNftContract || players.length === 0) return
     setNftLoading(true)
     try {
-      // Pass all players - fetchNftData scans all events anyway, but we pass all for fallback
       const addrs = players.map(p => p.address)
       const { holderSet: hs, totalMinted: tm } = await fetchNftData(chainFilter, addrs)
       setHolderSet(hs)
@@ -204,13 +203,11 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       if (chainFilter === 'Global') {
         const res = await fetchGlobalLeaderboard()
         setTotalPlayers(res.players.length)
-        // Store ALL players for Masters filter, but display only top 100 by default
-        allPlayersRef.current = res.players
         const top = res.players.slice(0, 100)
         setData(top)
+        rawDataRef.current = top
         setFailedNetworks(res.failedChains)
-        // Fetch NFT data for ALL players so Masters filter works correctly
-        void loadNftData(res.players)
+        void loadNftData(top)
       } else {
         setFailedNetworks([])
 
@@ -229,12 +226,10 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
           try {
             const players = await getChainLeaderboard(chainConfig)
             setTotalPlayers(players.length)
-            // Store ALL players for Masters filter
-            allPlayersRef.current = players
             const top = players.slice(0, 100)
             setData(top)
-            // Fetch NFT data for ALL players so Masters filter works correctly
-            void loadNftData(players)
+            rawDataRef.current = top
+            void loadNftData(top)
           } catch (err) {
             const msg = err instanceof Error ? err.message.split('\n')[0] : String(err)
             if (process.env.NODE_ENV === 'development') {
@@ -242,12 +237,12 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
             }
             setFailedNetworks([chainFilter])
             setData([])
-            allPlayersRef.current = []
+            rawDataRef.current = []
             setTotalPlayers(0)
           }
         } else {
           setData([])
-          allPlayersRef.current = []
+          rawDataRef.current = []
           setTotalPlayers(0)
         }
       }
@@ -268,7 +263,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
 
   // Derived display list (apply Masters filter)
   const displayData = showMastersOnly
-    ? allPlayersRef.current.filter(p => holderSet.has(p.address.toLowerCase()))
+    ? data.filter(p => holderSet.has(p.address.toLowerCase()))
     : data
 
   const truncateAddress = (addr: string) => `${addr.slice(0, 6)}...${addr.slice(-4)}`

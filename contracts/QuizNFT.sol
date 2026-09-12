@@ -1,23 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.27;
+pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
 
-contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
-    // hard ceiling so owner can never set an unbounded supply (upgrade path: raise constant after audit)
-    uint256 public constant MAX_SUPPLY_CAP = 100000;
+contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard {
     uint256 public totalMinted;
     string public baseTokenURI;
     address public quizScoresContract;
     uint256 public pointsThreshold;
     mapping(address => bool) public hasMinted;
-    uint256 public maxSupply = 10000;
-    address public pendingQuizScoresContract;
 
     event NFTMinted(address indexed player, uint256 tokenId);
     event BaseURIUpdated(string previousURI, string newURI);
@@ -37,10 +32,9 @@ contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
         pointsThreshold = _pointsThreshold;
     }
 
-    function mint() external nonReentrant whenNotPaused {
+    function mint() external nonReentrant {
         require(!hasMinted[msg.sender], "Already minted");
         require(_hasReachedThreshold(msg.sender), "Not enough points");
-        require(totalMinted < maxSupply, "Max supply reached");
 
         hasMinted[msg.sender] = true;
         totalMinted++;
@@ -66,8 +60,7 @@ contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
         (bool success, bytes memory data) = quizScoresContract.staticcall(
             abi.encodeWithSignature("totalPoints(address)", player)
         );
-        if (!success) return false;
-        if (data.length < 32) return false;
+        if (!success || data.length == 0) return false;
         uint256 points = abi.decode(data, (uint256));
         return points >= pointsThreshold;
     }
@@ -80,8 +73,7 @@ contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
         (bool success, bytes memory data) = quizScoresContract.staticcall(
             abi.encodeWithSignature("totalPoints(address)", player)
         );
-        if (!success) return 0;
-        if (data.length < 32) return 0;
+        if (!success || data.length == 0) return 0;
         return abi.decode(data, (uint256));
     }
 
@@ -99,31 +91,10 @@ contract QuizNFT is ERC721URIStorage, Ownable, ReentrancyGuard, Pausable {
         emit ThresholdUpdated(previous, _pointsThreshold);
     }
 
-    function proposeQuizScoresContract(address _quizScoresContract) external onlyOwner {
+    function setQuizScoresContract(address _quizScoresContract) external onlyOwner {
         require(_quizScoresContract != address(0), "Invalid address");
-        pendingQuizScoresContract = _quizScoresContract;
-    }
-
-    function acceptQuizScoresContract() external onlyOwner {
-        require(pendingQuizScoresContract != address(0), "No pending contract");
         address previous = quizScoresContract;
-        quizScoresContract = pendingQuizScoresContract;
-        pendingQuizScoresContract = address(0);
-        emit QuizContractUpdated(previous, quizScoresContract);
-    }
-
-    function setMaxSupply(uint256 _maxSupply) external onlyOwner {
-        require(_maxSupply > 0, "Max supply must be > 0");
-        require(_maxSupply <= MAX_SUPPLY_CAP, "maxSupply exceeds 100000");
-        require(_maxSupply >= totalMinted, "Below minted count");
-        maxSupply = _maxSupply;
-    }
-
-    function pause() external onlyOwner {
-        _pause();
-    }
-
-    function unpause() external onlyOwner {
-        _unpause();
+        quizScoresContract = _quizScoresContract;
+        emit QuizContractUpdated(previous, _quizScoresContract);
     }
 }
