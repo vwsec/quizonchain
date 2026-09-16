@@ -16,6 +16,7 @@ import {
   megaEth,
   litvmTestnet,
   arcTestnet,
+  arcMainnet,
   sepoliaTestnet,
   abstractMainnet,
 } from '@/lib/chains'
@@ -27,6 +28,7 @@ const CHAIN_UNICHAIN_MAINNET = 130
 const CHAIN_MEGAETH_MAINNET = 4326
 const CHAIN_LITVM_TESTNET = 4441
 const CHAIN_ARC_TESTNET = 5042002
+const CHAIN_ARC_MAINNET = 5042
 const CHAIN_SEPOLIA_TESTNET = 11155111
 const CHAIN_ABSTRACT_MAINNET = 2741
 
@@ -251,6 +253,23 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
     }
     return addr
   }
+  if (chainId === CHAIN_ARC_MAINNET) {
+    const raw = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET
+    if (!raw?.trim()) {
+      return {
+        success: false,
+        error: 'NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET is not configured for this build.',
+      }
+    }
+    const addr = raw.trim() as Address
+    if (!isAddress(addr)) {
+      return {
+        success: false,
+        error: 'Invalid Arc Mainnet contract address in env.',
+      }
+    }
+    return addr
+  }
   if (chainId === CHAIN_SEPOLIA_TESTNET) {
     const raw = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA ?? '0xe91E1FeA7652F0eb2A9A266FD5ae52AFB912729e'
     if (!process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA) {
@@ -281,7 +300,7 @@ function getContractAddress(chainId: number): Address | SubmitScoreFailure {
   }
   return {
     success: false,
-    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}), Arc (${CHAIN_ARC_TESTNET}), Sepolia (${CHAIN_SEPOLIA_TESTNET}), Abstract (${CHAIN_ABSTRACT_MAINNET}).`,
+    error: `Unsupported chain (${chainId}). Use one of: Soneium (${CHAIN_MAINNET}), Ink (${CHAIN_INK_MAINNET}), Base (${CHAIN_BASE_MAINNET}), Unichain (${CHAIN_UNICHAIN_MAINNET}), MegaETH (${CHAIN_MEGAETH_MAINNET}), LitVM (${CHAIN_LITVM_TESTNET}), Arc Testnet (${CHAIN_ARC_TESTNET}), Arc (${CHAIN_ARC_MAINNET}), Sepolia (${CHAIN_SEPOLIA_TESTNET}), Abstract (${CHAIN_ABSTRACT_MAINNET}).`,
   }
 }
 
@@ -299,6 +318,7 @@ function getViemChain(chainId: number) {
   if (chainId === CHAIN_MEGAETH_MAINNET) return megaEth
   if (chainId === CHAIN_LITVM_TESTNET) return litvmTestnet
   if (chainId === CHAIN_ARC_TESTNET) return arcTestnet
+  if (chainId === CHAIN_ARC_MAINNET) return arcMainnet
   if (chainId === CHAIN_SEPOLIA_TESTNET) return sepoliaTestnet
   if (chainId === CHAIN_ABSTRACT_MAINNET) return abstractMainnet
   return null

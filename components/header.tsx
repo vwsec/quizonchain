@@ -36,7 +36,7 @@ export function Header() {
   const { isChainLocked } = useConnectorType()
 
   const appTitle = isConnected && cfg
-    ? `Quiz On ${cfg.name === 'Arc Testnet' ? 'Arc' : cfg.name === 'LitVM' ? 'LitVM' : cfg.name === 'MegaETH' ? 'MegaETH' : cfg.name === 'Unichain' ? 'Unichain' : cfg.name === 'Base' ? 'Base' : cfg.name === 'Soneium' ? 'Soneium' : cfg.name === 'Sepolia' ? 'Sepolia' : cfg.name === 'Ink' ? 'Ink' : cfg.name === 'Abstract' ? 'Abstract' : 'Chain'}`
+    ? `Quiz On ${cfg.name === 'Arc Testnet' || cfg.name === 'Arc' ? 'Arc' : cfg.name === 'LitVM' ? 'LitVM' : cfg.name === 'MegaETH' ? 'MegaETH' : cfg.name === 'Unichain' ? 'Unichain' : cfg.name === 'Base' ? 'Base' : cfg.name === 'Soneium' ? 'Soneium' : cfg.name === 'Sepolia' ? 'Sepolia' : cfg.name === 'Ink' ? 'Ink' : cfg.name === 'Abstract' ? 'Abstract' : 'Chain'}`
     : 'Quiz On Chain'
   const titleParts = appTitle.split(' ')
   const chainName = isConnected ? titleParts.slice(2).join(' ') : 'Chain'

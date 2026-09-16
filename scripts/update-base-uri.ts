@@ -13,7 +13,8 @@ const chainUriMap: Record<number, string> = {
   130: "https://quizonchain.com/nft/unichain",   // Unichain
   4326: "https://quizonchain.com/nft/megaeth",   // MegaETH
   4441: "https://quizonchain.com/nft/litvm",     // LitVM
-  5042002: "https://quizonchain.com/nft/arc",    // Arc
+  5042002: "https://quizonchain.com/nft/arc",    // Arc Testnet
+  5042: "https://quizonchain.com/nft/arc-mainnet", // Arc Mainnet
   11155111: "https://quizonchain.com/nft/sepolia", // Sepolia
   2741: "https://quizonchain.com/nft/abstract",  // Abstract
 }
@@ -44,6 +45,7 @@ async function main() {
     4326: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
     4441: process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
     5042002: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
+    5042: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC_MAINNET,
     11155111: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA,
     2741: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT,
   }

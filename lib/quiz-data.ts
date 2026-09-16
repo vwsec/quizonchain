@@ -48,6 +48,7 @@ export const ECOSYSTEM_BY_CHAIN_ID: Record<number, string> = {
   4326: "MegaETH",
   4441: "LitVM",
   5042002: "Arc Testnet",
+  5042: "Arc",
   2741: "Abstract",
   11155111: "Sepolia",
 }
@@ -58,7 +59,7 @@ export const ECOSYSTEM_FILE_KEY: Record<string, string> = {
   soneium: "soneium",
   megaeth: "megaeth",
   litvm: "litvm",
-  arc: "arc",
+  arc: "arc-mainnet",
   "arc testnet": "arc",
   ink: "ink",
   abstract: "abstract",

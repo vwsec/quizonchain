@@ -101,6 +101,7 @@ function QuizApp() {
         chainId === 4326 ? "MegaETH" :
         chainId === 4441 ? "LitVM" :
         chainId === 5042002 ? "Arc Testnet" :
+        chainId === 5042 ? "Arc" :
         chainId === 2741 ? "Abstract" :
         chainId === 11155111 ? "Sepolia" :
         [57073].includes(chainId) ? "Ink" : null;

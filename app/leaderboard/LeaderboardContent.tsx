@@ -14,7 +14,8 @@ const TABS: { id: ChainFilterType; label: string; iconUrl: string | null }[] = [
   { id: 'Unichain', label: 'Unichain', iconUrl: '/chains/unichain.png' },
   { id: 'MegaETH', label: 'MegaETH', iconUrl: '/chains/megaeth.png' },
   { id: 'LitVM', label: 'LitVM', iconUrl: '/chains/litvm.png' },
-  { id: 'Arc Testnet', label: 'Arc', iconUrl: '/chains/arc.png' },
+  { id: 'Arc Testnet', label: 'Arc Testnet', iconUrl: '/chains/arc.png' },
+  { id: 'Arc', label: 'Arc', iconUrl: '/chains/arc.png' },
   { id: 'Abstract', label: 'Abstract', iconUrl: '/chains/abstract.png' },
   { id: 'Sepolia', label: 'Sepolia', iconUrl: '/chains/sepolia.svg' },
 ]
@@ -27,6 +28,7 @@ const CHAIN_ACCENT: Record<string, string> = {
   MegaETH: "#00ff88",
   LitVM: "#00F2FE",
   "Arc Testnet": "#4D8EE9",
+  "Arc": "#4D8EE9",
   Abstract: "#00b30f",
   Sepolia: "#cbaeff",
 }

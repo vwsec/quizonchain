@@ -1,6 +1,6 @@
 import { createPublicClient, http, type Chain } from 'viem';
 import { quizScoresAbi } from './submitScore';
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet } from './chains';
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, arcMainnet, sepoliaTestnet, abstractMainnet } from './chains';
 import { fetchLitvmLeaderboard } from './litvm-leaderboard';
 
 export type GlobalPlayer = {
@@ -20,6 +20,7 @@ const ALL_CHAINS: { chain: Chain; contractAddress: string; chainName: string }[]
   { chain: megaEth,         contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH!,        chainName: "MegaETH" },
   { chain: litvmTestnet,    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!,          chainName: "LitVM" },
   { chain: arcTestnet,      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC!,            chainName: "Arc Testnet" },
+  { chain: arcMainnet,      contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET!,    chainName: "Arc" },
   { chain: sepoliaTestnet,  contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA!,        chainName: "Sepolia" },
   { chain: abstractMainnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT!,      chainName: "Abstract" },
 ].filter(c => c.contractAddress);

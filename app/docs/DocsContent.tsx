@@ -101,6 +101,14 @@ const NETWORKS = [
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC,
   },
   {
+    name: "Arc",
+    id: 5042,
+    gasToken: "USDC",
+    explorer: "explorer.arc.io",
+    iconUrl: "/chains/arc.png",
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET,
+  },
+  {
     name: "Abstract",
     id: 2741,
     gasToken: "ETH",
@@ -367,7 +375,7 @@ export default function DocsContent() {
               </h2>
               <div className="p-8 border arc-card rounded-xl">
                  <p className="text-gray-300 leading-relaxed text-lg">
-                     Once you reach <span className="font-bold text-[var(--chain-accent)]">100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className="font-bold text-[var(--chain-accent)]">"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, across all 8 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, and Abstract. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
+                     Once you reach <span className="font-bold text-[var(--chain-accent)]">100 total points on any single chain</span>, you unlock the ability to mint an exclusive <span className="font-bold text-[var(--chain-accent)]">"The What of Blockchain" (TWOB)</span> NFT directly in the app. One NFT is mintable per address per chain, across all 9 supported networks: Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, Arc, and Abstract. Holding this NFT grants you the prestigious "Master" status on the leaderboard. You pay your own gas to mint (no gas tank).
                  </p>
               </div>
             </section>
@@ -392,7 +400,7 @@ export default function DocsContent() {
                   { q: "Is the quiz free to play?", a: "Yes, playing the quiz is completely free. Submitting your score on-chain requires a small gas fee." },
                   { q: "How do I get a QuizMaster NFT?", a: "Keep playing and submitting scores! Once your total reaches 100 points on any single chain, a mint button will appear allowing you to claim your exclusive 'The What of Blockchain' (TWOB) NFT." },
                   { q: "Are my scores stored permanently?", a: "Yes, scores submitted on-chain are stored permanently on the blockchain and cannot be deleted except by the contract owner." },
-                  { q: "Which chains support NFT minting?", a: "All 8 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, and Abstract. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
+                  { q: "Which chains support NFT minting?", a: "All 9 chains — Ink, Soneium, Base, Unichain, MegaETH, LitVM LiteForge, Arc Testnet, Arc, and Abstract. Each chain has its own NFT contract and you can mint one NFT per chain once you reach 100 points on that chain." },
                   { q: "What is zkLTC on LitVM LiteForge?", a: "zkLTC is the native gas token of the LitVM LiteForge testnet — a Litecoin-backed asset used to pay transaction fees on this EVM rollup." },
                   { q: "What is USDC on Arc Testnet?", a: "USDC is the native gas token of the Arc Testnet — a stablecoin-based fee model that eliminates gas price volatility for users." },
                   { q: "Is my quiz score verified before going on-chain?", a: "Yes. When you finish a quiz, your answers are verified server-side against a signed JWT that was created when the quiz was generated. The server will only sign a valid score — preventing any client-side manipulation before the transaction is submitted." }

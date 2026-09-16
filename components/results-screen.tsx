@@ -178,6 +178,7 @@ export function ResultsScreen({
     if (id === 4326) return "MegaETH"
     if (id === 4441) return "LitVM"
     if (id === 5042002) return "Arc Testnet"
+    if (id === 5042) return "Arc"
     if (id === 11155111) return "Sepolia"
     if (id === 2741) return "Abstract"
     return mounted ? (walletChain?.name ?? "Web3") : "Web3"

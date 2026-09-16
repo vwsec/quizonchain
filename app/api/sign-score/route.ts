@@ -51,12 +51,14 @@ const bodySchema = z.object({
 })
 
 function getSignerPrivateKey(): `0x${string}` {
-  const raw = (process.env.QUIZ_SIGNER_PRIVATE_KEY || process.env.SIGNER_PRIVATE_KEY)?.trim()
-  if (!raw) {
+  // ponytail: tolerate dashboard copy-paste artifacts (quotes/whitespace); strict 32-byte check stays.
+  const cleaned = (process.env.QUIZ_SIGNER_PRIVATE_KEY || process.env.SIGNER_PRIVATE_KEY)?.trim().replace(/^["']|["']$/g, "").replace(/\s+/g, "")
+  if (!cleaned) {
     throw new Error("QUIZ_SIGNER_PRIVATE_KEY or SIGNER_PRIVATE_KEY is missing on the server.")
   }
-  const prefixed = raw.startsWith("0x") ? raw : `0x${raw}`
+  const prefixed = cleaned.startsWith("0x") ? cleaned : `0x${cleaned}`
   if (!/^0x[0-9a-fA-F]{64}$/.test(prefixed)) {
+    console.error(`sign-score: malformed signer key (len=${cleaned.length})`)
     throw new Error("QUIZ_SIGNER_PRIVATE_KEY must be a 32-byte hex private key.")
   }
   return prefixed as `0x${string}`

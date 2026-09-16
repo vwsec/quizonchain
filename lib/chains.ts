@@ -90,6 +90,16 @@ export const arcTestnet = defineChain({
   testnet: true,
 });
 
+export const arcMainnet = defineChain({
+  id: 5042,
+  name: 'Arc',
+  nativeCurrency: { name: 'USD Coin', symbol: 'USDC', decimals: 6 },
+  rpcUrls: { default: { http: ['https://rpc.mainnet.arc.io'], webSocket: ['wss://rpc.quicknode.mainnet.arc.io'] } },
+  blockExplorers: { default: { name: 'Arc Explorer', url: 'https://explorer.arc.io' } },
+  iconUrl: '/chains/arc.png',
+  testnet: false,
+});
+
 export const sepoliaTestnet = defineChain({
   id: 11155111,
   name: 'Sepolia',
@@ -127,6 +137,7 @@ export const soneiumChains = [
   megaEth,
   litvmTestnet,
   arcTestnet,
+  arcMainnet,
   sepoliaTestnet,
   abstractMainnet,
 ] as const
@@ -162,6 +173,9 @@ export function getTxExplorerUrl(chainId: number, txHash: string): string {
   }
   if (chainId === 5042002) {
     return `https://testnet.arcscan.app/tx/${txHash}`
+  }
+  if (chainId === 5042) {
+    return `https://explorer.arc.io/tx/${txHash}`
   }
   if (chainId === 11155111) {
     return `https://eth-sepolia.blockscout.com/tx/${txHash}`

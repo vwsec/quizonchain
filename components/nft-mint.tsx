@@ -33,6 +33,7 @@ function getQuizContractAddress(chainId: number): Address | null {
     4326: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH,
     4441: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM,
     5042002: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC,
+    5042: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET,
   }
   const raw = map[chainId]
   if (!raw || !isAddress(raw)) return null
@@ -54,6 +55,7 @@ function getExplorerTxUrl(chainId: number, txHash: string): string {
     4326: `https://megaexplorer.xyz/tx/${txHash}`,
     4441: `https://liteforge.explorer.caldera.xyz/tx/${txHash}`,
     5042002: `https://testnet.arcscan.app/tx/${txHash}`,
+    5042: `https://explorer.arc.io/tx/${txHash}`,
     2741: `https://abscan.org/tx/${txHash}`,
   }
   return urls[chainId] ?? "#"
@@ -68,6 +70,7 @@ function getOpenSeaUrl(chainId: number, contractAddress: string, tokenId: string
     4326: `https://megaexplorer.xyz/token/${contractAddress}/instance/${tokenId}`,
     4441: `https://liteforge.explorer.caldera.xyz/token/${process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM}/instance/${tokenId}`,
     5042002: `https://testnet.arcscan.app/token/${contractAddress}/instance/${tokenId}`,
+    5042: `https://explorer.arc.io/token/${contractAddress}/instance/${tokenId}`,
     2741: `https://abscan.org/token/${contractAddress}/instance/${tokenId}`,
   }
   return urls[chainId] ?? `https://opensea.io/assets/${contractAddress}/${tokenId}`

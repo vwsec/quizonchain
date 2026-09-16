@@ -6,6 +6,7 @@ export const NFT_CONTRACTS: Record<number, string> = {
   4326: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH ?? "",
   4441: process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM!,
   5042002: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC ?? "",
+  5042: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC_MAINNET ?? "",
   11155111: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA ?? "",
   2741: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT!,
 };

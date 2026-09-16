@@ -34,17 +34,18 @@ async function main() {
   const address = await quizScores.getAddress()
   console.debug("QuizScores deployed to:", address)
 
-  const chainVarMap: Record<number, string> = {
+const chainVarMap: Record<number, string> = {
     1868: "NEXT_PUBLIC_CONTRACT_ADDRESS_SONEIUM",
     57073: "NEXT_PUBLIC_CONTRACT_ADDRESS_INK",
     8453: "NEXT_PUBLIC_CONTRACT_ADDRESS_BASE",
     130: "NEXT_PUBLIC_CONTRACT_ADDRESS_UNICHAIN",
      4326: "NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH",
      4441: "NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM",
-      5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
-      11155111: "NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA",
-      2741: "NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT",
-    }
+     5042002: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC",
+     5042: "NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET",
+     11155111: "NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA",
+     2741: "NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT",
+   }
 
   const chainId = hre.network.config.chainId
   const varName = chainId ? chainVarMap[chainId] : undefined

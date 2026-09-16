@@ -46,7 +46,7 @@ const cspWithNonce = (nonce: string) => `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://api.web3modal.org;
   style-src 'self' 'unsafe-inline';
-  img-src 'self' blob: data: https://*.walletconnect.com https://*.walletconnect.org;
+  img-src 'self' blob: data: https://*.walletconnect.com https://*.walletconnect.org https://abstract-assets.abs.xyz;
   font-src 'self' data:;
   object-src 'none';
   base-uri 'self';
@@ -80,9 +80,20 @@ const cspWithNonce = (nonce: string) => `
     https://rpc.blockdaemon.testnet.arc.network
     https://rpc.drpc.testnet.arc.network
     https://rpc.quicknode.testnet.arc.network
+    https://rpc.mainnet.arc.io
+    wss://rpc.quicknode.mainnet.arc.io
+    https://explorer.arc.io
+    https://arc-mainnet.g.alchemy.com
+    https://rpc.blockdaemon.mainnet.arc.io
+    https://rpc.drpc.mainnet.arc.io
+    https://rpc.quicknode.mainnet.arc.io
     https://ethereum-sepolia-rpc.publicnode.com
     https://rpc2.sepolia.org
-    https://rpc.sepolia.org;
+    https://rpc.sepolia.org
+    https://auth.privy.io
+    https://*.privy.io
+    https://api.mainnet.abs.xyz
+    https://*.abs.xyz;
   block-all-mixed-content;
   upgrade-insecure-requests;
 `.replace(/\s{2,}/g, ' ').trim()

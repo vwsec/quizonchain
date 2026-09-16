@@ -161,7 +161,7 @@ async function buildQuizResponse(
   )
 }
 
-function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet" | "Sepolia" | "Abstract") {
+function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unichain" | "MegaETH" | "LitVM" | "Arc Testnet" | "Arc" | "Sepolia" | "Abstract") {
   if (ecosystemName === "Arc Testnet") {
     return [
       {
@@ -190,6 +190,51 @@ function getFallbackQuestions(ecosystemName: "Ink" | "Soneium" | "Base" | "Unich
           "https://mainnet.arc.network",
           "https://rpc.arc.io",
           "https://testnet.arc.io/rpc",
+        ],
+        correctIndex: 0,
+      },
+      {
+        id: 5,
+        question: "What advantage does Arc's stablecoin gas model provide?",
+        options: [
+          "Eliminates gas price volatility",
+          "Increases block size",
+          "Reduces transaction finality time",
+          "Enables cross-chain messaging",
+        ],
+        correctIndex: 0,
+      },
+    ]
+  }
+
+  if (ecosystemName === "Arc") {
+    return [
+      {
+        id: 1,
+        question: "What is the native gas token used on Arc Mainnet?",
+        options: ["ETH", "USDC", "MATIC", "BNB"],
+        correctIndex: 1,
+      },
+      {
+        id: 2,
+        question: "What is the Chain ID of Arc Mainnet?",
+        options: ["1", "137", "5042", "8453"],
+        correctIndex: 2,
+      },
+      {
+        id: 3,
+        question: "Which company built the Arc blockchain?",
+        options: ["Coinbase", "Circle", "Consensys", "Kraken"],
+        correctIndex: 1,
+      },
+      {
+        id: 4,
+        question: "What is the RPC endpoint for Arc Mainnet?",
+        options: [
+          "https://rpc.mainnet.arc.io",
+          "https://rpc.arc.network",
+          "https://rpc.arc.io",
+          "https://mainnet.arc.io/rpc",
         ],
         correctIndex: 0,
       },

@@ -58,6 +58,11 @@ const config = {
       chainId: 5042002,
       accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
     },
+    arcMainnet: {
+      url: "https://rpc.mainnet.arc.io",
+      chainId: 5042,
+      accounts: normalizePrivateKey(process.env.PRIVATE_KEY),
+    },
     sepoliaTestnet: {
       url: "https://rpc.sepolia.org",
       chainId: 11155111,
@@ -77,6 +82,7 @@ const config = {
       megaethMainnet: "empty",
       litvmTestnet: "empty",
       arcTestnet: "empty",
+      arcMainnet: "empty",
       abstractMainnet: "empty",
     },
     customChains: [
@@ -126,6 +132,14 @@ const config = {
         urls: {
           apiURL: "https://testnet.arcscan.app/api",
           browserURL: "https://testnet.arcscan.app",
+        },
+      },
+      {
+        network: "arcMainnet",
+        chainId: 5042,
+        urls: {
+          apiURL: "https://explorer.arc.io/api",
+          browserURL: "https://explorer.arc.io",
         },
       },
       {

@@ -6,11 +6,11 @@ import Link from "next/link"
 import { useAccount } from "wagmi"
 import { createPublicClient, http, isAddress, type Chain } from "viem"
 import { fetchGlobalLeaderboard, getChainLeaderboard, type GlobalPlayer } from "@/lib/chain-leaderboard"
-import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet } from "@/lib/chains"
+import { soneiumMainnet, inkMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, arcMainnet, sepoliaTestnet, abstractMainnet } from "@/lib/chains"
 import { NFT_ABI } from "@/lib/nft-contracts"
 import { AlertCircle, Star } from "lucide-react"
 
-export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Sepolia' | 'Abstract'
+export type ChainFilterType = 'Global' | 'Ink' | 'Soneium' | 'Base' | 'Unichain' | 'MegaETH' | 'LitVM' | 'Arc Testnet' | 'Arc' | 'Sepolia' | 'Abstract'
 
 import { useChainUI } from "@/hooks/use-chain-ui"
 import { accentTextClass } from "@/lib/chain-ui"
@@ -25,6 +25,7 @@ const NFT_CONTRACT_MAP: Record<string, string | undefined> = {
   MegaETH: process.env.NEXT_PUBLIC_NFT_CONTRACT_MEGAETH,
   LitVM:   process.env.NEXT_PUBLIC_NFT_CONTRACT_LITVM,
   'Arc Testnet': process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC,
+  'Arc': process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC_MAINNET,
   Sepolia: process.env.NEXT_PUBLIC_NFT_CONTRACT_SEPOLIA,
   Abstract: process.env.NEXT_PUBLIC_NFT_CONTRACT_ABSTRACT,
 }
@@ -37,6 +38,7 @@ const CHAIN_FOR_NAME: Record<string, Chain> = {
   MegaETH: megaEth,
   LitVM:   litvmTestnet,
   'Arc Testnet': arcTestnet,
+  'Arc': arcMainnet,
   Sepolia: sepoliaTestnet,
   Abstract: abstractMainnet,
 }
@@ -218,6 +220,7 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
         else if (chainFilter === 'MegaETH') chainConfig = { chain: megaEth,   contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_MEGAETH!,      chainName: "MegaETH" }
         else if (chainFilter === 'LitVM') chainConfig = { chain: litvmTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_LITVM!, chainName: "LitVM" }
         else if (chainFilter === 'Arc Testnet') chainConfig = { chain: arcTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC!, chainName: "Arc Testnet" }
+        else if (chainFilter === 'Arc') chainConfig = { chain: arcMainnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET!, chainName: "Arc" }
         else if (chainFilter === 'Sepolia') chainConfig = { chain: sepoliaTestnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_SEPOLIA!, chainName: "Sepolia" }
         else if (chainFilter === 'Abstract') chainConfig = { chain: abstractMainnet, contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ABSTRACT!, chainName: "Abstract" }
 
@@ -272,7 +275,8 @@ export function Leaderboard({ chainFilter = 'Global' }: { chainFilter?: ChainFil
       case "MegaETH":  iconUrl = '/chains/megaeth.png'; break
       case "LitVM":
       case "LitVM LiteForge": iconUrl = '/chains/litvm.png'; break
-      case "Arc Testnet": iconUrl = '/chains/arc.png'; break
+      case "Arc Testnet":
+      case "Arc": iconUrl = '/chains/arc.png'; break
       case "Sepolia": iconUrl = '/chains/sepolia.svg'; break
     }
     if (iconUrl) {

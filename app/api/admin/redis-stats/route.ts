@@ -12,6 +12,7 @@ const ECOSYSTEMS = [
   { key: "soneium", name: "Soneium" },
   { key: "megaeth", name: "MegaETH" },
   { key: "arc", name: "Arc Testnet" },
+  { key: "arc-mainnet", name: "Arc" },
 ]
 
 /** Load pool metadata for an ecosystem — returns total quiz count or 0 if no pool file */

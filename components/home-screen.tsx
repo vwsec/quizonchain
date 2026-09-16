@@ -45,6 +45,7 @@ const CHAIN_LOGOS: Record<string, () => ReactNode> = {
   Soneium: () => <SoneiumLogo />,
   LitVM: () => <LitvmLogo />,
   'Arc Testnet': () => <ArcLogo />,
+  Arc: () => <ArcLogo />,
   Abstract: () => <AbstractLogo />,
   Sepolia: () => <SepoliaLogo />,
 }

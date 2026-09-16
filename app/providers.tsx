@@ -13,7 +13,7 @@ import {
   darkTheme,
 } from '@rainbow-me/rainbowkit'
 import { walletConnect, coinbaseWallet, baseAccount } from 'wagmi/connectors'
-import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet } from '@/lib/chains'
+import { inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, arcMainnet, sepoliaTestnet, abstractMainnet } from '@/lib/chains'
 import { startaleConnector } from '@startale/app-sdk'
 import { abstractWalletConnector } from '@abstract-foundation/agw-react/connectors'
 import { FarcasterMiniAppProvider } from '@/hooks/use-farcaster-miniapp'
@@ -61,7 +61,7 @@ if (!projectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not set.')
 }
 
-const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, sepoliaTestnet, abstractMainnet]
+const allChains = [inkMainnet, soneiumMainnet, base, unichain, megaEth, litvmTestnet, arcTestnet, arcMainnet, sepoliaTestnet, abstractMainnet]
 
 const connectors: CreateConnectorFn[] = [
   walletConnect({ projectId }),

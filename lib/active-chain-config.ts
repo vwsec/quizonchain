@@ -188,6 +188,29 @@ const CHAIN_CONFIGS = {
     nftMetadataPath: '/nft/arc/1.json',
     nftImage: '/nft/arc.png',
   },
+  arcMainnet: {
+    name: 'Arc',
+    chainId: 5042,
+    nativeCurrency: { name: 'USD Coin', symbol: 'USDC', decimals: 6 },
+    color: '#4D8EE9',
+    rpc: 'https://rpc.mainnet.arc.io',
+    explorer: 'https://explorer.arc.io',
+    blockscoutApi: 'https://explorer.arc.io/api',
+    contractAddress: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS_ARC_MAINNET!,
+    nftContract: process.env.NEXT_PUBLIC_NFT_CONTRACT_ARC_MAINNET!,
+    docsPages: [
+      'https://docs.arc.io/arc-chain',
+      'https://docs.arc.io/arc/concepts/system-overview',
+      'https://docs.arc.io/arc/references/gas-and-fees',
+      'https://docs.arc.io/arc/references/connect-to-arc',
+      'https://docs.arc.io/arc/tutorials/deploy-contracts',
+    ],
+    heroTitle: "The Knowledge of Arc",
+    heroSubtitle: "Test your Arc blockchain knowledge",
+    heroLabel: 'ARC',
+    nftMetadataPath: '/nft/arc-mainnet/1.json',
+    nftImage: '/nft/arc.png',
+  },
   abstract: {
     name: 'Abstract',
     chainId: 2741,
@@ -220,6 +243,7 @@ const CHAIN_ID_TO_KEY: Record<number, ChainKey> = {
   4326: 'megaeth',
   4441: 'litvm',
   5042002: 'arc',
+  5042: 'arcMainnet',
   11155111: 'sepolia',
   2741: 'abstract',
 };
@@ -239,7 +263,7 @@ export function getThemeName(config: { name: string } | undefined): string {
   if (name === 'Soneium') return 'soneium';
   if (name === 'Sepolia') return 'sepolia';
   if (name === 'LitVM') return 'litvm';
-  if (name === 'Arc Testnet') return 'arc';
+  if (name === 'Arc Testnet' || name === 'Arc') return 'arc';
   if (name === 'Abstract') return 'abstract';
   return '';
 }
